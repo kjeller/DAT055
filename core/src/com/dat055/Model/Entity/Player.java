@@ -36,10 +36,8 @@ public class Player extends Character {
      */
     public void checkKeyboardInput() {
         //TODO: Put in controller
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-            System.out.println("left");
+        if (Gdx.input.isKeyPressed(Input.Keys.LEFT))
             this.move("left");
-        }
 
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT))
             this.move("right");

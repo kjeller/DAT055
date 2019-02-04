@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/dat055-proj.iml" filepath="$PROJECT_DIR$/.idea/dat055-proj.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/core/dat055-proj.core.iml" filepath="$PROJECT_DIR$/.idea/modules/core/dat055-proj.core.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/core/dat055-proj.core.main.iml" filepath="$PROJECT_DIR$/.idea/modules/core/dat055-proj.core.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/core/dat055-proj.core.test.iml" filepath="$PROJECT_DIR$/.idea/modules/core/dat055-proj.core.test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/desktop/dat055-proj.desktop.iml" filepath="$PROJECT_DIR$/.idea/modules/desktop/dat055-proj.desktop.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/desktop/dat055-proj.desktop.main.iml" filepath="$PROJECT_DIR$/.idea/modules/desktop/dat055-proj.desktop.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/desktop/dat055-proj.desktop.test.iml" filepath="$PROJECT_DIR$/.idea/modules/desktop/dat055-proj.desktop.test.iml" />
+    </modules>
+  </component>
+</project>

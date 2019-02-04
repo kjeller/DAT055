@@ -10,14 +10,12 @@ import com.dat055.Model.GameModel;
 
 public class Game extends ApplicationAdapter {
 	SpriteBatch batch;
-	Texture img;
 	GameModel gameModel;
 	Player player;
 	
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
-		img = new Texture("badlogic.jpg");
 		player = new Player(1, 80, 64, "red_penguin_64x80.png", "Towbie", 5, 5);
 		gameModel = new GameModel();
 	}
@@ -29,6 +27,7 @@ public class Game extends ApplicationAdapter {
 		Gdx.gl.glClearColor(0, 1, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		batch.begin();
+		gameModel.draw(batch);
 		player.draw(batch);
 		batch.end();
 	}
@@ -37,6 +36,5 @@ public class Game extends ApplicationAdapter {
 	@Override
 	public void dispose () {
 		batch.dispose();
-		img.dispose();
 	}
 }
