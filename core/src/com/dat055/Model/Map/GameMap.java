@@ -8,7 +8,8 @@ public class GameMap {
     public GameMap(String mapName) {
         //TODO: read map from JSON file
 
-        front = new TileMap();
-        back = new TileMap();
+        TileFactory tileFactory = new TileFactory();
+        front = tileFactory.getTileMap();
+        back = tileFactory.getTileMap();
     }
 }
