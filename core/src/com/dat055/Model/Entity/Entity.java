@@ -30,7 +30,6 @@ public abstract class Entity {
      */
     public void update() {
         // TODO: Update entity stuff
-        System.out.println("update");
     }
 
     /**

@@ -24,7 +24,7 @@ public class TileMap{
     }
 
     public void addTile(Integer x, Integer y, Tile tile) {
-        if(x >= 0 && x <= width && y >= 0 && y <= height && tile != null){
+        if(x >= 0 && x < width && y >= 0 && y < height && tile != null){
             map[x][y] = tile;
         }
     }

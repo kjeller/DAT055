@@ -1,6 +1,7 @@
 package com.dat055.Model;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.dat055.Model.Entity.Player;
 import com.dat055.Model.Map.GameMap;
 
 public class GameModel extends Model {
@@ -8,20 +9,21 @@ public class GameModel extends Model {
     public enum Mode {
         Front, Back
     }
-    GameMap map;
-    public GameModel() {
-        this.initialize();
-    }
-    public void initialize() {
-        map = new GameMap("maps/map_0.json"); // Debugging map
+
+    public GameMap map;
+    Player player;
+
+    public void createMap(String fileName) {
+        map = new GameMap(fileName);
+        Mode mode = Mode.Front;
+
+        player = new Player(1, 80, 64, "red_penguin_64x80.png",
+                "Towbie", 5, 5);
     }
 
     public void update() {
-        //TODO: Game logic here bois
-    }
-
-    public void draw(SpriteBatch batch) {
-        map.draw(batch);
+        player.checkKeyboardInput();
+        player.update();
     }
     //Todo: collisionhandler here
 }
