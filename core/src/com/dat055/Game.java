@@ -45,7 +45,6 @@ public class Game extends ApplicationAdapter {
 		batch.end();
 	}
 
-
 	@Override
 	public void dispose () {
 		batch.dispose();

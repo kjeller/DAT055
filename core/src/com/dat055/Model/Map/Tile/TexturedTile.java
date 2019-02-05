@@ -1,28 +1,28 @@
 package com.dat055.Model.Map.Tile;
 
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 /**
  * A tile with collision and a texture
  */
 public class TexturedTile extends Tile {
-    private Texture texture;
+    private Sprite sprite;
 
     public TexturedTile(float x, float y, float tileSize) {
         super(x, y, tileSize);
     }
 
-    public TexturedTile(float x, float y, Texture texture, float tileSize) {
+    public TexturedTile(float x, float y, float tileSize, Sprite sprite) {
         super(x, y, tileSize);
-        this.texture = texture;
+        this.sprite = sprite;
     }
 
     public void draw(SpriteBatch batch) {
-        batch.draw(texture, x, y);
+        batch.draw(sprite, x, y);
     }
 
-    public void setTexture(Texture texture) {
-        this.texture = texture;
+    public void setSprite(Sprite sprite) {
+        this.sprite = sprite;
     }
 }

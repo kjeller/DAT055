@@ -1,7 +1,6 @@
 package com.dat055.View;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.dat055.Model.GameModel;
 import com.dat055.View.Screen.GameScreen;
 import com.dat055.View.Screen.Screen;
 
