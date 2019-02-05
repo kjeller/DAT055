@@ -1,13 +1,16 @@
 package com.dat055.Model.Map.Tile;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Rectangle;
 
 public class Tile {
     protected float x, y;
+    Rectangle box;
 
-    Tile(float x, float y) {
+    Tile(float x, float y, float tileSize) {
         this.x = x;
         this.y = y;
+        box = new Rectangle(x, y, tileSize, tileSize);
     }
 
     public void draw(SpriteBatch batch) {}

@@ -9,12 +9,12 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 public class TexturedTile extends Tile {
     private Texture texture;
 
-    public TexturedTile(float x, float y) {
-        super(x, y);
+    public TexturedTile(float x, float y, float tileSize) {
+        super(x, y, tileSize);
     }
 
-    public TexturedTile(float x, float y, Texture texture) {
-        super(x, y);
+    public TexturedTile(float x, float y, Texture texture, float tileSize) {
+        super(x, y, tileSize);
         this.texture = texture;
     }
 

@@ -23,9 +23,9 @@ public class TileFactory {
                 y--;
                 x=0;
             }
-            Tile temp = new Tile(x * tileSize, y *tileSize); // For airtiles
+            Tile temp = new Tile(x * tileSize, y *tileSize, tileSize); // For airtiles
             if(current != 0)
-                temp = new TexturedTile(x * tileSize, y * tileSize);
+                temp = new TexturedTile(x * tileSize, y * tileSize, tileSize);
             switch(current) {
                 case 1 :
                     //TODO: implement a texture pack
