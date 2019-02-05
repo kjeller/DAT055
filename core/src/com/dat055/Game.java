@@ -23,7 +23,7 @@ public class Game extends ApplicationAdapter {
 
 		// Add every view
 		views = new ArrayList<View>();
-		gameView = new GameView();
+		gameView = GameView.getInstance();
 		views.add(gameView);
 		//TODO: Add menuview here for example
 

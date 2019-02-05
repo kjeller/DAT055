@@ -7,10 +7,17 @@ import com.dat055.View.Screen.Screen;
 import java.util.ArrayList;
 
 public class GameView extends View{
+    private static GameView instance = null;
+
     private GameScreen gameScreen;
 
-    public GameView() {
-        screens = new ArrayList<Screen>();
+    private GameView() {screens = new ArrayList<Screen>();}
+
+    public static synchronized GameView getInstance() {
+        if ( instance == null )
+            instance = new GameView();
+
+        return instance;
     }
 
     @Override
@@ -27,5 +34,4 @@ public class GameView extends View{
         gameScreen = new GameScreen(fileName);
         screens.add(gameScreen);
     }
-
 }
