@@ -60,4 +60,12 @@ public abstract class Entity {
         rect.setSize(this.width, this.height);
         rect.setPosition(position.x, this.position.y);
     }
+
+    /**
+     * Returns vector2 position for entity
+     * @return
+     */
+    public Vector2 getVector2() {
+        return position;
+    }
 }

@@ -71,7 +71,7 @@ public class GameMap {
     public void draw(SpriteBatch batch) {
         front.draw(batch);
 
-        // TODO: Fix camera "angle" on back map
+        // TODO: Fix camera "angle" on back map somewhere
         //back.draw(batch);
     }
 
