@@ -2,6 +2,7 @@ package com.dat055.Model.Entity;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 
 public abstract class Entity {
     public Entity(int id, int height, int width, String texturePath) {

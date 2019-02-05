@@ -1,7 +1,10 @@
 package com.dat055.Model.Map;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
 import com.dat055.Model.Map.Tile.TileFactory;
@@ -11,6 +14,7 @@ public class GameMap {
 
     // Current map id and name
     private String id, name;
+    TextureAtlas atlas;
 
     public GameMap(String fileName) {
         id = "Not set.";
@@ -34,6 +38,7 @@ public class GameMap {
             System.out.println(mapJson1);
             if(mapJson0 != null || mapJson1 != null) {
                 setProperties(properties);
+
                 this.front = jsonToMap(mapJson0);
                 this.back = jsonToMap(mapJson1);
             }
@@ -48,7 +53,7 @@ public class GameMap {
      * @return A tilemap created by the tilefactory
      */
     private TileMap jsonToMap(JsonValue map) {
-        TileFactory tileFactory = new TileFactory();
+        TileFactory tileFactory = new TileFactory(atlas);
         return tileFactory.getTileMap(64, map.getInt("width"), map.getInt("height"),
                 map.get("data").iterator());
     }
@@ -60,10 +65,14 @@ public class GameMap {
     private void setProperties(JsonValue properties) {
         this.id = properties.getString("id");
         this.name = properties.getString("name");
+        this.atlas = new TextureAtlas(Gdx.files.internal(properties.getString("spritesheet")));
     }
 
     public void draw(SpriteBatch batch) {
         front.draw(batch);
+
+        // TODO: Fix camera "angle" on back map
+        //back.draw(batch);
     }
 
     public String toString() {
