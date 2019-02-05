@@ -11,7 +11,7 @@ public class GameModel extends Model {
     }
 
     public GameMap map;
-    Player player;
+    public Player player;
 
     public void createMap(String fileName) {
         map = new GameMap(fileName);

@@ -15,5 +15,6 @@ public class GameScreen implements Screen {
 
     public void draw(SpriteBatch batch) {
         gameModel.map.draw(batch);
+        gameModel.player.draw(batch);
     }
 }
