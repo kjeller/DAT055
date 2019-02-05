@@ -1,61 +1,93 @@
 package com.dat055.Model.Entity;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.math.Vector2;
 
 public abstract class Character extends Entity {
+    public String name;
+    private int healthPoints;
+    private Vector2 acceleration;
+    private Vector2 velocity;
+    private Vector2 deltaPosition;
+    protected Vector2 direction;
+    private Vector2 oldPosition;
+
+    protected float maxVelocity;
+    protected int gravity;
+    protected boolean isGrounded;
+    protected boolean isAlive;
+    protected boolean isMoving;
+
+
     public Character(int id, int height, int width, String texturePath, String name, int healthPoints, float maxVelocity) {
         super(id, height, width, texturePath);
+
         this.name = name;
         this.healthPoints = healthPoints;
         this.maxVelocity = maxVelocity;
-        this.accelerationX = 0;
-        this.accelerationY = -10;
-        this.directionRight = true;
+
+        acceleration = new Vector2(Vector2.Zero);
+        velocity = new Vector2(Vector2.Zero);
+        position = new Vector2(0,0);
+        oldPosition = new Vector2(position);
+        deltaPosition = new Vector2(Vector2.Zero);
+        direction = new Vector2(Vector2.Zero);
+
+        isGrounded = false;
+        isAlive = true;
+        isMoving = false;
+        gravity = 20;
     }
 
-    public String name;
-    private boolean directionRight;
-    private int healthPoints;
-    private float accelerationX;
-    private float accelerationY;
-    private float velocityX;
-    private float velocityY;
-    protected float maxVelocity;
-    protected boolean isGrounded;
-    protected boolean isAlive;
+
 
 
     /**
      * Method that moves the entity based on acceleration
-     * @param direction
+     * @param dir direction to move in
      */
-    public void move(String direction) {
-        //TODO: Fix
-        if (direction.equals("left")) {
-            accelerationX = -30;
-            directionRight = false;
-        }
+    public void move(float dir) {
+        //TODO: Clean up
+        if (isMoving) {
 
-        else if (direction.equals("right")) {
-            accelerationX = 30;
-            directionRight = true;
-        }
-
-        else {
-            if (directionRight) {
-                accelerationX -= 9;
-
+            switch((int)dir) {
+                case -1:
+                    // If already moving in other direction, give stronger acceleration.
+                    if (direction.x > 0) {
+                        if (isGrounded)
+                            acceleration.x = -28;
+                        else
+                            acceleration.x = -14;
+                    } else {
+                        if (isGrounded)
+                            acceleration.x = -12;
+                        else
+                            acceleration.x = -6;
+                    }
+                    break;
+                case 1:
+                    // If already moving in other direction, give stronger acceleration.
+                    if (direction.x < 0) {
+                        if (isGrounded)
+                            acceleration.x = 28;
+                        else
+                            acceleration.x = 14;
+                    } else {
+                        if (isGrounded)
+                            acceleration.x = 12;
+                        else
+                            acceleration.x = 6;
+                    }
             }
-            else {
-                accelerationX += 9;
+        } else if (velocity.x != 0) {
+            acceleration.x = 24 * -direction.x;
+            System.out.println(acceleration.x);
+            if (velocity.x < 0.5 && velocity.x > -0.5) {
+                velocity.x = 0;
+                acceleration.x = 0;
+                direction.x = 0;
             }
-            if (velocityX > -2 && velocityX < 2) {
-                accelerationX = 0;
-                velocityX = 0;
-            }
-
         }
-
     }
 
     /**
@@ -72,31 +104,43 @@ public abstract class Character extends Entity {
         if (this.isGrounded) {
             System.out.println("Character jumps.");
             isGrounded = false;
-            this.velocityY = 5;
+            velocity.y = 5;
         }
     }
+
+    /**
+     * Method that works as a kind of physics engine for entities.
+     */
     @Override
     public void update() {
-        velocityX += accelerationX * Gdx.graphics.getDeltaTime();
-        velocityY += accelerationY * Gdx.graphics.getDeltaTime();
-        if (velocityX > maxVelocity)
-            velocityX = maxVelocity;
-        if (velocityX < -maxVelocity)
-            velocityX = -maxVelocity;
+        float deltaTime = Gdx.graphics.getDeltaTime();
+        acceleration.y = -10;
 
-        float oldPosX = posX;
-        posX += velocityX;
-        posY += velocityY;
+        velocity.x += acceleration.x * deltaTime;
 
-        if (this.posY <= 0) {
+        if (velocity.x > maxVelocity)
+            velocity.x = maxVelocity;
+        if (velocity.x < -maxVelocity)
+            velocity.x = -maxVelocity;
+
+        velocity.y += acceleration.y * deltaTime;
+        oldPosition.set(position);
+        position.add(velocity);
+
+
+        deltaPosition.set(oldPosition.x-position.x, oldPosition.y-position.y);
+
+        if (deltaPosition.x > 0) direction.x = -1; else if (deltaPosition.x < 0) direction.x = 1;
+        if (deltaPosition.y > 0) direction.y = -1; else if (deltaPosition.y < 0) direction.y = 1;
+
+        //TODO: Fix when collision is online
+        if (this.position.y <= 0) {
             this.isGrounded = true;
-            this.velocityY = 0;
-            posY=0;
+            this.velocity.y = 0;
+            position.y=0;
         }
-        rect.setPosition(posX, posY);
-        //debug();
+        rect.setPosition(position.x, position.y);
     }
-
     /**
      * Method that makes the character take damage
      * @param damage
@@ -118,11 +162,15 @@ public abstract class Character extends Entity {
      * Method for debugging purposes
      */
     private void debug() {
-        System.out.println("\n\n\nAcceleration X: " + accelerationX);
-        System.out.println("Acceleration Y: " + accelerationY);
-        System.out.println("Velocity X: " + velocityX);
-        System.out.println("Velocity Y: " +  velocityY);
-        System.out.println("PosX: " + posX + " posY: " + posY);
+        System.out.println("\n\n\nAcceleration X: " + acceleration.x);
+        System.out.println("Acceleration Y: " + acceleration.x);
+        System.out.println("Velocity X: " + velocity.x);
+        System.out.println("Velocity Y: " +  velocity.y);
+        System.out.println("x: " + position.x + " y: " + position.y);
         System.out.println("Rectangle x: " + rect.toString());
+    }
+
+    public String toString() {
+        return String.format("Properties: id=%d, name=%s, height: %d, width: %d, x: %f, y: %f, accelerationX: %f, isMoving: %s, velocityX: %f", id, name, height, width, position.x, position.y, acceleration.x, isMoving, velocity.x);
     }
 }

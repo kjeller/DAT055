@@ -9,8 +9,7 @@ public abstract class Entity {
         this.id = id;
         this.height = height;
         this.width = width;
-        this.posX = 0.0f;
-        this.posY = 0.0f;
+        position = new Vector2(0, 0);
         this.setTexture(texturePath);
         this.setRectangle();
     }
@@ -18,10 +17,10 @@ public abstract class Entity {
     protected int id;
     protected int height;
     protected int width;
-    protected float posX;
-    protected float posY;
+    protected Vector2 position;
     private Texture texture;
     protected Rectangle rect;
+
 
     /**
      * act is action that the entity takes
@@ -34,9 +33,6 @@ public abstract class Entity {
      */
     public void update() {
         // TODO: Update entity stuff
-        if (this.posY == 0)
-
-        System.out.println("update");
     }
 
     /**
@@ -44,8 +40,7 @@ public abstract class Entity {
      */
     public void draw(SpriteBatch sb) {
         // TODO: Parameter spritebatch, then spritebatch.draw(texture), is called in Game.render();
-        //System.out.println("draw entity");
-        sb.draw(texture, (int)posX, (int)posY);
+        sb.draw(texture, position.x, position.y);
     }
 
     /**
@@ -63,6 +58,6 @@ public abstract class Entity {
     private void setRectangle() {
         rect = new Rectangle();
         rect.setSize(this.width, this.height);
-        rect.setPosition(this.posX, this.posY);
+        rect.setPosition(position.x, this.position.y);
     }
 }

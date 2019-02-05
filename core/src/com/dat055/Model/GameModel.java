@@ -18,7 +18,7 @@ public class GameModel extends Model {
         Mode mode = Mode.Front;
 
         player = new Player(1, 80, 64, "red_penguin_64x80.png",
-                "Towbie", 5, 5);
+                "Towbie", 5, 8);
     }
 
     public void update() {
