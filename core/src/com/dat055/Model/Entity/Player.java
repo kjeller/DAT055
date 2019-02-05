@@ -38,8 +38,12 @@ public class Player extends Character {
         //TODO: Put in controller
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT))
             this.move("left");
-
-        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT))
+        else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT))
             this.move("right");
+        else
+            this.move("none");
+
+        if (Gdx.input.isKeyPressed(Input.Keys.SPACE))
+            this.jump();
     }
 }

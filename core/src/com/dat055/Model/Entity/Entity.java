@@ -1,6 +1,7 @@
 package com.dat055.Model.Entity;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Rectangle;
 
 public abstract class Entity {
     public Entity(int id, int height, int width, String texturePath) {
@@ -10,6 +11,7 @@ public abstract class Entity {
         this.posX = 0.0f;
         this.posY = 0.0f;
         this.setTexture(texturePath);
+        this.setRectangle();
     }
 
     protected int id;
@@ -18,6 +20,7 @@ public abstract class Entity {
     protected float posX;
     protected float posY;
     private Texture texture;
+    protected Rectangle rect;
 
     /**
      * act is action that the entity takes
@@ -30,6 +33,8 @@ public abstract class Entity {
      */
     public void update() {
         // TODO: Update entity stuff
+        if (this.posY == 0)
+
         System.out.println("update");
     }
 
@@ -48,5 +53,15 @@ public abstract class Entity {
      */
     public void setTexture(String texturePath) {
         texture = new Texture(texturePath);
+    }
+
+    /**
+     * Returns a rectangle
+     * @return
+     */
+    private void setRectangle() {
+        rect = new Rectangle();
+        rect.setSize(this.width, this.height);
+        rect.setPosition(this.posX, this.posY);
     }
 }
