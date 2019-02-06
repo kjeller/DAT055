@@ -1,14 +1,14 @@
 package com.dat055.View.Screen;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.dat055.Model.MenuModel;
 import com.dat055.View.MenuView;
 
-public class MainScreen implements Screen {
+public class MainScreen {
     MenuModel menuModel; // logic for game stored here
     private SpriteBatch batch = new SpriteBatch();
     private TextButton button;

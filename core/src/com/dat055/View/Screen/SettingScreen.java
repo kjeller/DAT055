@@ -1,5 +1,7 @@
 package com.dat055.View.Screen;
 
-public class SettingScreen {
+import com.badlogic.gdx.Screen;
+
+public class SettingScreen  {
     // Rita ut allt
 }
