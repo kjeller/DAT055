@@ -46,12 +46,13 @@ public class GameModel extends Model {
         cam.update();
 
         //Todo: collisionhandler here
-        handler1.checkCollision(player);
+
 
 
         // Player logic
         player.checkKeyboardInput();
         player.update();
+        handler1.checkCollision(player);
 
         //TODO: Other entities here
 
