@@ -51,4 +51,6 @@ public class TileMap{
         }
         return sb.toString();
     }
+    public int getWidthPixels() { return width*64; }
+    public int getHeightPixels() { return height*64; }
 }

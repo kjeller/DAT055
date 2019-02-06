@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 public class TexturedTile extends Tile {
     private Sprite sprite;
 
+
     public TexturedTile(float x, float y, float tileSize) {
         super(x, y, tileSize);
     }
@@ -16,6 +17,8 @@ public class TexturedTile extends Tile {
     public TexturedTile(float x, float y, float tileSize, Sprite sprite) {
         super(x, y, tileSize);
         this.sprite = sprite;
+        this.isCollideable = true;
+        //state = State.SOLID;
     }
 
     public void draw(SpriteBatch batch) {

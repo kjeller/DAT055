@@ -5,14 +5,6 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
 public abstract class Entity {
-    public Entity(int id, int height, int width, String texturePath) {
-        this.id = id;
-        this.height = height;
-        this.width = width;
-        position = new Vector2(0, 0);
-        this.setTexture(texturePath);
-        this.setRectangle();
-    }
 
     protected int id;
     protected int height;
@@ -21,6 +13,14 @@ public abstract class Entity {
     private Texture texture;
     protected Rectangle rect;
 
+    public Entity(int id, int height, int width, String texturePath) {
+        this.id = id;
+        this.height = height;
+        this.width = width;
+        position = new Vector2(0, 0);
+        this.setTexture(texturePath);
+        this.setRectangle();
+    }
 
     /**
      * act is action that the entity takes
@@ -57,7 +57,7 @@ public abstract class Entity {
      */
     private void setRectangle() {
         rect = new Rectangle();
-        rect.setSize(this.width, this.height);
+        rect.setSize(this.width, this.height*2);
         rect.setPosition(position.x, this.position.y);
     }
 
@@ -65,7 +65,14 @@ public abstract class Entity {
      * Returns vector2 position for entity
      * @return
      */
-    public Vector2 getVector2() {
+    public Vector2 getPosition() {
         return position;
+    }
+    public Rectangle getRect() { return rect; }
+    public int getWidth() {
+        return width;
+    }
+    public int getHeight() {
+        return height;
     }
 }

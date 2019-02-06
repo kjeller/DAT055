@@ -76,4 +76,6 @@ public class GameMap {
     public String toString() {
         return  String.format("Properties: id=%s, name=%s", this.id, this.name);
     }
+    public TileMap getFrontTileMap() { return front; }
+    public TileMap getBackTileMap() { return back; }
 }

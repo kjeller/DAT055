@@ -28,7 +28,7 @@ public abstract class Character extends Entity {
 
         acceleration = new Vector2(Vector2.Zero);
         velocity = new Vector2(Vector2.Zero);
-        position = new Vector2(0,0);
+        position = new Vector2(0,100);
         oldPosition = new Vector2(position);
         deltaPosition = new Vector2(Vector2.Zero);
         direction = new Vector2(Vector2.Zero);
@@ -48,6 +48,7 @@ public abstract class Character extends Entity {
      */
     public void move(float dir) {
         //TODO: Clean up
+
         if (isMoving) {
 
             switch((int)dir) {
@@ -55,33 +56,32 @@ public abstract class Character extends Entity {
                     // If already moving in other direction, give stronger acceleration.
                     if (direction.x > 0) {
                         if (isGrounded)
-                            acceleration.x = -28;
+                            acceleration.x = -50;
                         else
-                            acceleration.x = -14;
+                            acceleration.x = -25;
                     } else {
                         if (isGrounded)
-                            acceleration.x = -12;
+                            acceleration.x = -18;
                         else
-                            acceleration.x = -6;
+                            acceleration.x = -9;
                     }
                     break;
                 case 1:
                     // If already moving in other direction, give stronger acceleration.
                     if (direction.x < 0) {
                         if (isGrounded)
-                            acceleration.x = 28;
+                            acceleration.x = 50;
                         else
-                            acceleration.x = 14;
+                            acceleration.x = 25;
                     } else {
                         if (isGrounded)
-                            acceleration.x = 12;
+                            acceleration.x = 18;
                         else
-                            acceleration.x = 6;
+                            acceleration.x = 9;
                     }
             }
         } else if (velocity.x != 0) {
             acceleration.x = 24 * -direction.x;
-            System.out.println(acceleration.x);
             if (velocity.x < 0.5 && velocity.x > -0.5) {
                 velocity.x = 0;
                 acceleration.x = 0;
@@ -104,9 +104,10 @@ public abstract class Character extends Entity {
         if (this.isGrounded) {
             System.out.println("Character jumps.");
             isGrounded = false;
-            velocity.y = 5;
+            velocity.y = 8;
         }
     }
+
 
     /**
      * Method that works as a kind of physics engine for entities.
@@ -114,7 +115,7 @@ public abstract class Character extends Entity {
     @Override
     public void update() {
         float deltaTime = Gdx.graphics.getDeltaTime();
-        acceleration.y = -10;
+        acceleration.y = -20;
 
         velocity.x += acceleration.x * deltaTime;
 
@@ -133,14 +134,19 @@ public abstract class Character extends Entity {
         if (deltaPosition.x > 0) direction.x = -1; else if (deltaPosition.x < 0) direction.x = 1;
         if (deltaPosition.y > 0) direction.y = -1; else if (deltaPosition.y < 0) direction.y = 1;
 
-        //TODO: Fix when collision is online
-        if (this.position.y <= 0) {
-            this.isGrounded = true;
-            this.velocity.y = 0;
-            position.y=0;
-        }
+        updateFalling();
         rect.setPosition(position.x, position.y);
     }
+
+    private void updateFalling() {
+        //TODO: Fix when collision is online
+        if (this.position.y <= 64) {
+            this.isGrounded = true;
+            this.velocity.y = 0;
+            position.y=64;
+        }
+    }
+
     /**
      * Method that makes the character take damage
      * @param damage
@@ -158,9 +164,13 @@ public abstract class Character extends Entity {
         this.isAlive = false;
     }
 
-    /**
-     * Method for debugging purposes
-     */
+    public Vector2 getPosition() {
+        return position;
+    }
+
+        /**
+         * Method for debugging purposes
+         */
     private void debug() {
         System.out.println("\n\n\nAcceleration X: " + acceleration.x);
         System.out.println("Acceleration Y: " + acceleration.x);
@@ -171,6 +181,9 @@ public abstract class Character extends Entity {
     }
 
     public String toString() {
-        return String.format("Properties: id=%d, name=%s, height: %d, width: %d, x: %f, y: %f, accelerationX: %f, isMoving: %s, velocityX: %f", id, name, height, width, position.x, position.y, acceleration.x, isMoving, velocity.x);
+        return String.format("Properties: id=%d, name=%s, height: %d," +
+                             " width: %d, x: %f, y: %f, accelerationX: %f, isMoving: %s, velocityX: %f, rect.x: %f, rect.y: %f",
+                id, name, height, width, position.x, position.y, acceleration.x, isMoving, velocity.x, rect.x, rect.y);
     }
+    public void setGrounded() { isGrounded = true; }
 }

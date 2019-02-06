@@ -47,7 +47,8 @@ public class Player extends Character {
             isMoving = false;
             this.move(0);
         }
-
+        if (Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT))
+            attack();
 
         if (Gdx.input.isKeyPressed(Input.Keys.SPACE))
             jump();

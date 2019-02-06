@@ -19,7 +19,7 @@ public class GameScreen implements Screen {
     }
 
     public void draw(SpriteBatch batch) {
-        batch.setProjectionMatrix(gameModel.cam.combined);    // Set camera for batch //TODO: This might need to be fixed
+        //batch.setProjectionMatrix(gameModel.cam.combined);    // Set camera for batch //TODO: This might need to be fixed
         gameModel.map.draw(batch);
         gameModel.player.draw(batch);
     }
