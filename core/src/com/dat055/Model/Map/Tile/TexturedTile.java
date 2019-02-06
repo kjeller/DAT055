@@ -22,6 +22,10 @@ public class TexturedTile extends Tile {
         batch.draw(sprite, x, y);
     }
 
+    /**
+     * Set sprite on Tile
+     * @param sprite
+     */
     public void setSprite(Sprite sprite) {
         this.sprite = sprite;
     }

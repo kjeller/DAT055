@@ -2,7 +2,6 @@ package com.dat055.Model.Map.Tile;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.dat055.Model.Map.TileMap;
 
@@ -17,7 +16,7 @@ public class TileFactory {
     }
 
     /**
-     * Creates a tilemap from tiles
+     * Creates a tilemap from tiles from a predefined json file
      */
     public TileMap getTileMap(Integer tileSize, Integer width, Integer height, JsonIterator data) {
         TileMap map = new TileMap(width, height);
@@ -50,6 +49,12 @@ public class TileFactory {
         return map;
     }
 
+    /**
+     * Searches through a texture atlas to find a specfic region.
+     * Returns that region as a sprite.
+     * @param region
+     * @return
+     */
     public Sprite getSprite(String region) {
         TextureRegion r = atlas.findRegion(region);
         if(r == null)

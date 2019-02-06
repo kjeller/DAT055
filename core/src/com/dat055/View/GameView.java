@@ -30,6 +30,10 @@ public class GameView extends View{
         for(Screen screen : screens) {screen.draw(batch);}
     }
 
+    /**
+     * Creates a gamescreen for a specific map.
+     * @param fileName
+     */
     public void startMap(String fileName) {
         gameScreen = new GameScreen(fileName);
         screens.add(gameScreen);
