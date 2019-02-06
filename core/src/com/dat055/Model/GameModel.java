@@ -57,7 +57,7 @@ public class GameModel extends Model {
         Vector2 playerPosition = player.getPosition();
         Vector3 camPosition = cam.position;
         camPosition.x += (playerPosition.x - camPosition.x) * lerp * deltaTime;
-        camPosition.y += (playerPosition.y - playerPosition.y) * lerp * deltaTime;
+        camPosition.y += (playerPosition.y - camPosition.y) * lerp * deltaTime;
         cam.update();
 
         if(!isPaused) {
