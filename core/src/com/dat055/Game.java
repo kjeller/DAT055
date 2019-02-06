@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.dat055.Model.Entity.Player;
 import com.dat055.Model.GameModel;
 import com.dat055.View.GameView;
+import com.dat055.View.MenuView;
 import com.dat055.View.View;
 
 import java.util.ArrayList;
@@ -16,6 +17,7 @@ public class Game extends ApplicationAdapter {
 	private SpriteBatch batch;
 	private ArrayList<View> views;
 	private GameView gameView;
+	private MenuView menuView;
 	
 	@Override
 	public void create () {
@@ -24,8 +26,10 @@ public class Game extends ApplicationAdapter {
 		// Add every view
 		views = new ArrayList<View>();
 		gameView = GameView.getInstance();
+		menuView = MenuView.getInstance();
 		views.add(gameView);
-		//TODO: Add menuview here for example
+		views.add(menuView);
+
 
 		gameView.startMap("maps/map_0.json");
 
