@@ -1,18 +1,19 @@
 package com.dat055.View;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.dat055.View.Screen.MainScreen;
-import com.dat055.View.Screen.Screen;
 
 import java.util.ArrayList;
 
 public class MenuView extends View{
     private static MenuView instance = null;
     private MainScreen menuScreen;
+    ArrayList<Screen> screens;
 
     private static BitmapFont font;
 
@@ -51,18 +52,16 @@ public class MenuView extends View{
     /**
      *
      */
-    @Override
-    public void update() {
+    /*public void update() {
         for(Screen screen : screens) {screen.update();}
     }
-
+*/
     /**
      *
      * @param batch
      */
-    @Override
     public void draw(SpriteBatch batch) {
-        for(Screen screen : screens) {screen.draw(batch);}
+        //for(Screen screen : screens) {screen.draw(batch);}
     }
 
 }
