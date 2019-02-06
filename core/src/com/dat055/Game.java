@@ -27,7 +27,7 @@ public class Game extends ApplicationAdapter {
 		views = new ArrayList<View>();
 		gameView = GameView.getInstance();
 		menuView = MenuView.getInstance();
-		views.add(gameView);
+		//views.add(gameView);
 		views.add(menuView);
 
 
@@ -39,7 +39,7 @@ public class Game extends ApplicationAdapter {
 
 	@Override
 	public void render () {
-		Gdx.gl.glClearColor(0, 1, 0, 1);
+		Gdx.gl.glClearColor(1, 0, 1, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 		for(View view : views) { view.update(); }
