@@ -19,6 +19,7 @@ public class GameView extends View{
     public void render(SpriteBatch batch) {
         batch.setProjectionMatrix(((GameModel)model).getCam().combined);    // Set camera for batch //TODO: This might need to be fixed
         ((GameModel)model).getGameMap().draw(batch);
-        ((GameModel)model).getPlayer().draw(batch);
+        ((GameModel)model).getPlayer1().draw(batch);
+        ((GameModel)model).getPlayer2().draw(batch);
     }
 }

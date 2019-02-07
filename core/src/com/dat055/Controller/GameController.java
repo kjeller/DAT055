@@ -13,7 +13,7 @@ public class GameController extends Controller {
     }
 
     public void update(float deltaTime) {
-        checkKeyboardInput(((GameModel)model).getPlayer()); // Handles keyboard input
+        checkKeyboardInput(((GameModel)model).getCurrentPlayer()); // Handles keyboard input
         super.update(deltaTime);    // Updates GameModel
     }
 
@@ -39,6 +39,10 @@ public class GameController extends Controller {
             player.jump();
         if (Gdx.input.isKeyPressed(Input.Keys.D))
             System.out.println(toString());
+
+        if(Gdx.input.isKeyPressed(Input.Keys.T))
+            ((GameModel)model).toggleCurrentPlayer();
+
     }
     /**
      * Calls gamemodel to create a game map for a specific map.

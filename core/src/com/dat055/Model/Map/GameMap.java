@@ -13,7 +13,7 @@ public class GameMap {
 
     public void draw(SpriteBatch batch) {
         front.draw(batch);
-        //back.draw(batch); //TODO: Implement back tilemap
+        back.draw(batch);
     }
 
     public TileMap getFrontTileMap() { return front; }
