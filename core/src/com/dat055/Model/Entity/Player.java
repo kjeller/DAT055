@@ -30,29 +30,4 @@ public class Player extends Character {
     public void interact(String interactable) {
         System.out.printf("%s inteacts with %s", this.name, interactable);
     }
-
-    /**
-     * Begone, foul beast
-     */
-    public void checkKeyboardInput() {
-        //TODO: Put in controller
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-            this.move(-1);
-            isMoving = true;
-        }
-        else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            this.move(1);
-            isMoving = true;
-        } else {
-            isMoving = false;
-            this.move(0);
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT))
-            attack();
-
-        if (Gdx.input.isKeyPressed(Input.Keys.SPACE))
-            jump();
-        if (Gdx.input.isKeyPressed(Input.Keys.D))
-            System.out.println(toString());
-    }
 }

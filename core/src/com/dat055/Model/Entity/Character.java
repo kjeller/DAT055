@@ -197,4 +197,5 @@ public abstract class Character extends Entity {
     public void setXVelocity(int x) { velocity.x = x; }
     public void setYVelocity(int y) { velocity.y = y; }
     public void setGrounded(boolean val) { isGrounded = val; }
+    public void setMoving(boolean val) {isMoving = val;}
 }

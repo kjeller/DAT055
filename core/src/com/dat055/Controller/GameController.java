@@ -1,5 +1,8 @@
 package com.dat055.Controller;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import com.dat055.Model.Entity.Player;
 import com.dat055.Model.GameModel;
 import com.dat055.View.GameView;
 
@@ -10,10 +13,33 @@ public class GameController extends Controller {
     }
 
     public void update(float deltaTime) {
-        ((GameModel)model).getPlayer().checkKeyboardInput();
-        super.update(deltaTime);
+        checkKeyboardInput(((GameModel)model).getPlayer()); // Handles keyboard input
+        super.update(deltaTime);    // Updates GameModel
     }
 
+    /**
+     * Handles keyboard input for a specific player.
+     */
+    private void checkKeyboardInput(Player player) {
+        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+            player.move(-1);
+            player.setMoving(true);
+        }
+        else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+            player.move(1);
+            player.setMoving(true);
+        } else {
+            player.setMoving(false);
+            player.move(0);
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT))
+            player.attack();
+
+        if (Gdx.input.isKeyPressed(Input.Keys.SPACE))
+            player.jump();
+        if (Gdx.input.isKeyPressed(Input.Keys.D))
+            System.out.println(toString());
+    }
     /**
      * Calls gamemodel to create a game map for a specific map.
      * @param fileName of a json file in assets/maps/

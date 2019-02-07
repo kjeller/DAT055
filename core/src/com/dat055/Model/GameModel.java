@@ -64,10 +64,7 @@ public class GameModel extends Model {
             //Todo: collisionhandler here
             handler1.checkCollision(player);
 
-
-            // Player logic
-            player.checkKeyboardInput();
-            player.update();
+            player.update(); // Updates player position, health etc.
 
             //TODO: Other entities here
         }
