@@ -1,6 +1,7 @@
 package com.dat055.View;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -9,12 +10,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.dat055.Model.MenuModel;
-import com.dat055.View.Screen.MainScreen;
-import com.dat055.View.Screen.Screen;
 
-import java.util.ArrayList;
-
-public class MenuView extends View{
+public class MenuView {
     private static MenuView instance = null;
 
     private static BitmapFont font;
@@ -57,24 +54,16 @@ public class MenuView extends View{
 
     /**
      *
-     * @return the general font.
      */
-
-
-    /**
-     *
-     */
-    @Override
     public void update() {
+        MenuModel.getInstance().update();
         MenuModel.getInstance().getStage().draw();
     }
 
     /**
-     *
-     * @param batch
+     * A draw function that draws the stage stored in the model
      */
-    @Override
-    public void draw(SpriteBatch batch) {
+    public void draw() {
         MenuModel.getInstance().getStage().draw();
     }
 }
