@@ -33,26 +33,63 @@ public class CollisionHandler {
     public boolean checkCollision(Player player) {
         position.set(player.getPosition());
 
-
+        // If player is outside of the map, stop checking for collisions.
         if (position.x < 0 || position.y < 0 || position.x + width > tileMap.getWidthPixels() || position.y + height > tileMap.getHeightPixels())
             return true;
         // Check tiles around entity
 
          for (int row = (int) (position.y / tileSize); row < Math.ceil((position.y + height) / tileSize); row++) {
             for (int col = (int) (position.x / tileSize); col < Math.ceil((position.x + width) / tileSize); col++) {
-                Tile tile = tileMap.getTile((int)Math.floor(col), (int)Math.floor(row));
+                Tile tile = tileMap.getTile((int) Math.floor(col), (int) Math.floor(row));
+                Rectangle playerRect = new Rectangle(player.getRect());
+                Rectangle tileRect = new Rectangle(tile.getRect());
+                Rectangle intersection = new Rectangle();
+                System.out.println("hej");
+                // Check for collision
+                if (tile.getState()) {
+                    if (Intersector.intersectRectangles(playerRect, tileRect, intersection)) {
 
-                // Is collideable
-                //if (tile.getState()) {
-                    //System.out.println("BONK INC");
-                    //System.out.println(tile.getRect());
-                    if (player.getRect().overlaps(tile.getRect())) {
-                        System.out.printf("row: %d, col: %d \n", row, col);
+                        /*if (checkXCollision(intersection)) {
+
+                            player.setXVelocity(0);
+                            //Collision is to the right
+                            if (playerRect.x < tileRect.x + tileRect.width) {
+                                player.setXPosition(Math.round(tileRect.x + tileRect.width));
+                            } else {
+                                player.setXPosition((int)(tileRect.x-playerRect.width));
+                            }
+                        }*/
+
+
+                        if (checkYCollision(intersection)) {
+                            player.setYVelocity(0);
+                            player.setGrounded(true);
+                            player.setYPosition((int)(intersection.y+intersection.height));
+                        }
+
+
+
                     }
                     return true;
-              //  }
+                }
             }
         }
         return false;
     }
+    private boolean checkYCollision(Rectangle intersection) {
+        if (intersection.width > intersection.height) {
+            System.out.println("collision Y");
+            return true;
+        }
+        return false;
+    }
+    private boolean checkXCollision(Rectangle intersection) {
+        System.out.printf("X: %f > %f\n", intersection.height, intersection.width);
+        if (intersection.height > intersection.width) {
+            System.out.println("Collision X");
+            return true;
+        }
+        return false;
+    }
+
 }

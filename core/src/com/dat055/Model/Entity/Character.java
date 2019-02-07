@@ -28,7 +28,7 @@ public abstract class Character extends Entity {
 
         acceleration = new Vector2(Vector2.Zero);
         velocity = new Vector2(Vector2.Zero);
-        position = new Vector2(0,100);
+        position = new Vector2(10,100);
         oldPosition = new Vector2(position);
         deltaPosition = new Vector2(Vector2.Zero);
         direction = new Vector2(Vector2.Zero);
@@ -102,7 +102,6 @@ public abstract class Character extends Entity {
      */
     public void jump() {
         if (this.isGrounded) {
-            System.out.println("Character jumps.");
             isGrounded = false;
             velocity.y = 8;
         }
@@ -115,8 +114,8 @@ public abstract class Character extends Entity {
     @Override
     public void update() {
         float deltaTime = Gdx.graphics.getDeltaTime();
-        acceleration.y = -20;
 
+        updateFalling();
         velocity.x += acceleration.x * deltaTime;
 
         if (velocity.x > maxVelocity)
@@ -134,17 +133,22 @@ public abstract class Character extends Entity {
         if (deltaPosition.x > 0) direction.x = -1; else if (deltaPosition.x < 0) direction.x = 1;
         if (deltaPosition.y > 0) direction.y = -1; else if (deltaPosition.y < 0) direction.y = 1;
 
-        updateFalling();
         rect.setPosition(position.x, position.y);
     }
 
     private void updateFalling() {
         //TODO: Fix when collision is online
-        if (this.position.y <= 64) {
+        if (isGrounded) {
+            this.velocity.y = 0;
+            acceleration.y = 0;
+        } else {
+            acceleration.y = -20;
+        }/*
+        if (this.position.y <= 0) {
             this.isGrounded = true;
             this.velocity.y = 0;
-            position.y=64;
-        }
+            position.y=0;
+        }*/
     }
 
     /**
@@ -167,6 +171,9 @@ public abstract class Character extends Entity {
     public Vector2 getPosition() {
         return position;
     }
+    public Vector2 getOldPosition() {
+        return oldPosition;
+    }
 
         /**
          * Method for debugging purposes
@@ -185,5 +192,10 @@ public abstract class Character extends Entity {
                              " width: %d, x: %f, y: %f, accelerationX: %f, isMoving: %s, velocityX: %f, rect.x: %f, rect.y: %f",
                 id, name, height, width, position.x, position.y, acceleration.x, isMoving, velocity.x, rect.x, rect.y);
     }
-    public void setGrounded() { isGrounded = true; }
+    public void setXPosition(int x) { position.x = x; }
+    public void setYPosition(int y) { position.y = y; }
+    public void setXVelocity(int x) { velocity.x = x; }
+    public void setYVelocity(int y) { velocity.y = y; }
+    public void setGrounded(boolean val) { isGrounded = val; }
+    public void setMoving(boolean val) {isMoving = val;}
 }

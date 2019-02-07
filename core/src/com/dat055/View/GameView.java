@@ -1,41 +1,25 @@
 package com.dat055.View;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.dat055.View.Screen.GameScreen;
-import com.dat055.View.Screen.Screen;
-
-import java.util.ArrayList;
+import com.dat055.Model.GameModel;
 
 public class GameView extends View{
     private static GameView instance = null;
+    private GameView(GameModel gameModel) {
+        this.model = gameModel;
+    }
 
-    private GameScreen gameScreen;
-
-    private GameView() {screens = new ArrayList<Screen>();}
-
-    public static synchronized GameView getInstance() {
+    public static synchronized GameView getInstance(GameModel gameModel) {
         if ( instance == null )
-            instance = new GameView();
+            instance = new GameView(gameModel);
 
         return instance;
     }
 
-    @Override
-    public void update() {
-        for(Screen screen : screens) {screen.update();}
-    }
-
-    @Override
-    public void draw(SpriteBatch batch) {
-        for(Screen screen : screens) {screen.draw(batch);}
-    }
-
-    /**
-     * Creates a gamescreen for a specific map.
-     * @param fileName
-     */
-    public void startMap(String fileName) {
-        gameScreen = new GameScreen(fileName);
-        screens.add(gameScreen);
+    public void render(SpriteBatch batch) {
+        batch.setProjectionMatrix(((GameModel)model).getCam().combined);    // Set camera for batch //TODO: This might need to be fixed
+        ((GameModel)model).getGameMap().draw(batch);
+        ((GameModel)model).getPlayer1().draw(batch);
+        ((GameModel)model).getPlayer2().draw(batch);
     }
 }
