@@ -1,4 +1,4 @@
-package com.dat055.Model.Map;
+package com.dat055.Model.Map.Tile;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.StringBuilder;

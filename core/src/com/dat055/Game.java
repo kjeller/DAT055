@@ -18,20 +18,18 @@ public class Game extends ApplicationAdapter {
 	private SpriteBatch batch;
 	private ArrayList<Controller> controllers;
 	private GameController gameController;
-	private MenuView menuView;
-	private Model model;
-	private View view;
 
-	private float deltaTime = 0; // Time since last update
+	private float deltaTime; // Time since last update
 	
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
 		controllers = new ArrayList<Controller>();
 
-		GameModel gameModel = GameModel.getInstance();
-		gameController = new GameController(gameModel, GameView.getInstance(gameModel));
+		GameModel gameModel = new GameModel();
+		gameController = new GameController(gameModel, new GameView(gameModel));
 		gameController.startMap("maps/map_0.json");
+
 		controllers.add(gameController);
 	}
 

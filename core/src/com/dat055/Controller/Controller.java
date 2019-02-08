@@ -14,7 +14,6 @@ public abstract class Controller {
     }
 
     public void update(float deltaTime) {
-        model.update(deltaTime);
     }
 
     public void render(SpriteBatch batch) {

@@ -2,9 +2,11 @@ package com.dat055.Model.Map;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
-import com.dat055.Model.Map.Tile.TileFactory;
+import com.dat055.Model.Map.Tile.TileMap;
+import com.dat055.Model.Map.Tile.TileMapFactory;
 
 public class GameMapFactory {
     private String fileName;
@@ -28,7 +30,6 @@ public class GameMapFactory {
 
     /**
      * Reads json file and creates two TileMaps: one front and one back
-     * @param fileName name of JSON file
      */
     private void readToMap() {
         try{
@@ -38,17 +39,21 @@ public class GameMapFactory {
             JsonValue mapJson0 = root.get("map_0");
             JsonValue mapJson1 = root.get("map_1");
 
-            System.out.println(mapJson0);
-            System.out.println(mapJson1);
             if(mapJson0 != null || mapJson1 != null) {
                 setProperties(properties);
 
                 map.front = jsonToMap(mapJson0);
                 map.back = jsonToMap(mapJson1);
+                map.frontStartPos = getStartPos(mapJson0);
+                map.backStartPos = getStartPos(mapJson1);
             }
         } catch (Exception x) {
             System.out.println(x);
         }
+    }
+
+    private Vector2 getStartPos(JsonValue map) {
+        return new Vector2(map.getFloat("startX"), map.getFloat("startY"));
     }
 
     /**
@@ -57,8 +62,8 @@ public class GameMapFactory {
      * @return A tilemap created by the tilefactory
      */
     private TileMap jsonToMap(JsonValue map) {
-        TileFactory tileFactory = new TileFactory(atlas);
-        return tileFactory.getTileMap(tileSize, map.getInt("width"), map.getInt("height"),
+        TileMapFactory tileMapFactory = new TileMapFactory(atlas);
+        return tileMapFactory.getTileMap(tileSize, map.getInt("width"), map.getInt("height"),
                 map.get("data").iterator());
     }
 
