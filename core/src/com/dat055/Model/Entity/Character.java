@@ -39,9 +39,6 @@ public abstract class Character extends Entity {
         gravity = 20;
     }
 
-
-
-
     /**
      * Method that moves the entity based on acceleration
      * @param dir direction to move in
@@ -80,6 +77,8 @@ public abstract class Character extends Entity {
                             acceleration.x = 9;
                     }
             }
+
+        // If player isn't holding any key, and should stop moving.
         } else if (velocity.x != 0) {
             acceleration.x = 24 * -direction.x;
             if (velocity.x < 0.5 && velocity.x > -0.5) {
@@ -106,7 +105,6 @@ public abstract class Character extends Entity {
             velocity.y = 8;
         }
     }
-
 
     /**
      * Method that works as a kind of physics engine for entities.

@@ -26,7 +26,6 @@ public class CollisionHandler {
         // If player is outside of the map, stop checking for collisions.
         if (position.x < 0 || position.y < 0 || position.x + width > tileMap.getWidthPixels() || position.y + height > tileMap.getHeightPixels())
             return true;
-        // Check tiles around entity
 
         // Loop through the tiles around the player.
         for (int row = (int) (position.y / tileSize); row < Math.ceil((position.y + height) / tileSize); row++) {
@@ -38,17 +37,18 @@ public class CollisionHandler {
                 if (tile.getState()) {
                     if (Intersector.intersectRectangles(playerRect, tileRect, intersection)) {
 
+                        // Check collisions above and below
                         if (checkYCollision(intersection)) {
                             player.setYVelocity(0);
-
                             if (tileRect.y < playerRect.y) {
                                 player.setGrounded(true);
                                 player.setYPosition((int)(intersection.y+intersection.height));
                             } else {
                                 player.setYPosition((int)(tileRect.y-playerRect.height));
                             }
-
                         }
+
+                        // Check collisions to the side
                         if (checkXCollision(intersection)) {
                             player.setXVelocity(0);
                             if (playerRect.x < tileRect.x + tileRect.width/2)
@@ -78,7 +78,6 @@ public class CollisionHandler {
     }
     private boolean checkXCollision(Rectangle intersection) {
         if (intersection.height > intersection.width) {
-            System.out.println("Collision X");
             return true;
         }
         return false;
