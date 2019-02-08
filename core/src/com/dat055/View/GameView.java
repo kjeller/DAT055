@@ -5,38 +5,33 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Rectangle;
+import com.dat055.Model.Entity.Player;
 import com.dat055.Model.GameModel;
 import com.dat055.Model.Map.Tile.Tile;
-import com.dat055.Model.Map.TileMap;
-
-import java.awt.*;
+import com.dat055.Model.Map.Tile.TileMap;
 
 public class GameView extends View{
-    private static GameView instance = null;
     private ShapeRenderer renderer;
-    private boolean showRectangle = false;
+    private boolean showRectangle;
 
-    private GameView(GameModel gameModel) {
+    public GameView(GameModel gameModel) {
         this.model = gameModel;
         renderer = new ShapeRenderer();
-    }
-
-    public static synchronized GameView getInstance(GameModel gameModel) {
-        if ( instance == null )
-            instance = new GameView(gameModel);
-        return instance;
+        showRectangle = false;
     }
 
     public void render(SpriteBatch batch) {
         batch.setProjectionMatrix(((GameModel)model).getCam().combined);    // Set camera for batch //TODO: This might need to be fixed
         ((GameModel)model).getGameMap().draw(batch);
-        ((GameModel)model).getPlayer1().draw(batch);
-        ((GameModel)model).getPlayer2().draw(batch);
+        Player player1 = ((GameModel)model).getPlayer1();
+        Player player2 = ((GameModel)model).getPlayer2();
+        player1.draw(batch);
+        player2.draw(batch);
 
-        // Ugly shite for debugging below and above - Kjelle
         if(showRectangle) {
-            drawRectangle(((GameModel)model).getPlayer1().getRect(), Color.BLUE);
-            drawRectangle(((GameModel)model).getPlayer2().getRect(), Color.BLUE);
+            renderer.setProjectionMatrix(((GameModel)model).getCam().combined);
+            drawRectangle(player1.getRect(), Color.BLUE);
+            drawRectangle(player2.getRect(), Color.BLUE);
             TileMap front = ((GameModel)model).getGameMap().getFrontTileMap();
             for(int i = 0; i < front.getWidth(); i++){
                 for(int j = 0; j < front.getHeight(); j++){
@@ -48,17 +43,14 @@ public class GameView extends View{
         }
     }
 
-    public void toggleRectangle() {
-        if(!showRectangle)
-            showRectangle = true;
-        else
-            showRectangle = false;
-    }
     private void drawRectangle(Rectangle rectangle, Color color) {
-        renderer.setProjectionMatrix(((GameModel)model).getCam().combined);
         renderer.begin(ShapeType.Filled);
         renderer.setColor(color);
         renderer.rect(rectangle.x, rectangle.y, rectangle.width, rectangle.height);
         renderer.end();
     }
+
+    public boolean getShowRectangle() { return showRectangle; }
+
+    public void setShowRectangle(boolean bool) { showRectangle = bool; }
 }

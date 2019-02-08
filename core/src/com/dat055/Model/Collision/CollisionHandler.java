@@ -5,9 +5,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.dat055.Model.Entity.Player;
 import com.dat055.Model.Map.Tile.Tile;
-import com.dat055.Model.Map.TileMap;
-
-
+import com.dat055.Model.Map.Tile.TileMap;
 
 public class CollisionHandler {
     private final int tileSize = 64;
