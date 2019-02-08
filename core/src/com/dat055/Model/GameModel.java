@@ -72,12 +72,12 @@ public class GameModel extends Model {
 
         if(!isPaused) {
 
-
             player1.update(); // Updates player position, health etc.
             player2.update();
 
             handler1.checkCollision(player1);
             handler1.checkCollision(player2);
+
 
             //TODO: Other entities here
         }
@@ -87,6 +87,10 @@ public class GameModel extends Model {
     public Player getCurrentPlayer() { return currentPlayer; }
     public Player getPlayer1() { return player1; }
     public Player getPlayer2() { return player2; }
+    public CollisionHandler getHandler1() {
+        return handler1;
+    }
+
     public OrthographicCamera getCam() {return cam;}
     public void setPause(Boolean bool) {isPaused = bool;}
     public void setCurrentPlayer(Player player) { currentPlayer = player; }

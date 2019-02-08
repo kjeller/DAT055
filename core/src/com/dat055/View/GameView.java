@@ -10,6 +10,7 @@ import com.dat055.Model.Map.Tile.Tile;
 import com.dat055.Model.Map.TileMap;
 
 import java.awt.*;
+import java.util.ArrayList;
 
 public class GameView extends View{
     private static GameView instance = null;
@@ -35,9 +36,8 @@ public class GameView extends View{
 
         // Ugly shite for debugging below and above - Kjelle
         if(showRectangle) {
-            drawRectangle(((GameModel)model).getPlayer1().getRect(), Color.BLUE);
-            drawRectangle(((GameModel)model).getPlayer2().getRect(), Color.BLUE);
             TileMap front = ((GameModel)model).getGameMap().getFrontTileMap();
+            ArrayList<Rectangle>  hitboxRectangles = ((GameModel)model).getHandler1().getCheckedTiles();
             for(int i = 0; i < front.getWidth(); i++){
                 for(int j = 0; j < front.getHeight(); j++){
                     Tile tile = front.getTile(i, j);
@@ -45,6 +45,11 @@ public class GameView extends View{
                         drawRectangle(tile.getRect(), Color.RED);
                 }
             }
+            for (int i = 0; i < hitboxRectangles.size(); i++) {
+                drawRectangle(hitboxRectangles.get(i), Color.MAGENTA);
+            }
+            drawRectangle(((GameModel)model).getPlayer1().getRect(), Color.BLUE);
+            drawRectangle(((GameModel)model).getPlayer2().getRect(), Color.BLUE);
         }
     }
 

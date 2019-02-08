@@ -7,11 +7,13 @@ import com.dat055.Model.Entity.Player;
 import com.dat055.Model.Map.Tile.Tile;
 import com.dat055.Model.Map.TileMap;
 
+import java.util.ArrayList;
 
 
 public class CollisionHandler {
     private final int tileSize = 64;
     private TileMap tileMap;
+    private ArrayList<Rectangle> rectList;
 
     public CollisionHandler(TileMap map) {
         tileMap = map;
@@ -23,22 +25,32 @@ public class CollisionHandler {
         Rectangle playerRect = new Rectangle((player.getRect()));
         int height = player.getHeight();
         int width = player.getWidth();
+        rectList = new ArrayList();
 
         // If player is outside of the map, stop checking for collisions.
         if (position.x < 0 || position.y < 0 || position.x + width > tileMap.getWidthPixels() || position.y + height > tileMap.getHeightPixels())
             return true;
 
+        if (!tileMap.getTile((int)(position.x/tileSize), (int)(position.y-2)/tileSize).getState()) {
+            player.setGrounded(false);
+        }
+
         // Loop through the tiles around the player.
         for (int row = (int) (position.y / tileSize); row < Math.ceil((position.y + height) / tileSize); row++) {
             for (int col = (int) (position.x / tileSize); col < Math.ceil((position.x + width) / tileSize); col++) {
                 Tile tile = tileMap.getTile((int) Math.floor(col), (int) Math.floor(row));
+
+
+
                 Rectangle tileRect = tile.getRect();
                 Rectangle intersection = new Rectangle();
+                rectList.add(tileRect);
                 // Check for collision
                 if (tile.getState()) {
                     if (Intersector.intersectRectangles(playerRect, tileRect, intersection)) {
 
-                        // Check collisions above and below
+
+
                         if (checkYCollision(intersection)) {
                             player.setYVelocity(0);
                             if (tileRect.y < playerRect.y) {
@@ -52,33 +64,47 @@ public class CollisionHandler {
                         // Check collisions to the side
                         if (checkXCollision(intersection)) {
                             player.setXVelocity(0);
-                            if (playerRect.x < tileRect.x + tileRect.width/2)
+                            player.setXAcceleration(0);
+                            // Left
+                            if (playerRect.x < tileRect.x + tileRect.width/2) {
                                 player.setXPosition(Math.round(tileRect.x - playerRect.width));
-                            else
+                            }
+                            // Right
+                            else if (playerRect.x < tileRect.x+tileRect.width) {
                                 player.setXPosition((int)(tileRect.x + playerRect.width));
+
+                            }
+
+                        }
+                        // Check collisions above and below
+                        if (checkBothCollision(intersection)) {
                         }
                     }
-                    return true;
                 }
-
             }
         }
+        return false;
+    }
+    private boolean checkBothCollision(Rectangle intersection) {
+        if (checkYCollision(intersection) && checkXCollision(intersection))
+            return true;
         return false;
     }
     private boolean checkYCollision(Rectangle intersection) {
 
         if (intersection.width > intersection.height) {
-            System.out.println("Collision Y");
             return true;
         }
         return false;
     }
     private boolean checkXCollision(Rectangle intersection) {
 
-        if (intersection.height >= intersection.width) {
-            System.out.println("Collision X");
+        if (intersection.height > intersection.width) {
             return true;
         }
         return false;
+    }
+    public ArrayList<Rectangle> getCheckedTiles() {
+        return rectList;
     }
 }
