@@ -106,19 +106,19 @@ public class GameController extends Controller {
         //TODO: Set player spawn positions
     }
 
-    public void toggleCurrentPlayer() {
+    private void toggleCurrentPlayer() {
         if(currentPlayer == player1)
             currentPlayer = player2;
         else
             currentPlayer = player1;
     }
-    public void togglePause() {
+    private void togglePause() {
         if(isPaused)
             isPaused = false;
         else
-            isPaused = false;
+            isPaused = true;
     }
-    public void toggleDebug() {
+    private void toggleDebug() {
         if(((GameView)view).getShowRectangle())
             ((GameView)view).setShowRectangle(false);
         else

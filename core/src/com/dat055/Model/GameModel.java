@@ -33,9 +33,10 @@ public class GameModel extends Model {
      * Creates a GameMap
      * @param fileName
      */
-    public void createMap(String fileName, Integer tileSize) {
+    public void createMap(String fileName, int tileSize) {
         GameMapFactory mapFactory = new GameMapFactory();
         map = mapFactory.getMap(fileName, tileSize);
+
     }
 
     public GameMap getGameMap() { return map; }

@@ -1,18 +1,24 @@
 package com.dat055.Model.Map;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
+import com.dat055.Model.Entity.Entity;
 import com.dat055.Model.Map.Tile.TileMap;
 import com.dat055.Model.Map.Tile.TileMapFactory;
+
+import java.util.ArrayList;
 
 public class GameMapFactory {
     private String fileName;
     private GameMap map;
     private TextureAtlas atlas;
     private Integer tileSize;
+    ArrayList<Entity> entities;
 
     /**
      * Creates and returns a GameMap
@@ -24,6 +30,7 @@ public class GameMapFactory {
         this.fileName = fileName;
         this.tileSize = tileSize;
         map = new GameMap();
+        entities = new ArrayList<Entity>();
         readToMap();
         return map;
     }
@@ -42,8 +49,8 @@ public class GameMapFactory {
             if(mapJson0 != null || mapJson1 != null) {
                 setProperties(properties);
 
-                map.front = jsonToMap(mapJson0);
-                map.back = jsonToMap(mapJson1);
+                map.front = jsonToTileMap(mapJson0);
+                map.back = jsonToTileMap(mapJson1);
                 map.frontStartPos = getStartPos(mapJson0);
                 map.backStartPos = getStartPos(mapJson1);
             }
@@ -61,12 +68,26 @@ public class GameMapFactory {
      * @param map JSON object that contains map data
      * @return A tilemap created by the tilefactory
      */
-    private TileMap jsonToMap(JsonValue map) {
+    private TileMap jsonToTileMap(JsonValue map) {
         TileMapFactory tileMapFactory = new TileMapFactory(atlas);
         return tileMapFactory.getTileMap(tileSize, map.getInt("width"), map.getInt("height"),
                 map.get("data").iterator());
     }
 
+    private ArrayList<Entity> getEntities(JsonValue map) {
+        ArrayList<Entity> entities = new ArrayList<Entity>();
+
+        for(JsonValue entityArrayJson : map.get("entities").iterator()) {
+            Entity entity;
+            Vector2 start;
+            Texture texture;
+            for(JsonValue entityJson : entityArrayJson.child)
+            if(entityJson.child.asString().equals("player")) {
+
+            }
+        }
+        return entities;
+    }
     /**
      * Sets the properties of this gamemap defined in json file
      * @param properties json values with the properties
