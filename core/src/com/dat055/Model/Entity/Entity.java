@@ -57,7 +57,7 @@ public abstract class Entity {
      */
     private void setRectangle() {
         rect = new Rectangle();
-        rect.setSize(this.width, this.height*2);
+        rect.setSize(this.width, this.height);
         rect.setPosition(position.x, this.position.y);
     }
 

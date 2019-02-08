@@ -40,9 +40,12 @@ public class GameController extends Controller {
         if (Gdx.input.isKeyPressed(Input.Keys.D))
             System.out.println(toString());
 
-        if(Gdx.input.isKeyPressed(Input.Keys.T))
+        if(Gdx.input.isKeyJustPressed(Input.Keys.T))
             ((GameModel)model).toggleCurrentPlayer();
 
+        // Enter debug mode
+        if(Gdx.input.isKeyJustPressed((Input.Keys.B)))
+            ((GameView)view).toggleRectangle();
     }
     /**
      * Calls gamemodel to create a game map for a specific map.

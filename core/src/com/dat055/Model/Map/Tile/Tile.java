@@ -5,9 +5,9 @@ import com.badlogic.gdx.math.Rectangle;
 
 public class Tile {
     protected float x, y;
-    Rectangle box;
-    protected boolean isCollideable = false;
 
+    protected boolean isCollideable = false;
+    Rectangle box;
     //protected State state;
 
     Tile(float x, float y, float tileSize) {

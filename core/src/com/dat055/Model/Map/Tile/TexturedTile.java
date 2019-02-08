@@ -2,6 +2,7 @@ package com.dat055.Model.Map.Tile;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Rectangle;
 
 /**
  * A tile with collision and a texture
@@ -18,6 +19,8 @@ public class TexturedTile extends Tile {
         super(x, y, tileSize);
         this.sprite = sprite;
         this.isCollideable = true;
+
+
         //state = State.SOLID;
     }
 

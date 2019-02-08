@@ -4,7 +4,10 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.StringBuilder;
 import com.dat055.Model.Map.Tile.Tile;
 
-public class TileMap{
+import java.util.Arrays;
+import java.util.Iterator;
+
+public class TileMap {
     private Tile[][] map;
     Integer width, height;
 
@@ -53,4 +56,7 @@ public class TileMap{
     }
     public int getWidthPixels() { return width*64; }
     public int getHeightPixels() { return height*64; }
+    public int getWidth() { return width;}
+    public int getHeight() { return height;}
+
 }
