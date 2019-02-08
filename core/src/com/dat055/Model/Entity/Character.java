@@ -60,10 +60,10 @@ public abstract class Character extends Entity {
                         else
                             acceleration.x = -25;
                     } else {
-                        if (isGrounded)
+                        /*if (isGrounded)
                             acceleration.x = -18;
                         else
-                            acceleration.x = -9;
+                            acceleration.x = -9;*/
                     }
                     break;
                 case 1:
@@ -143,12 +143,7 @@ public abstract class Character extends Entity {
             acceleration.y = 0;
         } else {
             acceleration.y = -20;
-        }/*
-        if (this.position.y <= 0) {
-            this.isGrounded = true;
-            this.velocity.y = 0;
-            position.y=0;
-        }*/
+        }
     }
 
     /**
@@ -167,14 +162,6 @@ public abstract class Character extends Entity {
     private void die() {
         this.isAlive = false;
     }
-
-    public Vector2 getPosition() {
-        return position;
-    }
-    public Vector2 getOldPosition() {
-        return oldPosition;
-    }
-
         /**
          * Method for debugging purposes
          */
@@ -198,4 +185,15 @@ public abstract class Character extends Entity {
     public void setYVelocity(int y) { velocity.y = y; }
     public void setGrounded(boolean val) { isGrounded = val; }
     public void setMoving(boolean val) {isMoving = val;}
+
+    public boolean getGrounded() { return isGrounded; }
+    public Vector2 getPosition() {
+        return position;
+    }
+    public Vector2 getOldPosition() {
+        return oldPosition;
+    }
+
+
+
 }

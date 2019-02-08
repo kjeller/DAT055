@@ -52,8 +52,8 @@ public class GameModel extends Model {
                 "Towbie", 5, 5);
         player2= new Player(1, 80, 64, "blue_penguin_64x80.png",
                 "Kjello", 5, 5);
-        handler1 = new CollisionHandler(player1, map.getFrontTileMap());
-        handler2 = new CollisionHandler(player2, map.getBackTileMap());
+        handler1 = new CollisionHandler(map.getFrontTileMap());
+        handler2 = new CollisionHandler(map.getBackTileMap());
 
         currentPlayer = player1;
 
@@ -71,12 +71,13 @@ public class GameModel extends Model {
         cam.update();
 
         if(!isPaused) {
-            //Todo: collisionhandler here
-            handler1.checkCollision(player1);
-            handler1.checkCollision(player2);
+
 
             player1.update(); // Updates player position, health etc.
             player2.update();
+
+            handler1.checkCollision(player1);
+            handler1.checkCollision(player2);
 
             //TODO: Other entities here
         }
