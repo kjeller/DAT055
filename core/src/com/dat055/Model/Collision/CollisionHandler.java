@@ -15,6 +15,7 @@ public class CollisionHandler {
         tileMap = map;
     }
 
+
     public boolean checkCollision(Player player) {
         Vector2 position = new Vector2(player.getPosition());
         Rectangle playerRect = new Rectangle((player.getRect()));
@@ -57,25 +58,23 @@ public class CollisionHandler {
                     }
                     return true;
                 }
-                else {
-                    if (player.getGrounded()) {
-                        player.setGrounded(false);
-                    }
-
-                }
 
             }
         }
         return false;
     }
     private boolean checkYCollision(Rectangle intersection) {
+
         if (intersection.width > intersection.height) {
+            System.out.println("Collision Y");
             return true;
         }
         return false;
     }
     private boolean checkXCollision(Rectangle intersection) {
-        if (intersection.height > intersection.width) {
+
+        if (intersection.height >= intersection.width) {
+            System.out.println("Collision X");
             return true;
         }
         return false;

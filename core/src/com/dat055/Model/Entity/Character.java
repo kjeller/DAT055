@@ -57,10 +57,10 @@ public abstract class Character extends Entity {
                         else
                             acceleration.x = -25;
                     } else {
-                        /*if (isGrounded)
+                        if (isGrounded)
                             acceleration.x = -18;
                         else
-                            acceleration.x = -9;*/
+                            acceleration.x = -9;
                     }
                     break;
                 case 1:
