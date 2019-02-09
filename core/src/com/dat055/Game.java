@@ -6,7 +6,9 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.dat055.Controller.Controller;
 import com.dat055.Controller.GameController;
+import com.dat055.Controller.MenuController;
 import com.dat055.Model.GameModel;
+import com.dat055.Model.MenuModel;
 import com.dat055.Model.Model;
 import com.dat055.View.GameView;
 import com.dat055.View.MenuView;
@@ -18,7 +20,7 @@ public class Game extends ApplicationAdapter {
 	private SpriteBatch batch;
 	private ArrayList<Controller> controllers;
 	private GameController gameController;
-	private MenuView menuView;
+	private MenuController menuController;
 	private Model model;
 	private View view;
 
@@ -31,6 +33,7 @@ public class Game extends ApplicationAdapter {
 
 		GameModel gameModel = GameModel.getInstance();
 		gameController = new GameController(gameModel, GameView.getInstance(gameModel));
+		menuController = new MenuController();
 		gameController.startMap("maps/map_0.json");
 		controllers.add(gameController);
 	}
@@ -42,11 +45,12 @@ public class Game extends ApplicationAdapter {
 		deltaTime = Gdx.graphics.getDeltaTime();
 
 		// Update
-		for(Controller controller : controllers) { controller.update(deltaTime); }
+		//for(Controller controller : controllers) { controller.update(deltaTime); }
 
 		// Draw
 		batch.begin();
-		for(Controller controller : controllers) {controller.render(batch); }
+		//for(Controller controller : controllers) {controller.render(batch); }
+		menuController.draw();
 		batch.end();
 	}
 

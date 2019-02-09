@@ -56,8 +56,6 @@ public class GameModel extends Model {
         handler2 = new CollisionHandler(map.getBackTileMap());
 
         currentPlayer = player1;
-
-        MenuModel.getInstance();
     }
 
     @Override
