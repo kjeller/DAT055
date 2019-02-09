@@ -3,15 +3,14 @@ package com.dat055.Model.Map.Tile;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.dat055.Model.Map.TileMap;
 
 import com.badlogic.gdx.utils.JsonValue.JsonIterator;
 
 
-public class TileFactory {
+public class TileMapFactory {
     TextureAtlas atlas;
 
-    public TileFactory(TextureAtlas atlas) {
+    public TileMapFactory(TextureAtlas atlas) {
         this.atlas = atlas;
     }
 

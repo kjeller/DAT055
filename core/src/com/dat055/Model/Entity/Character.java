@@ -57,10 +57,10 @@ public abstract class Character extends Entity {
                         else
                             acceleration.x = -25;
                     } else {
-                        /*if (isGrounded)
+                        if (isGrounded)
                             acceleration.x = -18;
                         else
-                            acceleration.x = -9;*/
+                            acceleration.x = -9;
                     }
                     break;
                 case 1:
@@ -126,6 +126,8 @@ public abstract class Character extends Entity {
         position.add(velocity);
 
 
+
+
         deltaPosition.set(oldPosition.x-position.x, oldPosition.y-position.y);
 
         if (deltaPosition.x > 0) direction.x = -1; else if (deltaPosition.x < 0) direction.x = 1;
@@ -181,6 +183,7 @@ public abstract class Character extends Entity {
     public void setYPosition(int y) { position.y = y; }
     public void setXVelocity(int x) { velocity.x = x; }
     public void setYVelocity(int y) { velocity.y = y; }
+    public void setXAcceleration(int x) { acceleration.x = x; }
     public void setGrounded(boolean val) { isGrounded = val; }
     public void setMoving(boolean val) {isMoving = val;}
 
