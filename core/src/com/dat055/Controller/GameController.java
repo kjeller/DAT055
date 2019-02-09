@@ -48,12 +48,12 @@ public class GameController extends Controller {
 
         if(!isPaused) {
 
-            handler1.checkCollision(player1);
-            handler2.checkCollision(player2);
-
             // Updates player position, health etc.
             player1.update();
             player2.update();
+
+            handler1.checkCollision(player1);
+            handler2.checkCollision(player2);
 
             //TODO: Other entities here
         }
@@ -102,6 +102,8 @@ public class GameController extends Controller {
         GameMap map = ((GameModel)model).getGameMap();
         handler1 = new CollisionHandler(map.getFrontTileMap());
         handler2 = new CollisionHandler(map.getBackTileMap());
+        ((GameModel)model).setHandler1(handler1);
+
 
         //TODO: Set player spawn positions
     }

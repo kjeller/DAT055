@@ -15,6 +15,7 @@ public class GameModel extends Model {
     private Player player1;
     private Player player2;
     private OrthographicCamera cam;
+    private CollisionHandler handler1;
 
     public GameModel(){
         initialize();
@@ -42,4 +43,7 @@ public class GameModel extends Model {
     public Player getPlayer1() { return player1; }
     public Player getPlayer2() { return player2; }
     public OrthographicCamera getCam() {return cam;}
+    public CollisionHandler getHandler1() { return handler1; }
+
+    public void setHandler1(CollisionHandler handler1) {this.handler1 = handler1; }
 }

@@ -5,10 +5,14 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Rectangle;
+import com.dat055.Controller.GameController;
+import com.dat055.Model.Collision.CollisionHandler;
 import com.dat055.Model.Entity.Player;
 import com.dat055.Model.GameModel;
 import com.dat055.Model.Map.Tile.Tile;
 import com.dat055.Model.Map.Tile.TileMap;
+
+import java.util.ArrayList;
 
 public class GameView extends View{
     private ShapeRenderer renderer;
@@ -30,8 +34,6 @@ public class GameView extends View{
 
         if(showRectangle) {
             renderer.setProjectionMatrix(((GameModel)model).getCam().combined);
-            drawRectangle(player1.getRect(), Color.BLUE);
-            drawRectangle(player2.getRect(), Color.BLUE);
             TileMap front = ((GameModel)model).getGameMap().getFrontTileMap();
             for(int i = 0; i < front.getWidth(); i++){
                 for(int j = 0; j < front.getHeight(); j++){
@@ -40,6 +42,12 @@ public class GameView extends View{
                         drawRectangle(tile.getRect(), Color.RED);
                 }
             }
+            ArrayList<Rectangle> hitboxRectangles = ((GameModel)model).getHandler1().getCheckedTiles();
+            for (int i = 0; i < hitboxRectangles.size(); i++) {
+                drawRectangle(hitboxRectangles.get(i), Color.MAGENTA);
+            }
+            drawRectangle(player1.getRect(), Color.BLUE);
+            drawRectangle(player2.getRect(), Color.BLUE);
         }
     }
 

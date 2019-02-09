@@ -5,7 +5,8 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.dat055.Model.Entity.Player;
 import com.dat055.Model.Map.Tile.Tile;
-import com.dat055.Model.Map.TileMap;
+import com.dat055.Model.Map.Tile.TileMap;
+
 
 import java.util.ArrayList;
 
@@ -48,9 +49,7 @@ public class CollisionHandler {
                 // Check for collision
                 if (tile.getState()) {
                     if (Intersector.intersectRectangles(playerRect, tileRect, intersection)) {
-
-
-
+                        // Check collisions above and below
                         if (checkYCollision(intersection)) {
                             player.setYVelocity(0);
                             if (tileRect.y < playerRect.y) {
@@ -76,33 +75,23 @@ public class CollisionHandler {
                             }
 
                         }
-                        // Check collisions above and below
-                        if (checkBothCollision(intersection)) {
-                        }
+                        if (checkBothCollisions(intersection))
+                            System.out.println("mweep");
                     }
                 }
             }
         }
         return false;
     }
-    private boolean checkBothCollision(Rectangle intersection) {
-        if (checkYCollision(intersection) && checkXCollision(intersection))
-            return true;
-        return false;
-    }
     private boolean checkYCollision(Rectangle intersection) {
-
-        if (intersection.width > intersection.height) {
-            return true;
-        }
-        return false;
+        return (intersection.width > intersection.height);
     }
     private boolean checkXCollision(Rectangle intersection) {
 
-        if (intersection.height > intersection.width) {
-            return true;
-        }
-        return false;
+        return (intersection.height > intersection.width);
+    }
+    private boolean checkBothCollisions(Rectangle intersection) {
+        return (intersection.height == intersection.width);
     }
     public ArrayList<Rectangle> getCheckedTiles() {
         return rectList;
