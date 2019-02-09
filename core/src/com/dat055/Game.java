@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.dat055.Controller.Controller;
 import com.dat055.Controller.GameController;
+import com.dat055.Controller.MenuController;
 import com.dat055.Model.GameModel;
 import com.dat055.Model.Model;
 import com.dat055.View.GameView;
@@ -18,6 +19,7 @@ public class Game extends ApplicationAdapter {
 	private SpriteBatch batch;
 	private ArrayList<Controller> controllers;
 	private GameController gameController;
+	private MenuController menuController;
 
 	private float deltaTime; // Time since last update
 	
@@ -30,6 +32,7 @@ public class Game extends ApplicationAdapter {
 		gameController = new GameController(gameModel, new GameView(gameModel));
 		gameController.startMap("maps/map_0.json");
 
+		menuController = new MenuController();
 		controllers.add(gameController);
 	}
 
@@ -44,7 +47,8 @@ public class Game extends ApplicationAdapter {
 
 		// Draw
 		batch.begin();
-		for(Controller controller : controllers) {controller.render(batch); }
+		for(Controller controller : controllers) { controller.render(batch); }
+		menuController.draw();
 		batch.end();
 	}
 
