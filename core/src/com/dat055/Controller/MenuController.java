@@ -5,6 +5,8 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.dat055.View.MenuView;
 import com.dat055.Model.MenuModel;
 
+import java.awt.*;
+
 public class MenuController {
     private float dt;
     private MenuView menuView;
@@ -16,7 +18,7 @@ public class MenuController {
         Gdx.input.setInputProcessor(menuModel.getStage());
     }
 
-    public void update() {
+    public void update(float dt) {
         menuModel.update(dt);
     }
 
