@@ -80,7 +80,7 @@ public class GameController extends Controller {
         if (Gdx.input.isKeyPressed(Input.Keys.SPACE))
             currentPlayer.jump();
         if (Gdx.input.isKeyPressed(Input.Keys.D))
-            System.out.println(toString());
+            System.out.println(currentPlayer.toString());
 
         if(Gdx.input.isKeyJustPressed(Input.Keys.T))
             toggleCurrentPlayer();

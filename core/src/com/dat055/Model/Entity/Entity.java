@@ -10,14 +10,16 @@ public abstract class Entity {
     protected int height;
     protected int width;
     protected Vector2 position;
-    private Texture texture;
+    protected Texture texture;
     protected Rectangle rect;
+    protected Vector2 startPosition;
 
-    public Entity(int id, int height, int width, String texturePath) {
-        this.id = id;
+    public Entity(Vector2 position, int height, int width, String texturePath) {
         this.height = height;
         this.width = width;
-        position = new Vector2(0, 0);
+
+        this.position = new Vector2(position);
+        startPosition = new Vector2(position);
         this.setTexture(texturePath);
         this.setRectangle();
     }

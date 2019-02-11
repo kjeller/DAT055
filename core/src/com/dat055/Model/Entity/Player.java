@@ -2,10 +2,12 @@ package com.dat055.Model.Entity;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.math.Vector2;
 
 public class Player extends Character {
-    public Player(int id, int height, int width, String texturePath, String name, int healthPoints, float maxVelocity) {
-        super(id, height, width, texturePath,name, healthPoints, maxVelocity);
+    Hook hook;
+    public Player(Vector2 position, int height, int width, String texturePath, String name, int healthPoints, float maxVelocity) {
+        super(position, height, width, texturePath,name, healthPoints, maxVelocity);
     }
 
     /**
@@ -22,8 +24,14 @@ public class Player extends Character {
     @Override
     public void attack() {
         System.out.printf("%s attacks!\n", this.name);
+        hook = generateHook();
     }
 
+    private Hook generateHook() {
+        int directionOffset;
+        //if (direction.x )
+        return new Hook(position, height, width, "hook.png", 5.0f);
+    }
     /**
      * Player interacts with something
      */

@@ -23,9 +23,9 @@ public class GameModel extends Model {
 
     @Override
     public void initialize() {
-        player1 = new Player(1, 80, 64, "red_penguin_64x80.png",
+        player1 = new Player(new Vector2(10, 100), 80, 64, "red_penguin_64x80.png",
                 "Towbie", 5, 5);
-        player2= new Player(1, 80, 64, "blue_penguin_64x80.png",
+        player2= new Player(new Vector2(20, 100), 80, 64, "blue_penguin_64x80.png",
                 "Kjello", 5, 5);
         cam = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
     }
