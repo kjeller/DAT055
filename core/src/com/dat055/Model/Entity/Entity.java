@@ -13,11 +13,11 @@ public abstract class Entity {
     private Texture texture;
     protected Rectangle rect;
 
-    public Entity(int id, int height, int width, String texturePath) {
+    public Entity(int id, int height, int width, String texturePath, Vector2 position) {
         this.id = id;
         this.height = height;
         this.width = width;
-        position = new Vector2(0, 0);
+        this.position = position;
         this.setTexture(texturePath);
         this.setRectangle();
     }
@@ -42,6 +42,7 @@ public abstract class Entity {
         // TODO: Parameter spritebatch, then spritebatch.draw(texture), is called in Game.render();
         sb.draw(texture, position.x, position.y);
     }
+
 
     /**
      * Sets the entity's texture to what is specified in texturePath

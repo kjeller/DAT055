@@ -7,10 +7,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.dat055.Controller.Controller;
 import com.dat055.Controller.GameController;
 import com.dat055.Model.GameModel;
-import com.dat055.Model.Model;
 import com.dat055.View.GameView;
-import com.dat055.View.MenuView;
-import com.dat055.View.View;
 
 import java.util.ArrayList;
 
@@ -29,6 +26,7 @@ public class Game extends ApplicationAdapter {
 		GameModel gameModel = new GameModel();
 		gameController = new GameController(gameModel, new GameView(gameModel));
 		gameController.startMap("maps/map_0.json");
+		gameController.initialize();
 
 		controllers.add(gameController);
 	}

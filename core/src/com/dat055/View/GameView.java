@@ -13,6 +13,7 @@ import com.dat055.Model.Map.Tile.TileMap;
 public class GameView extends View{
     private ShapeRenderer renderer;
     private boolean showRectangle;
+    private float rotationTimer = 0;
 
     public GameView(GameModel gameModel) {
         this.model = gameModel;
@@ -21,8 +22,9 @@ public class GameView extends View{
     }
 
     public void render(SpriteBatch batch) {
+
         batch.setProjectionMatrix(((GameModel)model).getCam().combined);    // Set camera for batch //TODO: This might need to be fixed
-        ((GameModel)model).getGameMap().draw(batch);
+        ((GameModel)model).getGameMap().draw(batch, rotationTimer, ((GameModel)model).getMode());
         Player player1 = ((GameModel)model).getPlayer1();
         Player player2 = ((GameModel)model).getPlayer2();
         player1.draw(batch);
@@ -30,15 +32,21 @@ public class GameView extends View{
 
         if(showRectangle) {
             renderer.setProjectionMatrix(((GameModel)model).getCam().combined);
+
+            drawMapRectangle(((GameModel)model).getGameMap().getFrontTileMap(), Color.RED);
+            drawMapRectangle(((GameModel)model).getGameMap().getBackTileMap(), Color.RED);
+
             drawRectangle(player1.getRect(), Color.BLUE);
             drawRectangle(player2.getRect(), Color.BLUE);
-            TileMap front = ((GameModel)model).getGameMap().getFrontTileMap();
-            for(int i = 0; i < front.getWidth(); i++){
-                for(int j = 0; j < front.getHeight(); j++){
-                    Tile tile = front.getTile(i, j);
-                    if((tile).getState())
-                        drawRectangle(tile.getRect(), Color.RED);
-                }
+        }
+    }
+
+    private void drawMapRectangle(TileMap map, Color color) {
+        for(int i = 0; i < map.getWidth(); i++){
+            for(int j = 0; j < map.getHeight(); j++){
+                Tile tile = map.getTile(i, j);
+                if((tile).getState())
+                    drawRectangle(tile.getRect(), color);
             }
         }
     }
@@ -53,4 +61,5 @@ public class GameView extends View{
     public boolean getShowRectangle() { return showRectangle; }
 
     public void setShowRectangle(boolean bool) { showRectangle = bool; }
+    public void setRotationTimer(float val) {this.rotationTimer = val;}
 }

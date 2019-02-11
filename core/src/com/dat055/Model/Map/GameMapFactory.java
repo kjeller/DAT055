@@ -8,16 +8,20 @@ import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
 import com.dat055.Model.Entity.Entity;
+import com.dat055.Model.Entity.Player;
 import com.dat055.Model.Map.Tile.TileMap;
 import com.dat055.Model.Map.Tile.TileMapFactory;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class GameMapFactory {
     private String fileName;
     private GameMap map;
-    private TextureAtlas atlas;
-    private Integer tileSize;
+    private TextureAtlas atlas; // texture atlas for map
+    private int tileSize;
+    private Player player1;
+    private Player player2;
     ArrayList<Entity> entities;
 
     /**
@@ -43,24 +47,24 @@ public class GameMapFactory {
             JsonReader reader = new JsonReader();
             JsonValue root = reader.parse(Gdx.files.internal(fileName));
             JsonValue properties = root.child;
-            JsonValue mapJson0 = root.get("map_0");
             JsonValue mapJson1 = root.get("map_1");
+            JsonValue mapJson2 = root.get("map_2");
 
-            if(mapJson0 != null || mapJson1 != null) {
+            if(mapJson1 != null || mapJson2 != null) {
                 setProperties(properties);
 
-                map.front = jsonToTileMap(mapJson0);
-                map.back = jsonToTileMap(mapJson1);
-                map.frontStartPos = getStartPos(mapJson0);
-                map.backStartPos = getStartPos(mapJson1);
+                map.front = jsonToTileMap(mapJson1);
+                map.back = jsonToTileMap(mapJson2);
+                map.entities = getEntities(mapJson1);
+                map.entities = getEntities(mapJson2);
+
+                // getEntities sets the players. it is ugly I know
+                map.player1 = player1;
+                map.player2 = player2;
             }
         } catch (Exception x) {
             System.out.println(x);
         }
-    }
-
-    private Vector2 getStartPos(JsonValue map) {
-        return new Vector2(map.getFloat("startX"), map.getFloat("startY"));
     }
 
     /**
@@ -70,20 +74,51 @@ public class GameMapFactory {
      */
     private TileMap jsonToTileMap(JsonValue map) {
         TileMapFactory tileMapFactory = new TileMapFactory(atlas);
-        return tileMapFactory.getTileMap(tileSize, map.getInt("width"), map.getInt("height"),
+        JsonValue properties = map.get("properties");
+        return tileMapFactory.getTileMap(tileSize, properties.getInt("width"), properties.getInt("height"),
                 map.get("data").iterator());
     }
 
+    // TODO: Very ugly code benath. Need to clean this up someday.
+
+    /**
+     * Reads entity array from Json map file and creates the entities
+     * @param map which contains the entities
+     * @return ArrayList of these entities
+     */
     private ArrayList<Entity> getEntities(JsonValue map) {
-        ArrayList<Entity> entities = new ArrayList<Entity>();
 
-        for(JsonValue entityArrayJson : map.get("entities").iterator()) {
-            Entity entity;
-            Vector2 start;
-            Texture texture;
-            for(JsonValue entityJson : entityArrayJson.child)
-            if(entityJson.child.asString().equals("player")) {
+        // Get array of entities
+        Iterator<JsonValue> entitiesJson = map.get("entities").child.iterator();
 
+        // Loop through every entity in array
+        while(entitiesJson.hasNext()) {
+            JsonValue current = entitiesJson.next();
+            if(current != null) {
+                Entity entity = null;
+                Vector2 start;
+                JsonValue position = current.get("position");
+                start = new Vector2(position.getInt(0) * tileSize,
+                        position.getInt(1)*tileSize);
+
+                if(current.name.equals("player1")) {
+                    player1 = new Player(start, current.getString("sprite"), "player1" );
+                    entity = player1;
+                }
+                else if(current.name.equals("player2")) {
+                    player2 = new Player(start, current.getString("sprite"), "player2" );
+                    entity = player2;
+                }
+                else if(current.name.equals("enemy")) {
+                    //Todo: add different enemy types to make it easier for map boi
+                    //entity = new Enemy(start, current.getString("sprite"), "enemy" );
+                }
+                else if(current.name.equals("door")) {
+                    //TODO: Door goes here
+                }
+
+                if(entity != null)
+                    entities.add(entity);
             }
         }
         return entities;
@@ -95,7 +130,7 @@ public class GameMapFactory {
     private void setProperties(JsonValue properties) {
         map.id = properties.getString("id");
         map.name = properties.getString("name");
-        atlas = new TextureAtlas(Gdx.files.internal(properties.getString("spritesheet")));
+        atlas = new TextureAtlas(Gdx.files.internal(properties.getString("sprite")));
     }
 
 }

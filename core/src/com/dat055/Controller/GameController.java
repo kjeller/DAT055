@@ -6,10 +6,12 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.dat055.Model.Collision.CollisionHandler;
+import com.dat055.Model.Entity.Entity;
 import com.dat055.Model.Entity.Player;
 import com.dat055.Model.GameModel;
 import com.dat055.Model.Map.GameMap;
 import com.dat055.View.GameView;
+
 
 public class GameController extends Controller {
     private boolean isPaused;
@@ -20,12 +22,17 @@ public class GameController extends Controller {
     private CollisionHandler handler1;
     private CollisionHandler handler2;
 
+    private boolean isRotating = false;
+    private float rotationTimer = 0;
+
+    private boolean isDebug = false;
+
     public GameController(GameModel model, GameView view) {
         super(model, view);
-        initalize();
+        initialize();
     }
 
-    public void initalize() {
+    public void initialize() {
         isPaused = false;
 
         player1 = ((GameModel)model).getPlayer1();
@@ -38,6 +45,18 @@ public class GameController extends Controller {
     public void update(float deltaTime) {
         checkKeyboardInput(); // Handles keyboard input
 
+        // Tile rotation map transition
+        if(isRotating) {
+            rotationTimer+= 2f;
+        }
+
+
+        if(rotationTimer >= 180f) {
+            isRotating = false;
+            rotationTimer = 180f;
+        }
+        ((GameView)view).setRotationTimer(rotationTimer);
+
         // Camera transition
         float lerp = 2f;
         Vector2 playerPosition = currentPlayer.getPosition();
@@ -47,15 +66,19 @@ public class GameController extends Controller {
         cam.update();
 
         if(!isPaused) {
+            // Updates entities position, health etc.
+            // This includes the players
+            for(Entity entity : ((GameModel)model).entities) {
+                entity.update();
+            }
 
             handler1.checkCollision(player1);
             handler2.checkCollision(player2);
 
-            // Updates player position, health etc.
-            player1.update();
-            player2.update();
-
             //TODO: Other entities here
+
+            if(isDebug)
+                ((GameModel)model).getDebugCam().update();
         }
     }
 
@@ -106,11 +129,22 @@ public class GameController extends Controller {
         //TODO: Set player spawn positions
     }
 
+    //TODO: Create timer for rotating map
     private void toggleCurrentPlayer() {
-        if(currentPlayer == player1)
-            currentPlayer = player2;
-        else
+        if(((GameModel)model).getMode() == GameModel.Mode.FRONT) {
+            ((GameModel)model).setMode(GameModel.Mode.BACK);
             currentPlayer = player1;
+            rotationTimer = 0;
+        }
+        else {
+            ((GameModel)model).setMode(GameModel.Mode.FRONT);
+            currentPlayer = player2;
+            rotationTimer = 0;
+        }
+        isRotating = true; // Will start rotation timer
+
+        if(isDebug)
+            currentPlayer = ((GameModel)model).getDebugCam();
     }
     private void togglePause() {
         if(isPaused)
@@ -119,9 +153,14 @@ public class GameController extends Controller {
             isPaused = true;
     }
     private void toggleDebug() {
-        if(((GameView)view).getShowRectangle())
-            ((GameView)view).setShowRectangle(false);
-        else
+        if(((GameView)view).getShowRectangle()) {
+            isDebug = false;
+            ((GameView) view).setShowRectangle(false);
+        }
+        else {
+            isDebug = true;
             ((GameView)view).setShowRectangle(true);
+            currentPlayer = ((GameModel)model).getDebugCam();
+        }
     }
 }

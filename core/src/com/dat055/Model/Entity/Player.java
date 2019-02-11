@@ -2,10 +2,14 @@ package com.dat055.Model.Entity;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.math.Vector2;
 
 public class Player extends Character {
-    public Player(int id, int height, int width, String texturePath, String name, int healthPoints, float maxVelocity) {
-        super(id, height, width, texturePath,name, healthPoints, maxVelocity);
+    public Player(Vector2 startPos, String texturePath, String name) {
+        // Ändrade det här för att underlätta vid inläsning av mappen - Kjelle
+        super(1, 80, 64, texturePath,name, 5, 5, startPos);
+
+
     }
 
     /**

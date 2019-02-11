@@ -9,7 +9,7 @@ import java.util.Iterator;
 
 public class TileMap {
     private Tile[][] map;
-    Integer width, height;
+    private int width, height;
 
     public TileMap(Integer width, Integer height) {
         this.width = width;
@@ -17,11 +17,11 @@ public class TileMap {
         map = new Tile[width][height];
     }
 
-    public void draw(SpriteBatch batch) {
+    public void draw(SpriteBatch batch, float rotation) {
         for(int i = 0; i < width; i++) {
             for(int j = 0; j < height; j++) {
                 if(map[i][j] != null)
-                    map[i][j].draw(batch);
+                    map[i][j].draw(batch, rotation);
             }
         }
     }
