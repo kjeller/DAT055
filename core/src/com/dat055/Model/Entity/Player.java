@@ -7,7 +7,7 @@ import com.badlogic.gdx.math.Vector2;
 public class Player extends Character {
     public Player(Vector2 startPos, String texturePath, String name) {
         // Ändrade det här för att underlätta vid inläsning av mappen - Kjelle
-        super(1, 80, 64, texturePath,name, 5, 5, startPos);
+        super(startPos, 80, 64, texturePath,name, 5, 5);
 
 
     }

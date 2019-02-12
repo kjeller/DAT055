@@ -6,11 +6,11 @@ import com.badlogic.gdx.math.Vector2;
 public abstract class Character extends Entity {
     public String name;
     private int healthPoints;
-    private Vector2 acceleration;
-    private Vector2 velocity;
-    private Vector2 deltaPosition;
+    protected Vector2 acceleration;
+    protected Vector2 velocity;
+    protected Vector2 deltaPosition;
     protected Vector2 direction;
-    private Vector2 oldPosition;
+    protected Vector2 oldPosition;
 
     protected float maxVelocity;
     protected int gravity;

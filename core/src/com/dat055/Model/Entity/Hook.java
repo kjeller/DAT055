@@ -65,7 +65,7 @@ public class Hook extends Entity {
     @Override
     public void draw(SpriteBatch sb) {
         //TODO: Fix texture-bös
-        sb.draw(texture, position.x, position.y);
+
     }
     public boolean getRemoved() {
         return remove;

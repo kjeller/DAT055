@@ -12,7 +12,6 @@ public class GameModel extends Model {
     private GameMap map;
     private DebugCamera debugCam;
     private OrthographicCamera cam;
-    private CollisionHandler handler1;
 
     public GameModel(){
         cam = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -31,7 +30,4 @@ public class GameModel extends Model {
     public GameMap getGameMap() { return map; }
     public Player getDebugCam() { return debugCam; }
     public OrthographicCamera getCam() {return cam;}
-    public CollisionHandler getHandler1() { return handler1; }
-
-    public void setHandler1(CollisionHandler handler1) {this.handler1 = handler1; }
 }
