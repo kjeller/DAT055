@@ -61,7 +61,7 @@ public class MenuView {
     }
 
     /**
-     * A draw function that draws the stage stored in the model
+     * A render function that draws the stage stored in the model
      */
     public void draw() {
         MenuModel.getInstance().getStage().draw();

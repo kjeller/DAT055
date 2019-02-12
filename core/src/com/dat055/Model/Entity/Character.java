@@ -6,11 +6,11 @@ import com.badlogic.gdx.math.Vector2;
 public abstract class Character extends Entity {
     public String name;
     private int healthPoints;
-    private Vector2 acceleration;
-    private Vector2 velocity;
-    private Vector2 deltaPosition;
+    protected Vector2 acceleration;
+    protected Vector2 velocity;
+    protected Vector2 deltaPosition;
     protected Vector2 direction;
-    private Vector2 oldPosition;
+    protected  Vector2 oldPosition;
 
     protected float maxVelocity;
     protected int gravity;
@@ -19,8 +19,8 @@ public abstract class Character extends Entity {
     protected boolean isMoving;
 
 
-    public Character(int id, int height, int width, String texturePath, String name, int healthPoints, float maxVelocity) {
-        super(id, height, width, texturePath);
+    public Character(int id, int height, int width, String texturePath, String name, int healthPoints, float maxVelocity, Vector2 startPos) {
+        super(id, height, width, texturePath, startPos);
 
         this.name = name;
         this.healthPoints = healthPoints;
@@ -28,7 +28,6 @@ public abstract class Character extends Entity {
 
         acceleration = new Vector2(Vector2.Zero);
         velocity = new Vector2(Vector2.Zero);
-        position = new Vector2(10,100);
         oldPosition = new Vector2(position);
         deltaPosition = new Vector2(Vector2.Zero);
         direction = new Vector2(Vector2.Zero);
@@ -136,7 +135,7 @@ public abstract class Character extends Entity {
         rect.setPosition(position.x, position.y);
     }
 
-    private void updateFalling() {
+    protected void updateFalling() {
         //TODO: Fix when collision is online
         if (isGrounded) {
             this.velocity.y = 0;

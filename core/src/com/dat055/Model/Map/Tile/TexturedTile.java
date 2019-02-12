@@ -2,7 +2,6 @@ package com.dat055.Model.Map.Tile;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Rectangle;
 
 /**
  * A tile with collision and a texture
@@ -24,8 +23,10 @@ public class TexturedTile extends Tile {
         //state = State.SOLID;
     }
 
-    public void draw(SpriteBatch batch) {
-        batch.draw(sprite, x, y);
+    @Override
+    public void draw(SpriteBatch batch, float rotation, int originX) {
+        batch.draw(sprite, x, y, 32, -y,
+                box.width, box.height, 1,1, rotation);
     }
 
     /**

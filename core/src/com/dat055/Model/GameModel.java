@@ -2,46 +2,34 @@ package com.dat055.Model;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
-import com.dat055.Model.Collision.CollisionHandler;
+import com.dat055.Model.Entity.DebugCamera;
 import com.dat055.Model.Entity.Player;
 import com.dat055.Model.Map.GameMap;
 import com.dat055.Model.Map.GameMapFactory;
 
 public class GameModel extends Model {
     private GameMap map;
-    private Player player1;
-    private Player player2;
+    private DebugCamera debugCam;
     private OrthographicCamera cam;
     private CollisionHandler handler1;
 
     public GameModel(){
-        initialize();
-    }
-
-    @Override
-    public void initialize() {
-        player1 = new Player(1, 80, 64, "red_penguin_64x80.png",
-                "Towbie", 5, 5);
-        player2= new Player(1, 80, 64, "blue_penguin_64x80.png",
-                "Kjello", 5, 5);
         cam = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        debugCam = new DebugCamera(new Vector2(Vector2.Zero));
     }
 
     /**
-     * Creates a GameMap
-     * @param fileName
+     *
+     * @param fileName name of map (json)
+     * @param tileSize size of one tile in tilemap
      */
-    public void createMap(String fileName, Integer tileSize) {
+    public void createMap(String fileName, int tileSize) {
         GameMapFactory mapFactory = new GameMapFactory();
         map = mapFactory.getMap(fileName, tileSize);
     }
-
     public GameMap getGameMap() { return map; }
-    public Player getPlayer1() { return player1; }
-    public Player getPlayer2() { return player2; }
+    public Player getDebugCam() { return debugCam; }
     public OrthographicCamera getCam() {return cam;}
     public CollisionHandler getHandler1() { return handler1; }
 
