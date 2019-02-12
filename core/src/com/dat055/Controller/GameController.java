@@ -75,7 +75,12 @@ public class GameController extends Controller {
                 }
             }
             handler1.checkCollision(player1);
+            if (player1.getHook() != null)
+                handler1.checkCollision(player1.getHook());
+
             handler2.checkCollision(player2);
+            if (player2.getHook() != null)
+                handler2.checkCollision(player2.getHook());
 
             if(isDebug)
                 ((GameModel)model).getDebugCam().update();
@@ -90,16 +95,18 @@ public class GameController extends Controller {
         if(!isRotating) {
             if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
                 currentPlayer.move(-1);
+                currentPlayer.setLookingDirection(new Vector2(-1, currentPlayer.getDirection().y));
                 currentPlayer.setMoving(true);
             }
             else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
                 currentPlayer.move(1);
+                currentPlayer.setLookingDirection(new Vector2(1, currentPlayer.getDirection().y));
                 currentPlayer.setMoving(true);
             } else {
                 currentPlayer.setMoving(false);
                 currentPlayer.move(0);
             }
-            if (Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT))
+            if (Gdx.input.isKeyJustPressed(Input.Keys.CONTROL_LEFT))
                 currentPlayer.attack();
 
             if (Gdx.input.isKeyPressed(Input.Keys.SPACE))

@@ -14,21 +14,16 @@ public class DebugCamera extends Player{
 
         velocity.x += acceleration.x * deltaTime;
 
-        if (velocity.x > maxVelocity)
-            velocity.x = maxVelocity;
-        if (velocity.x < -maxVelocity)
-            velocity.x = -maxVelocity;
+        if (velocity.x > maxVelocity.x)
+            velocity.x = maxVelocity.x;
+        if (velocity.x < -maxVelocity.x)
+            velocity.x = -maxVelocity.x;
 
         velocity.y += acceleration.y * deltaTime;
         oldPosition.set(position);
         position.add(velocity);
 
-
-        deltaPosition.set(oldPosition.x-position.x, oldPosition.y-position.y);
-
-        if (deltaPosition.x > 0) direction.x = -1; else if (deltaPosition.x < 0) direction.x = 1;
-        if (deltaPosition.y > 0) direction.y = -1; else if (deltaPosition.y < 0) direction.y = 1;
-
+        setDirection();
         rect.setPosition(position.x, position.y);
     }
     @Override

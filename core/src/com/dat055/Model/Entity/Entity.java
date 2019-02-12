@@ -12,9 +12,9 @@ public abstract class Entity {
     protected int id;
     protected int height;
     protected int width;
-    protected Vector2 position;
-    private Sprite sprite;
-    protected Rectangle rect;
+    Vector2 position;
+    Sprite sprite;
+    Rectangle rect;
 
     public Entity(Vector2 position, int height, int width, String texturePath) {
         this.height = height;
@@ -26,7 +26,7 @@ public abstract class Entity {
 
     /**
      * act is action that the entity takes
-     * @param act
+     * @param act action that entity should do
      */
     public abstract void action(String act);
 
@@ -50,29 +50,17 @@ public abstract class Entity {
                 rect.width, rect.height, 1,1, rotation);
     }
 
-    /**
-     * Sets the entity's texture to what is specified in texturePath
-     * @param texturePath
-     */
     //TODO: Use sprite directly from spritesheet
     public void setTexture(String texturePath) {
         sprite = new Sprite(new Texture(texturePath));
     }
 
-    /**
-     * Returns a rectangle
-     * @return
-     */
-    private void setRectangle() {
+    void setRectangle() {
         rect = new Rectangle();
         rect.setSize(this.width, this.height);
         rect.setPosition(position.x, this.position.y);
     }
 
-    /**
-     * Returns vector2 position for entity
-     * @return
-     */
     public Vector2 getPosition() {
         return position;
     }
