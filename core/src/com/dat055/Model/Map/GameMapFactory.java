@@ -22,7 +22,6 @@ public class GameMapFactory {
     private int tileSize;
     private Player player1;
     private Player player2;
-    ArrayList<Entity> entities;
 
     /**
      * Creates and returns a GameMap
@@ -30,11 +29,11 @@ public class GameMapFactory {
      * @param tileSize size of every tile in game
      * @return a gamemap with a set of tilemaps
      */
-    public GameMap getMap(String fileName, Integer tileSize) {
+    public GameMap getMap(String fileName, int tileSize) {
         this.fileName = fileName;
         this.tileSize = tileSize;
         map = new GameMap();
-        entities = new ArrayList<Entity>();
+        map.tileSize = tileSize;
         readToMap();
         return map;
     }
@@ -55,8 +54,8 @@ public class GameMapFactory {
 
                 map.front = jsonToTileMap(mapJson1);
                 map.back = jsonToTileMap(mapJson2);
-                map.entities = getEntities(mapJson1);
-                map.entities = getEntities(mapJson2);
+                map.entitiesFront = getEntities(mapJson1);
+                map.entitiesBack = getEntities(mapJson2);
 
                 // getEntities sets the players. it is ugly I know
                 map.player1 = player1;
@@ -87,7 +86,7 @@ public class GameMapFactory {
      * @return ArrayList of these entities
      */
     private ArrayList<Entity> getEntities(JsonValue map) {
-
+        ArrayList<Entity> entities = new ArrayList<Entity>();
         // Get array of entities
         Iterator<JsonValue> entitiesJson = map.get("entities").child.iterator();
 

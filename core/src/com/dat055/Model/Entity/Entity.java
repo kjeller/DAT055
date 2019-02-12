@@ -1,6 +1,9 @@
 package com.dat055.Model.Entity;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
@@ -10,7 +13,7 @@ public abstract class Entity {
     protected int height;
     protected int width;
     protected Vector2 position;
-    private Texture texture;
+    private Sprite sprite;
     protected Rectangle rect;
 
     public Entity(int id, int height, int width, String texturePath, Vector2 position) {
@@ -39,17 +42,22 @@ public abstract class Entity {
      * Generic method for drawing an entity
      */
     public void draw(SpriteBatch sb) {
-        // TODO: Parameter spritebatch, then spritebatch.draw(texture), is called in Game.render();
-        sb.draw(texture, position.x, position.y);
+        // TODO: Parameter spritebatch, then spritebatch.render(texture), is called in Game.render();
+        sb.draw(sprite, position.x, position.y);
     }
 
+    public void draw(SpriteBatch batch, float rotation) {
+        batch.draw(sprite, position.x, position.y, width/2, -position.y,
+                rect.width, rect.height, 1,1, rotation);
+    }
 
     /**
      * Sets the entity's texture to what is specified in texturePath
      * @param texturePath
      */
+    //TODO: Use sprite directly from spritesheet
     public void setTexture(String texturePath) {
-        texture = new Texture(texturePath);
+        sprite = new Sprite(new Texture(texturePath));
     }
 
     /**

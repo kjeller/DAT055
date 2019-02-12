@@ -26,7 +26,6 @@ public class Game extends ApplicationAdapter {
 		GameModel gameModel = new GameModel();
 		gameController = new GameController(gameModel, new GameView(gameModel));
 		gameController.startMap("maps/map_0.json");
-		gameController.initialize();
 
 		controllers.add(gameController);
 	}

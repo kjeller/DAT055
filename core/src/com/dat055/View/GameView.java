@@ -5,39 +5,30 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Rectangle;
-import com.dat055.Model.Entity.Player;
 import com.dat055.Model.GameModel;
+import com.dat055.Model.Map.GameMap;
 import com.dat055.Model.Map.Tile.Tile;
 import com.dat055.Model.Map.Tile.TileMap;
 
 public class GameView extends View{
     private ShapeRenderer renderer;
-    private boolean showRectangle;
+    private boolean isBackActive = false; // Front map is active if this is false
+    private boolean debug = false;
     private float rotationTimer = 0;
 
     public GameView(GameModel gameModel) {
         this.model = gameModel;
         renderer = new ShapeRenderer();
-        showRectangle = false;
     }
 
     public void render(SpriteBatch batch) {
+        GameMap map = ((GameModel)model).getGameMap();
+        batch.setProjectionMatrix(((GameModel)model).getCam().combined);    // Set camera for batch
+        map.render(batch, rotationTimer, isBackActive);
 
-        batch.setProjectionMatrix(((GameModel)model).getCam().combined);    // Set camera for batch //TODO: This might need to be fixed
-        ((GameModel)model).getGameMap().draw(batch, rotationTimer, ((GameModel)model).getMode());
-        Player player1 = ((GameModel)model).getPlayer1();
-        Player player2 = ((GameModel)model).getPlayer2();
-        player1.draw(batch);
-        player2.draw(batch);
-
-        if(showRectangle) {
+        if(debug) {
             renderer.setProjectionMatrix(((GameModel)model).getCam().combined);
-
-            drawMapRectangle(((GameModel)model).getGameMap().getFrontTileMap(), Color.RED);
-            drawMapRectangle(((GameModel)model).getGameMap().getBackTileMap(), Color.RED);
-
-            drawRectangle(player1.getRect(), Color.BLUE);
-            drawRectangle(player2.getRect(), Color.BLUE);
+            map.drawAllRectangles(renderer);
         }
     }
 
@@ -58,8 +49,7 @@ public class GameView extends View{
         renderer.end();
     }
 
-    public boolean getShowRectangle() { return showRectangle; }
-
-    public void setShowRectangle(boolean bool) { showRectangle = bool; }
-    public void setRotationTimer(float val) {this.rotationTimer = val;}
+    public void setRotationTimer(float timer) { rotationTimer = timer;}
+    public void setDebug(boolean bool) { debug = bool; }
+    public void setBackActive(boolean bool) {isBackActive = bool;}
 }

@@ -12,33 +12,31 @@ import com.dat055.Model.GameModel;
 import com.dat055.Model.Map.GameMap;
 import com.dat055.View.GameView;
 
+import java.util.ArrayList;
 
 public class GameController extends Controller {
-    private boolean isPaused;
+    public enum Mode {FRONT, BACK}
+
+    private Mode mode;
     private Player currentPlayer;
     private Player player1;
     private Player player2;
+    private ArrayList<Entity> entitiesFront;
+    private ArrayList<Entity> entitiesBack;
     private Camera cam;
     private CollisionHandler handler1;
     private CollisionHandler handler2;
 
-    private boolean isRotating = false;
-    private float rotationTimer = 0;
+    private boolean isRotating;
+    private boolean isPaused;
+    private boolean isDebug;
+    private boolean isBackActive;
 
-    private boolean isDebug = false;
+    private float rotationTimer = 0;
 
     public GameController(GameModel model, GameView view) {
         super(model, view);
-        initialize();
-    }
-
-    public void initialize() {
-        isPaused = false;
-
-        player1 = ((GameModel)model).getPlayer1();
-        player2 = ((GameModel)model).getPlayer2();
-        currentPlayer = player1;
-        cam = ((GameModel)model).getCam();
+        mode = Mode.FRONT;
     }
 
     @Override
@@ -49,7 +47,6 @@ public class GameController extends Controller {
         if(isRotating) {
             rotationTimer+= 2f;
         }
-
 
         if(rotationTimer >= 180f) {
             isRotating = false;
@@ -65,17 +62,20 @@ public class GameController extends Controller {
         camPosition.y += (playerPosition.y - camPosition.y) * lerp * deltaTime;
         cam.update();
 
-        if(!isPaused) {
-            // Updates entities position, health etc.
-            // This includes the players
-            for(Entity entity : ((GameModel)model).entities) {
-                entity.update();
+        if(!isPaused && !isRotating) {
+            // Updates entities position, health etc. depending on mode
+            if(!isBackActive) {
+                for(Entity entity : entitiesFront) {
+                    entity.update();
+                }
             }
-
+            else {
+                for(Entity entity : entitiesBack) {
+                    entity.update();
+                }
+            }
             handler1.checkCollision(player1);
             handler2.checkCollision(player2);
-
-            //TODO: Other entities here
 
             if(isDebug)
                 ((GameModel)model).getDebugCam().update();
@@ -86,34 +86,45 @@ public class GameController extends Controller {
      * Handles keyboard input for a specific player.
      */
     private void checkKeyboardInput() {
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-            currentPlayer.move(-1);
-            currentPlayer.setMoving(true);
+        // Player input movements
+        if(!isRotating) {
+            if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+                currentPlayer.move(-1);
+                currentPlayer.setMoving(true);
+            }
+            else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+                currentPlayer.move(1);
+                currentPlayer.setMoving(true);
+            } else {
+                currentPlayer.setMoving(false);
+                currentPlayer.move(0);
+            }
+            if (Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT))
+                currentPlayer.attack();
+
+            if (Gdx.input.isKeyPressed(Input.Keys.SPACE))
+                currentPlayer.jump();
+
+            if(Gdx.input.isKeyJustPressed(Input.Keys.T))
+                toggleCurrentPlayer();
         }
-        else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            currentPlayer.move(1);
-            currentPlayer.setMoving(true);
-        } else {
-            currentPlayer.setMoving(false);
-            currentPlayer.move(0);
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT))
-            currentPlayer.attack();
 
-        if (Gdx.input.isKeyPressed(Input.Keys.SPACE))
-            currentPlayer.jump();
-        if (Gdx.input.isKeyPressed(Input.Keys.D))
-            System.out.println(toString());
-
-        if(Gdx.input.isKeyJustPressed(Input.Keys.T))
-            toggleCurrentPlayer();
-
+        // Toggles pause menu
         if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE))
             togglePause();
 
         // Enter debug mode
         if(Gdx.input.isKeyJustPressed((Input.Keys.B)))
             toggleDebug();
+
+        // Easier switching between players in debug mode
+        if(isDebug) {
+            if(Gdx.input.isKeyJustPressed((Input.Keys.NUM_1)))
+                currentPlayer = player1;
+
+            if(Gdx.input.isKeyJustPressed((Input.Keys.NUM_2)))
+                currentPlayer = player2;
+        }
     }
 
     /**
@@ -122,26 +133,37 @@ public class GameController extends Controller {
      */
     public void startMap(String fileName) {
         ((GameModel)model).createMap(fileName, 64);
+
         GameMap map = ((GameModel)model).getGameMap();
         handler1 = new CollisionHandler(map.getFrontTileMap());
         handler2 = new CollisionHandler(map.getBackTileMap());
+        player1 = map.getPlayer1();
+        player2 = map.getPlayer2();
+        entitiesFront = map.getEntitiesFront();
+        entitiesBack = map.getEntitiesBack();
 
-        //TODO: Set player spawn positions
+        isPaused = false;
+        isBackActive = true;
+        isRotating = false;
+        isDebug = false;
+
+        currentPlayer = player2;
+        cam = ((GameModel)model).getCam();
     }
 
-    //TODO: Create timer for rotating map
     private void toggleCurrentPlayer() {
-        if(((GameModel)model).getMode() == GameModel.Mode.FRONT) {
-            ((GameModel)model).setMode(GameModel.Mode.BACK);
-            currentPlayer = player1;
-            rotationTimer = 0;
+        if(!isBackActive) {
+            isBackActive = true;
+            currentPlayer = player2;
         }
         else {
-            ((GameModel)model).setMode(GameModel.Mode.FRONT);
-            currentPlayer = player2;
-            rotationTimer = 0;
+            isBackActive = false;
+            currentPlayer = player1;
         }
-        isRotating = true; // Will start rotation timer
+
+        rotationTimer = 0; // Resets timer
+        isRotating = true; // Will start adding to rotation timer in update
+        ((GameView)view).setBackActive(isBackActive); // Notfies view to draw correctly
 
         if(isDebug)
             currentPlayer = ((GameModel)model).getDebugCam();
@@ -153,14 +175,12 @@ public class GameController extends Controller {
             isPaused = true;
     }
     private void toggleDebug() {
-        if(((GameView)view).getShowRectangle()) {
+        if(isDebug)
             isDebug = false;
-            ((GameView) view).setShowRectangle(false);
-        }
         else {
             isDebug = true;
-            ((GameView)view).setShowRectangle(true);
             currentPlayer = ((GameModel)model).getDebugCam();
         }
+        ((GameView) view).setDebug(isDebug);
     }
 }

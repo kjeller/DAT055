@@ -17,7 +17,7 @@ public class Tile {
         box = new Rectangle(x, y, tileSize, tileSize);
     }
 
-    public void draw(SpriteBatch batch, float rotation) {}
+    public void draw(SpriteBatch batch, float rotation, int originX) {}
 
     public String toString() {
         return String.format("Tile @ (%.2f, %.2f)\n", x, y);
