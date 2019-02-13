@@ -3,11 +3,14 @@ package com.dat055.Model.Collision;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.dat055.Model.Entity.Enemy;
 import com.dat055.Model.Entity.Entity;
 import com.dat055.Model.Entity.Hook;
 import com.dat055.Model.Entity.Player;
+import com.dat055.Model.Map.GameMap;
 import com.dat055.Model.Map.Tile.Tile;
 import com.dat055.Model.Map.Tile.TileMap;
+
 
 
 import java.util.ArrayList;
@@ -17,6 +20,7 @@ public class CollisionHandler {
     private final int tileSize = 64;
     private TileMap tileMap;
     private ArrayList<Rectangle> rectList;
+    private GameMap gameMap;
 
     public CollisionHandler(TileMap map) {
         tileMap = map;
@@ -24,13 +28,15 @@ public class CollisionHandler {
 
 
     public void checkCollision(Entity entity) {
+        if (entity == null)
+            return;
         if (entity instanceof Player)
             collisionPlayer((Player)entity);
         else if (entity instanceof Hook)
             collisionHook((Hook)entity);
     }
 
-    private Rectangle checkIfCollision(Entity entity) {
+    private Rectangle checkIfWallCollision(Entity entity) {
         Vector2 position = new Vector2(entity.getPosition());
         for (int row = (int) (position.y / tileSize); row < Math.ceil((position.y + entity.getHeight()) / tileSize); row++) {
             for (int col = (int) (position.x / tileSize); col < Math.ceil((position.x + entity.getWidth()) / tileSize); col++) {
@@ -49,11 +55,34 @@ public class CollisionHandler {
 
     private void collisionHook(Hook hook) {
         Rectangle intersection;
-        if (!hook.getApexReached() && (intersection = checkIfCollision(hook)) != null) {
-            hook.setApexReached(true);
-            hook.setHasGrip(true);
-        }
+        if (!hook.getApexReached()) {
+            if ((intersection = checkIfWallCollision(hook)) != null) {
+                hook.setApexReached(true);
+                hook.setHasGrip(true);
 
+            }
+            /*else if ((intersection = checkIfEntityCollision(hook)) != null) {
+                hook.setApexReached(true);
+            }*/
+        }
+    }
+
+    private Rectangle checkIfEntityCollision(Entity entity) {
+        Vector2 position = new Vector2(entity.getPosition());
+        for (int row = (int) (position.y / tileSize); row < Math.ceil((position.y + entity.getHeight()) / tileSize); row++) {
+            for (int col = (int) (position.x / tileSize); col < Math.ceil((position.x + entity.getWidth()) / tileSize); col++) {
+                Rectangle intersector = new Rectangle();
+                for (Entity ent : gameMap.getEntitiesFront()) {
+                    if (Intersector.intersectRectangles(entity.getRect(), ent.getRect(), intersector)) {
+                        if (ent instanceof Enemy)
+                            System.out.println("Enemy detection");
+
+                        // Check if ent is enemy or whatever
+
+                    }
+                }
+            }}
+        return new Rectangle(0, 0, 0, 0);
     }
 
     private void collisionPlayer(Player player) {
