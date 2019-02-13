@@ -4,22 +4,26 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 
 public class MainMenu extends Menu {
-    MainMenu(float width) {
+    public MainMenu(float width) {
+        super();
         initTxtBtnStyle();
         initLblStyle();
 
         Table table = new Table();
         Table subTable = new Table();
-        Label verNr = new Label("Ver: 0.17", super.getLblStyle());
+        Label verNr = new Label("Ver: 0.17", super.lblStyle);
 
         table.setWidth(width);
         table.align(Align.center|Align.top);
@@ -27,6 +31,7 @@ public class MainMenu extends Menu {
         table.setPosition(0, Gdx.graphics.getHeight());
 
         TextButton start = createButton("Play");
+        TextButton multiplayer = createButton("Multiplayer");
         TextButton settings = createButton("Settings");
         TextButton exit = createButton("Exit");
         TextButton credits = createButton("Credits");
@@ -35,12 +40,13 @@ public class MainMenu extends Menu {
         subTable.add(verNr);
 
         table.padTop(200);
-        table.add(start).width(300).padBottom(30).row();
-        table.add(settings).width(300).padBottom(30).row();
-        table.add(exit).width(300).padBottom(60).row();
+        table.add(start).width(300).padBottom(15).row();
+        table.add(multiplayer).width(300).padBottom(15).row();
+        table.add(settings).width(300).padBottom(15).row();
+        table.add(exit).width(300).padBottom(45).row();
         table.add(subTable).width(500).padBottom(20);
 
-        super.setTable(table);
+        super.table = table;
     }
 
     private void initTxtBtnStyle() {
@@ -59,13 +65,14 @@ public class MainMenu extends Menu {
 
         txtBtnStyle.up = skin.getDrawable("but1_pressed");
         txtBtnStyle.down = skin.getDrawable("but1");
-        super.setTxtButtons(txtBtnStyle);
+
+        super.txtBtnStyle = txtBtnStyle;
     }
 
     private void initLblStyle() {
         LabelStyle lblStyle = new Label.LabelStyle();
         lblStyle.font = super.generateFont(26);
         lblStyle.fontColor = Color.WHITE;
-        setLblStyle(lblStyle);
+        super.lblStyle = lblStyle;
     }
 }

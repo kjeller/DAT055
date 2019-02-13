@@ -7,7 +7,5 @@ public class MenuView extends View {
     /**
      * A draw function that draws the stage stored in the model
      */
-    public void draw(Stage stage) {
-        stage.draw();
-    }
+    public void draw(Stage stage) { stage.draw(); }
 }

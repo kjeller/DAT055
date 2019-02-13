@@ -1,38 +1,50 @@
 package com.dat055.Model;
 
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 
-// TODO: Singleton
+
 public class MenuModel extends Model {
-    private HashMap<String, Table> tables;
+    private HashMap<String, Menu> menus;
+    private String currentMenu;
     private Stage stage;
+    private Sprite bgSprite;
 
     public MenuModel() {
         stage = new Stage();
-        tables = new HashMap<String, Table>();
-        includeMenu("Main", new MainMenu(stage.getWidth()));
-        stage.addActor(tables.get("Main"));
+        menus = new HashMap<String, Menu>();
     }
 
-    private void includeMenu(String label, Menu menu) {
-        tables.put(label, menu.getTable());
-    }
-
-    private void initSettingsMenu () {
-        // Needs new button style with toggle.
+    public void includeMenu(String label, Menu menu) {
+        menus.put(label, menu);
+        bgSprite = menu.getBgSprite();
     }
 
     public void swapMenu(String menu) {
         stage.clear();
-        stage.addActor(tables.get(menu));
+        stage.addActor(menus.get(menu).getTable());
+        currentMenu = menu;
     }
 
     public Stage getStage() {
         return stage;
     }
 
-    public void update(float dt) {}
+    public HashMap<String, TextButton> getButtons() {
+        HashMap<String, TextButton> btns = new HashMap<String, TextButton>();
+        Iterator<String> itr = menus.keySet().iterator();
+        while (itr.hasNext()) {
+            String key = itr.next();
+            if (menus.get(key) != null) {
+                btns.putAll(menus.get(key).getButtons());
+            }
+        } return btns;
+    }
+
+    public void update() { stage.act(); }
 }
