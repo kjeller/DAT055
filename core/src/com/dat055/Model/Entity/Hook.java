@@ -18,7 +18,6 @@ public class Hook extends Entity {
         this.maxLength = maxLength;
         initialize();
     }
-
     private void initialize() {
         setRectangle();
         hasGrip = false;
