@@ -9,7 +9,8 @@ import com.dat055.Model.Map.GameMap;
 import com.dat055.Model.Map.GameMapFactory;
 
 public class GameModel extends Model {
-    private GameMap map;
+    private GameMap map1;
+    private GameMap map2;
     private DebugCamera debugCam;
     private OrthographicCamera cam;
 
@@ -23,11 +24,13 @@ public class GameModel extends Model {
      * @param fileName name of map (json)
      * @param tileSize size of one tile in tilemap
      */
-    public void createMap(String fileName, int tileSize) {
-        GameMapFactory mapFactory = new GameMapFactory();
-        map = mapFactory.getMap(fileName, tileSize);
+    public void createMap(String fileName) {
+        GameMapFactory mapFactory = new GameMapFactory(fileName);
+        map1 = mapFactory.getMap();
+        map2 = mapFactory.getMap();
     }
-    public GameMap getGameMap() { return map; }
+    public GameMap getGameMap1() { return map1; }
+    public GameMap getGameMap2() { return map2; }
     public Player getDebugCam() { return debugCam; }
     public OrthographicCamera getCam() {return cam;}
 }

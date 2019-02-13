@@ -5,42 +5,44 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.dat055.Model.Collision.CollisionHandler;
-import com.dat055.Model.Entity.Entity;
 import com.dat055.Model.Entity.Player;
 import com.dat055.Model.GameModel;
 import com.dat055.Model.Map.GameMap;
 import com.dat055.View.GameView;
 
-import java.util.ArrayList;
 
 public class GameController extends Controller {
     public enum Mode {FRONT, BACK}
-
     private Mode mode;
+
+    private GameMap map1;
+    private GameMap map2;
     private Player currentPlayer;
     private Player player1;
     private Player player2;
-    private ArrayList<Entity> entitiesFront;
-    private ArrayList<Entity> entitiesBack;
     private Camera cam;
-    private CollisionHandler handler1;
-    private CollisionHandler handler2;
 
     private boolean isRotating;
     private boolean isPaused;
     private boolean isDebug;
-    private boolean isBackActive;
 
     private float rotationTimer = 0;
 
     public GameController(GameModel model, GameView view) {
         super(model, view);
-        mode = Mode.FRONT;
     }
 
     @Override
     public void update(float deltaTime) {
+
+        // Camera transition
+        float lerp = 2f;
+        Vector2 playerPosition = currentPlayer.getPosition();
+        Vector3 camPosition = cam.position;
+        camPosition.x += Math.round((playerPosition.x - camPosition.x) * lerp * deltaTime);
+        camPosition.y += Math.round((playerPosition.y - camPosition.y) * lerp * deltaTime);
+        cam.update();
+
         checkKeyboardInput(); // Handles keyboard input
 
         // Tile rotation map transition
@@ -52,43 +54,22 @@ public class GameController extends Controller {
             isRotating = false;
             rotationTimer = 180f;
         }
-        ((GameView)view).setRotationTimer(rotationTimer);
-
-        // Camera transition
-        float lerp = 2f;
-        Vector2 playerPosition = currentPlayer.getPosition();
-        Vector3 camPosition = cam.position;
-        camPosition.x += (playerPosition.x - camPosition.x) * lerp * deltaTime;
-        camPosition.y += (playerPosition.y - camPosition.y) * lerp * deltaTime;
-        cam.update();
+        ((GameView)view).setRotationInc(rotationTimer);
+        if(!isRotating && !isPaused) {
+            if(mode == Mode.FRONT)
+                map1.update(deltaTime);
+            else
+                map2.update(deltaTime);
+        }
 
         if(!isPaused && !isRotating) {
-            // Updates entities position, health etc. depending on mode
-            if(!isBackActive) {
-                for(Entity entity : entitiesFront) {
-                    entity.update();
-                }
-            }
-            else {
-                for(Entity entity : entitiesBack) {
-                    entity.update();
-                }
-            }
-            handler1.checkCollision(player1);
-            if (player1.getHook() != null)
-                handler1.checkCollision(player1.getHook());
-
-            handler2.checkCollision(player2);
-            if (player2.getHook() != null)
-                handler2.checkCollision(player2.getHook());
-
-            if(isDebug)
-                ((GameModel)model).getDebugCam().update();
+            if(isDebug){}
+                //((GameModel)model).getDebugCam().update();
         }
     }
 
     /**
-     * Handles keyboard input for a specific player.
+     * Handles keyboard input for current player.
      */
     private void checkKeyboardInput() {
         // Player input movements
@@ -139,41 +120,38 @@ public class GameController extends Controller {
      * @param fileName of a json file in assets/maps/
      */
     public void startMap(String fileName) {
-        ((GameModel)model).createMap(fileName, 64);
+        ((GameModel)model).createMap(fileName);
 
-        GameMap map = ((GameModel)model).getGameMap();
-        handler1 = new CollisionHandler(map.getFrontTileMap());
-        handler2 = new CollisionHandler(map.getBackTileMap());
-        player1 = map.getPlayer1();
-        player2 = map.getPlayer2();
-        entitiesFront = map.getEntitiesFront();
-        entitiesBack = map.getEntitiesBack();
+        map1 = ((GameModel)model).getGameMap1();
+        map2 = ((GameModel)model).getGameMap2();
+        player1 = map1.getPlayer();
+        player2 = map2.getPlayer();
 
+        // Set default values
         isPaused = false;
-        isBackActive = true;
         isRotating = false;
         isDebug = false;
+        mode = Mode.FRONT;
 
-        currentPlayer = player2;
+        currentPlayer = player1;
         cam = ((GameModel)model).getCam();
     }
 
     private void toggleCurrentPlayer() {
-        if(!isBackActive) {
-            isBackActive = true;
+        if(mode == Mode.FRONT) {
             currentPlayer = player2;
+            mode = Mode.BACK;
         }
         else {
-            isBackActive = false;
             currentPlayer = player1;
+            mode = Mode.FRONT;
         }
+
+        ((GameView)view).setMode(mode);
 
         rotationTimer = 0; // Resets timer
         isRotating = true; // Will start adding to rotation timer in update
-        ((GameView)view).setBackActive(isBackActive); // Notfies view to draw correctly
 
-        if(isDebug)
-            currentPlayer = ((GameModel)model).getDebugCam();
     }
     private void togglePause() {
         if(isPaused)
@@ -186,7 +164,6 @@ public class GameController extends Controller {
             isDebug = false;
         else {
             isDebug = true;
-            currentPlayer = ((GameModel)model).getDebugCam();
         }
         ((GameView) view).setDebug(isDebug);
     }

@@ -1,91 +1,98 @@
 package com.dat055.Model.Map;
 
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
+import com.dat055.Model.Collision.CollisionHandler;
 import com.dat055.Model.Entity.Entity;
 import com.dat055.Model.Entity.Player;
-import com.dat055.Model.GameModel;
 import com.dat055.Model.Map.Tile.Tile;
 import com.dat055.Model.Map.Tile.TileMap;
 
 import java.util.ArrayList;
 
 public class GameMap {
-    TileMap front, back;
-    String id, name;  // Current map id and name
-    int tileSize;
+    private final Color PLAYER_RECTANGLE = Color.BLUE;
+    private final Color TILE_RECTANGLE = Color.RED;
 
-    // Separate front and back entities to rotate them easier
-    ArrayList<Entity> entitiesFront;
-    ArrayList<Entity> entitiesBack;
+    private String name, id;  // name: map_0 or map_1, id is the id is json file
+    private TileMap tileMap;
 
-    Player player1;
-    Player player2;
+    private ArrayList<Entity> entities; // List of all entities on map, players included
+    private Player player;  // a reference to player - makes it easier to control player
+    private CollisionHandler colHandler;
 
-    GameMap() {
-        id = "Not set.";
-        name = "Not set.";
+    public GameMap(TileMap tileMap, ArrayList<Entity> entities, Player player, String name) {
+        this.tileMap = tileMap;
+        this.entities = entities;
+        this.player = player;
+        this.name = name;
+        colHandler = new CollisionHandler(tileMap);
     }
-
-    public void render(SpriteBatch batch, float rotation, boolean isBackActive) {
-        if(isBackActive) {
-            drawRotated(batch, back, front, entitiesBack, entitiesFront, rotation);
+    public void update(float deltaTime) {
+        // Updates entities position, health etc.
+        for(Entity entity : entities) {
+            entity.update();
+            if(entity instanceof Player) //TODO: Fix
+                colHandler.checkCollision(entity);
         }
-        else {
-            drawRotated(batch, front, back, entitiesFront, entitiesBack, rotation);
-        }
+        //Todo: towbie fix
+        colHandler.checkCollision(player.getHook());
     }
 
-    private void drawRotated(SpriteBatch batch, TileMap active, TileMap paused, ArrayList<Entity> activeE, ArrayList<Entity> pausedE, float rotation) {
-        paused.render(batch, rotation, tileSize);
-        active.render(batch, 180f + rotation, tileSize);
-        drawEntities(batch, activeE, 180f + rotation);
-        drawEntities(batch, pausedE, rotation);
-    }
-    private void drawEntities(SpriteBatch batch, ArrayList<Entity> entities, float rotation) {
+    public void render(SpriteBatch batch, float rotation) {
         for(Entity entity : entities) {
             entity.draw(batch, rotation);
         }
-    }
-    public void drawAllRectangles(ShapeRenderer renderer) {
-        drawMapRectangle(front, Color.RED, renderer);
-        drawMapRectangle(back, Color.RED, renderer);
-
-        for(Entity entity : entitiesFront) {
-            drawRectangle(entity.getRect(), Color.BLUE, renderer);
-        }
-        for(Entity entity : entitiesBack) {
-            drawRectangle(entity.getRect(), Color.BLUE, renderer);
-        }
-    }
-    private void drawMapRectangle(TileMap map, Color color, ShapeRenderer renderer) {
-        for(int i = 0; i < map.getWidth(); i++){
-            for(int j = 0; j < map.getHeight(); j++){
-                Tile tile = map.getTile(i, j);
-                if((tile).getState())  // If the tile is collideable
-                    drawRectangle(tile.getRect(), color, renderer);
+        for(int i = 0; i < tileMap.getWidth(); i++){
+            for(int j = 0; j < tileMap.getHeight(); j++){
+                Tile tile = tileMap.getTile(i, j);
+                    tile.draw(batch, rotation);
             }
         }
     }
+
+    /**
+     * Will render all rectangles known to man. With predefined colors.
+     * @param batch the spritebatch used
+     * @param renderer for rendering the rectangles
+     */
+    public void renderRectangles(ShapeRenderer renderer) {
+
+        for(Entity entity : entities) {
+            drawRectangle(entity.getRect(), PLAYER_RECTANGLE, renderer);
+        }
+        for(int i = 0; i < tileMap.getWidth(); i++){
+            for(int j = 0; j < tileMap.getHeight(); j++){
+                Tile tile = tileMap.getTile(i, j);
+                if(tile.getState())  // If the tile is collideable
+                    drawRectangle(tile.getRect(), TILE_RECTANGLE, renderer);
+            }
+        }
+    }
+
+    /**
+     * Helper method for drawing a rectangle
+     * @param rectangle the rectangle that will be drawed
+     * @param color the color of the rectangle
+     * @param renderer will render the rectangle
+     */
     private void drawRectangle(Rectangle rectangle, Color color, ShapeRenderer renderer) {
-        renderer.begin(ShapeRenderer.ShapeType.Filled);
+        renderer.begin(ShapeRenderer.ShapeType.Line);
         renderer.setColor(color);
         renderer.rect(rectangle.x, rectangle.y, rectangle.width, rectangle.height);
         renderer.end();
     }
 
-    public TileMap getFrontTileMap() { return front; }
-    public TileMap getBackTileMap() { return back; }
-    public ArrayList<Entity> getEntitiesFront() { return entitiesFront;}
-    public ArrayList<Entity> getEntitiesBack() { return entitiesBack;}
-    public String getId() { return id; }
+    public TileMap getTileMap() { return tileMap; }
+    public ArrayList<Entity> getEntities() { return entities;}
+    public Player getPlayer() { return player;}
     public String getName() { return name; }
-    public Player getPlayer1() {return player1;}
-    public Player getPlayer2() {return player2;}
+    public String getId() { return id; }
     public String toString() {
-        return  String.format("Properties: id=%s, name=%s, frontmap=%s, backmap=%s",
-                this.id, this.name, this.front, this.back);
+        return  String.format("GameMap: %s \n -TileMap: %s \n -Player: %s \n -Entities: %s \n",
+                this.name, this.tileMap, this.player, this.entities);
     }
 }

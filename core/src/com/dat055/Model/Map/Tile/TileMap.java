@@ -17,12 +17,12 @@ public class TileMap {
         map = new Tile[width][height];
     }
 
-    public void render(SpriteBatch batch, float rotation, int tileSize) {
-        int halftile = tileSize /2;
+    public void render(SpriteBatch batch, float rotation) {
         for(int i = 0; i < width; i++) {
             for(int j = 0; j < height; j++) {
                 if(map[i][j] != null)
-                    map[i][j].draw(batch, rotation, i);
+                    map[i][j].draw(batch, rotation);
+                //map[i][j].draw(batch, rotation, i); before
             }
         }
     }

@@ -1,6 +1,8 @@
-{ "properties" : {"id" : 0, "name" : "debug map", "sprite" : "textures/spritesheets/tileMap/tileSheet_0.atlas"},
-  "map_1" : {
-    "properties" : {"width" : 12, "height": 12},
+{
+  "properties" : {"id" : 0, "name" : "debug map"},
+  "map" : [{
+    "properties" : {"width" : 12, "height": 12, "desc" : "light",
+      "sprite" : "textures/spritesheets/tileMap/tileSheet_0.atlas"},
     "data" : [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
               1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
               0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -14,11 +16,12 @@
               0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 2,
               1, 1, 2, 2, 2, 2, 1, 1, 1, 1, 1, 2],
   "entities" : [
-    {"player1" : {"position" : [0, 1], "sprite" : "textures/blue_penguin_64x80.png"}},
+    {"player" : {"position" : [0, 1], "sprite" : "textures/blue_penguin_64x80.png"}},
     {"enemy" : {"position" : [0, 1], "sprite" : "textures/blue_penguin_64x80.png"}}
   ]},
-  "map_2" : {
-    "properties" : {"width" : 12, "height": 12},
+    {
+    "properties" : {"width" : 12, "height": 12, "desc" : "shadow",
+      "sprite" : "textures/spritesheets/tileMap/tileSheet_0.atlas"},
     "data" : [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
               3, 3, 2, 2, 2, 2, 3, 3, 3, 3, 3, 2,
               0, 0, 3, 3, 3, 3, 0, 0, 0, 0, 0, 2,
@@ -32,6 +35,6 @@
               2, 2, 2, 2, 0, 0, 2, 2, 1, 0, 0, 0,
               2, 2, 2, 2, 0, 0, 2, 2, 2, 1, 1, 1],
   "entities" : [
-    {"player2" : {"position" : [0, 5], "sprite" :  "textures/red_penguin_64x80.png"}}]
-  }
+    {"player" : {"position" : [0, 5], "sprite" :  "textures/red_penguin_64x80.png"}}]
+  }]
 }

@@ -24,7 +24,7 @@ public class TexturedTile extends Tile {
     }
 
     @Override
-    public void draw(SpriteBatch batch, float rotation, int originX) {
+    public void draw(SpriteBatch batch, float rotation) {
         batch.draw(sprite, x, y, 32, -y,
                 box.width, box.height, 1,1, rotation);
     }

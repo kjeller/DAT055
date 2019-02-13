@@ -24,7 +24,7 @@ public class DebugCamera extends Player{
         position.add(velocity);
 
         setDirection();
-        rect.setPosition(position.x, position.y);
+        rect.setPosition(1, 1);
     }
     @Override
     public void setTexture(String texturePath) {}
