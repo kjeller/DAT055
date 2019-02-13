@@ -72,7 +72,7 @@ public class CollisionHandler {
         for (int row = (int) (position.y / tileSize); row < Math.ceil((position.y + entity.getHeight()) / tileSize); row++) {
             for (int col = (int) (position.x / tileSize); col < Math.ceil((position.x + entity.getWidth()) / tileSize); col++) {
                 Rectangle intersector = new Rectangle();
-                for (Entity ent : gameMap.getEntitiesFront()) {
+                /*for (Entity ent : gameMap.getEntitiesFront()) {
                     if (Intersector.intersectRectangles(entity.getRect(), ent.getRect(), intersector)) {
                         if (ent instanceof Enemy)
                             System.out.println("Enemy detection");
@@ -80,7 +80,7 @@ public class CollisionHandler {
                         // Check if ent is enemy or whatever
 
                     }
-                }
+                }*/
             }}
         return new Rectangle(0, 0, 0, 0);
     }
