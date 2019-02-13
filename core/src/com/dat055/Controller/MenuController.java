@@ -1,6 +1,8 @@
 package com.dat055.Controller;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -17,12 +19,14 @@ import java.util.Map;
 
 public class MenuController {
     private boolean visible;
+    private GameController gameController;
     private MenuView menuView;
     private MenuModel menuModel;
     private HashMap <String, InputListener> listeners;
 
-    public MenuController() {
+    public MenuController(GameController gameController) {
         unhide();
+        this.gameController = gameController;
         listeners = new HashMap<String, InputListener>();
         menuView = new MenuView();
         menuModel = new MenuModel();
@@ -47,6 +51,10 @@ public class MenuController {
 
     public void unhide() {
         visible = true;
+    }
+
+    public boolean isVisible() {
+        return visible;
     }
 
     public void draw() {
@@ -79,14 +87,20 @@ public class MenuController {
          listeners.put("Play", new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                HashMap<String, TextButton> buttons = menuModel.getButtons();
-                buttons.get("Play").setText("boom");
+                hide();
+                gameController.startMap("maps/map_0.json");
+                gameController.togglePause();
                 return true;
             }
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 super.touchUp(event, x, y, pointer, button);
+            }
+
+            @Override
+            public void enter(InputEvent event, float x, float y, int pointer, int button) {
+                
             }
         });
 

@@ -16,8 +16,8 @@ import com.dat055.View.View;
 import java.util.ArrayList;
 
 public class Game extends ApplicationAdapter {
+	private boolean toggle = true;
 	private SpriteBatch batch;
-	private ArrayList<Controller> controllers;
 	private GameController gameController;
 	private MenuController menuController;
 
@@ -26,14 +26,10 @@ public class Game extends ApplicationAdapter {
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
-		controllers = new ArrayList<Controller>();
 
 		GameModel gameModel = new GameModel();
 		gameController = new GameController(gameModel, new GameView(gameModel));
-		gameController.startMap("maps/map_0.json");
-
-		menuController = new MenuController();
-		controllers.add(gameController);
+		menuController = new MenuController(gameController);
 	}
 
 	@Override
@@ -42,12 +38,18 @@ public class Game extends ApplicationAdapter {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		deltaTime = Gdx.graphics.getDeltaTime();
 
-		// Update
-		for(Controller controller : controllers) { controller.update(deltaTime); }
+
+		if(menuController.isVisible())
+			menuController.update();
+
+		if(!gameController.isPaused())
+			gameController.update(deltaTime);
+
 
 		// Draw
 		batch.begin();
-		for(Controller controller : controllers) { controller.render(batch); }
+		if(!gameController.isPaused())
+			gameController.render(batch);
 		menuController.draw();
 		batch.end();
 	}
@@ -55,5 +57,10 @@ public class Game extends ApplicationAdapter {
 	@Override
 	public void dispose () {
 		batch.dispose();
+	}
+
+	public void pauseMenu() {
+		menuController.swapMenu("Pause");
+		menuController.unhide();
 	}
 }

@@ -26,7 +26,7 @@ public class GameController extends Controller {
     }
 
     public void initalize() {
-        isPaused = false;
+        isPaused = true;
 
         player1 = ((GameModel)model).getPlayer1();
         player2 = ((GameModel)model).getPlayer2();
@@ -125,5 +125,9 @@ public class GameController extends Controller {
             ((GameView)view).setShowRectangle(false);
         else
             ((GameView)view).setShowRectangle(true);
+    }
+
+    public boolean isPaused() {
+        return isPaused;
     }
 }
