@@ -15,6 +15,8 @@ import com.dat055.Model.GameModel;
 import com.dat055.Model.Map.GameMap;
 import com.dat055.View.GameView;
 
+import java.rmi.MarshalledObject;
+
 
 public class GameController extends Controller {
     public enum Mode {FRONT, BACK}
@@ -60,6 +62,10 @@ public class GameController extends Controller {
         }
     }
 
+    /**
+     * Updates the camera
+     * @param deltaTime
+     */
     private void updateCamera(float deltaTime) {
         float effectiveViewportWidth = cam.viewportWidth * cam.zoom;
         float effectiveViewportHeight = cam.viewportHeight * cam.zoom;
@@ -84,9 +90,12 @@ public class GameController extends Controller {
         super.render(batch); // Render view
         if(isDebug) {
             BitmapFont font = ((GameModel)model).getFont();
+            batch.setProjectionMatrix(cam.combined);
             font.setColor(Color.WHITE);
-            font.draw(batch, String.format("Current player: "),
-                    0, Gdx.graphics.getHeight()*0.95f);
+            font.draw(batch, String.format(
+                    "mode: %s\nrot.timer: %s", mode, rotationTimer),
+                    cam.position.x -Gdx.graphics.getWidth()/2,
+                    cam.position.y+Gdx.graphics.getHeight()/2);
         }
     }
 
@@ -154,7 +163,9 @@ public class GameController extends Controller {
         isRotating = false;
         isDebug = false;
         mode = Mode.FRONT;
+        ((GameView)view).setMode(Mode.FRONT);
 
+        if(mode == Mode.FRONT)
         currentPlayer = player1;
         cam = ((GameModel)model).getCam();
     }
@@ -168,12 +179,10 @@ public class GameController extends Controller {
             currentPlayer = player1;
             mode = Mode.FRONT;
         }
-
         ((GameView)view).setMode(mode);
 
         rotationTimer = 0; // Resets timer
         isRotating = true; // Will start adding to rotation timer in update
-
     }
     private void togglePause() {
         if(isPaused)

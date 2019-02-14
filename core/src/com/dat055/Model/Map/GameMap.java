@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.dat055.Model.Collision.CollisionHandler;
 import com.dat055.Model.Entity.Entity;
+import com.dat055.Model.Entity.Hook;
 import com.dat055.Model.Entity.Player;
 import com.dat055.Model.Map.Tile.Tile;
 import com.dat055.Model.Map.Tile.TileMap;
@@ -56,6 +57,7 @@ public class GameMap {
         }
     }
 
+    // == Debug stuff below ==
     /**
      * Will render all rectangles known to man. With predefined colors.
      * @param renderer for rendering the rectangles
@@ -64,6 +66,12 @@ public class GameMap {
 
         for(Entity entity : entities) {
             drawRectangle(entity.getRect(), PLAYER_RECTANGLE, renderer);
+            if(entity instanceof Player) {
+                Hook hook = ((Player)entity).getHook();
+                if(hook != null) {
+                    drawRectangle(hook.getRect(), PLAYER_RECTANGLE, renderer);
+                }
+            }
         }
         for(int i = 0; i < tileMap.getWidth(); i++){
             for(int j = 0; j < tileMap.getHeight(); j++){
@@ -86,7 +94,13 @@ public class GameMap {
         renderer.rect(rectangle.x, rectangle.y, rectangle.width, rectangle.height);
         renderer.end();
     }
+    public void drawEntityText(BitmapFont font, SpriteBatch batch){
+        for(Entity entity : entities)
+            font.draw(batch, entity.toString(),
+                    entity.getPosition().x , entity.getPosition().y+300);
+    }
 
+    // Getters and setters
     public TileMap getTileMap() { return tileMap; }
     public ArrayList<Entity> getEntities() { return entities;}
     public Player getPlayer() { return player;}

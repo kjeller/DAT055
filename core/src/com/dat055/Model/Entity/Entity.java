@@ -76,8 +76,10 @@ public abstract class Entity {
 
     public Vector2 setPosition() { return position; }
 
+    @Override
     public String toString() {
-        return String.format("Height: %d, width: %d, position: (%f, %f), rect.x: %f, rect.y: %f, rect.width: %f, rect.height: %f\n",
-                height, width, position.x, position.y, rect.x, rect.y, rect.width, rect.height);
+        return String.format("(h, w): (%d, %d),\npos: (%.1f, %.1f), \n" +
+                        "rect.(x, y): (%.1f, %.1f), \nrect.(h, w): (%.1f, %.1f)\n",
+                height, width, position.x, position.y, rect.x, rect.y, rect.height, rect.width);
     }
 }

@@ -21,6 +21,7 @@ public class GameModel extends Model {
         debugCam = new DebugCamera(new Vector2(Vector2.Zero));
         debugFont = new BitmapFont(Gdx.files.internal("fonts/Mincho.fnt"),
                 Gdx.files.internal("fonts/Mincho.png"), false);
+        debugFont.getData().setScale(0.4f, 0.4f);
     }
 
     /**

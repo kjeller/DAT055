@@ -181,8 +181,11 @@ public abstract class Character extends Entity {
 
 
     public String toString() {
-        return super.toString() + String.format("hp: %d, acceleration: (%f, %f), direction: (%f, %f), lookingDirection: %f, isGrounded: %s, isAlive: %s, isMoving: %s\n",
-                healthPoints, acceleration.x, acceleration.y, direction.x, direction.y, lookingDirection.x, isGrounded, isAlive, isMoving);
+        return super.toString() + String.format("hp: %d, acc: (%.1f, %.1f),\n" +
+                        "dir: (%.1f, %.1f), lookDir: %.1f,\nisGrounded: %s," +
+                        "\nisAlive: %s,\nisMoving: %s\n",
+                healthPoints, acceleration.x, acceleration.y, direction.x,
+                direction.y, lookingDirection.x, isGrounded, isAlive, isMoving);
     }
 
 }

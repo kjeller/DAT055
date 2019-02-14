@@ -27,12 +27,21 @@ public class GameView extends View{
         map1.render(batch, rotation);
         map2.render(batch, rotation - 180);
 
+        // Debug
         if(debug) {
+            batch.end();
             renderer.setProjectionMatrix(((GameModel)model).getCam().combined);
-            if(mode == Mode.FRONT)
+            if(mode == Mode.FRONT) {
                 map1.renderRectangles(renderer);
-            else
+                batch.begin();
+                map1.drawEntityText(((GameModel)model).getFont(), batch);
+            } else {
                 map2.renderRectangles(renderer);
+                batch.begin();
+                map2.drawEntityText(((GameModel)model).getFont(), batch);
+            }
+
+
         }
     }
     public void setRotationInc(float timer) { rotationInc = timer;}
