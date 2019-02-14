@@ -1,6 +1,5 @@
 package com.dat055.View;
 
-import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.dat055.Controller.GameController.Mode;
@@ -22,6 +21,7 @@ public class GameView extends View{
         GameMap map1 = ((GameModel)model).getGameMap1();
         GameMap map2 = ((GameModel)model).getGameMap2();
         batch.setProjectionMatrix(((GameModel)model).getCam().combined);    // Set camera for batch
+
         float rotation = mode == Mode.FRONT ? 180f + rotationInc : rotationInc; // Sets rotation for planes
 
         map1.render(batch, rotation);

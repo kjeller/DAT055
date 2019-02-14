@@ -11,7 +11,7 @@ public class TileMap {
     private Tile[][] map;
     private int width, height;
 
-    public TileMap(Integer width, Integer height) {
+    public TileMap(int width, int height) {
         this.width = width;
         this.height = height;
         map = new Tile[width][height];
@@ -22,12 +22,11 @@ public class TileMap {
             for(int j = 0; j < height; j++) {
                 if(map[i][j] != null)
                     map[i][j].draw(batch, rotation);
-                //map[i][j].draw(batch, rotation, i); before
             }
         }
     }
 
-    public void addTile(Integer x, Integer y, Tile tile) {
+    public void addTile(int x, int y, Tile tile) {
         if(x >= 0 && x < width && y >= 0 && y < height && tile != null){
             map[x][y] = tile;
         }
@@ -39,7 +38,7 @@ public class TileMap {
      * @param y
      * @return Tile at given (x, y)
      */
-    public Tile getTile(Integer x, Integer y) {
+    public Tile getTile(int x, int y) {
         if(x >= 0 && x < width && y >= 0 && y < height)
             return map[x][y];
         return null;
