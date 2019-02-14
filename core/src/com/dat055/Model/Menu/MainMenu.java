@@ -21,7 +21,7 @@ public class MainMenu extends Menu {
     private TextButton play, multi, settings, exit, credits;
 
     public MainMenu(MenuController cntr) {
-        super();
+        super("UI/Delta.jpg");
         initTxtBtnStyle();
         initLblStyle();
 

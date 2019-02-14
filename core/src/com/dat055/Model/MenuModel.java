@@ -14,7 +14,6 @@ public class MenuModel extends Model {
     private HashMap<String, Menu> menus;
     private String currentMenu;
     private Stage stage;
-    private Sprite bgSprite;
 
     public MenuModel() {
         stage = new Stage();
@@ -23,11 +22,11 @@ public class MenuModel extends Model {
 
     public void includeMenu(String label, Menu menu) {
         menus.put(label, menu);
-        bgSprite = menu.getBgSprite();
     }
 
     public void swapMenu(String menu) {
         stage.clear();
+        stage.addActor(new Image(menus.get(menu).getBg()));
         stage.addActor(menus.get(menu).getTable());
         currentMenu = menu;
     }

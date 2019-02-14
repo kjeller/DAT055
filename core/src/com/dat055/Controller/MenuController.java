@@ -33,7 +33,6 @@ public class MenuController {
         Gdx.input.setInputProcessor(menuModel.getStage());
 
         swapMenu("Main");
-
     }
 
     public void update() {

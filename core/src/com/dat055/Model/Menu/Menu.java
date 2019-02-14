@@ -20,13 +20,12 @@ public abstract class Menu {
     protected LabelStyle lblStyle;
     protected TextButtonStyle txtBtnStyle;
     protected TextFieldStyle txtFldStyle;
-    protected Sprite bgSprite;
+    protected Texture bg;
 
-    protected Menu() { }
+    protected Menu() {}
 
     protected Menu(String bgAssetLocation) {
-        Texture bgTexture = new Texture(bgAssetLocation);
-        bgSprite = new Sprite(bgTexture);
+        bg = new Texture(bgAssetLocation);
     }
 
     public LabelStyle getLblStyle() {
@@ -45,8 +44,8 @@ public abstract class Menu {
         return this.table;
     }
 
-    public Sprite getBgSprite() {
-        return this.bgSprite;
+    public Texture getBg() {
+        return this.bg;
     }
 
     public TextButton createButton(String label) { return new TextButton(label, txtBtnStyle); }

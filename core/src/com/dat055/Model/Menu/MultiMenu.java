@@ -14,12 +14,12 @@ import com.dat055.Model.Menu.Menu;
 public class MultiMenu extends Menu {
     private MenuController controller;
     TextButton join, host, back;
-    public MultiMenu(MenuController cntr) {
-        super();
+    public MultiMenu(MenuController ctrl) {
+        super("UI/Delta.jpg");
         initTxtBtnStyle();
         initLblStyle();
 
-        this.controller = cntr;
+        controller = ctrl;
         Table table = new Table();
         Table subTable = new Table();
 
@@ -47,7 +47,7 @@ public class MultiMenu extends Menu {
 
     private void initTxtBtnStyle() {
         TextButton.TextButtonStyle txtBtnStyle = new TextButton.TextButtonStyle();
-        BitmapFont font = super.generateFont(30);
+        BitmapFont font = generateFont(30);
 
         Skin skin = new Skin(Gdx.files.internal("UI/ui.json"));
         TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("UI/ui.atlas"));
@@ -65,11 +65,11 @@ public class MultiMenu extends Menu {
 
     private void initTxtFldStyle() {
         TextField.TextFieldStyle txtFldStyle = new TextField.TextFieldStyle();
-        BitmapFont font = super.generateFont(30);
+        BitmapFont font = generateFont(30);
 
         txtFldStyle.font = font;
         txtFldStyle.disabledFontColor = Color.WHITE;
-        txtFldStyle.messageFont = super.generateFont(20);
+        txtFldStyle.messageFont = generateFont(20);
         txtFldStyle.messageFontColor = Color.RED;
 
         super.txtFldStyle = txtFldStyle;
