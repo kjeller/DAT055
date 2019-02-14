@@ -1,30 +1,38 @@
-package com.dat055.Model;
+package com.dat055.Model.Menu;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
+import com.dat055.Controller.MenuController;
+import com.dat055.Model.Menu.Menu;
 
 public class MultiMenu extends Menu {
-    public MultiMenu(float width) {
+    private MenuController controller;
+    TextButton join, host, back;
+    public MultiMenu(MenuController cntr) {
         super();
         initTxtBtnStyle();
         initLblStyle();
 
+        this.controller = cntr;
         Table table = new Table();
         Table subTable = new Table();
 
-        table.setWidth(width);
-        table.align(Align.center|Align.top);
+        table.setWidth(controller.getWidth());
+        table.align(Align.center | Align.top);
 
         table.setPosition(0, Gdx.graphics.getHeight());
 
-        TextButton join = createButton("Join");
-        TextButton host = createButton("Host");
-        TextButton back = createButton("Back");
-        //TextField address = createTextField("Enter the host IP");
+        join = createButton("Join");
+        host = createButton("Host");
+        back = createButton("Back");
+
+        addListeners();
 
         subTable.add(back).width(150).padRight(300);
         subTable.add(host);
@@ -72,5 +80,20 @@ public class MultiMenu extends Menu {
         lblStyle.font = super.generateFont(26);
         lblStyle.fontColor = Color.WHITE;
         super.lblStyle = lblStyle;
+    }
+
+    private void addListeners() {
+        back.addListener(new ClickListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                controller.swapMenu("Main");
+                return true;
+            }
+
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                super.touchUp(event, x, y, pointer, button);
+            }
+        });
     }
 }

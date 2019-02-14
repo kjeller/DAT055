@@ -61,6 +61,6 @@ public class Game extends ApplicationAdapter {
 
 	public void pauseMenu() {
 		menuController.swapMenu("Pause");
-		menuController.unhide();
+		menuController.toggleVisibility();
 	}
 }

@@ -3,8 +3,9 @@ package com.dat055.Model;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.dat055.Model.Menu.MainMenu;
+import com.dat055.Model.Menu.Menu;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
@@ -33,17 +34,6 @@ public class MenuModel extends Model {
 
     public Stage getStage() {
         return stage;
-    }
-
-    public HashMap<String, TextButton> getButtons() {
-        HashMap<String, TextButton> btns = new HashMap<String, TextButton>();
-        Iterator<String> itr = menus.keySet().iterator();
-        while (itr.hasNext()) {
-            String key = itr.next();
-            if (menus.get(key) != null) {
-                btns.putAll(menus.get(key).getButtons());
-            }
-        } return btns;
     }
 
     public void update() { stage.act(); }

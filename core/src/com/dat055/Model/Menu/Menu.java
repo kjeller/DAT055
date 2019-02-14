@@ -1,4 +1,4 @@
-package com.dat055.Model;
+package com.dat055.Model.Menu;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
@@ -16,17 +16,15 @@ import javafx.scene.layout.Background;
 import java.util.HashMap;
 
 public abstract class Menu {
-    protected HashMap<String, TextButton> txtButtons;
     protected Table table;
     protected LabelStyle lblStyle;
     protected TextButtonStyle txtBtnStyle;
     protected TextFieldStyle txtFldStyle;
     protected Sprite bgSprite;
 
-    protected Menu() { txtButtons = new HashMap<String, TextButton>(); }
+    protected Menu() { }
 
     protected Menu(String bgAssetLocation) {
-        txtButtons = new HashMap<String, TextButton>();
         Texture bgTexture = new Texture(bgAssetLocation);
         bgSprite = new Sprite(bgTexture);
     }
@@ -51,15 +49,7 @@ public abstract class Menu {
         return this.bgSprite;
     }
 
-    public HashMap<String, TextButton> getButtons() {
-        return txtButtons;
-    }
-
-    public TextButton createButton(String label) {
-        TextButton txtBtn = new TextButton(label, txtBtnStyle);
-        txtButtons.put(label, txtBtn);
-        return txtBtn;
-    }
+    public TextButton createButton(String label) { return new TextButton(label, txtBtnStyle); }
 
     public TextField createTextField(String label) {
         TextField txtFld = new TextField(label, txtFldStyle);
