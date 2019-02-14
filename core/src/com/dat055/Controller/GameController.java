@@ -3,6 +3,11 @@ package com.dat055.Controller;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.dat055.Model.Entity.Player;
@@ -20,7 +25,7 @@ public class GameController extends Controller {
     private Player currentPlayer;
     private Player player1;
     private Player player2;
-    private Camera cam;
+    private OrthographicCamera cam;
 
     private boolean isRotating;
     private boolean isPaused;
@@ -34,37 +39,54 @@ public class GameController extends Controller {
 
     @Override
     public void update(float deltaTime) {
-
-        // Camera transition
-        float lerp = 2f;
-        Vector2 playerPosition = currentPlayer.getPosition();
-        Vector3 camPosition = cam.position;
-        camPosition.x += Math.round((playerPosition.x - camPosition.x) * lerp * deltaTime);
-        camPosition.y += Math.round((playerPosition.y - camPosition.y) * lerp * deltaTime);
-        cam.update();
-
-        checkKeyboardInput(); // Handles keyboard input
+        updateCamera(deltaTime);    // Updates camera
+        checkKeyboardInput();       // Handles keyboard input
 
         // Tile rotation map transition
-        if(isRotating) {
+        if(isRotating && !isPaused)
             rotationTimer+= 2f;
-        }
-
         if(rotationTimer >= 180f) {
             isRotating = false;
             rotationTimer = 180f;
         }
         ((GameView)view).setRotationInc(rotationTimer);
+
+        // Time break
         if(!isRotating && !isPaused) {
             if(mode == Mode.FRONT)
                 map1.update(deltaTime);
             else
                 map2.update(deltaTime);
         }
+    }
 
-        if(!isPaused && !isRotating) {
-            if(isDebug){}
-                //((GameModel)model).getDebugCam().update();
+    private void updateCamera(float deltaTime) {
+        float effectiveViewportWidth = cam.viewportWidth * cam.zoom;
+        float effectiveViewportHeight = cam.viewportHeight * cam.zoom;
+
+        // Camera transition to player
+        float lerp = 2f;
+        Vector2 playerPosition = currentPlayer.getPosition();
+        Vector3 camPosition = cam.position;
+        camPosition.x += Math.round((playerPosition.x - camPosition.x) * lerp * deltaTime);
+        camPosition.y += Math.round((playerPosition.y - camPosition.y) * lerp * deltaTime);
+
+        if(camPosition.x >= effectiveViewportWidth)
+            cam.position.x = effectiveViewportWidth;
+
+        if(camPosition.y >= effectiveViewportHeight)
+            cam.position.y = effectiveViewportHeight;
+        cam.update();
+    }
+
+    @Override
+    public void render(SpriteBatch batch) {
+        super.render(batch); // Render view
+        if(isDebug) {
+            BitmapFont font = ((GameModel)model).getFont();
+            font.setColor(Color.WHITE);
+            font.draw(batch, String.format("Current player: "),
+                    0, Gdx.graphics.getHeight()*0.95f);
         }
     }
 
@@ -166,5 +188,9 @@ public class GameController extends Controller {
             isDebug = true;
         }
         ((GameView) view).setDebug(isDebug);
+    }
+
+    public String toString() {
+        return String.format("-currentPlayer: %s \n-GameMap1: %s \n-GameMap2: %s", currentPlayer, map1, map2);
     }
 }

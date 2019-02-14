@@ -2,6 +2,7 @@ package com.dat055.Model;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.Vector2;
 import com.dat055.Model.Entity.DebugCamera;
 import com.dat055.Model.Entity.Player;
@@ -13,16 +14,18 @@ public class GameModel extends Model {
     private GameMap map2;
     private DebugCamera debugCam;
     private OrthographicCamera cam;
+    private BitmapFont debugFont;
 
     public GameModel(){
         cam = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         debugCam = new DebugCamera(new Vector2(Vector2.Zero));
+        debugFont = new BitmapFont(Gdx.files.internal("fonts/Mincho.fnt"),
+                Gdx.files.internal("fonts/Mincho.png"), false);
     }
 
     /**
      *
      * @param fileName name of map (json)
-     * @param tileSize size of one tile in tilemap
      */
     public void createMap(String fileName) {
         GameMapFactory mapFactory = new GameMapFactory(fileName);
@@ -32,5 +35,6 @@ public class GameModel extends Model {
     public GameMap getGameMap1() { return map1; }
     public GameMap getGameMap2() { return map2; }
     public Player getDebugCam() { return debugCam; }
+    public BitmapFont getFont() { return debugFont; }
     public OrthographicCamera getCam() {return cam;}
 }

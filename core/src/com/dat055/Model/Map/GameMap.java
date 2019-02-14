@@ -1,7 +1,9 @@
 package com.dat055.Model.Map;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
@@ -56,7 +58,6 @@ public class GameMap {
 
     /**
      * Will render all rectangles known to man. With predefined colors.
-     * @param batch the spritebatch used
      * @param renderer for rendering the rectangles
      */
     public void renderRectangles(ShapeRenderer renderer) {
