@@ -40,7 +40,7 @@ public class TileMap {
      * @return Tile at given (x, y)
      */
     public Tile getTile(Integer x, Integer y) {
-        if(x >= 0 && x <= width && y >= 0 && y <= height)
+        if(x >= 0 && x < width && y >= 0 && y < height)
             return map[x][y];
         return null;
     }

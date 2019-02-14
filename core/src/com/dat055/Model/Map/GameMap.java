@@ -29,13 +29,13 @@ public class GameMap {
         this.entities = entities;
         this.player = player;
         this.name = name;
-        colHandler = new CollisionHandler(tileMap);
+        colHandler = new CollisionHandler(this);
     }
     public void update(float deltaTime) {
         // Updates entities position, health etc.
         for(Entity entity : entities) {
             entity.update();
-            if(entity instanceof Player) //TODO: Fix
+            //if(entity instanceof Player) //TODO: Fix
                 colHandler.checkCollision(entity);
         }
         //Todo: towbie fix
@@ -56,7 +56,6 @@ public class GameMap {
 
     /**
      * Will render all rectangles known to man. With predefined colors.
-     * @param batch the spritebatch used
      * @param renderer for rendering the rectangles
      */
     public void renderRectangles(ShapeRenderer renderer) {

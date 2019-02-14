@@ -19,7 +19,7 @@ public class Player extends Character {
      * @param act
      */
     public void action(String act) {
-        System.out.printf("%s %ss\n", this.name, act);
+        System.out.printf("%s %ss\n", name, act);
     }
 
     /**
@@ -81,11 +81,16 @@ public class Player extends Character {
      * Player interacts with something
      */
     public void interact(String interactable) {
-        System.out.printf("%s interacts with %s", this.name, interactable);
+        System.out.printf("%s interacts with %s", name, interactable);
     }
     public Hook getHook() {
         if (hook != null)
             return hook;
         return null;
+    }
+
+    @Override
+    public String toString() {
+        return super.toString();
     }
 }

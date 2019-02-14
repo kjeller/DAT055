@@ -8,8 +8,6 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
 public abstract class Entity {
-
-    protected int id;
     protected int height;
     protected int width;
     Vector2 position;
@@ -21,7 +19,7 @@ public abstract class Entity {
         this.width = width;
         this.position = position;
         this.setTexture(texturePath);
-        this.setRectangle();
+        setRectangle();
     }
 
     /**
@@ -57,9 +55,13 @@ public abstract class Entity {
 
     void setRectangle() {
         rect = new Rectangle();
-        rect.setSize(this.width, this.height);
-        rect.setPosition(position.x, this.position.y);
+        rect.setSize(width, height);
+        rect.setPosition(position.x, position.y);
     }
+    public void setXPosition(int x) { position.x = x; }
+    public void setYPosition(int y) { position.y = y; }
+    public void setRectX(int x) { rect.x = x; }
+    public void setRectY(int y) { rect.y = y; }
 
     public Vector2 getPosition() {
         return position;
@@ -73,4 +75,9 @@ public abstract class Entity {
     }
 
     public Vector2 setPosition() { return position; }
+
+    public String toString() {
+        return String.format("Height: %d, width: %d, position: (%f, %f), rect.x: %f, rect.y: %f, rect.width: %f, rect.height: %f\n",
+                height, width, position.x, position.y, rect.x, rect.y, rect.width, rect.height);
+    }
 }

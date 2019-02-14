@@ -1,6 +1,7 @@
 package com.dat055.Model.Entity;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 
 public abstract class Character extends Entity {
@@ -81,7 +82,7 @@ public abstract class Character extends Entity {
      * Method that makes the character jump.
      */
     public void jump() {
-        if (this.isGrounded) {
+        if (isGrounded) {
             isGrounded = false;
             velocity.y = 8;
         }
@@ -92,12 +93,18 @@ public abstract class Character extends Entity {
      */
     @Override
     public void update() {
-
-        updateFalling();
-        setVelocityX();
-        setVelocityY();
-        setPositions();
-        setDirection();
+        if (isAlive) {
+            updateFalling();
+            setVelocityX();
+            setVelocityY();
+            setPositions();
+            setDirection();
+        }
+    }
+    @Override
+    public void draw(SpriteBatch sb, float rotation) {
+        if (isAlive)
+            super.draw(sb, rotation);
     }
     void setPositions() {
         oldPosition.set(position);
@@ -124,7 +131,7 @@ public abstract class Character extends Entity {
      */
     private void updateFalling() {
         if (isGrounded) {
-            this.velocity.y = 0;
+            velocity.y = 0;
             acceleration.y = 0;
         } else {
             acceleration.y = -20;
@@ -152,18 +159,15 @@ public abstract class Character extends Entity {
      * Method that kills the character
      */
     private void die() {
-        this.isAlive = false;
+        if (isAlive == true) {
+            System.out.println("Player died!");
+            isAlive = false;
+        }
+
     }
 
-    /**
-     * * Method for debugging purposes
-     */
-    public String toString() {
-        return String.format("Properties:position: (%f,%f), height: %d, width: %d, accelerationX: %f, isMoving: %s, velocity: (%f,%f), direction: %f",
-                position.x, position.y, height, width, acceleration.x, isMoving, velocity.x, velocity.y, direction.x);
-    }
-    public void setXPosition(int x) { position.x = x; }
-    public void setYPosition(int y) { position.y = y; }
+
+
     public void setXVelocity(int x) { velocity.x = x; }
     public void setYVelocity(int y) { velocity.y = y; }
     public void setXAcceleration(int x) { acceleration.x = x; }
@@ -176,6 +180,9 @@ public abstract class Character extends Entity {
     public Vector2 getVelocity() { return velocity; }
 
 
-
+    public String toString() {
+        return super.toString() + String.format("hp: %d, acceleration: (%f, %f), direction: (%f, %f), lookingDirection: %f, isGrounded: %s, isAlive: %s, isMoving: %s\n",
+                healthPoints, acceleration.x, acceleration.y, direction.x, direction.y, lookingDirection.x, isGrounded, isAlive, isMoving);
+    }
 
 }
