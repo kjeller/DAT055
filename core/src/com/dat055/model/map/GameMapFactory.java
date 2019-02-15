@@ -1,14 +1,15 @@
-package com.dat055.model.map;
+package com.dat055.Model.Map;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
-import com.dat055.model.entity.Entity;
-import com.dat055.model.entity.Player;
-import com.dat055.model.map.tile.TileMap;
-import com.dat055.model.map.tile.TileMapFactory;
+import com.dat055.Model.Entity.Enemy;
+import com.dat055.Model.Entity.Entity;
+import com.dat055.Model.Entity.Player;
+import com.dat055.Model.Map.Tile.TileMap;
+import com.dat055.Model.Map.Tile.TileMapFactory;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -30,8 +31,6 @@ public class GameMapFactory {
 
     /**
      * Creates and returns a GameMap
-     * @param fileName name of json file in assets/maps
-     * @param tileSize size of every tile in game
      * @return a gamemap with a set of tilemaps
      */
     public GameMap getMap() {
@@ -49,7 +48,7 @@ public class GameMapFactory {
         try{
             JsonReader reader = new JsonReader();
             root = reader.parse(Gdx.files.internal(fileName));
-        } catch (Exception x) { System.out.println("Error: map file could not be read."); return false;}
+        } catch (Exception x) { System.out.println("Error: Map file could not be read."); return false;}
 
         for(JsonValue jsonMap : root.get(MAP_NAME)) {
         GameMap map = getGameMap(jsonMap, getTextureAtlas(jsonMap));
@@ -135,11 +134,11 @@ public class GameMapFactory {
         ArrayList<Entity> entities = new ArrayList<Entity>();
         entities.add(player); // Adds player to list
         // Get array of entities
-        Iterator<JsonValue> entitiesJson = map.get(MAP_ENTITIES).child.iterator();
+        Iterator<JsonValue> entitiesJson = map.get(MAP_ENTITIES).iterator();
 
         // Loop through every entity in array
         while(entitiesJson.hasNext()) {
-            JsonValue current = entitiesJson.next();
+            JsonValue current = entitiesJson.next().child;
             if(current != null) {
                 Entity entity = null;
                 JsonValue position = current.get("position");

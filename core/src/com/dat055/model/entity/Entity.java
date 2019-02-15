@@ -37,7 +37,6 @@ public abstract class Entity {
      * Generic method for drawing an entity
      */
     public void draw(SpriteBatch sb) {
-        // TODO: Parameter spritebatch, then spritebatch.render(texture), is called in Game.render();
         sb.draw(sprite, position.x, position.y);
     }
 
@@ -56,10 +55,8 @@ public abstract class Entity {
         rect.setSize(width, height);
         rect.setPosition(position.x, position.y);
     }
-    public void setXPosition(int x) { position.x = x; }
-    public void setYPosition(int y) { position.y = y; }
-    public void setRectX(int x) { rect.x = x; }
-    public void setRectY(int y) { rect.y = y; }
+    public void setXPosition(int x) { position.x = x; rect.x = position.x; }
+    public void setYPosition(int y) { position.y = y; rect.y = position.y; }
 
     public Vector2 getPosition() {
         return position;
@@ -71,8 +68,6 @@ public abstract class Entity {
     public int getHeight() {
         return height;
     }
-
-    public Vector2 setPosition() { return position; }
 
     @Override
     public String toString() {

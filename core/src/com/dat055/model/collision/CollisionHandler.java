@@ -1,15 +1,16 @@
-package com.dat055.model.collision;
+package com.dat055.Model.Collision;
 
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.dat055.model.entity.Enemy;
-import com.dat055.model.entity.Entity;
-import com.dat055.model.entity.Hook;
-import com.dat055.model.entity.Player;
-import com.dat055.model.map.GameMap;
-import com.dat055.model.map.tile.Tile;
-import com.dat055.model.map.tile.TileMap;
+import com.dat055.Model.Entity.Enemy;
+import com.dat055.Model.Entity.Entity;
+import com.dat055.Model.Entity.Character;
+import com.dat055.Model.Entity.Hook;
+import com.dat055.Model.Entity.Player;
+import com.dat055.Model.Map.GameMap;
+import com.dat055.Model.Map.Tile.Tile;
+import com.dat055.Model.Map.Tile.TileMap;
 
 
 
@@ -28,7 +29,6 @@ public class CollisionHandler {
         tileMap = map.getTileMap();
     }
 
-
     public void checkCollision(Entity entity) {
         if (entity == null)
             return;
@@ -36,6 +36,8 @@ public class CollisionHandler {
             collisionPlayer((Player)entity);
         else if (entity instanceof Hook)
             collisionHook((Hook)entity);
+        else if (entity instanceof Enemy)
+            collisionEnemy((Enemy)entity);
     }
 
     private Rectangle checkIfWallCollision(Entity entity, ArrayList<Tile> tiles) {
@@ -48,6 +50,11 @@ public class CollisionHandler {
             }
         }
         return null;
+    }
+
+    private void collisionEnemy(Enemy enemy) {
+        tileList = collisionBoxes(enemy);
+
     }
 
     private void collisionHook(Hook hook) {
@@ -85,7 +92,6 @@ public class CollisionHandler {
         for (Entity mapEntity : gameMap.getEntities()) {
             if (Intersector.intersectRectangles(entity.getRect(), mapEntity.getRect(), intersection)) {
                 if (mapEntity instanceof Enemy) {
-                    System.out.println("Enemy detection");
                     return intersection;
                 }
             }
@@ -117,25 +123,25 @@ public class CollisionHandler {
             if (checkXCollision(intersection)) {
                 player.setXVelocity(0);
                 player.setXAcceleration(0);
+
                 // Value to set as X-pos
                 val = (playerRect.x == intersection.x) ?
-                        Math.round(playerRect.x+1) : Math.round(playerRect.x-1);
+                        (int)(intersection.x+intersection.width) : (int)(intersection.x-playerRect.width);
                 player.setXPosition(val);
             }
             if (checkBothCollisions(intersection)) System.out.println("mweep");
             //TODO: Fix corner collisions
         }
     }
+
     private boolean checkIfOutside(Entity entity) {
         boolean ret = false;
         if (entity.getPosition().x  < 0) {
             entity.setXPosition(0);
-            entity.setRectX((int)entity.getPosition().x);
             ret = true;
         }
         if (entity.getPosition().x+entity.getWidth() > tileMap.getWidthPixels()) {
             entity.setXPosition(tileMap.getWidthPixels()-entity.getWidth());
-            entity.setRectX((int)entity.getPosition().x);
             ret = true;
         }
 
@@ -168,7 +174,7 @@ public class CollisionHandler {
             return true;
 
         // Check if entity should fall off edge
-        if (!tileMap.getTile((int)((position.x)/tileSize), (int)(position.y-1)/tileSize).getState())
+        if (!tileMap.getTile((int)((position.x+player.getWidth())/tileSize), (int)(position.y-1)/tileSize).getState())
             player.setGrounded(false);
 
         // Check if entity is falling to stop a movement bug.
