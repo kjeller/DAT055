@@ -18,4 +18,6 @@ public abstract class Controller {
     public void render(SpriteBatch batch) {
         view.render(batch);
     }
+
+    public void render() {}
 }

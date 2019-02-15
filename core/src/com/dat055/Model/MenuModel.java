@@ -34,6 +34,4 @@ public class MenuModel extends Model {
     public Stage getStage() {
         return stage;
     }
-
-    public void update() { stage.act(); }
 }
