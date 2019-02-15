@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.dat055.model.entity.Player;
 import com.dat055.model.GameModel;
 import com.dat055.model.map.GameMap;
+import com.dat055.net.Server;
 import com.dat055.view.GameView;
 
 
@@ -16,20 +17,17 @@ public class GameController extends Controller {
     public enum Mode {FRONT, BACK}
     private Mode mode;
 
-    private GameMap map1;
-    private GameMap map2;
-    private Player currentPlayer;
-    private Player player1;
-    private Player player2;
+    private GameMap map1, map2;
+    private Player currentPlayer, player1, player2;
     private OrthographicCamera cam;
 
-    private boolean isRotating;
-    private boolean isPaused;
-    private boolean isDebug;
-    private boolean isMultiplayer;
+    private boolean isRotating, isPaused, isDebug, isMultiplayer;
 
     private float rotationTimer = 180f;
     private float rotation = 0;
+
+
+    private Server server;
 
     public GameController(GameModel model, GameView view) {
         super(model, view);
@@ -142,7 +140,7 @@ public class GameController extends Controller {
      * Calls gamemodel to create a game map for a specific map.
      * @param fileName of a json file in assets/maps/
      */
-    public void startMap(String fileName) {
+    private void startMap(String fileName) {
         ((GameModel)model).createMap(fileName);
 
         map1 = ((GameModel)model).getGameMap1();
@@ -155,13 +153,45 @@ public class GameController extends Controller {
         isPaused = false;
         isRotating = false;
         isDebug = false;
+
+        whosOnTop(mode);
+    }
+
+    /**
+     * Starts a singleplayer map where player toggles between
+     * playable characters. Mainmenu will call this to start map.
+     * @param fileName name of map that will be created with startMap()
+     */
+    public void startSingleplayerMap(String fileName) {
+        startMap(fileName);
+
+        isMultiplayer = false;
         mode = Mode.FRONT;
 
         whosOnTop(mode);
     }
 
     /**
+     * Starts a multiplayer map where each player is assigned a
+     * playable character. Switching between characters not enabled.
+     * Mainmenu will call this to start map. Host then needs to wait for
+     * another player to join server.
+     * @param fileName name of map that will be created with startMap()
+     */
+    public void startMultiplayerMap(String fileName) {
+        startMap(fileName);
+
+        isMultiplayer = true;
+        //Todo: start server here maybe waiting for a player to join
+
+        //Host decides this from menu
+        mode = Mode.FRONT;
+        whosOnTop(mode);
+    }
+
+    /**
      * Decides who is the top player based on mode
+     * Sets currentPlayer to player on active plane
      * @param mode FRONT or BACK
      */
     private void whosOnTop(Mode mode) {
@@ -176,18 +206,20 @@ public class GameController extends Controller {
     }
 
     private void toggleCurrentPlayer() {
-        if(mode == Mode.FRONT) {
-            currentPlayer = player2;
-            mode = Mode.BACK;
-        }
-        else {
-            currentPlayer = player1;
-            mode = Mode.FRONT;
-        }
-        ((GameView)view).setMode(mode);
+        if(!isMultiplayer) {
+            if(mode == Mode.FRONT) {
+                currentPlayer = player2;
+                mode = Mode.BACK;
+            }
+            else {
+                currentPlayer = player1;
+                mode = Mode.FRONT;
+            }
+            ((GameView)view).setMode(mode);
 
-        rotationTimer = 0; // Resets timer
-        isRotating = true; // Will start adding to rotation timer in update
+            rotationTimer = 0; // Resets timer
+            isRotating = true; // Will start adding to rotation timer in update
+        }
     }
     private void togglePause() {
         if(isPaused)

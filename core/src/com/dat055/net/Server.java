@@ -3,13 +3,13 @@ package com.dat055.net;
 import java.io.IOException;
 import java.net.*;
 
-public class ClientServer extends Thread {
+public class Server extends Thread {
     private DatagramSocket socket;
     private int destPort;
     private InetAddress destAddr;
     private boolean isAlive = true;
 
-    public ClientServer(int srcPort, int destPort, String destAddr) {
+    public Server(int srcPort, int destPort, String destAddr) {
         this.destPort = destPort;
         try {
             this.destAddr = InetAddress.getByName(destAddr);
