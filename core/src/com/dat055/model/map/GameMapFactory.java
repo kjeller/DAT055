@@ -1,14 +1,14 @@
-package com.dat055.Model.Map;
+package com.dat055.model.map;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
-import com.dat055.Model.Entity.Entity;
-import com.dat055.Model.Entity.Player;
-import com.dat055.Model.Map.Tile.TileMap;
-import com.dat055.Model.Map.Tile.TileMapFactory;
+import com.dat055.model.entity.Entity;
+import com.dat055.model.entity.Player;
+import com.dat055.model.map.tile.TileMap;
+import com.dat055.model.map.tile.TileMapFactory;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -49,7 +49,7 @@ public class GameMapFactory {
         try{
             JsonReader reader = new JsonReader();
             root = reader.parse(Gdx.files.internal(fileName));
-        } catch (Exception x) { System.out.println("Error: Map file could not be read."); return false;}
+        } catch (Exception x) { System.out.println("Error: map file could not be read."); return false;}
 
         for(JsonValue jsonMap : root.get(MAP_NAME)) {
         GameMap map = getGameMap(jsonMap, getTextureAtlas(jsonMap));

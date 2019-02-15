@@ -1,4 +1,4 @@
-package com.dat055.View;
+package com.dat055.view;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
@@ -6,9 +6,9 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.dat055.Controller.GameController.Mode;
-import com.dat055.Model.GameModel;
-import com.dat055.Model.Map.GameMap;
+import com.dat055.controller.GameController.Mode;
+import com.dat055.model.GameModel;
+import com.dat055.model.map.GameMap;
 
 public class GameView extends View{
     private ShapeRenderer renderer;

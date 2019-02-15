@@ -1,4 +1,4 @@
-package com.dat055.Model;
+package com.dat055.model;
 
 public abstract class Model {
     public Model() {}

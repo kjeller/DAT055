@@ -1,11 +1,11 @@
-package com.dat055.Model;
+package com.dat055.model;
 
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.utils.Align;
-import com.dat055.View.MenuView;
+import com.dat055.view.MenuView;
 
 // TODO: Singleton
 public class MenuModel extends Model {

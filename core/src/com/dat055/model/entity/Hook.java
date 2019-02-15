@@ -1,4 +1,4 @@
-package com.dat055.Model.Entity;
+package com.dat055.model.entity;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;

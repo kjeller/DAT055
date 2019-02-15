@@ -4,10 +4,10 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.dat055.Controller.Controller;
-import com.dat055.Controller.GameController;
-import com.dat055.Model.GameModel;
-import com.dat055.View.GameView;
+import com.dat055.controller.Controller;
+import com.dat055.controller.GameController;
+import com.dat055.model.GameModel;
+import com.dat055.view.GameView;
 
 import java.util.ArrayList;
 

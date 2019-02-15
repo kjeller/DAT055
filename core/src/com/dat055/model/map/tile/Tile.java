@@ -1,8 +1,7 @@
-package com.dat055.Model.Map.Tile;
+package com.dat055.model.map.tile;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector2;
 
 public class Tile {
     protected float x, y;
@@ -20,7 +19,7 @@ public class Tile {
     public void draw(SpriteBatch batch, float rotation) {}
 
     public String toString() {
-        return String.format("Tile @ (%.2f, %.2f)\n", x, y);
+        return String.format("tile @ (%.2f, %.2f)\n", x, y);
     }
     public boolean getState(){return isCollideable; }
     public Rectangle getRect() {return box; };

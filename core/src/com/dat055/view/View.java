@@ -1,7 +1,7 @@
-package com.dat055.View;
+package com.dat055.view;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.dat055.Model.Model;
+import com.dat055.model.Model;
 
 public abstract class View{
     Model model;

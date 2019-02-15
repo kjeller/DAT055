@@ -1,21 +1,15 @@
-package com.dat055.Controller;
+package com.dat055.controller;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.Camera;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.dat055.Model.Entity.Player;
-import com.dat055.Model.GameModel;
-import com.dat055.Model.Map.GameMap;
-import com.dat055.View.GameView;
-
-import java.rmi.MarshalledObject;
+import com.dat055.model.entity.Player;
+import com.dat055.model.GameModel;
+import com.dat055.model.map.GameMap;
+import com.dat055.view.GameView;
 
 
 public class GameController extends Controller {
@@ -47,7 +41,7 @@ public class GameController extends Controller {
             updateCamera(deltaTime);    // Updates camera
         checkKeyboardInput();           // Handles keyboard input
 
-        // Tile rotation map transition
+        // tile rotation map transition
         if(isRotating && !isPaused)
             rotationTimer+= 2f;
         if(rotationTimer >= 180f) {
@@ -178,6 +172,7 @@ public class GameController extends Controller {
             ((GameView)view).setRotation(0);
             currentPlayer = player2;
         }
+        ((GameView)view).setMode(mode);
     }
 
     private void toggleCurrentPlayer() {

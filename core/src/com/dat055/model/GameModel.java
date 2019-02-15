@@ -1,13 +1,13 @@
-package com.dat055.Model;
+package com.dat055.model;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.Vector2;
-import com.dat055.Model.Entity.DebugCamera;
-import com.dat055.Model.Entity.Player;
-import com.dat055.Model.Map.GameMap;
-import com.dat055.Model.Map.GameMapFactory;
+import com.dat055.model.entity.DebugCamera;
+import com.dat055.model.entity.Player;
+import com.dat055.model.map.GameMap;
+import com.dat055.model.map.GameMapFactory;
 
 public class GameModel extends Model {
     private GameMap map1;
