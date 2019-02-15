@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
+import com.dat055.Model.Entity.Enemy;
 import com.dat055.Model.Entity.Entity;
 import com.dat055.Model.Entity.Player;
 import com.dat055.Model.Map.Tile.TileMap;
@@ -30,8 +31,6 @@ public class GameMapFactory {
 
     /**
      * Creates and returns a GameMap
-     * @param fileName name of json file in assets/maps
-     * @param tileSize size of every tile in game
      * @return a gamemap with a set of tilemaps
      */
     public GameMap getMap() {
@@ -135,11 +134,11 @@ public class GameMapFactory {
         ArrayList<Entity> entities = new ArrayList<Entity>();
         entities.add(player); // Adds player to list
         // Get array of entities
-        Iterator<JsonValue> entitiesJson = map.get(MAP_ENTITIES).child.iterator();
+        Iterator<JsonValue> entitiesJson = map.get(MAP_ENTITIES).iterator();
 
         // Loop through every entity in array
         while(entitiesJson.hasNext()) {
-            JsonValue current = entitiesJson.next();
+            JsonValue current = entitiesJson.next().child;
             if(current != null) {
                 Entity entity = null;
                 JsonValue position = current.get("position");
