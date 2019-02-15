@@ -32,8 +32,10 @@ public class GameController extends Controller {
     private boolean isRotating;
     private boolean isPaused;
     private boolean isDebug;
+    private boolean isMultiplayer;
 
-    private float rotationTimer = 0;
+    private float rotationTimer = 180f;
+    private float rotation = 0;
 
     public GameController(GameModel model, GameView view) {
         super(model, view);
@@ -41,8 +43,9 @@ public class GameController extends Controller {
 
     @Override
     public void update(float deltaTime) {
-        updateCamera(deltaTime);    // Updates camera
-        checkKeyboardInput();       // Handles keyboard input
+        if(!isPaused)
+            updateCamera(deltaTime);    // Updates camera
+        checkKeyboardInput();           // Handles keyboard input
 
         // Tile rotation map transition
         if(isRotating && !isPaused)
@@ -51,7 +54,8 @@ public class GameController extends Controller {
             isRotating = false;
             rotationTimer = 180f;
         }
-        ((GameView)view).setRotationInc(rotationTimer);
+        rotation = mode == Mode.FRONT ? 180f + rotationTimer : rotationTimer; // Sets rotation for planes
+        ((GameView)view).setRotation(rotation);
 
         // Time break
         if(!isRotating && !isPaused) {
@@ -88,15 +92,9 @@ public class GameController extends Controller {
     @Override
     public void render(SpriteBatch batch) {
         super.render(batch); // Render view
-        if(isDebug) {
-            BitmapFont font = ((GameModel)model).getFont();
-            batch.setProjectionMatrix(cam.combined);
-            font.setColor(Color.WHITE);
-            font.draw(batch, String.format(
-                    "mode: %s\nrot.timer: %s", mode, rotationTimer),
-                    cam.position.x -Gdx.graphics.getWidth()/2,
-                    cam.position.y+Gdx.graphics.getHeight()/2);
-        }
+        ((GameView)view).setDebugString(String.format(
+                "mode: %s\nrot: %.1f\nrot.timer: %s\nisRotating: %s\nisPaused: %s",
+                mode, rotation, rotationTimer, isRotating, isPaused));
     }
 
     /**
@@ -155,6 +153,7 @@ public class GameController extends Controller {
 
         map1 = ((GameModel)model).getGameMap1();
         map2 = ((GameModel)model).getGameMap2();
+        cam = ((GameModel)model).getCam();
         player1 = map1.getPlayer();
         player2 = map2.getPlayer();
 
@@ -163,11 +162,22 @@ public class GameController extends Controller {
         isRotating = false;
         isDebug = false;
         mode = Mode.FRONT;
-        ((GameView)view).setMode(Mode.FRONT);
 
-        if(mode == Mode.FRONT)
-        currentPlayer = player1;
-        cam = ((GameModel)model).getCam();
+        whosOnTop(mode);
+    }
+
+    /**
+     * Decides who is the top player based on mode
+     * @param mode FRONT or BACK
+     */
+    private void whosOnTop(Mode mode) {
+        if(mode == Mode.FRONT) {
+            ((GameView)view).setRotation(360f);
+            currentPlayer = player1;
+        } else {
+            ((GameView)view).setRotation(0);
+            currentPlayer = player2;
+        }
     }
 
     private void toggleCurrentPlayer() {
