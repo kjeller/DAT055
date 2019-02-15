@@ -1,19 +1,17 @@
-package com.dat055.Model.Map;
+package com.dat055.model.map;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
-import com.dat055.Model.Collision.CollisionHandler;
-import com.dat055.Model.Entity.Enemy;
-import com.dat055.Model.Entity.Entity;
-import com.dat055.Model.Entity.Hook;
-import com.dat055.Model.Entity.Player;
-import com.dat055.Model.Map.Tile.Tile;
-import com.dat055.Model.Map.Tile.TileMap;
+import com.dat055.model.collision.CollisionHandler;
+import com.dat055.model.entity.Enemy;
+import com.dat055.model.entity.Entity;
+import com.dat055.model.entity.Hook;
+import com.dat055.model.entity.Player;
+import com.dat055.model.map.tile.Tile;
+import com.dat055.model.map.tile.TileMap;
 
 import java.util.ArrayList;
 

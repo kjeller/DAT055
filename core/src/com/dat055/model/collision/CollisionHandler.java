@@ -1,16 +1,16 @@
-package com.dat055.Model.Collision;
+package com.dat055.model.collision;
 
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.dat055.Model.Entity.Enemy;
-import com.dat055.Model.Entity.Entity;
-import com.dat055.Model.Entity.Character;
-import com.dat055.Model.Entity.Hook;
-import com.dat055.Model.Entity.Player;
-import com.dat055.Model.Map.GameMap;
-import com.dat055.Model.Map.Tile.Tile;
-import com.dat055.Model.Map.Tile.TileMap;
+import com.dat055.model.entity.Enemy;
+import com.dat055.model.entity.Entity;
+import com.dat055.model.entity.Character;
+import com.dat055.model.entity.Hook;
+import com.dat055.model.entity.Player;
+import com.dat055.model.map.GameMap;
+import com.dat055.model.map.tile.Tile;
+import com.dat055.model.map.tile.TileMap;
 
 
 
