@@ -42,11 +42,11 @@ public class MultiMenu extends Menu {
         addListeners();
 
         subTable.add(back).width(150).padRight(300);
-        subTable.add(host);
+        subTable.add(host).width(150);
 
         table.padTop(200);
         table.add(address).width(300).padBottom(30).row();
-        table.add(join).width(300).padBottom(30).row();
+        table.add(join).width(300).padBottom(100).row();
         table.add(subTable).width(500).padBottom(20);
 
         super.table = table;
@@ -96,8 +96,8 @@ public class MultiMenu extends Menu {
 
     public BitmapFont fontPad(BitmapFont f) {
         BitmapFont.BitmapFontData fd = f.getData();
-        fd.padLeft = -35;
-        fd.padRight = -70;
+        fd.padLeft = -5;
+        fd.padRight = -10;
         return f;
     }
 
