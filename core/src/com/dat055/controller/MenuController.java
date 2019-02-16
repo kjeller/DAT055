@@ -57,7 +57,7 @@ public class MenuController extends Controller{
     }
 
     public void startGame(String mapPath) {
-        gameController.startMap(mapPath);
-        gameController.togglePause();
+        gameController.startSingleplayerMap(mapPath);
+        //gameController.togglePause();
     }
 }
