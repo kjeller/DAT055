@@ -92,14 +92,14 @@ public class MainMenu extends Menu {
         play.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                controller.toggleVisibility();
-                controller.clearStage();
-                controller.startGame("maps/map_0.json");
                 return true;
             }
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                controller.toggleVisibility();
+                controller.clearStage();
+                controller.startGame("maps/map_0.json");
                 super.touchUp(event, x, y, pointer, button);
             }
         });
@@ -107,12 +107,12 @@ public class MainMenu extends Menu {
         multi.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                controller.swapMenu("Multiplayer");
                 return true;
             }
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                controller.swapMenu("Multiplayer");
                 super.touchUp(event, x, y, pointer, button);
             }
         });
@@ -120,7 +120,6 @@ public class MainMenu extends Menu {
         settings.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                controller.swapMenu("Main");
                 return true;
             }
 
@@ -133,12 +132,12 @@ public class MainMenu extends Menu {
         exit.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                controller.swapMenu("Main");
                 return true;
             }
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                System.exit(0);
                 super.touchUp(event, x, y, pointer, button);
             }
         });
@@ -146,12 +145,12 @@ public class MainMenu extends Menu {
         credits.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                controller.swapMenu("Main");
                 return true;
             }
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                controller.swapMenu("Main");
                 super.touchUp(event, x, y, pointer, button);
             }
         });

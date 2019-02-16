@@ -51,9 +51,8 @@ public abstract class Menu {
     public TextButton createButton(String label) { return new TextButton(label, txtBtnStyle); }
 
     public TextField createTextField(String label) {
-        TextField txtFld = new TextField(label, txtFldStyle);
-        txtFld.setText(label);
-        return txtFld;
+        TextField tf = new TextField(label, txtFldStyle);
+        return tf;
     }
 
     public BitmapFont generateFont(int size) {
@@ -61,6 +60,7 @@ public abstract class Menu {
         FreeTypeFontGenerator.FreeTypeFontParameter params = new FreeTypeFontGenerator.FreeTypeFontParameter();
 
         params.size = size;
+
         return generator.generateFont(params);
     }
 }

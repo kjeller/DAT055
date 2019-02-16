@@ -16,7 +16,6 @@ import com.dat055.View.View;
 import java.util.ArrayList;
 
 public class Game extends ApplicationAdapter {
-	private boolean toggle = true;
 	private SpriteBatch batch;
 	private GameController gameController;
 	private MenuController menuController;
