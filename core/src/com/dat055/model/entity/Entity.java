@@ -29,7 +29,7 @@ public abstract class Entity {
     /**
      * Generic methods for updating an entity
      */
-    public void update() {
+    public void update(float deltaTime) {
         // TODO: Update entity stuff
     }
 

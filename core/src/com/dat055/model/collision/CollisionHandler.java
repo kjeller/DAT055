@@ -20,7 +20,6 @@ import java.util.ArrayList;
 public class CollisionHandler {
     private final int tileSize = 64;
     private TileMap tileMap;
-    private ArrayList<Rectangle> rectList;
     private ArrayList<Tile> tileList;
     private GameMap gameMap;
 
@@ -29,17 +28,162 @@ public class CollisionHandler {
         tileMap = map.getTileMap();
     }
 
+    /**
+     * Method to return all tiles surrounding an entity
+     * @param entity entity to be checked
+     * @return an array list containing all surrounding tiles.
+     */
+    private ArrayList<Tile> collisionBoxes(Entity entity) {
+        Vector2 position = new Vector2(entity.getPosition());
+        ArrayList<Tile> tiles = new ArrayList<Tile>();
+        for (int row = (int) (position.y / tileSize); row < Math.ceil((position.y + entity.getHeight()) / tileSize); row++) {
+            for (int col = (int) (position.x / tileSize); col < Math.ceil((position.x + entity.getWidth()) / tileSize); col++) {
+                Tile tile = tileMap.getTile((int) Math.floor(col), (int) Math.floor(row));
+                tiles.add(tile);
+            }
+        }
+        return tiles;
+    }
+
+    /**
+     * Redirect the right collision checks to an entity
+     * @param entity the entity to be checked.
+     */
     public void checkCollision(Entity entity) {
         if (entity == null)
             return;
-        if (entity instanceof Player)
-            collisionPlayer((Player)entity);
+        if (entity instanceof Character) {
+            collisionCharacter((Character)entity);
+        }
         else if (entity instanceof Hook)
             collisionHook((Hook)entity);
-        else if (entity instanceof Enemy)
-            collisionEnemy((Enemy)entity);
     }
 
+    /**
+     * One of the collision cases to be checked.
+     * @param character entity to be tested
+     */
+    private void collisionCharacter(Character character) {
+        Vector2 deltaPos = new Vector2();
+        deltaPos.set(character.getDeltaPosition());
+        tileList = collisionBoxes(character);
+
+        if (checkIfOutside(character))
+            checkChangeDirection(character);
+
+        // Check certain specific cases before usual collision check
+        if (!checkIfFalling(tileMap.getTile((int)((character.getPosition().x+character.getWidth())/tileSize),
+                (int)(character.getPosition().y-1)/tileSize)))
+            character.setGrounded(false);
+
+        if (checkBeforeCollision(character))
+            return;
+
+        Rectangle intersection;
+        // Check if there is an intersection between the entity and the tiles around it
+        if ((intersection = checkIfWallCollision(character, tileList)) != null) {
+            // Check if collision is above or below
+            verticalCollision(character, intersection);
+
+            // Check if collision is to the left or to the right
+            horizontalCollision(character, intersection);
+
+            // Check if collision is on a corner
+            edgeAdjacentCollision(character, intersection);
+            //TODO: Fix corner collisions
+        }
+    }
+
+    /**
+     * One of the collision cases to be checked.
+     * @param hook that is tested
+     */
+    private void collisionHook(Hook hook) {
+        tileList = collisionBoxes(hook);
+        if (checkIfOutside(hook)) {
+            hook.setApexReached(true);
+        }
+
+        Rectangle intersection;
+        if (!hook.getApexReached()) {
+            if ((intersection = checkIfWallCollision(hook, tileList)) != null) {
+
+                hook.setApexReached(true);
+                if (!checkYCollision(intersection))
+                    hook.setHasGrip(true);
+                Tile tile = getCurrentTile(hook.getPosition());
+                if (tile.getRect().contains(hook.getRect()))
+                    hook.setHasGrip(false);
+
+            }
+            else if ((intersection = checkIfEntityCollision(hook)) != null) {
+                //TODO: Add behavior to entity collision.
+            }
+        }
+    }
+
+    /**
+     * Method to check if collision is horizontal and handle it
+     * @param character entity to be tested
+     * @param intersection intersection between tile and entity
+     */
+    private void horizontalCollision(Character character, Rectangle intersection) {
+        if (checkXCollision(intersection)) {
+            int val;
+            Rectangle rect = new Rectangle(character.getRect());
+
+            character.setXVelocity(0);
+            character.setXAcceleration(0);
+
+            // Value to set as position.x
+            val = (rect.x == intersection.x) ?
+                    (int)(intersection.x+intersection.width) : (int)(intersection.x-rect.width);
+            character.setXPosition(val);
+            // If character is an enemy, it should change directions.
+            checkChangeDirection(character);
+        }
+    }
+
+    /**
+     * Method to check if collision is vertical and handle it
+     * @param character entity to be tested
+     * @param intersection intersection between tile and entity
+     */
+    private void verticalCollision(Character character, Rectangle intersection) {
+        if (checkYCollision(intersection)) {
+            int val;
+            Rectangle rect = new Rectangle(character.getRect());
+
+            character.setYVelocity(0);
+
+            // Value to set as position.y
+            val = (rect.y + rect.height == intersection.y + intersection.height) ?
+                    (int)(intersection.y-rect.height) : (int)(intersection.y+intersection.height);
+            if (!(rect.y + rect.height == intersection.y + intersection.height))
+                character.setGrounded(true);
+            character.setYPosition(val);
+        }
+    }
+
+    /**
+     * Method to check if collision is horizontal as well as vertical, and handle it
+     * @param character entity to be tested
+     * @param intersection intersection between tile and entity
+     */
+    private void edgeAdjacentCollision(Character character, Rectangle intersection) {
+        if (checkBothCollisions(intersection)) {
+            Vector2 newPosition = new Vector2();
+            System.out.println("mweep");
+        }
+    }
+
+    /**
+     * Method to check if there is a collision between an entity and a wall.
+     * If there is, return the intersecting rectangle.
+     * @param entity entity to be checked
+     * @param tiles tiles that surround the entity
+     * @return the intersecting rectangle, if there is any
+     */
     private Rectangle checkIfWallCollision(Entity entity, ArrayList<Tile> tiles) {
         Rectangle intersection = new Rectangle();
         for (Tile tile : tiles) {
@@ -52,46 +196,19 @@ public class CollisionHandler {
         return null;
     }
 
-    private void collisionEnemy(Enemy enemy) {
-        tileList = collisionBoxes(enemy);
-
-    }
-
-    private void collisionHook(Hook hook) {
-        tileList = collisionBoxes(hook);
-        if (checkIfOutside(hook)) {
-            hook.setApexReached(true);
-        }
-        Rectangle intersection;
-        if (!hook.getApexReached()) {
-            if ((intersection = checkIfWallCollision(hook, tileList)) != null) {
-                hook.setApexReached(true);
-                hook.setHasGrip(true);
-            }
-            else if ((intersection = checkIfEntityCollision(hook)) != null) {
-                hook.setApexReached(true);
-            }
-        }
-    }
-    private ArrayList<Tile> collisionBoxes(Entity entity) {
-        Vector2 position = new Vector2(entity.getPosition());
-        ArrayList<Tile> tiles = new ArrayList();
-        for (int row = (int) (position.y / tileSize); row < Math.ceil((position.y + entity.getHeight()) / tileSize); row++) {
-            for (int col = (int) (position.x / tileSize); col < Math.ceil((position.x + entity.getWidth()) / tileSize); col++) {
-                Tile tile = tileMap.getTile((int) Math.floor(col), (int) Math.floor(row));
-                tiles.add(tile);
-            }
-        }
-        return tiles;
-    }
-
+    /**
+     * Method to check collision between two entities.
+     * If there is, return the intersecting rectangle.
+     * @param entity entity to check with all entities on map
+     * @return the intersecting rectangle, if there is any
+     */
     private Rectangle checkIfEntityCollision(Entity entity) {
         tileList = collisionBoxes(entity);
-        Vector2 position = new Vector2(entity.getPosition());
         Rectangle intersection = new Rectangle();
         for (Entity mapEntity : gameMap.getEntities()) {
             if (Intersector.intersectRectangles(entity.getRect(), mapEntity.getRect(), intersection)) {
-                if (mapEntity instanceof Enemy) {
+                if (entity instanceof Hook && mapEntity instanceof Enemy) {
+                    ((Enemy)mapEntity).takeDamage(1);
                     return intersection;
                 }
             }
@@ -99,52 +216,22 @@ public class CollisionHandler {
         return null;
     }
 
-    private void collisionPlayer(Player player) {
-        tileList = collisionBoxes(player);
-        checkIfOutside(player);
-
-        Rectangle playerRect = new Rectangle((player.getRect()));
-        if (checkBeforeCollision(player))
-            return;
-        Rectangle intersection;
-        // Loop through the tiles around the player.
-        if ((intersection = checkIfWallCollision(player, tileList)) != null) {
-            int val;
-            // Check collisions above and below
-            if (checkYCollision(intersection)) {
-                player.setYVelocity(0);
-                val = (playerRect.y + playerRect.height == intersection.y + intersection.height) ?
-                        (int)(intersection.y-playerRect.height) : (int)(intersection.y+intersection.height);
-                if (!(playerRect.y + playerRect.height == intersection.y + intersection.height))
-                    player.setGrounded(true);
-                player.setYPosition(val);
-            }
-            // Check collisions to the side
-            if (checkXCollision(intersection)) {
-                player.setXVelocity(0);
-                player.setXAcceleration(0);
-
-                // Value to set as X-pos
-                val = (playerRect.x == intersection.x) ?
-                        (int)(intersection.x+intersection.width) : (int)(intersection.x-playerRect.width);
-                player.setXPosition(val);
-            }
-            if (checkBothCollisions(intersection)) System.out.println("mweep");
-            //TODO: Fix corner collisions
-        }
-    }
-
+    /**
+     * Method to check and correct if entity is moving outside map border
+     * @param entity entity to be checked
+     * @return value that is used to cancel any further handling this frame.
+     */
     private boolean checkIfOutside(Entity entity) {
         boolean ret = false;
-        if (entity.getPosition().x  < 0) {
+        if (entity.getPosition().x < 0) {
             entity.setXPosition(0);
             ret = true;
         }
+
         if (entity.getPosition().x+entity.getWidth() > tileMap.getWidthPixels()) {
             entity.setXPosition(tileMap.getWidthPixels()-entity.getWidth());
             ret = true;
         }
-
 
         if (entity instanceof Player) {
             Player player = (Player)entity;
@@ -155,47 +242,61 @@ public class CollisionHandler {
         }
         return ret;
     }
+
     /**
      * Method that checks stuff before collision is checked
-     * @param player player to be tested
+     * @param character entity to be tested
      * @return value that determines if collision should be checked after method has checked cases.
      */
-    private boolean checkBeforeCollision(Player player) {
-        Vector2 position = new Vector2(player.getPosition());
+    private boolean checkBeforeCollision(Character character) {
+        Vector2 position = new Vector2(character.getPosition());
+        int height = character.getHeight();
+        int width = character.getWidth();
 
-        int height = player.getHeight();
-        int width = player.getWidth();
-
-        // Get tile player is currently in
-        Tile tile = tileMap.getTile((int)((position.x+width/2)/tileSize), (int)(position.y)/tileSize);
-
-        // If player is outside of the map, stop checking for collisions.
-        if (position.x < 0 || position.y < 0 || position.x + width > tileMap.getWidthPixels() || position.y + height > tileMap.getHeightPixels())
-            return true;
-
-        // Check if entity should fall off edge
-        if (!tileMap.getTile((int)((position.x+player.getWidth())/tileSize), (int)(position.y-1)/tileSize).getState())
-            player.setGrounded(false);
+        // Get tile that the player is currently in.
+        Tile tile = getCurrentTile(position);//tileMap.getTile((int)((position.x+width/2)/tileSize), (int)(position.y)/tileSize);
 
         // Check if entity is falling to stop a movement bug.
-        if (player.getVelocity().y != 0 && player.getDirection().y < 0 ) {
-            if (tile.getState()) {
-                player.setYPosition((int)tile.getRect().y + 64);
-                player.setGrounded(true);
+        if (character.getVelocity().y != 0 && character.getDirection().y < 0 ) {
+            if (getCurrentTile(position).getState()) {
+                character.setYPosition((int)tile.getRect().y + 64);
+                character.setGrounded(true);
                 return true;
             }
         }
-        else if (player.getVelocity().y != 0 && player.getDirection().y > 0) {
+
+        // Check if entity is rising/jumping to stop a movement bug.
+        /*else if (character.getVelocity().y != 0 && character.getDirection().y > 0) {
             tile = tileMap.getTile((int)((position.x+width/2)/tileSize), (int)(position.y+height+1)/tileSize);
             // Check if entity is rising to stop a movement bug.
-            if (tile.getState()) {
-                player.setYPosition((int)tile.getRect().y-height);
-                player.setDirectionY(-1);
-                player.setYVelocity(0);
-
+            if (getCurrentTile(position).getState()) {
+                character.setYPosition((int)tile.getRect().y-height);
+                character.setDirectionY(-1);
+                character.setYVelocity(0);
             }
-        }
+        }*/
         return false;
+    }
+
+    /**
+     * Check if tile (that is below the player) is solid.
+     * @param tile tile that is tested.
+     * @return return whether the tile is solid or not.
+     */
+    private boolean checkIfFalling(Tile tile) {
+        if (tile == null)
+            return true;
+        return tile.getState();
+    }
+
+    /**
+     * Method that changes an enemy's direction.
+     * @param entity enemy whose direction should change
+     */
+    private void checkChangeDirection(Entity entity) {
+        if (entity instanceof Enemy) {
+            ((Enemy) entity).changeLookingDirectionX();
+        }
     }
 
     private boolean checkYCollision(Rectangle intersection) {
@@ -207,7 +308,7 @@ public class CollisionHandler {
     private boolean checkBothCollisions(Rectangle intersection) {
         return (intersection.height == intersection.width);
     }
-    public ArrayList<Rectangle> getCheckedTiles() {
-        return rectList;
+    private Tile getCurrentTile(Vector2 position) {
+        return tileMap.getTile((int)position.x/64, (int)position.y/64);
     }
 }

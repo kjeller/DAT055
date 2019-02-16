@@ -6,9 +6,7 @@ import com.badlogic.gdx.math.Vector2;
 public class Player extends Character {
     Hook hook;
     private boolean movingWithHook;
-    private int distanceTraveled;
     public Player(Vector2 startPosition, String texturePath, String name) {
-        // Ändrade det här för att underlätta vid inläsning av mappen - Kjelle
         super(startPosition, 80, 64, texturePath,name, 5, new Vector2(5, 20));
         movingWithHook = false;
     }
@@ -34,10 +32,6 @@ public class Player extends Character {
 
     }
 
-    private Hook generateHook() {
-        return new Hook(new Vector2(position), 20, 20, "hook.png", 250.0f, lookingDirection);
-    }
-
     @Override
     public void draw(SpriteBatch sb, float rotation) {
         super.draw(sb, rotation);
@@ -45,38 +39,65 @@ public class Player extends Character {
             hook.draw(sb);
     }
     @Override
-    public void update() {
+    public void update(float deltaTime) {
         // TODO: Toggle methods for booleans?
-        if (hook != null && hook.getHasGrip())
+        if (hook != null) {
+            hookMovement();
+            hookUpdate(deltaTime);
+        }
+        if (maxVelocity.x > 5)
+            normalizeMaxVelocityX(deltaTime);
+        super.update(deltaTime);
+
+    }
+
+    /**
+     * Method used to generate a fresh new hook.
+     * @return the newly generated hook.
+     */
+    private Hook generateHook() {
+        return new Hook(new Vector2(position), 20, 20, "hook.png", 250.0f, lookingDirection);
+    }
+    /**
+     * Method that sets up the hook's update method.
+     * @param deltaTime time since last frame.
+     */
+    private void hookUpdate(float deltaTime) {
+        hook.setPlayerPosX((int)position.x);
+        hook.update(deltaTime);
+        hook.setOriginPosition(position);
+        if (hook.getRemoved())
+            hook = null;
+    }
+
+    /**
+     * Method used when traveling with the momentum of the hook.
+     */
+    private void hookMovement() {
+        if (hook.getHasGrip())
             movingWithHook = true;
+
         if (movingWithHook) {
+            maxVelocity.x = 10;
             if (lookingDirection.x > 0) {
-                position.x += 5;
+                acceleration.x = 60;
                 if (position.x+width >= hook.getPosition().x) {
                     movingWithHook = false;
                     hook.setHasGrip(false);
-                    hook = null;
                 }
             } else {
-                position.x -= 5;
-                if (hook.getPosition().x+20 >= position.x) {
+                acceleration.x = -60;
+                if (hook.getPosition().x+hook.width > position.x) {
                     movingWithHook = false;
                     hook.setHasGrip(false);
-                    hook = null;
                 }
             }
-
-        }
-        super.update();
-        if (hook != null) {
-            hook.setOriginPosition(position);
-            hook.update();
-            if (hook.getRemoved())
-                hook = null;
         }
     }
+
+
     /**
-     * Player interacts with something
+     * Player interacts with something.
      */
     public void interact(String interactable) {
         System.out.printf("%s interacts with %s", name, interactable);
@@ -90,5 +111,13 @@ public class Player extends Character {
     @Override
     public String toString() {
         return super.toString();
+    }
+    private void normalizeMaxVelocityX(float deltaTime) {
+        maxVelocity.x -= 10 * deltaTime;
+        if (maxVelocity.x < 5.5 && maxVelocity.x > 4.5)
+            maxVelocity.x = 5;
+    }
+    private void toggleMovingWithHook() {
+        movingWithHook = (movingWithHook) ? false : true;
     }
 }
