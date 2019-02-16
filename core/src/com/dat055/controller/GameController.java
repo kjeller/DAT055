@@ -23,6 +23,8 @@ public class GameController extends Controller {
 
     private boolean isRotating, isPaused, isDebug, isMultiplayer;
 
+    private boolean isRunning = false;
+
     private float rotationTimer = 180f;
     private float rotation = 0;
 
@@ -35,26 +37,28 @@ public class GameController extends Controller {
 
     @Override
     public void update(float deltaTime) {
-        if(!isPaused)
-            updateCamera(deltaTime);    // Updates camera
-        checkKeyboardInput();           // Handles keyboard input
+        if(map1 != null || map2 != null) {
+            if(!isPaused)
+                updateCamera(deltaTime);    // Updates camera
+            checkKeyboardInput();           // Handles keyboard input
 
-        // tile rotation map transition
-        if(isRotating && !isPaused)
-            rotationTimer+= 2f;
-        if(rotationTimer >= 180f) {
-            isRotating = false;
-            rotationTimer = 180f;
-        }
-        rotation = mode == Mode.FRONT ? 180f + rotationTimer : rotationTimer; // Sets rotation for planes
-        ((GameView)view).setRotation(rotation);
+            // tile rotation map transition
+            if(isRotating && !isPaused)
+                rotationTimer+= 2f;
+            if(rotationTimer >= 180f) {
+                isRotating = false;
+                rotationTimer = 180f;
+            }
+            rotation = mode == Mode.FRONT ? 180f + rotationTimer : rotationTimer; // Sets rotation for planes
+            ((GameView)view).setRotation(rotation);
 
-        // Time break
-        if(!isRotating && !isPaused) {
-            if(mode == Mode.FRONT)
-                map1.update(deltaTime);
-            else
-                map2.update(deltaTime);
+            // Time break
+            if(!isRotating && !isPaused) {
+                if(mode == Mode.FRONT)
+                    map1.update(deltaTime);
+                else
+                    map2.update(deltaTime);
+            }
         }
     }
 
@@ -153,6 +157,7 @@ public class GameController extends Controller {
         isPaused = false;
         isRotating = false;
         isDebug = false;
+        isRunning = true;
 
         whosOnTop(mode);
     }
@@ -183,10 +188,25 @@ public class GameController extends Controller {
 
         isMultiplayer = true;
         //Todo: start server here maybe waiting for a player to join
+        server = new Server(1337);
+        while(server.getStatus()) { } // Await player
 
         //Host decides this from menu
         mode = Mode.FRONT;
         whosOnTop(mode);
+    }
+
+    /**
+     * Joins server and creates own server to communicate with other server
+     * @param addr IP of other server
+     */
+    public void joinMultiplayerMap(String addr) {
+        server = new Server(1337, "192.168.0.105");
+        // get map filename
+        isMultiplayer = true;
+        mode = Mode.BACK;
+        whosOnTop(mode);
+        //start sending a shit ton of positions for currentPlayer
     }
 
     /**
@@ -221,7 +241,7 @@ public class GameController extends Controller {
             isRotating = true; // Will start adding to rotation timer in update
         }
     }
-    private void togglePause() {
+    public void togglePause() {
         if(isPaused)
             isPaused = false;
         else
@@ -239,4 +259,7 @@ public class GameController extends Controller {
     public String toString() {
         return String.format("-currentPlayer: %s \n-GameMap1: %s \n-GameMap2: %s", currentPlayer, map1, map2);
     }
+
+    public boolean isPaused() { return  isPaused;}
+    public boolean isRunning() { return isRunning;}
 }

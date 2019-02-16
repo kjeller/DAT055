@@ -4,19 +4,34 @@ import java.io.IOException;
 import java.net.*;
 
 public class Server extends Thread {
-    private DatagramSocket socket;
-    private int destPort;
-    private InetAddress destAddr;
-    private boolean isAlive = true;
+    private final String RESPONSE_JOIN = "join";
+    private final String RESPONSE_CLOSE = "close";
 
-    public Server(int srcPort, int destPort, String destAddr) {
-        this.destPort = destPort;
+    private DatagramSocket socket;
+    private InetAddress destAddr;
+    private int port;
+
+    private boolean waitForOtherPlayer;
+
+    public Server(int port, String destAddr) {
+        this.port = port;
         try {
             this.destAddr = InetAddress.getByName(destAddr);
-            socket = new DatagramSocket(srcPort);
+            socket = new DatagramSocket(port);
+            waitForOtherPlayer = false;
         }
         catch (UnknownHostException e) { e.printStackTrace(); }
         catch (SocketException e) { e.printStackTrace(); }
+        start();
+    }
+
+    /**
+     * Awaits another player to join constructor
+     * @param port
+     */
+    public Server(int port) {
+        this.port = port;
+        waitForOtherPlayer = true;
         start();
     }
 
@@ -28,10 +43,12 @@ public class Server extends Thread {
             } catch (InterruptedException e) {
                 break;
             }
-            send("snokN");
             receive();
 
-            if(!isAlive) close();
+            if(waitForOtherPlayer)
+                send(RESPONSE_JOIN);
+            else
+                send("test");
         }
     }
 
@@ -41,7 +58,7 @@ public class Server extends Thread {
      */
     public void send(String msg) {
         byte[] data = msg.getBytes();
-        DatagramPacket packet = new DatagramPacket(data, data.length, destAddr, destPort);
+        DatagramPacket packet = new DatagramPacket(data, data.length, destAddr, port);
         try {
             socket.send(packet);
         } catch (IOException e) { System.out.println(e); }
@@ -51,26 +68,53 @@ public class Server extends Thread {
      * Receive packet from socket
      * @throws IOException
      */
-    public void receive() {
+    private void receive() {
         DatagramPacket packet;
         byte[] data = new byte[1024];
         packet = new DatagramPacket(data, data.length);
-        try {
-            socket.receive(packet);
-        } catch (IOException e) { e.printStackTrace(); }
+
+        try { socket.receive(packet); }
+        catch (IOException e) { e.printStackTrace(); }
+
+        if(data == RESPONSE_JOIN.getBytes()) {
+            if(setSocketConn(packet.getAddress())) // Try to set new socket to player
+                waitForOtherPlayer = false;
+        } else if( data == RESPONSE_CLOSE.getBytes()) {
+            close();  // Close connection and kill thread
+        }
+
+        // For debug
         System.out.printf("(%s:%s): %s\n",
                 packet.getAddress(), packet.getPort(), new String(data));
-
-        data = new byte[1024]; //clear buffer
-        if(new String(data).equals("close"))
-            isAlive = false;
     }
 
     /**
      * Closes socket and tries to stop thread
      */
-    public void close() {
+    private void close() {
         socket.close();
         this.interrupt();
+    }
+
+    /**
+     * Tries to create a new socket for an address
+     * @param addr
+     * @return
+     */
+    private boolean setSocketConn (InetAddress addr) {
+        try {
+            this.destAddr = addr;
+            socket = new DatagramSocket(port);
+            waitForOtherPlayer = false;
+        } catch (Exception ignored) { return false; }
+        return true;
+    }
+
+    /**
+     * Call this to see if another player has joined
+     * @return
+     */
+    public boolean getStatus() {
+        return waitForOtherPlayer;
     }
 }
