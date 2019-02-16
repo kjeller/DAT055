@@ -183,10 +183,25 @@ public class GameController extends Controller {
 
         isMultiplayer = true;
         //Todo: start server here maybe waiting for a player to join
+        server = new Server(1337);
+        while(server.getStatus()) { } // Await player
 
         //Host decides this from menu
         mode = Mode.FRONT;
         whosOnTop(mode);
+    }
+
+    /**
+     * Joins server and creates own server to communicate with other server
+     * @param addr IP of other server
+     */
+    public void joinMultiplayerMap(String addr) {
+        server = new Server(1337, "192.168.0.105");
+        // get map filename
+        isMultiplayer = true;
+        mode = Mode.BACK;
+        whosOnTop(mode);
+        //start sending a shit ton of positions for currentPlayer
     }
 
     /**
