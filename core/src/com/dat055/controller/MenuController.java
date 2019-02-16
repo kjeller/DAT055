@@ -1,18 +1,10 @@
-package com.dat055.Controller;
+package com.dat055.controller;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.dat055.Model.Menu.MainMenu;
-import com.dat055.Model.Menu.Menu;
-import com.dat055.Model.Menu.MultiMenu;
-import com.dat055.View.MenuView;
-import com.dat055.Model.MenuModel;
-
-import java.util.HashMap;
-import java.util.Iterator;
+import com.dat055.model.menu.MainMenu;
+import com.dat055.model.menu.MultiMenu;
+import com.dat055.view.MenuView;
+import com.dat055.model.MenuModel;
 
 public class MenuController extends Controller{
     private boolean visible;

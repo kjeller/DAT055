@@ -1,4 +1,4 @@
-package com.dat055.Model.Map.Tile;
+package com.dat055.model.map.tile;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;

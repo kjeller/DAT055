@@ -1,11 +1,11 @@
-package com.dat055.Model.Collision;
+package com.dat055.model.collision;
 
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.dat055.Model.Entity.Player;
-import com.dat055.Model.Map.Tile.Tile;
-import com.dat055.Model.Map.Tile.TileMap;
+import com.dat055.model.entity.Player;
+import com.dat055.model.map.tile.Tile;
+import com.dat055.model.map.tile.TileMap;
 
 
 import java.util.ArrayList;

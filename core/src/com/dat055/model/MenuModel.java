@@ -1,13 +1,10 @@
-package com.dat055.Model;
+package com.dat055.model;
 
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
-import com.dat055.Model.Menu.MainMenu;
-import com.dat055.Model.Menu.Menu;
+import com.dat055.model.menu.Menu;
 
 import java.util.HashMap;
-import java.util.Iterator;
 
 
 public class MenuModel extends Model {

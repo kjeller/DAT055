@@ -1,12 +1,12 @@
-package com.dat055.Model.Map;
+package com.dat055.model.map;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
-import com.dat055.Model.Map.Tile.TileMap;
-import com.dat055.Model.Map.Tile.TileMapFactory;
+import com.dat055.model.map.tile.TileMap;
+import com.dat055.model.map.tile.TileMapFactory;
 
 public class GameMapFactory {
     private String fileName;

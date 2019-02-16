@@ -1,11 +1,7 @@
-package com.dat055.Model.Map.Tile;
+package com.dat055.model.map.tile;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.StringBuilder;
-import com.dat055.Model.Map.Tile.Tile;
-
-import java.util.Arrays;
-import java.util.Iterator;
 
 public class TileMap {
     private Tile[][] map;
@@ -33,10 +29,10 @@ public class TileMap {
     }
 
     /**
-     * Returns Tile at given coord in tilemap
+     * Returns tile at given coord in tilemap
      * @param x
      * @param y
-     * @return Tile at given (x, y)
+     * @return tile at given (x, y)
      */
     public Tile getTile(Integer x, Integer y) {
         if(x >= 0 && x <= width && y >= 0 && y <= height)

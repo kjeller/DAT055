@@ -1,4 +1,4 @@
-package com.dat055.Model.Menu;
+package com.dat055.model.menu;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -13,8 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
-import com.dat055.Controller.MenuController;
-import com.dat055.Model.Menu.Menu;
+import com.dat055.controller.MenuController;
 
 public class MainMenu extends Menu {
     private MenuController controller;

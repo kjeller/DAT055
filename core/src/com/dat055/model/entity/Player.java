@@ -1,7 +1,4 @@
-package com.dat055.Model.Entity;
-
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
+package com.dat055.model.entity;
 
 public class Player extends Character {
     public Player(int id, int height, int width, String texturePath, String name, int healthPoints, float maxVelocity) {

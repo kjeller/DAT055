@@ -1,16 +1,14 @@
-package com.dat055.View;
+package com.dat055.view;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Rectangle;
-import com.dat055.Controller.GameController;
-import com.dat055.Model.Collision.CollisionHandler;
-import com.dat055.Model.Entity.Player;
-import com.dat055.Model.GameModel;
-import com.dat055.Model.Map.Tile.Tile;
-import com.dat055.Model.Map.Tile.TileMap;
+import com.dat055.model.entity.Player;
+import com.dat055.model.GameModel;
+import com.dat055.model.map.tile.Tile;
+import com.dat055.model.map.tile.TileMap;
 
 import java.util.ArrayList;
 

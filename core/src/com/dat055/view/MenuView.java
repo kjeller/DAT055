@@ -1,4 +1,4 @@
-package com.dat055.View;
+package com.dat055.view;
 
 import com.badlogic.gdx.scenes.scene2d.Stage;
 

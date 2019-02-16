@@ -1,8 +1,8 @@
-package com.dat055.Model.Map;
+package com.dat055.model.map;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-import com.dat055.Model.Map.Tile.TileMap;
+import com.dat055.model.map.tile.TileMap;
 
 public class GameMap {
     TileMap front, back;

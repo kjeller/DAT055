@@ -1,8 +1,7 @@
-package com.dat055.Model.Map.Tile;
+package com.dat055.model.map.tile;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Rectangle;
 
 /**
  * A tile with collision and a texture
@@ -29,7 +28,7 @@ public class TexturedTile extends Tile {
     }
 
     /**
-     * Set sprite on Tile
+     * Set sprite on tile
      * @param sprite
      */
     public void setSprite(Sprite sprite) {

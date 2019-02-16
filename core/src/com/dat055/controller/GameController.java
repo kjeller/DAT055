@@ -1,15 +1,15 @@
-package com.dat055.Controller;
+package com.dat055.controller;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.dat055.Model.Collision.CollisionHandler;
-import com.dat055.Model.Entity.Player;
-import com.dat055.Model.GameModel;
-import com.dat055.Model.Map.GameMap;
-import com.dat055.View.GameView;
+import com.dat055.model.collision.CollisionHandler;
+import com.dat055.model.entity.Player;
+import com.dat055.model.GameModel;
+import com.dat055.model.map.GameMap;
+import com.dat055.view.GameView;
 
 public class GameController extends Controller {
     private boolean isPaused;
