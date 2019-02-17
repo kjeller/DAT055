@@ -5,11 +5,8 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
@@ -18,46 +15,66 @@ import com.dat055.controller.MenuController;
 public class MainMenu extends Menu {
     private MenuController controller;
     private TextButton play, multi, settings, exit, credits;
+    private Label verNr;
 
     public MainMenu(MenuController cntr) {
         super("UI/Delta.jpg");
-        initTxtBtnStyle();
-        initLblStyle();
 
         this.controller = cntr;
-        Table table = new Table();
-        Table subTable = new Table();
-        Label verNr = new Label("Ver: 0.17", super.lblStyle);
+        createTable(Gdx.graphics.getWidth()/4,Gdx.graphics.getHeight()/18);
+    }
 
-        table.setWidth(controller.getWidth());
-        table.align(Align.center|Align.top);
+    @Override
+    public void createTable(int width, int height) {
+        // Initiate the styles used by super
+        initStyles(height);
 
-        table.setPosition(0, Gdx.graphics.getHeight());
-
+        // Create the actors
         play = createButton("Play");
         multi = createButton("Multiplayer");
         settings = createButton("Settings");
         exit = createButton("Exit");
         credits = createButton("Credits");
+        verNr = new Label("Ver: 0.17", super.lblStyle);
 
+        // Add listeners to the actors
         addListeners();
 
-        subTable.add(credits).width(150).padRight(300);
-        subTable.add(verNr);
+        // Create the actual table
+        layoutTable(width, height);
+    }
 
-        table.padTop(200);
-        table.add(play).width(300).padBottom(15).row();
-        table.add(multi).width(300).padBottom(15).row();
-        table.add(settings).width(300).padBottom(15).row();
-        table.add(exit).width(300).padBottom(45).row();
-        table.add(subTable).width(500).padBottom(20);
+    private void layoutTable(int butX, int butY) {
+        int padL, padS;
+        padL = butX/3;
+        padS = butY/2;
+
+        Table table = new Table();
+        table.setSize(controller.getWidth(),controller.getHeight());
+        table.bottom();
+
+        table.setPosition(0, 0);
+
+        table.add(play).width(butX).height(butY).padBottom(padS).expandX().colspan(2).row();
+        table.add(multi).width(butX).height(butY).padBottom(padS).colspan(2).row();
+        table.add(settings).width(butX).height(butY).padBottom(padS).colspan(2).row();
+        table.add(exit).width(butX).height(butY).padBottom(padL).colspan(2).row();
+        table.add(credits).width(butX/2).height(butY).padLeft(padS).padBottom(padS).left();
+        table.add(verNr).width(butX/2).height(butY).padRight(padS).padBottom(padS).right();
+
+        table.setDebug(true);
 
         super.table = table;
     }
 
-    private void initTxtBtnStyle() {
+    private void initStyles(int height) {
+        initLblStyle(height);
+        initTxtBtnStyle(height);
+    }
+
+    private void initTxtBtnStyle(int height) {
         TextButtonStyle txtBtnStyle;
-        BitmapFont font = super.generateFont(30);
+        BitmapFont font = generateFont(height-Gdx.graphics.getHeight()/50);
 
         Skin skin = new Skin(Gdx.files.internal("UI/ui.json"));
         TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("UI/ui.atlas"));
@@ -75,9 +92,9 @@ public class MainMenu extends Menu {
         super.txtBtnStyle = txtBtnStyle;
     }
 
-    private void initLblStyle() {
+    private void initLblStyle(int height) {
         LabelStyle lblStyle = new Label.LabelStyle();
-        lblStyle.font = super.generateFont(26);
+        lblStyle.font = generateFont(height-Gdx.graphics.getHeight()/30);
         lblStyle.fontColor = Color.WHITE;
         super.lblStyle = lblStyle;
     }

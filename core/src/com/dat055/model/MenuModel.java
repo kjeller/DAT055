@@ -1,5 +1,6 @@
 package com.dat055.model;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.dat055.model.menu.Menu;
@@ -21,14 +22,23 @@ public class MenuModel extends Model {
         menus.put(label, menu);
     }
 
+    public void resize(int width, int height) {
+        stage.getViewport().update(width, height, true);
+    }
+
     public void swapMenu(String menu) {
         stage.clear();
-        stage.addActor(new Image(menus.get(menu).getBg()));
-        stage.addActor(menus.get(menu).getTable());
+        menus.get(menu).getBg().setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        stage.addActor(menus.get(menu).getBg());
+        Table tbl = menus.get(menu).getTable();
+        tbl.setFillParent(true);
+        stage.addActor(tbl);
         currentMenu = menu;
     }
 
     public Stage getStage() {
         return stage;
     }
+
+    public String getCurrentMenu() { return currentMenu; }
 }

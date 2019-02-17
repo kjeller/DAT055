@@ -1,8 +1,11 @@
 package com.dat055.controller;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.dat055.model.menu.MainMenu;
+import com.dat055.model.menu.Menu;
 import com.dat055.model.menu.MultiMenu;
+import com.dat055.model.menu.PauseMenu;
 import com.dat055.view.MenuView;
 import com.dat055.model.MenuModel;
 
@@ -17,6 +20,7 @@ public class MenuController extends Controller{
 
         ((MenuModel)model).includeMenu("Main", new MainMenu(this));
         ((MenuModel)model).includeMenu("Multiplayer", new MultiMenu(this));
+        ((MenuModel)model).includeMenu("Pause", new PauseMenu(this));
 
         Gdx.input.setInputProcessor(((MenuModel)model).getStage());
 
@@ -26,6 +30,11 @@ public class MenuController extends Controller{
     @Override
     public void update(float dt) {
         ((MenuModel)model).getStage().act(dt);
+    }
+
+    @Override
+    public void resize(int width, int height) {
+        ((MenuModel)model).resize(width, height);
     }
 
     public void toggleVisibility() {
@@ -48,8 +57,9 @@ public class MenuController extends Controller{
         ((MenuModel)model).getStage().clear();
     }
 
-    public float getWidth() {
-        return ((MenuModel)model).getStage().getWidth();
+    public float getWidth()  { return ((MenuModel)model).getStage().getWidth();  }
+    public float getHeight() {
+        return ((MenuModel)model).getStage().getHeight();
     }
 
     public void swapMenu(String menu) {
@@ -58,6 +68,5 @@ public class MenuController extends Controller{
 
     public void startGame(String mapPath) {
         gameController.startSingleplayerMap(mapPath);
-        //gameController.togglePause();
     }
 }

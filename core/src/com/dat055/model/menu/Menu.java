@@ -4,6 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -16,13 +18,15 @@ public abstract class Menu {
     protected LabelStyle lblStyle;
     protected TextButtonStyle txtBtnStyle;
     protected TextFieldStyle txtFldStyle;
-    protected Texture bg;
+    protected Image bg;
 
     protected Menu() {}
 
     protected Menu(String bgAssetLocation) {
-        bg = new Texture(bgAssetLocation);
+        bg = new Image(new Texture(bgAssetLocation));
     }
+
+    public void createTable(int width, int height) {}
 
     public LabelStyle getLblStyle() {
         return this.lblStyle;
@@ -37,12 +41,10 @@ public abstract class Menu {
     }
 
     public Table getTable() {
-        return this.table;
+        return table;
     }
 
-    public Texture getBg() {
-        return this.bg;
-    }
+    public Image getBg() { return bg; }
 
     public TextButton createButton(String label) { return new TextButton(label, txtBtnStyle); }
 

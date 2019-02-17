@@ -48,6 +48,9 @@ public class Game extends ApplicationAdapter {
 	}
 
 	@Override
+	public void resize(int width, int height) { menuController.resize(width,height); }
+
+	@Override
 	public void dispose () {
 		batch.dispose();
 	}

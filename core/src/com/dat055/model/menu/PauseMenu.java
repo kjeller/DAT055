@@ -15,13 +15,12 @@ import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.dat055.controller.MenuController;
 
-public class MultiMenu extends Menu {
+public class PauseMenu extends Menu {
     private MenuController controller;
     String ip;
-    TextButton join, host, back;
-    TextField address;
-    public MultiMenu(MenuController ctrl) {
-        super("UI/Delta.jpg");
+    TextButton resume, settings, menu;
+    public PauseMenu(MenuController ctrl) {
+        super();
 
         controller = ctrl;
         createTable(Gdx.graphics.getWidth()/4,Gdx.graphics.getHeight()/18);
@@ -31,10 +30,9 @@ public class MultiMenu extends Menu {
     public void createTable(int width, int height) {
         initStyles(height);
 
-        join = createButton("Join");
-        host = createButton("Host");
-        back = createButton("Back");
-        address = createTextField("Enter host IP");
+        resume = createButton("Resume game");
+        settings = createButton("Settings");
+        menu = createButton("Main menu");
 
         addListeners();
 
@@ -48,22 +46,20 @@ public class MultiMenu extends Menu {
 
         Table table = new Table();
         table.setSize(controller.getWidth(),controller.getWidth());
-        table.bottom();
 
         table.setPosition(0,0);
 
         table.padTop(200);
-        table.add(address).width(butX).height(butY).padBottom(padS).expandX().colspan(2).row();
-        table.add(join).width(butX).height(butY).padBottom(padL).colspan(2).row();
-        table.add(back).width(butX/2).height(butY).padLeft(padS).padBottom(padS).left();
-        table.add(host).width(butX/2).height(butY).padRight(padS).padBottom(padS).right();
+        table.add().width(butX).height(butY).padBottom(padS).expandX().row();
+        table.add(settings).width(butX).height(butY).padBottom(padL).row();
+        table.add(menu).width(butX).height(butY).padBottom(padL).row();
+
 
         super.table = table;
     }
 
     private void initStyles(int height) {
         initTxtBtnStyle(height);
-        initTxtFldStyle(height);
         initLblStyle(height);
     }
 
@@ -82,25 +78,6 @@ public class MultiMenu extends Menu {
         txtBtnStyle.down = skin.getDrawable("but1");
 
         super.txtBtnStyle = txtBtnStyle;
-    }
-
-    private void initTxtFldStyle(int height) {
-        TextField.TextFieldStyle txtFldStyle = new TextField.TextFieldStyle();
-
-        Skin skin = new Skin(Gdx.files.internal("UI/ui.json"));
-        TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("UI/ui.atlas"));
-        skin.addRegions(atlas);
-
-        txtFldStyle.font = fontPad(generateFont(height-Gdx.graphics.getHeight()/50));
-        txtFldStyle.background = skin.getDrawable("but1_pressed");
-        txtFldStyle.fontColor = Color.BLACK;
-        txtFldStyle.focusedBackground = skin.getDrawable("but1");
-        txtFldStyle.focusedFontColor = Color.WHITE;
-        txtFldStyle.messageFont = generateFont(height-Gdx.graphics.getHeight()/60);
-        txtFldStyle.messageFontColor = Color.RED;
-        txtFldStyle.cursor = new NinePatchDrawable(new NinePatch(new Texture("UI/cursor.9.png")));
-
-        super.txtFldStyle = txtFldStyle;
     }
 
     private void initLblStyle(int height) {
@@ -122,7 +99,7 @@ public class MultiMenu extends Menu {
     }
 
     private void addListeners() {
-        join.addListener(new ClickListener() {
+        resume.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 return super.touchDown(event, x, y, pointer, button);
@@ -130,13 +107,26 @@ public class MultiMenu extends Menu {
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                ip = address.getText();
-                System.out.println("[Multi:115]Debug: " + "IP input: " + ip);
+                // Unpause
                 super.touchUp(event, x, y, pointer, button);
             }
         });
 
-        back.addListener(new ClickListener() {
+        settings.addListener(new ClickListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                return super.touchDown(event, x, y, pointer, button);
+            }
+
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                controller.swapMenu("Settings");
+                super.touchUp(event, x, y, pointer, button);
+            }
+
+        });
+
+        menu.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 return super.touchDown(event, x, y, pointer, button);
@@ -148,14 +138,6 @@ public class MultiMenu extends Menu {
                 super.touchUp(event, x, y, pointer, button);
             }
 
-        });
-
-        address.addListener(new FocusListener() {
-            @Override
-            public void keyboardFocusChanged (FocusEvent event, Actor actor, boolean focused) {
-                if(focused) { address.setText(""); }
-                else { address.setText("Enter host IP"); }
-            }
         });
     }
 }
