@@ -9,8 +9,7 @@ public class DebugCamera extends Player{
         super(startPos, null, "camcam");
     }
     @Override
-    public void update() {
-        float deltaTime = Gdx.graphics.getDeltaTime();
+    public void update(float deltaTime) {
 
         velocity.x += acceleration.x * deltaTime;
 

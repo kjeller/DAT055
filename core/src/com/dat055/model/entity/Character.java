@@ -9,14 +9,14 @@ public abstract class Character extends Entity {
     private int healthPoints;
     Vector2 acceleration;
     Vector2 velocity;
-    Vector2 deltaPosition;
-    Vector2 direction;
+    private Vector2 deltaPosition;
+    private Vector2 direction;
     Vector2 oldPosition;
     Vector2 maxVelocity;
     Vector2 lookingDirection;
     private boolean isGrounded;
-    private boolean isAlive;
-    private boolean isMoving;
+    boolean isAlive;
+    boolean isMoving;
 
 
     public Character(Vector2 position, int height, int width, String texturePath, String name, int healthPoints, Vector2 maxVelocity) {
@@ -51,7 +51,6 @@ public abstract class Character extends Entity {
                         acceleration.x = (isGrounded) ? -50 : -25;
                     else
                         acceleration.x = (isGrounded) ? -18 : -9;
-
                     break;
                 case 1:
                     // If already moving in other direction, give stronger acceleration.
@@ -72,7 +71,7 @@ public abstract class Character extends Entity {
     }
 
     /**
-     *  Method for performing attack
+     *  Method for performing attacks
      */
     public void attack() {
         System.out.println("Enemy attacks!");
@@ -92,13 +91,15 @@ public abstract class Character extends Entity {
      * Method that works as a kind of physics engine for entities.
      */
     @Override
-    public void update() {
+    public void update(float deltaTime) {
         if (isAlive) {
             updateFalling();
-            setVelocityX();
-            setVelocityY();
+            setVelocityX(deltaTime);
+            setVelocityY(deltaTime);
             setPositions();
             setDirection();
+            /*if (this instanceof Player)
+                System.out.println(velocity.x + " + " + baseVelocity.x);*/
         }
     }
     @Override
@@ -106,12 +107,20 @@ public abstract class Character extends Entity {
         if (isAlive)
             super.draw(sb, rotation);
     }
-    void setPositions() {
+
+    /**
+     * Helper method used to set position based on velocity.
+     */
+    private void setPositions() {
         oldPosition.set(position);
         position.add(Math.round(velocity.x), Math.round(velocity.y));
     }
-    void setVelocityX() {
-        float deltaTime = Gdx.graphics.getDeltaTime();
+
+    /**
+     * Helper method used to set horizontal velocity based on acceleration.
+     * @param deltaTime time since last frame
+     */
+    private void setVelocityX(float deltaTime) {
         velocity.x += acceleration.x * deltaTime;
 
         if (velocity.x > maxVelocity.x)
@@ -119,17 +128,22 @@ public abstract class Character extends Entity {
         if (velocity.x < -maxVelocity.x)
             velocity.x = -maxVelocity.x;
     }
-    void setVelocityY() {
-        float deltaTime = Gdx.graphics.getDeltaTime();
+
+    /**
+     * Helper method used to set vertical velocity based on acceleration.
+     * @param deltaTime time since last frame
+     */
+    private void setVelocityY(float deltaTime) {
         velocity.y += acceleration.y * deltaTime;
         if (velocity.y < -maxVelocity.y)
             velocity.y = -maxVelocity.y;
     }
 
     /**
-     * Methods that updates the entity's y-position
+     * Helper method that updates the entity's acceleration.
      */
     private void updateFalling() {
+        //TODO: Longer jumping by holding jump button
         if (isGrounded) {
             velocity.y = 0;
             acceleration.y = 0;
@@ -137,6 +151,10 @@ public abstract class Character extends Entity {
             acceleration.y = -20;
         }
     }
+
+    /**
+     * Helper method that sets the entity's direction.
+     */
     void setDirection() {
         deltaPosition.set(oldPosition.x-position.x, oldPosition.y-position.y);
         // direction.x = -1: left, direction.x = 1: right
@@ -156,30 +174,32 @@ public abstract class Character extends Entity {
     }
 
     /**
-     * Method that kills the character
+     * Method that kills the entity
      */
     private void die() {
-        if (isAlive == true) {
-            System.out.println("Player died!");
+        if (isAlive) {
+            System.out.println(name + " died!");
             isAlive = false;
         }
 
     }
-
-
-
+    // Get and set methods galore.
     public void setXVelocity(int x) { velocity.x = x; }
     public void setYVelocity(int y) { velocity.y = y; }
     public void setXAcceleration(int x) { acceleration.x = x; }
     public void setGrounded(boolean val) { isGrounded = val; }
     public void setMoving(boolean val) {isMoving = val;}
-    public void setDirectionY(int y) { direction.y = y; }
     public void setLookingDirection(Vector2 dir) {lookingDirection.set(dir); }
+
 
     public Vector2 getDirection() { return direction; }
     public Vector2 getVelocity() { return velocity; }
+    public Vector2 getDeltaPosition() { return deltaPosition; }
 
-
+    /**
+     * Method that returns the entity's variables. Used for debugging.
+     * @return the string containing all data.
+     */
     public String toString() {
         return super.toString() + String.format("hp: %d, acc: (%.1f, %.1f),\n" +
                         "dir: (%.1f, %.1f), lookDir: %.1f,\nisGrounded: %s," +

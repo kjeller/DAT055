@@ -18,6 +18,7 @@ import java.util.ArrayList;
 public class GameMap {
     private final Color PLAYER_RECTANGLE = Color.BLUE;
     private final Color TILE_RECTANGLE = Color.RED;
+    private final Color ENEMY_RECTANGLE = Color.GOLD;
 
     private String name, id;  // name: map_0 or map_1, id is the id is json file
     private TileMap tileMap;
@@ -36,14 +37,9 @@ public class GameMap {
     public void update(float deltaTime) {
         // Updates entities position, health etc.
         for(Entity entity : entities) {
-            entity.update();
-            if(entity instanceof Player) {
-                colHandler.checkCollision(entity);
-                colHandler.checkCollision(player.getHook());
-            }
-            if (entity instanceof Enemy) {
-                colHandler.checkCollision(entity);
-            }
+            entity.update(deltaTime);
+            colHandler.checkCollision(entity);
+            colHandler.checkCollision(player.getHook());
         }
     }
 
@@ -67,13 +63,19 @@ public class GameMap {
     public void renderRectangles(ShapeRenderer renderer) {
 
         for(Entity entity : entities) {
-            drawRectangle(entity.getRect(), PLAYER_RECTANGLE, renderer);
+            if (entity instanceof Player)
+                drawRectangle(entity.getRect(), PLAYER_RECTANGLE, renderer);
+            else if (entity instanceof Enemy) {
+                drawRectangle(entity.getRect(), ENEMY_RECTANGLE, renderer);
+            }
             if(entity instanceof Player) {
                 Hook hook = ((Player)entity).getHook();
                 if(hook != null) {
                     drawRectangle(hook.getRect(), PLAYER_RECTANGLE, renderer);
+                    drawRectangle(hook.getWire(), PLAYER_RECTANGLE, renderer);
                 }
             }
+
         }
         for(int i = 0; i < tileMap.getWidth(); i++){
             for(int j = 0; j < tileMap.getHeight(); j++){

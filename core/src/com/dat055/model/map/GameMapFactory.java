@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
+import com.dat055.model.entity.Enemy;
 import com.dat055.model.entity.Entity;
 import com.dat055.model.entity.Player;
 import com.dat055.model.map.tile.TileMap;
@@ -146,7 +147,7 @@ public class GameMapFactory {
 
                 if(current.name.equals("enemy")) {
                     //Todo: add different enemy types to make it easier for map boi
-                    //entity = new Enemy(start, current.getString("sprite"), "enemy" );
+                    entity = new Enemy(start, current.getString("sprite"), "enemy" );
                 }
                 else if(current.name.equals("door")) {
                     //TODO: Door goes here
