@@ -27,13 +27,16 @@ public class PeerNetwork extends Thread {
         this.port = port;
         try {
             this.destAddr = InetAddress.getByName(destAddr);
-            socket = new DatagramSocket(port);
         }
         catch (UnknownHostException e) { e.printStackTrace(); }
-        catch (SocketException e) { System.out.println(e);}
         //TODO: Socket wont bind to port, fix this plox
-        sender = new Sender(socket, this.destAddr);
-        receiver = new Receiver(socket);
+
+        try {
+            sender = new Sender(new DatagramSocket(), this.destAddr);
+            receiver = new Receiver(new DatagramSocket(port));
+        } catch (SocketException e) {
+            e.printStackTrace();
+        }
         sendJoinRequest();  // Tells sender to send join requests
         start();
         sender.start();     // Starts sending current message

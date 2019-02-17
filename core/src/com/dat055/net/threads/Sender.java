@@ -38,8 +38,7 @@ public class Sender extends Thread {
      * @param msg
      */
     public void send() {
-        int port = socket.getPort();
-        DatagramPacket packet = new DatagramPacket(data, data.length, destAddr, socket.getPort());
+        DatagramPacket packet = new DatagramPacket(data, data.length, destAddr, 1337);
         try {
             socket.send(packet);
         } catch (IOException e) { System.out.println(e); }
