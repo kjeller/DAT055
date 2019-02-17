@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.dat055.model.entity.Player;
 import com.dat055.model.GameModel;
 import com.dat055.model.map.GameMap;
+import com.dat055.net.Multiplayer;
 import com.dat055.net.PeerNetwork;
 import com.dat055.view.GameView;
 
@@ -189,7 +190,11 @@ public class GameController extends Controller {
         isMultiplayer = true;
         //Todo: start server here maybe waiting for a player to join
         server = new PeerNetwork(1337);
-        while(server.getStatus()) { } // Await player
+
+        // Wait for peer to join
+        while(server.getStatus()) {
+
+        }
 
         //Host decides this from menu
         mode = Mode.FRONT;
@@ -202,10 +207,16 @@ public class GameController extends Controller {
      */
     public void joinMultiplayerMap(String addr) {
         server = new PeerNetwork(1337, "192.168.0.105");
+
+        // Wait for peer to accept join request
+        while(server.getStatus()) {
+
+        }
         // get map filename
         isMultiplayer = true;
         mode = Mode.BACK;
         whosOnTop(mode);
+
         //start sending a shit ton of positions for currentPlayer
     }
 

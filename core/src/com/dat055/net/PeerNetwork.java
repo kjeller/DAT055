@@ -1,20 +1,21 @@
 package com.dat055.net;
 
+import com.dat055.net.message.JoinMessage;
+import com.dat055.net.message.Message;
+import com.dat055.net.message.Protocol;
 import com.dat055.net.threads.Receiver;
 import com.dat055.net.threads.Sender;
-import jdk.nashorn.internal.runtime.regexp.joni.constants.OPCode;
 
-import java.io.IOException;
+import java.io.*;
 import java.net.*;
 
 public class PeerNetwork extends Thread {
     private DatagramSocket socket;
     private InetAddress destAddr;
-    private int port;
 
     private Sender sender;
     private Receiver receiver;
-    private boolean waitForPeer;
+    private boolean waitForPeer = true;
 
     /**
      * Ready-to-join-another-peer-constructor
@@ -22,7 +23,6 @@ public class PeerNetwork extends Thread {
      * @param destAddr
      */
     public PeerNetwork(int port, String destAddr) {
-        this.port = port;
         try {
             this.destAddr = InetAddress.getByName(destAddr);
             socket = new DatagramSocket(port);
@@ -31,7 +31,9 @@ public class PeerNetwork extends Thread {
         catch (SocketException e) { e.printStackTrace(); }
         sender = new Sender(socket, this.destAddr);
         receiver = new Receiver(socket);
+        sendJoinRequest();  // Tells sender to send join requests
         start();
+        sender.start();     // Starts sending current message
     }
 
     /**
@@ -39,12 +41,11 @@ public class PeerNetwork extends Thread {
      * @param port
      */
     public PeerNetwork(int port) {
-        this.port = port;
         try { socket = new DatagramSocket(port); }
         catch (SocketException e) { e.printStackTrace(); }
         receiver = new Receiver(socket);
-        waitForPeer = true;
         start();
+        receiver.start();
     }
 
     @Override
@@ -55,56 +56,8 @@ public class PeerNetwork extends Thread {
             } catch (InterruptedException e) {
                 break;
             }
-            receive();
-
-            if(waitForOtherPlayer)
-                send(RESPONSE_JOIN);
-            else
-                send("test");
+            receiveMessage();
         }
-    }
-
-    /**
-     * Sends a join request to other peer then awaiting answer
-     */
-    public void sendJoinRequest() {
-        Message msg = new Message(Message.OP_JOIN, )
-    }
-
-    /**
-     * Sends string to socket
-     * @param msg
-     */
-    public void send(String msg) {
-        byte[] data = msg.getBytes();
-        DatagramPacket packet = new DatagramPacket(data, data.length, destAddr, port);
-        try {
-            socket.send(packet);
-        } catch (IOException e) { System.out.println(e); }
-    }
-
-    /**
-     * Receive packet from socket
-     * @throws IOException
-     */
-    private void receive() {
-        DatagramPacket packet;
-        byte[] data = new byte[1024];
-        packet = new DatagramPacket(data, data.length);
-
-        try { socket.receive(packet); }
-        catch (IOException e) { e.printStackTrace(); }
-
-        if(data == RESPONSE_JOIN.getBytes()) {
-            if(setSocketConn(packet.getAddress())) // Try to set new socket to player
-                waitForOtherPlayer = false;
-        } else if( data == RESPONSE_CLOSE.getBytes()) {
-            close();  // Close connection and kill thread
-        }
-
-        // For debug
-        System.out.printf("(%s:%s): %s\n",
-                packet.getAddress(), packet.getPort(), new String(data));
     }
 
     /**
@@ -117,16 +70,62 @@ public class PeerNetwork extends Thread {
         this.interrupt();
     }
 
+    public void sendJoinRequest() { sendMessage(new Message(Protocol.OP_JOIN)); }
+
     /**
-     * Tries to create a new socket for an address
+     * Serializes message and tells Sender to start send
+     * @param msg
+     */
+    private void sendMessage(Message msg) {
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        ObjectOutputStream objOut;
+        try {
+            objOut = new ObjectOutputStream(out);
+            objOut.writeObject(msg);
+        } catch (IOException ignored) {}
+
+        sender.dataToBeSent(out.toByteArray());
+    }
+
+    /**
+     * Deserializes message and translates op codes to determine what to do
+     */
+    private void receiveMessage() {
+        byte[] data = receiver.getData();
+        ByteArrayInputStream in = new ByteArrayInputStream(data);
+        ObjectInputStream objIn;
+        Message msg = null;
+        try {
+            objIn = new ObjectInputStream(in);
+            msg = (Message)objIn.readObject();
+        } catch (IOException ignored) {
+        } catch (ClassNotFoundException ignored) {}
+
+        // Translate messages
+        if(msg != null && waitForPeer) {
+            switch (msg.getOp()) {
+                case Protocol.OP_JOIN:
+                    System.out.println(((JoinMessage)msg).getName());
+                    sendJoinRequest();
+                    if(setSocketConn(receiver.getCurrent().getAddress()))  // Sets address to other peer
+                        waitForPeer = false;
+                    break;
+                case Protocol.OP_LEAVE: break;
+                case Protocol.OP_PLAYER: break;
+                case Protocol.OP_HOOK: break;
+            }
+        }
+    }
+
+    /**
+     * Sets socket for sender. Needs to be called by "host"
      * @param addr
-     * @return
+     * @return true if it worked, false if it did not work
      */
     private boolean setSocketConn (InetAddress addr) {
         try {
             this.destAddr = addr;
-            socket = new DatagramSocket(port);
-            waitForPeer = false;
+            sender = new Sender(socket, destAddr);
         } catch (Exception ignored) { return false; }
         return true;
     }

@@ -1,6 +1,6 @@
 package com.dat055.net.threads;
 
-import com.dat055.net.Message;
+import com.dat055.net.message.Message;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
@@ -13,7 +13,7 @@ import java.net.InetAddress;
 public class Sender extends Thread {
     private DatagramSocket socket;
     private InetAddress destAddr;
-    private Message msg;
+    private byte[] data;
 
     public Sender(DatagramSocket socket, InetAddress destAddr) {
         this.socket = socket;
@@ -38,15 +38,13 @@ public class Sender extends Thread {
      * @param msg
      */
     public void send() {
-        byte[] data;
         DatagramPacket packet = new DatagramPacket(data, data.length, destAddr, socket.getPort());
         try {
             socket.send(packet);
         } catch (IOException e) { System.out.println(e); }
     }
 
-    public void setMessageToSend(Message msg) {
-        this.msg = msg;
+    public void dataToBeSent(byte[] data) {
+        this.data = data;
     }
-
 }
