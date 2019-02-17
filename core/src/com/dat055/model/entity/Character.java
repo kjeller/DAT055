@@ -98,8 +98,6 @@ public abstract class Character extends Entity {
             setVelocityY(deltaTime);
             setPositions();
             setDirection();
-            /*if (this instanceof Player)
-                System.out.println(velocity.x + " + " + baseVelocity.x);*/
         }
     }
     @Override
@@ -190,6 +188,7 @@ public abstract class Character extends Entity {
     public void setGrounded(boolean val) { isGrounded = val; }
     public void setMoving(boolean val) {isMoving = val;}
     public void setLookingDirection(Vector2 dir) {lookingDirection.set(dir); }
+    public void setDirectionY(int val) { direction.y = val; }
 
 
     public Vector2 getDirection() { return direction; }
