@@ -60,6 +60,10 @@ public class GameController extends Controller {
                 else
                     map2.update(deltaTime);
             }
+
+            if(isMultiplayer) {
+                server.sendPlayerUpdate(currentPlayer);
+            }
         }
     }
 
@@ -193,8 +197,8 @@ public class GameController extends Controller {
 
         // Wait for peer to join
         while(server.getStatus()) {
-
         }
+        System.out.println("Noice");
 
         //Host decides this from menu
         mode = Mode.FRONT;
@@ -216,6 +220,8 @@ public class GameController extends Controller {
         isMultiplayer = true;
         mode = Mode.BACK;
         whosOnTop(mode);
+        startMap("maps/map_0.json");
+        // TODO: Implement get map
 
         //start sending a shit ton of positions for currentPlayer
     }

@@ -3,8 +3,8 @@ package com.dat055.net.message;
 public class JoinMessage extends Message {
     private String name;
 
-    public JoinMessage(char op, String name) {
-        super(op);
+    public JoinMessage(String name) {
+        super(Protocol.OP_JOIN);
         this.name = name;
     }
 

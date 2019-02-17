@@ -1,7 +1,9 @@
 package com.dat055.net;
 
+import com.dat055.model.entity.Player;
 import com.dat055.net.message.JoinMessage;
 import com.dat055.net.message.Message;
+import com.dat055.net.message.PlayerMessage;
 import com.dat055.net.message.Protocol;
 import com.dat055.net.threads.Receiver;
 import com.dat055.net.threads.Sender;
@@ -37,7 +39,8 @@ public class PeerNetwork extends Thread {
         } catch (SocketException e) {
             e.printStackTrace();
         }
-        sendJoinRequest();  // Tells sender to send join requests
+        sendJoinRequest("Kjelle");  // Tells sender to send join requests
+        //TODO: Set name through menu
         start();
         sender.start();     // Starts sending current message
         receiver.start();
@@ -77,7 +80,10 @@ public class PeerNetwork extends Thread {
         this.interrupt();
     }
 
-    public void sendJoinRequest() { sendMessage(new JoinMessage(Protocol.OP_JOIN, "Kjelle")); }
+    public void sendJoinRequest(String name) { sendMessage(new JoinMessage(name)); }
+    public void sendPlayerUpdate(Player player) {
+        sendMessage(new PlayerMessage(player.getPosition(), player.getDirection(), player.getIsAlive()));
+    }
 
     /**
      * Serializes message and tells Sender to start send
@@ -92,7 +98,9 @@ public class PeerNetwork extends Thread {
         } catch (IOException ignored) {}
 
         sender.dataToBeSent(out.toByteArray());
+        sender.start();
     }
+
 
     /**
      * Deserializes message and translates op codes to determine what to do
@@ -104,21 +112,22 @@ public class PeerNetwork extends Thread {
         Message msg;
         try {
             objIn =  new ObjectInputStream(new ByteArrayInputStream(data));
-            msg = (JoinMessage)objIn.readObject();
+            msg = (Message) objIn.readObject();
             objIn.close();
 
             // Translate messages
             if(msg != null && waitForPeer) {
                 switch (msg.getOp()) {
                     case Protocol.OP_JOIN:
-                        System.out.println(((JoinMessage)msg).getName());
-                        sendJoinRequest();
+                        System.out.println((JoinMessage)msg);
                         if(setSocketConn(receiver.getCurrent().getAddress()))  // Sets address to other peer
                             waitForPeer = false;
+                        sendJoinRequest("kjelle"); //TODO: Fix this too
                         break;
-                    case Protocol.OP_LEAVE: break;
-                    case Protocol.OP_PLAYER: break;
+
+                    case Protocol.OP_PLAYER: System.out.println((PlayerMessage)msg);break;
                     case Protocol.OP_HOOK: break;
+                    case Protocol.OP_LEAVE: close(); break;
                 }
             }
         } catch (IOException ignored) {
@@ -135,7 +144,7 @@ public class PeerNetwork extends Thread {
     private boolean setSocketConn (InetAddress addr) {
         try {
             this.destAddr = addr;
-            socket = new DatagramSocket(port, this.destAddr);
+            sender = new Sender(new DatagramSocket(), this.destAddr);
         } catch (Exception ignored) { return false; }
         return true;
     }

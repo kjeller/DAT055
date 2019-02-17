@@ -195,6 +195,7 @@ public abstract class Character extends Entity {
     public Vector2 getDirection() { return direction; }
     public Vector2 getVelocity() { return velocity; }
     public Vector2 getDeltaPosition() { return deltaPosition; }
+    public boolean getIsAlive() { return isAlive; }
 
     /**
      * Method that returns the entity's variables. Used for debugging.
