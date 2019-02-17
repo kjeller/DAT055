@@ -1,37 +1,49 @@
 package com.dat055.net;
 
+import com.dat055.net.threads.Receiver;
+import com.dat055.net.threads.Sender;
+import jdk.nashorn.internal.runtime.regexp.joni.constants.OPCode;
+
 import java.io.IOException;
 import java.net.*;
 
-public class Server extends Thread {
-    private final String RESPONSE_JOIN = "join";
-    private final String RESPONSE_CLOSE = "close";
-
+public class PeerNetwork extends Thread {
     private DatagramSocket socket;
     private InetAddress destAddr;
     private int port;
 
-    private boolean waitForOtherPlayer;
+    private Sender sender;
+    private Receiver receiver;
+    private boolean waitForPeer;
 
-    public Server(int port, String destAddr) {
+    /**
+     * Ready-to-join-another-peer-constructor
+     * @param port
+     * @param destAddr
+     */
+    public PeerNetwork(int port, String destAddr) {
         this.port = port;
         try {
             this.destAddr = InetAddress.getByName(destAddr);
             socket = new DatagramSocket(port);
-            waitForOtherPlayer = false;
         }
         catch (UnknownHostException e) { e.printStackTrace(); }
         catch (SocketException e) { e.printStackTrace(); }
+        sender = new Sender(socket, this.destAddr);
+        receiver = new Receiver(socket);
         start();
     }
 
     /**
-     * Awaits another player to join constructor
+     * Awaits-another-peer-to-join-constructor
      * @param port
      */
-    public Server(int port) {
+    public PeerNetwork(int port) {
         this.port = port;
-        waitForOtherPlayer = true;
+        try { socket = new DatagramSocket(port); }
+        catch (SocketException e) { e.printStackTrace(); }
+        receiver = new Receiver(socket);
+        waitForPeer = true;
         start();
     }
 
@@ -50,6 +62,13 @@ public class Server extends Thread {
             else
                 send("test");
         }
+    }
+
+    /**
+     * Sends a join request to other peer then awaiting answer
+     */
+    public void sendJoinRequest() {
+        Message msg = new Message(Message.OP_JOIN, )
     }
 
     /**
@@ -89,10 +108,12 @@ public class Server extends Thread {
     }
 
     /**
-     * Closes socket and tries to stop thread
+     * Closes socket and tries to stop all threads within network
      */
     private void close() {
         socket.close();
+        sender.interrupt();
+        receiver.interrupt();
         this.interrupt();
     }
 
@@ -105,7 +126,7 @@ public class Server extends Thread {
         try {
             this.destAddr = addr;
             socket = new DatagramSocket(port);
-            waitForOtherPlayer = false;
+            waitForPeer = false;
         } catch (Exception ignored) { return false; }
         return true;
     }
@@ -115,6 +136,6 @@ public class Server extends Thread {
      * @return
      */
     public boolean getStatus() {
-        return waitForOtherPlayer;
+        return waitForPeer;
     }
 }

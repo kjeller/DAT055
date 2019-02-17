@@ -9,7 +9,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.dat055.model.entity.Player;
 import com.dat055.model.GameModel;
 import com.dat055.model.map.GameMap;
-import com.dat055.net.Server;
+import com.dat055.net.PeerNetwork;
 import com.dat055.view.GameView;
 
 
@@ -29,7 +29,7 @@ public class GameController extends Controller {
     private float rotation = 0;
 
 
-    private Server server;
+    private PeerNetwork server;
 
     public GameController(GameModel model, GameView view) {
         super(model, view);
@@ -188,7 +188,7 @@ public class GameController extends Controller {
 
         isMultiplayer = true;
         //Todo: start server here maybe waiting for a player to join
-        server = new Server(1337);
+        server = new PeerNetwork(1337);
         while(server.getStatus()) { } // Await player
 
         //Host decides this from menu
@@ -201,7 +201,7 @@ public class GameController extends Controller {
      * @param addr IP of other server
      */
     public void joinMultiplayerMap(String addr) {
-        server = new Server(1337, "192.168.0.105");
+        server = new PeerNetwork(1337, "192.168.0.105");
         // get map filename
         isMultiplayer = true;
         mode = Mode.BACK;
