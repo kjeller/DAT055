@@ -14,7 +14,6 @@ public class Receiver extends Thread {
     private byte[] data;
     public Receiver(DatagramSocket socket) {
         this.socket = socket;
-        start();
     }
 
     @Override

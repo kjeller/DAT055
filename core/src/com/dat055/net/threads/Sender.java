@@ -18,7 +18,6 @@ public class Sender extends Thread {
     public Sender(DatagramSocket socket, InetAddress destAddr) {
         this.socket = socket;
         this.destAddr = destAddr;
-        start();
     }
 
     @Override
