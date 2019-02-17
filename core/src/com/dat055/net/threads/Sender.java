@@ -18,6 +18,7 @@ public class Sender extends Thread {
     public Sender(DatagramSocket socket, InetAddress destAddr) {
         this.socket = socket;
         this.destAddr = destAddr;
+        data = new byte[1024];
     }
 
     @Override
@@ -37,6 +38,7 @@ public class Sender extends Thread {
      * @param msg
      */
     public void send() {
+        int port = socket.getPort();
         DatagramPacket packet = new DatagramPacket(data, data.length, destAddr, socket.getPort());
         try {
             socket.send(packet);

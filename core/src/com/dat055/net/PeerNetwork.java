@@ -12,6 +12,7 @@ import java.net.*;
 public class PeerNetwork extends Thread {
     private DatagramSocket socket;
     private InetAddress destAddr;
+    private int port;
 
     private Sender sender;
     private Receiver receiver;
@@ -23,17 +24,20 @@ public class PeerNetwork extends Thread {
      * @param destAddr
      */
     public PeerNetwork(int port, String destAddr) {
+        this.port = port;
         try {
             this.destAddr = InetAddress.getByName(destAddr);
             socket = new DatagramSocket(port);
         }
         catch (UnknownHostException e) { e.printStackTrace(); }
-        catch (SocketException e) { e.printStackTrace(); }
+        catch (SocketException e) { System.out.println(e);}
+        //TODO: Socket wont bind to port, fix this plox
         sender = new Sender(socket, this.destAddr);
         receiver = new Receiver(socket);
         sendJoinRequest();  // Tells sender to send join requests
         start();
         sender.start();     // Starts sending current message
+        receiver.start();
     }
 
     /**
@@ -92,6 +96,7 @@ public class PeerNetwork extends Thread {
      */
     private void receiveMessage() {
         byte[] data = receiver.getData();
+        if(data == null) { return; }
         ByteArrayInputStream in = new ByteArrayInputStream(data);
         ObjectInputStream objIn;
         Message msg = null;
@@ -125,7 +130,7 @@ public class PeerNetwork extends Thread {
     private boolean setSocketConn (InetAddress addr) {
         try {
             this.destAddr = addr;
-            sender = new Sender(socket, destAddr);
+            socket = new DatagramSocket(port, this.destAddr);
         } catch (Exception ignored) { return false; }
         return true;
     }

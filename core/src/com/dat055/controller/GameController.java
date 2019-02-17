@@ -206,7 +206,7 @@ public class GameController extends Controller {
      * @param addr IP of other server
      */
     public void joinMultiplayerMap(String addr) {
-        server = new PeerNetwork(1337, "192.168.0.105");
+        server = new PeerNetwork(1337, addr);
 
         // Wait for peer to accept join request
         while(server.getStatus()) {

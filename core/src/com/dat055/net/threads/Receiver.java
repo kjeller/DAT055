@@ -12,6 +12,7 @@ public class Receiver extends Thread {
     private DatagramSocket socket;
     private DatagramPacket current; // will be used to determine where to packet came from
     private byte[] data;
+
     public Receiver(DatagramSocket socket) {
         this.socket = socket;
     }
