@@ -77,7 +77,7 @@ public class PeerNetwork extends Thread {
         this.interrupt();
     }
 
-    public void sendJoinRequest() { sendMessage(new Message(Protocol.OP_JOIN)); }
+    public void sendJoinRequest() { sendMessage(new JoinMessage(Protocol.OP_JOIN, "Kjelle")); }
 
     /**
      * Serializes message and tells Sender to start send
@@ -100,29 +100,31 @@ public class PeerNetwork extends Thread {
     private void receiveMessage() {
         byte[] data = receiver.getData();
         if(data == null) { return; }
-        ByteArrayInputStream in = new ByteArrayInputStream(data);
         ObjectInputStream objIn;
-        Message msg = null;
+        Message msg;
         try {
-            objIn = new ObjectInputStream(in);
-            msg = (Message)objIn.readObject();
-        } catch (IOException ignored) {
-        } catch (ClassNotFoundException ignored) {}
+            objIn =  new ObjectInputStream(new ByteArrayInputStream(data));
+            msg = (JoinMessage)objIn.readObject();
+            objIn.close();
 
-        // Translate messages
-        if(msg != null && waitForPeer) {
-            switch (msg.getOp()) {
-                case Protocol.OP_JOIN:
-                    System.out.println(((JoinMessage)msg).getName());
-                    sendJoinRequest();
-                    if(setSocketConn(receiver.getCurrent().getAddress()))  // Sets address to other peer
-                        waitForPeer = false;
-                    break;
-                case Protocol.OP_LEAVE: break;
-                case Protocol.OP_PLAYER: break;
-                case Protocol.OP_HOOK: break;
+            // Translate messages
+            if(msg != null && waitForPeer) {
+                switch (msg.getOp()) {
+                    case Protocol.OP_JOIN:
+                        System.out.println(((JoinMessage)msg).getName());
+                        sendJoinRequest();
+                        if(setSocketConn(receiver.getCurrent().getAddress()))  // Sets address to other peer
+                            waitForPeer = false;
+                        break;
+                    case Protocol.OP_LEAVE: break;
+                    case Protocol.OP_PLAYER: break;
+                    case Protocol.OP_HOOK: break;
+                }
             }
-        }
+        } catch (IOException ignored) {
+        } catch (ClassNotFoundException e) {e.printStackTrace();}
+
+
     }
 
     /**

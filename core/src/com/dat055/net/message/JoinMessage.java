@@ -11,4 +11,7 @@ public class JoinMessage extends Message {
     public String getName() {
         return name;
     }
+
+    @Override
+    public String toString() { return super.toString() + ", Name: " + name; }
 }
