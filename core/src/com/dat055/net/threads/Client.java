@@ -10,12 +10,12 @@ import java.net.InetAddress;
 /**
  * A thread responsible for sending messages through a socket
  */
-public class Sender extends Thread {
+public class Client extends Thread {
     private DatagramSocket socket;
     private InetAddress destAddr;
     private byte[] data;
 
-    public Sender(DatagramSocket socket, InetAddress destAddr) {
+    public Client(DatagramSocket socket, InetAddress destAddr) {
         this.socket = socket;
         this.destAddr = destAddr;
         data = new byte[1024];

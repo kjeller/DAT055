@@ -8,12 +8,12 @@ import java.net.DatagramSocket;
 /**
  * A thread responsible for receiving messages through a socket
  */
-public class Receiver extends Thread {
+public class Server extends Thread {
     private DatagramSocket socket;
     private DatagramPacket current; // will be used to determine where to packet came from
     private byte[] data;
 
-    public Receiver(DatagramSocket socket) {
+    public Server(DatagramSocket socket) {
         this.socket = socket;
     }
 

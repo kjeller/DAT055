@@ -5,8 +5,8 @@ import com.dat055.net.message.JoinMessage;
 import com.dat055.net.message.Message;
 import com.dat055.net.message.PlayerMessage;
 import com.dat055.net.message.Protocol;
-import com.dat055.net.threads.Receiver;
-import com.dat055.net.threads.Sender;
+import com.dat055.net.threads.Server;
+import com.dat055.net.threads.Client;
 
 import java.io.*;
 import java.net.*;
@@ -16,8 +16,8 @@ public class PeerNetwork extends Thread {
     private InetAddress destAddr;
     private int port;
 
-    private Sender sender;
-    private Receiver receiver;
+    private Client client;
+    private Server server;
     private boolean waitForPeer = true;
 
     /**
@@ -25,8 +25,10 @@ public class PeerNetwork extends Thread {
      * @param port
      * @param destAddr
      */
-    public PeerNetwork(int port, String destAddr) {
+    public PeerNetwork(int port, InetAddress destAddr, Client client, Server server) {
         this.port = port;
+        this.destAddr = destAddr;
+        this.client = client;
         try {
             this.destAddr = InetAddress.getByName(destAddr);
         }
@@ -34,16 +36,20 @@ public class PeerNetwork extends Thread {
         //TODO: Socket wont bind to port, fix this plox
 
         try {
-            sender = new Sender(new DatagramSocket(), this.destAddr);
-            receiver = new Receiver(new DatagramSocket(port));
+            sender = new Client(new DatagramSocket(), this.destAddr);
+            receiver = new Server(new DatagramSocket(port));
         } catch (SocketException e) {
             e.printStackTrace();
         }
         sendJoinRequest("Kjelle");  // Tells sender to send join requests
         //TODO: Set name through menu
         start();
-        sender.start();     // Starts sending current message
-        receiver.start();
+        try {
+            sender.start();     // Starts sending current message
+            receiver.start();
+        } catch (Exception e) {
+            throw new IllegalArgumentException("asdasd");
+        }
     }
 
     /**
@@ -53,7 +59,7 @@ public class PeerNetwork extends Thread {
     public PeerNetwork(int port) {
         try { socket = new DatagramSocket(port); }
         catch (SocketException e) { e.printStackTrace(); }
-        receiver = new Receiver(socket);
+        receiver = new Server(socket);
         start();
         receiver.start();
     }
@@ -86,7 +92,7 @@ public class PeerNetwork extends Thread {
     }
 
     /**
-     * Serializes message and tells Sender to start send
+     * Serializes message and tells Client to start send
      * @param msg
      */
     private void sendMessage(Message msg) {
@@ -145,7 +151,7 @@ public class PeerNetwork extends Thread {
     private boolean setSocketConn (InetAddress addr) {
         try {
             this.destAddr = addr;
-            sender = new Sender(new DatagramSocket(), this.destAddr);
+            sender = new Client(new DatagramSocket(), this.destAddr);
         } catch (Exception ignored) { return false; }
         return true;
     }
