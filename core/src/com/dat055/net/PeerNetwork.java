@@ -12,10 +12,6 @@ import java.io.*;
 import java.net.*;
 
 public class PeerNetwork extends Thread {
-    private DatagramSocket socket;
-    private InetAddress destAddr;
-    private int port;
-
     private Client client;
     private Server server;
     private boolean waitForPeer = true;
@@ -25,43 +21,19 @@ public class PeerNetwork extends Thread {
      * @param port
      * @param destAddr
      */
-    public PeerNetwork(int port, InetAddress destAddr, Client client, Server server) {
-        this.port = port;
-        this.destAddr = destAddr;
-        this.client = client;
-        try {
-            this.destAddr = InetAddress.getByName(destAddr);
-        }
-        catch (UnknownHostException e) { e.printStackTrace(); }
-        //TODO: Socket wont bind to port, fix this plox
-
-        try {
-            sender = new Client(new DatagramSocket(), this.destAddr);
-            receiver = new Server(new DatagramSocket(port));
-        } catch (SocketException e) {
-            e.printStackTrace();
-        }
-        sendJoinRequest("Kjelle");  // Tells sender to send join requests
-        //TODO: Set name through menu
+    public PeerNetwork(Client client, Server server) {
+       this.server = server;
+       this.client = client;
         start();
-        try {
-            sender.start();     // Starts sending current message
-            receiver.start();
-        } catch (Exception e) {
-            throw new IllegalArgumentException("asdasd");
-        }
     }
 
     /**
      * Awaits-another-peer-to-join-constructor
      * @param port
      */
-    public PeerNetwork(int port) {
-        try { socket = new DatagramSocket(port); }
-        catch (SocketException e) { e.printStackTrace(); }
-        receiver = new Server(socket);
+    public PeerNetwork(Server server) {
+        this.server = server;
         start();
-        receiver.start();
     }
 
     @Override
@@ -77,12 +49,12 @@ public class PeerNetwork extends Thread {
     }
 
     /**
-     * Closes socket and tries to stop all threads within network
+     * Closes socket, client and server then tries to stop all threads within network
      */
     private void close() {
-        socket.close();
-        sender.interrupt();
-        receiver.interrupt();
+        socket.close(); //TODO: Close socket for server and client
+        server.interrupt();
+        client.interrupt();
         this.interrupt();
     }
 
@@ -92,7 +64,7 @@ public class PeerNetwork extends Thread {
     }
 
     /**
-     * Serializes message and tells Client to start send
+     * Serializes message and tells Client to start send message
      * @param msg
      */
     private void sendMessage(Message msg) {
@@ -103,9 +75,9 @@ public class PeerNetwork extends Thread {
             objOut.writeObject(msg);
         } catch (IOException ignored) {}
 
-        sender.dataToBeSent(out.toByteArray());
-        if(!sender.isAlive())
-            sender.start();
+        client.dataToBeSent(out.toByteArray());
+        if(!client.isAlive())
+            client.start();
     }
 
 
@@ -127,7 +99,7 @@ public class PeerNetwork extends Thread {
                 switch (msg.getOp()) {
                     case Protocol.OP_JOIN:
                         System.out.println((JoinMessage)msg);
-                        if(setSocketConn(receiver.getCurrent().getAddress()))  // Sets address to other peer
+                        if(setClient(server.getCurrent().getAddress()))  // Sets send address to other peer
                             waitForPeer = false;
                         sendJoinRequest("kjelle"); //TODO: Fix this too
                         break;
@@ -144,16 +116,12 @@ public class PeerNetwork extends Thread {
     }
 
     /**
-     * Sets socket for sender. Needs to be called by "host"
+     * Adds a peer to this network
      * @param addr
      * @return true if it worked, false if it did not work
      */
-    private boolean setSocketConn (InetAddress addr) {
-        try {
-            this.destAddr = addr;
-            sender = new Client(new DatagramSocket(), this.destAddr);
-        } catch (Exception ignored) { return false; }
-        return true;
+    private boolean setClient (InetAddress addr) {
+        return (client = PeerNetworkFactory.getClient(addr)) != null;
     }
 
     /**

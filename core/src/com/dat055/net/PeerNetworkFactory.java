@@ -8,45 +8,45 @@ import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 
-public class PeerNetworkFactory {
+public abstract class PeerNetworkFactory {
 
-    public PeerNetwork getPeerNetwork(int port, String Addr) {
+    public static PeerNetwork getPeerNetwork(int port, String addr) {
+        return new PeerNetwork( client = getClient(addr), getServer(port));
+    }
+
+    public static PeerNetwork getPeerNetwork(int port) {
+        return new PeerNetwork(getServer(port));
+    }
+
+    public static Client getClient(InetAddress addr) {
+        Client client;
+        try {
+            client = new Client(new DatagramSocket(), addr);
+        }
+        catch (SocketException e) { return null; }
+        return client;
+    }
+
+    public static Client getClient(String addr) {
         InetAddress destAddr;
         Client client;
+        try {
+            destAddr = InetAddress.getByName(addr);
+            client = new Client(new DatagramSocket(), destAddr);
+        }
+        catch (UnknownHostException e) { return null; }
+        catch (SocketException e) { return null; }
+        return client;
+    }
+
+    public static Server getServer(int port) {
         Server server;
 
-        // Try if
         try {
-            destAddr = InetAddress.getByName(Addr);
-        }
-        catch (UnknownHostException e) {
+            server = new Server(new DatagramSocket(port));
+        } catch (SocketException e) {
             return null;
         }
-
-        try {
-            server = new Server(new DatagramSocket());
-            client = new Client(new DatagramSocket(), destAddr);
-        } catch (SocketException e) {
-            e.printStackTrace();
-        }
-
-
-        try {
-            sender = new Client(new DatagramSocket(), this.destAddr);
-            receiver = new Server(new DatagramSocket(port));
-        } catch (SocketException e) {
-            e.printStackTrace();
-        }
-        sendJoinRequest("Kjelle");  // Tells sender to send join requests
-        //TODO: Set name through menu
-        start();
-        try {
-            sender.start();     // Starts sending current message
-            receiver.start();
-        } catch (Exception e) {
-            throw new IllegalArgumentException("asdasd");
-        }
-
-        PeerNetwork peerNetwork = new PeerNetwork(port, destAddr);
+        return server;
     }
 }

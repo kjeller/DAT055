@@ -196,7 +196,10 @@ public class GameController extends Controller {
         server = new PeerNetwork(1337);
 
         // Wait for peer to join
-        while(server.getStatus()) { }
+        while(server.getStatus()) {
+            if(server.getTimeOut())
+                System.out.println("Server timed out!");
+        }
 
         System.out.println("Noice");
 
