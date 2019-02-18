@@ -118,7 +118,7 @@ public class Player extends Character {
     private void updateInvincible(float deltaTime) {
         if (isInvincible)
             iframes -= deltaTime;
-        if (iframes < 0)
+        if (iframes < 0 && isInvincible)
             isInvincible = false;
     }
     /**

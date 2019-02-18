@@ -5,6 +5,8 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
+import com.dat055.model.entity.Door;
+import com.dat055.model.entity.Button;
 import com.dat055.model.entity.Enemy;
 import com.dat055.model.entity.Entity;
 import com.dat055.model.entity.Player;
@@ -132,7 +134,7 @@ public class GameMapFactory {
      */
     private ArrayList<Entity> getEntities(JsonValue map, Player player) {
         ArrayList<Entity> entities = new ArrayList<Entity>();
-        entities.add(player); // Adds player to list
+
         // Get array of entities
         Iterator<JsonValue> entitiesJson = map.get(MAP_ENTITIES).iterator();
 
@@ -151,12 +153,19 @@ public class GameMapFactory {
                 }
                 else if(current.name.equals("door")) {
                     //TODO: Door goes here
+                    entity = new Door(start, 128, 64, current.getString("sprite"));
                 }
+                else if(current.name.equals("button")) {
+                    JsonValue button = current.child;
 
+                    entity = new Button(start, 64, 64, current.getString("sprite"));
+                    entity.addObserver((Door)entities.get(1));
+                }
                 if(entity != null)
                     entities.add(entity);
             }
         }
+        entities.add(player); // Adds player to list
         return entities;
     }
 }

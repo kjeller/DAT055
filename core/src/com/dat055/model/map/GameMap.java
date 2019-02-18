@@ -5,12 +5,8 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector2;
 import com.dat055.model.collision.CollisionHandler;
-import com.dat055.model.entity.Enemy;
-import com.dat055.model.entity.Entity;
-import com.dat055.model.entity.Hook;
-import com.dat055.model.entity.Player;
+import com.dat055.model.entity.*;
 import com.dat055.model.map.tile.Tile;
 import com.dat055.model.map.tile.TileMap;
 
@@ -20,6 +16,7 @@ public class GameMap {
     private final Color PLAYER_RECTANGLE = Color.BLUE;
     private final Color TILE_RECTANGLE = Color.RED;
     private final Color ENEMY_RECTANGLE = Color.GOLD;
+    private final Color DOOR_RECTANGLE = Color.BROWN;
 
     private String name, id;  // name: map_0 or map_1, id is the id is json file
     private TileMap tileMap;
@@ -68,6 +65,9 @@ public class GameMap {
                 drawRectangle(entity.getRect(), PLAYER_RECTANGLE, renderer);
             else if (entity instanceof Enemy) {
                 drawRectangle(entity.getRect(), ENEMY_RECTANGLE, renderer);
+            }
+            else if(entity instanceof Door){
+                drawRectangle(entity.getRect(), DOOR_RECTANGLE,renderer );
             }
             if(entity instanceof Player) {
                 Hook hook = ((Player)entity).getHook();

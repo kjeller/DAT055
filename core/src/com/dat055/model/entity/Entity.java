@@ -5,7 +5,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
-public abstract class Entity {
+import java.util.Observable;
+
+public abstract class Entity extends Observable {
     protected int height;
     protected int width;
     Vector2 position;

@@ -3,11 +3,8 @@ package com.dat055.model.collision;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.dat055.model.entity.Enemy;
-import com.dat055.model.entity.Entity;
+import com.dat055.model.entity.*;
 import com.dat055.model.entity.Character;
-import com.dat055.model.entity.Hook;
-import com.dat055.model.entity.Player;
 import com.dat055.model.map.GameMap;
 import com.dat055.model.map.tile.Tile;
 import com.dat055.model.map.tile.TileMap;
@@ -122,8 +119,10 @@ public class CollisionHandler {
             }
             else if ((intersection = checkIfEntityCollision(hook)) != null) {
                 hook.setApexReached(true);
+
+
+                }
                 //TODO: Add behavior to entity collision.
-            }
         }
     }
 
@@ -213,15 +212,28 @@ public class CollisionHandler {
         for (Entity mapEntity : gameMap.getEntities()) {
             if (Intersector.intersectRectangles(entity.getRect(), mapEntity.getRect(), intersection)) {
                 if (entity instanceof Hook && mapEntity instanceof Enemy) {
-                    ((Enemy)mapEntity).takeDamage(1);
+                    ((Enemy) mapEntity).takeDamage(1);
                     return intersection;
                 }
 
                 //TODO: Fix this ugly mess
                 if (entity instanceof Player && mapEntity instanceof Enemy) {
-                    enemyInteraction(intersection, (Player)entity, (Enemy)mapEntity);
+                    enemyInteraction(intersection, (Player) entity, (Enemy) mapEntity);
                 }
-
+                if (entity instanceof Hook && mapEntity instanceof Button) {
+                    Button button = (Button) mapEntity;
+                    if (!button.getActive()) {
+                        button.activate();
+                    }
+                }
+                if(entity instanceof Hook && mapEntity instanceof Door){
+                    return intersection;
+                }
+                if(entity instanceof Player && mapEntity instanceof Door){
+                    if(!((Door) mapEntity).getState()){
+                        horizontalCollision((Character) entity, intersection);
+                    }
+                }
             }
         }
         return null;
