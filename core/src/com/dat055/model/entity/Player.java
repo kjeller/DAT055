@@ -5,10 +5,13 @@ import com.badlogic.gdx.math.Vector2;
 
 public class Player extends Character {
     Hook hook;
+    boolean isInvincible;
+    float iframes;
     private boolean movingWithHook;
     public Player(Vector2 startPosition, String texturePath, String name) {
         super(startPosition, 80, 64, texturePath,name, 5, new Vector2(5, 20));
         movingWithHook = false;
+        isInvincible = false;
     }
     /**
      * Player does act that is specified in parameter
@@ -41,14 +44,16 @@ public class Player extends Character {
     @Override
     public void update(float deltaTime) {
         // TODO: Toggle methods for booleans?
-        if (hook != null) {
-            hookMovement();
-            hookUpdate(deltaTime);
+        if (isAlive) {
+            if (hook != null) {
+                hookMovement();
+                hookUpdate(deltaTime);
+            }
+            if (maxVelocity.x > 5)
+                normalizeMaxVelocityX(deltaTime);
+            super.update(deltaTime);
+            updateInvincible(deltaTime);
         }
-        if (maxVelocity.x > 5)
-            normalizeMaxVelocityX(deltaTime);
-        super.update(deltaTime);
-
     }
 
     /**
@@ -95,7 +100,27 @@ public class Player extends Character {
         }
     }
 
+    /**
+     * Take damage and also set invincibility for 2 seconds.
+     * @param damage amount of damage to take
+     */
+    @Override
+    public void takeDamage(int damage) {
+        super.takeDamage(damage);
+        isInvincible = true;
+        iframes = 2;
+    }
 
+    /**
+     * Update iframe timer.
+     * @param deltaTime time since last frame.
+     */
+    private void updateInvincible(float deltaTime) {
+        if (isInvincible)
+            iframes -= deltaTime;
+        if (iframes < 0)
+            isInvincible = false;
+    }
     /**
      * Player interacts with something.
      */
@@ -107,10 +132,8 @@ public class Player extends Character {
             return hook;
         return null;
     }
-
-    @Override
-    public String toString() {
-        return super.toString();
+    public boolean getInvincible() {
+        return isInvincible;
     }
     private void normalizeMaxVelocityX(float deltaTime) {
         maxVelocity.x -= 10 * deltaTime;
@@ -119,5 +142,10 @@ public class Player extends Character {
     }
     private void toggleMovingWithHook() {
         movingWithHook = (movingWithHook) ? false : true;
+    }
+
+    @Override
+    public String toString() {
+        return super.toString() + String.format("isInvincible: %s\n", isInvincible);
     }
 }

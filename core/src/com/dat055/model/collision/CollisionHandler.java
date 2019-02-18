@@ -59,6 +59,7 @@ public class CollisionHandler {
             collisionHook((Hook)entity);
     }
 
+
     /**
      * One of the collision cases to be checked.
      * @param character entity to be tested
@@ -92,6 +93,9 @@ public class CollisionHandler {
             edgeAdjacentCollision(character, intersection);
             //TODO: Fix corner collisions
         }
+        else if ((intersection = checkIfEntityCollision(character)) != null) {
+            System.out.println("WAOW");
+        }
     }
 
     /**
@@ -117,6 +121,7 @@ public class CollisionHandler {
 
             }
             else if ((intersection = checkIfEntityCollision(hook)) != null) {
+                hook.setApexReached(true);
                 //TODO: Add behavior to entity collision.
             }
         }
@@ -211,11 +216,33 @@ public class CollisionHandler {
                     ((Enemy)mapEntity).takeDamage(1);
                     return intersection;
                 }
+
+                //TODO: Fix this ugly mess
+                if (entity instanceof Player && mapEntity instanceof Enemy) {
+                    enemyInteraction(intersection, (Player)entity, (Enemy)mapEntity);
+                }
+
             }
         }
         return null;
     }
+    private void enemyInteraction(Rectangle intersection, Player player, Enemy enemy) {
+        if (player.getInvincible())
+            return;
 
+        if (checkXCollision(intersection)) {
+            player.takeDamage(1);
+            player.setXVelocity(-5*(int)player.getDirection().x);
+            player.setXAcceleration(50);
+            player.jump();
+            player.setYVelocity(3);
+        }
+        else if (player.getRect().y > (enemy.getRect().y)) {
+            player.setGrounded(true);
+            player.jump();
+            enemy.takeDamage(1);
+        }
+    }
     /**
      * Method to check and correct if entity is moving outside map border
      * @param entity entity to be checked
