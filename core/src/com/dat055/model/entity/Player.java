@@ -85,13 +85,13 @@ public class Player extends Character {
         if (movingWithHook) {
             maxVelocity.x = 10;
             if (lookingDirection.x > 0) {
-                acceleration.x = 60;
+                acceleration.x = 100;
                 if (position.x+width >= hook.getPosition().x) {
                     movingWithHook = false;
                     hook.setHasGrip(false);
                 }
             } else {
-                acceleration.x = -60;
+                acceleration.x = -100;
                 if (hook.getPosition().x+hook.width > position.x) {
                     movingWithHook = false;
                     hook.setHasGrip(false);
@@ -140,7 +140,7 @@ public class Player extends Character {
         return isInvincible;
     }
     private void normalizeMaxVelocityX(float deltaTime) {
-        maxVelocity.x -= 10 * deltaTime;
+        maxVelocity.x -= 8 * deltaTime;
         if (maxVelocity.x < 5.5 && maxVelocity.x > 4.5)
             maxVelocity.x = 5;
     }

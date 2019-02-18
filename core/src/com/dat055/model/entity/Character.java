@@ -200,10 +200,10 @@ public abstract class Character extends Entity {
      * @return the string containing all data.
      */
     public String toString() {
-        return super.toString() + String.format("hp: %d, acc: (%.1f, %.1f),\n" +
+        return super.toString() + String.format("hp: %d,\nvelocity: (%.1f, %.1f),\n acc: (%.1f, %.1f),\n" +
                         "dir: (%.1f, %.1f), lookDir: %.1f,\nisGrounded: %s," +
                         "\nisAlive: %s,\nisMoving: %s\n",
-                healthPoints, acceleration.x, acceleration.y, direction.x,
+                healthPoints, velocity.x, velocity.y, acceleration.x, acceleration.y, direction.x,
                 direction.y, lookingDirection.x, isGrounded, isAlive, isMoving);
     }
 
