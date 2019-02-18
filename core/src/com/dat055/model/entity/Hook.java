@@ -1,6 +1,5 @@
 package com.dat055.model.entity;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -15,7 +14,6 @@ public class Hook extends Entity {
     private boolean remove;
     private boolean hasGrip;
     private float playerPosX;
-    private boolean flipX;
 
     Hook(Vector2 position, int height, int width, String texturePath, float maxLength, Vector2 initDirection) {
         super(position, height, width, texturePath);
@@ -36,7 +34,6 @@ public class Hook extends Entity {
         direction = new Vector2(Vector2.Zero);
         wire.x = (initDirection.x > 0) ? position.x + 64 : position.x;
         wire.y = position.y + 48;
-        flipX = initDirection.x > 0;
     }
 
     @Override
@@ -88,11 +85,8 @@ public class Hook extends Entity {
     }
 
     @Override
-    public void draw(SpriteBatch sb) {
-        //TODO: Fix texture-bös
-        sb.draw(new Texture(texturePath), position.x, position.y-25, 25, 48, 0, 0, 25, 48, flipX, false);
-        //	draw(texture, float x, float y, float width, float height, int srcX, int srcY, int srcWidth, int srcHeight, boolean flipX, boolean flipY)
-        //sb.draw(sprite, position.x, );
+    public void draw(SpriteBatch sb, float rotation) {
+        super.draw(sb, rotation, new Vector2(0, -25));
     }
     /**
      * Set position where hook should originate from.

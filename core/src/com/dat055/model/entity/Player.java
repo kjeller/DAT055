@@ -39,7 +39,7 @@ public class Player extends Character {
     public void draw(SpriteBatch sb, float rotation) {
         super.draw(sb, rotation);
         if (hook != null)
-            hook.draw(sb);
+            hook.draw(sb, rotation);
     }
     @Override
     public void update(float deltaTime) {
