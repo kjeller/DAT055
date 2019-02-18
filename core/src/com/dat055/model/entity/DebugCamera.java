@@ -27,7 +27,4 @@ public class DebugCamera extends Player{
     }
     @Override
     public void setTexture(String texturePath) {}
-
-    @Override
-    public void draw(SpriteBatch batch) {}
 }

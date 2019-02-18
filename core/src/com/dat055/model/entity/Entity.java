@@ -36,13 +36,13 @@ public abstract class Entity {
     /**
      * Generic method for drawing an entity
      */
-    public void draw(SpriteBatch sb) {
-        sb.draw(sprite, position.x, position.y);
+    public void draw(SpriteBatch sb, float rotation) {
+        draw(sb, rotation, Vector2.Zero);
     }
 
-    public void draw(SpriteBatch batch, float rotation) {
-        batch.draw(sprite, position.x, position.y, width/2, -position.y,
-                rect.width, rect.height, 1,1, rotation);
+    public void draw(SpriteBatch batch, float rotation, Vector2 offset) {
+        batch.draw(sprite, position.x+offset.x, position.y+offset.y, width/2, -position.y,
+                sprite.getWidth(), sprite.getHeight(), 1,1, rotation);
     }
 
     //TODO: Use sprite directly from spritesheet

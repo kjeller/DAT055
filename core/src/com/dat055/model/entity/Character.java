@@ -103,7 +103,7 @@ public abstract class Character extends Entity {
     @Override
     public void draw(SpriteBatch sb, float rotation) {
         if (isAlive)
-            super.draw(sb, rotation);
+            super.draw(sb, rotation, Vector2.Zero);
     }
 
     /**

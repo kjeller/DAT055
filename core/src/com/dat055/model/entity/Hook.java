@@ -85,9 +85,8 @@ public class Hook extends Entity {
     }
 
     @Override
-    public void draw(SpriteBatch sb) {
-        //TODO: Fix texture-bös
-        sb.draw(sprite, position.x, position.y-25);
+    public void draw(SpriteBatch sb, float rotation) {
+        super.draw(sb, rotation, new Vector2(0, -25));
     }
     /**
      * Set position where hook should originate from.
