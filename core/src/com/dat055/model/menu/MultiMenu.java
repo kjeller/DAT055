@@ -98,10 +98,8 @@ public class MultiMenu extends Menu {
         skin.addRegions(atlas);
 
         txtFldStyle.font = fontPad(generateFont(height-Gdx.graphics.getHeight()/50));
-        txtFldStyle.background = skin.getDrawable("but1_pressed");
-        txtFldStyle.fontColor = Color.BLACK;
-        txtFldStyle.focusedBackground = skin.getDrawable("but1");
-        txtFldStyle.focusedFontColor = Color.WHITE;
+        txtFldStyle.background = skin.getDrawable("but1");
+        txtFldStyle.fontColor = Color.WHITE;
         txtFldStyle.messageFont = generateFont(height-Gdx.graphics.getHeight()/60);
         txtFldStyle.messageFontColor = Color.RED;
         txtFldStyle.cursor = new NinePatchDrawable(new NinePatch(new Texture("UI/cursor.9.png")));
