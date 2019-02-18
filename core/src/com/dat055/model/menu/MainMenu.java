@@ -2,8 +2,10 @@ package com.dat055.model.menu;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
@@ -16,6 +18,7 @@ public class MainMenu extends Menu {
     private MenuController controller;
     private TextButton play, multi, settings, exit, credits;
     private Label verNr;
+    private TextButtonStyle hoverStyle;
 
     public MainMenu(MenuController cntr) {
         super("UI/Delta.jpg");
@@ -35,7 +38,7 @@ public class MainMenu extends Menu {
         settings = createButton("Settings");
         exit = createButton("Exit");
         credits = createButton("Credits");
-        verNr = new Label("Ver: 0.17", super.lblStyle);
+        verNr = new Label("Version: 0.43", super.lblStyle);
 
         // Add listeners to the actors
         addListeners();
@@ -89,6 +92,10 @@ public class MainMenu extends Menu {
         txtBtnStyle.up = skin.getDrawable("but1_pressed");
         txtBtnStyle.down = skin.getDrawable("but1");
 
+        hoverStyle = new TextButtonStyle(txtBtnStyle);
+        hoverStyle.up = skin.getDrawable("but1");
+        hoverStyle.fontColor = Color.WHITE;
+
         super.txtBtnStyle = txtBtnStyle;
     }
 
@@ -118,6 +125,18 @@ public class MainMenu extends Menu {
                 controller.startGame("maps/map_0.json");
                 super.touchUp(event, x, y, pointer, button);
             }
+
+            @Override
+            public void enter (InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                play.setStyle(hoverStyle);
+                super.enter(event,x,y,pointer,fromActor);
+            }
+
+            @Override
+            public void exit (InputEvent event, float x, float y, int pointer, Actor toActor) {
+                play.setStyle(txtBtnStyle);
+                super.enter(event,x,y,pointer,toActor);
+            }
         });
 
         multi.addListener(new ClickListener() {
@@ -131,6 +150,18 @@ public class MainMenu extends Menu {
                 controller.swapMenu("Multiplayer");
                 super.touchUp(event, x, y, pointer, button);
             }
+
+            @Override
+            public void enter (InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                multi.setStyle(hoverStyle);
+                super.enter(event,x,y,pointer,fromActor);
+            }
+
+            @Override
+            public void exit (InputEvent event, float x, float y, int pointer, Actor toActor) {
+                multi.setStyle(txtBtnStyle);
+                super.enter(event,x,y,pointer,toActor);
+            }
         });
 
         settings.addListener(new ClickListener() {
@@ -142,6 +173,18 @@ public class MainMenu extends Menu {
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 super.touchUp(event, x, y, pointer, button);
+            }
+
+            @Override
+            public void enter (InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                settings.setStyle(hoverStyle);
+                super.enter(event,x,y,pointer,fromActor);
+            }
+
+            @Override
+            public void exit (InputEvent event, float x, float y, int pointer, Actor toActor) {
+                settings.setStyle(txtBtnStyle);
+                super.enter(event,x,y,pointer,toActor);
             }
         });
 
@@ -156,6 +199,18 @@ public class MainMenu extends Menu {
                 System.exit(0);
                 super.touchUp(event, x, y, pointer, button);
             }
+
+            @Override
+            public void enter (InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                exit.setStyle(hoverStyle);
+                super.enter(event,x,y,pointer,fromActor);
+            }
+
+            @Override
+            public void exit (InputEvent event, float x, float y, int pointer, Actor toActor) {
+                exit.setStyle(txtBtnStyle);
+                super.enter(event,x,y,pointer,toActor);
+            }
         });
 
         credits.addListener(new ClickListener() {
@@ -168,6 +223,18 @@ public class MainMenu extends Menu {
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 controller.swapMenu("Main");
                 super.touchUp(event, x, y, pointer, button);
+            }
+
+            @Override
+            public void enter (InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                credits.setStyle(hoverStyle);
+                super.enter(event,x,y,pointer,fromActor);
+            }
+
+            @Override
+            public void exit (InputEvent event, float x, float y, int pointer, Actor toActor) {
+                credits.setStyle(txtBtnStyle);
+                super.enter(event,x,y,pointer,toActor);
             }
         });
     }

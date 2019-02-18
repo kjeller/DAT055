@@ -19,6 +19,7 @@ public class PauseMenu extends Menu {
     private MenuController controller;
     String ip;
     TextButton resume, settings, menu;
+    private TextButton.TextButtonStyle hoverStyle;
     public PauseMenu(MenuController ctrl) {
         super();
 
@@ -32,7 +33,7 @@ public class PauseMenu extends Menu {
 
         resume = createButton("Resume game");
         settings = createButton("Settings");
-        menu = createButton("Main menu");
+        menu = createButton("Exit to main menu");
 
         addListeners();
 
@@ -77,6 +78,10 @@ public class PauseMenu extends Menu {
         txtBtnStyle.up = skin.getDrawable("but1_pressed");
         txtBtnStyle.down = skin.getDrawable("but1");
 
+        hoverStyle = new TextButton.TextButtonStyle(txtBtnStyle);
+        hoverStyle.up = skin.getDrawable("but1");
+        hoverStyle.fontColor = Color.WHITE;
+
         super.txtBtnStyle = txtBtnStyle;
     }
 
@@ -110,6 +115,18 @@ public class PauseMenu extends Menu {
                 // Unpause
                 super.touchUp(event, x, y, pointer, button);
             }
+
+            @Override
+            public void enter (InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                resume.setStyle(hoverStyle);
+                super.enter(event,x,y,pointer,fromActor);
+            }
+
+            @Override
+            public void exit (InputEvent event, float x, float y, int pointer, Actor toActor) {
+                resume.setStyle(txtBtnStyle);
+                super.enter(event,x,y,pointer,toActor);
+            }
         });
 
         settings.addListener(new ClickListener() {
@@ -124,6 +141,17 @@ public class PauseMenu extends Menu {
                 super.touchUp(event, x, y, pointer, button);
             }
 
+            @Override
+            public void enter (InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                settings.setStyle(hoverStyle);
+                super.enter(event,x,y,pointer,fromActor);
+            }
+
+            @Override
+            public void exit (InputEvent event, float x, float y, int pointer, Actor toActor) {
+                settings.setStyle(txtBtnStyle);
+                super.enter(event,x,y,pointer,toActor);
+            }
         });
 
         menu.addListener(new ClickListener() {
@@ -138,6 +166,17 @@ public class PauseMenu extends Menu {
                 super.touchUp(event, x, y, pointer, button);
             }
 
+            @Override
+            public void enter (InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                menu.setStyle(hoverStyle);
+                super.enter(event,x,y,pointer,fromActor);
+            }
+
+            @Override
+            public void exit (InputEvent event, float x, float y, int pointer, Actor toActor) {
+                menu.setStyle(txtBtnStyle);
+                super.enter(event,x,y,pointer,toActor);
+            }
         });
     }
 }

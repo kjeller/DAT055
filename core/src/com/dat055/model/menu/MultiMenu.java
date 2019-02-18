@@ -20,6 +20,8 @@ public class MultiMenu extends Menu {
     String ip;
     TextButton join, host, back;
     TextField address;
+    private TextButton.TextButtonStyle hoverStyle;
+
     public MultiMenu(MenuController ctrl) {
         super("UI/Delta.jpg");
 
@@ -81,6 +83,10 @@ public class MultiMenu extends Menu {
         txtBtnStyle.up = skin.getDrawable("but1_pressed");
         txtBtnStyle.down = skin.getDrawable("but1");
 
+        hoverStyle = new TextButton.TextButtonStyle(txtBtnStyle);
+        hoverStyle.up = skin.getDrawable("but1");
+        hoverStyle.fontColor = Color.WHITE;
+
         super.txtBtnStyle = txtBtnStyle;
     }
 
@@ -134,6 +140,18 @@ public class MultiMenu extends Menu {
                 System.out.println("[Multi:115]Debug: " + "IP input: " + ip);
                 super.touchUp(event, x, y, pointer, button);
             }
+
+            @Override
+            public void enter (InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                join.setStyle(hoverStyle);
+                super.enter(event,x,y,pointer,fromActor);
+            }
+
+            @Override
+            public void exit (InputEvent event, float x, float y, int pointer, Actor toActor) {
+                join.setStyle(txtBtnStyle);
+                super.enter(event,x,y,pointer,toActor);
+            }
         });
 
         back.addListener(new ClickListener() {
@@ -148,6 +166,42 @@ public class MultiMenu extends Menu {
                 super.touchUp(event, x, y, pointer, button);
             }
 
+            @Override
+            public void enter (InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                back.setStyle(hoverStyle);
+                super.enter(event,x,y,pointer,fromActor);
+            }
+
+            @Override
+            public void exit (InputEvent event, float x, float y, int pointer, Actor toActor) {
+                back.setStyle(txtBtnStyle);
+                super.enter(event,x,y,pointer,toActor);
+            }
+        });
+
+        host.addListener(new ClickListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                return super.touchDown(event, x, y, pointer, button);
+            }
+
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                //controller.swapMenu("Host");
+                super.touchUp(event, x, y, pointer, button);
+            }
+
+            @Override
+            public void enter (InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                host.setStyle(hoverStyle);
+                super.enter(event,x,y,pointer,fromActor);
+            }
+
+            @Override
+            public void exit (InputEvent event, float x, float y, int pointer, Actor toActor) {
+                host.setStyle(txtBtnStyle);
+                super.enter(event,x,y,pointer,toActor);
+            }
         });
 
         address.addListener(new FocusListener() {
