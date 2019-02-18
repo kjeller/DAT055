@@ -82,7 +82,7 @@ public class PeerNetwork extends Thread {
 
     public void sendJoinRequest(String name) { sendMessage(new JoinMessage(name)); }
     public void sendPlayerUpdate(Player player) {
-        sendMessage(new PlayerMessage(player.getPosition(), player.getDirection(), player.getIsAlive()));
+        sendMessage(new PlayerMessage(player));
     }
 
     /**
@@ -98,7 +98,8 @@ public class PeerNetwork extends Thread {
         } catch (IOException ignored) {}
 
         sender.dataToBeSent(out.toByteArray());
-        sender.start();
+        if(!sender.isAlive())
+            sender.start();
     }
 
 

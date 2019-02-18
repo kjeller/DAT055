@@ -196,8 +196,8 @@ public class GameController extends Controller {
         server = new PeerNetwork(1337);
 
         // Wait for peer to join
-        while(server.getStatus()) {
-        }
+        while(server.getStatus()) { }
+
         System.out.println("Noice");
 
         //Host decides this from menu
