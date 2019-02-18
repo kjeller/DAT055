@@ -98,7 +98,7 @@ public class GameController extends Controller {
      */
     private void checkKeyboardInput() {
         // Player input movements
-        if(!isRotating) {
+        if(!isRotating || !isPaused) {
             if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
                 currentPlayer.move(-1);
                 currentPlayer.setLookingDirection(new Vector2(-1, currentPlayer.getDirection().y));
@@ -117,9 +117,9 @@ public class GameController extends Controller {
 
             if (Gdx.input.isKeyPressed(Input.Keys.SPACE))
                 currentPlayer.jump();
-
-            if(Gdx.input.isKeyJustPressed(Input.Keys.T))
-                toggleCurrentPlayer();
+            if(!isMultiplayer)
+                if(Gdx.input.isKeyJustPressed(Input.Keys.T))
+                    toggleCurrentPlayer();
         }
 
         // Toggles pause menu

@@ -41,6 +41,7 @@ public abstract class Entity {
     }
 
     public void draw(SpriteBatch batch, float rotation, Vector2 offset) {
+        sprite.setFlip(rotation > 90  && rotation < 270, false); // Rotates sprite correctly to plane
         batch.draw(sprite, position.x+offset.x, position.y+offset.y, width/2, -position.y,
                 sprite.getWidth(), sprite.getHeight(), 1,1, rotation);
     }

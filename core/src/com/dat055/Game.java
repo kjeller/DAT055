@@ -35,13 +35,13 @@ public class Game extends ApplicationAdapter {
 		if(menuController.isVisible())
 			menuController.update(deltaTime);
 
-		if(!gameController.isPaused() && gameController.isRunning())
+		if(gameController.isRunning())
 			gameController.update(deltaTime);
 
 
 		// Draw
 		batch.begin();
-		if(!gameController.isPaused() && gameController.isRunning())
+		if(gameController.isRunning())
 			gameController.render(batch);
 		menuController.render();
 		batch.end();
