@@ -215,7 +215,6 @@ public class CollisionHandler {
                     ((Enemy) mapEntity).takeDamage(1);
                     return intersection;
                 }
-
                 //TODO: Fix this ugly mess
                 if (entity instanceof Player && mapEntity instanceof Enemy) {
                     enemyInteraction(intersection, (Player) entity, (Enemy) mapEntity);
@@ -293,27 +292,28 @@ public class CollisionHandler {
         int width = character.getWidth();
 
         // Get tile that the player is currently in.
-        Tile tile = getCurrentTile(position);//tileMap.getTile((int)((position.x+width/2)/tileSize), (int)(position.y)/tileSize);
+        Tile tile = getCurrentTile(new Vector2(position.x+width/2, position.y));//tileMap.getTile((int)((position.x+width/2)/tileSize), (int)(position.y)/tileSize);
 
         // Check if entity is falling to stop a movement bug.
-        if (character.getVelocity().y != 0 && character.getDirection().y < 0 ) {
-            if (getCurrentTile(position).getState()) {
-                character.setYPosition((int)tile.getRect().y + 64);
-                character.setGrounded(true);
-                return true;
+        if (character.getVelocity().y < 0) {
+            if (tile.getState()) {
+                if (character.getRect().x < tile.getRect().x+tile.getRect().width/2)
+                    character.setYPosition((int)tile.getRect().y + 64);
+                    character.setGrounded(true);
+                    return true;
             }
         }
 
         // Check if entity is rising/jumping to stop a movement bug.
-        /*else if (character.getVelocity().y != 0 && character.getDirection().y > 0) {
-            tile = tileMap.getTile((int)((position.x+width/2)/tileSize), (int)(position.y+height+1)/tileSize);
+        else if (character.getVelocity().y != 0 && character.getDirection().y > 0) {
+            tile = getCurrentTile(new Vector2(position.x+width/2, position.y+height+1));//tileMap.getTile((int)((position.x+width/2)/tileSize), (int)(position.y+height+1)/tileSize);
             // Check if entity is rising to stop a movement bug.
             if (getCurrentTile(position).getState()) {
                 character.setYPosition((int)tile.getRect().y-height);
                 character.setDirectionY(-1);
                 character.setYVelocity(0);
             }
-        }*/
+        }
         return false;
     }
 

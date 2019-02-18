@@ -136,7 +136,7 @@ public class Player extends Character {
         return isInvincible;
     }
     private void normalizeMaxVelocityX(float deltaTime) {
-        maxVelocity.x -= 10 * deltaTime;
+        maxVelocity.x -= 8 * deltaTime;
         if (maxVelocity.x < 5.5 && maxVelocity.x > 4.5)
             maxVelocity.x = 5;
     }

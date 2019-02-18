@@ -98,7 +98,7 @@ public class GameController extends Controller {
      */
     private void checkKeyboardInput() {
         // Player input movements
-        if(!isRotating || !isPaused) {
+        if(!isRotating && !isPaused) {
             if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
                 currentPlayer.move(-1);
                 currentPlayer.setLookingDirection(new Vector2(-1, currentPlayer.getDirection().y));
