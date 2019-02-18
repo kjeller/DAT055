@@ -14,6 +14,7 @@ import com.dat055.model.map.tile.Tile;
 import com.dat055.model.map.tile.TileMap;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class GameMap {
     private final Color PLAYER_RECTANGLE = Color.BLUE;
@@ -35,9 +36,17 @@ public class GameMap {
         colHandler = new CollisionHandler(this);
     }
     public void update(float deltaTime) {
+        Iterator it =  entities.iterator();
         // Updates entities position, health etc.
-        for(Entity entity : entities) {
+
+        while (it.hasNext()) {
+            Entity entity = (Entity)it.next();
             entity.update(deltaTime);
+
+            if (entity instanceof Enemy) {
+                if (!((Enemy)entity).getIsAlive())
+                    it.remove();
+            }
             colHandler.checkCollision(entity);
             colHandler.checkCollision(player.getHook());
         }
@@ -53,6 +62,12 @@ public class GameMap {
                     tile.draw(batch, rotation);
             }
         }
+    }
+
+    private void checkIfDead(Entity entity) {
+       /* if (entity instanceof Character) {
+
+        }*/
     }
 
     // == Debug stuff below ==

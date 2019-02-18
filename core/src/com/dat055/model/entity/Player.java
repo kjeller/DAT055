@@ -116,10 +116,14 @@ public class Player extends Character {
      * @param deltaTime time since last frame.
      */
     private void updateInvincible(float deltaTime) {
-        if (isInvincible)
+        if (isInvincible) {
             iframes -= deltaTime;
-        if (iframes < 0)
+        }
+
+        if (iframes < 0) {
             isInvincible = false;
+        }
+
     }
     /**
      * Player interacts with something.

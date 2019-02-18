@@ -10,6 +10,7 @@ public abstract class Entity {
     protected int width;
     Vector2 position;
     Sprite sprite;
+    String texturePath;
     Rectangle rect;
 
     public Entity(Vector2 position, int height, int width, String texturePath) {
@@ -17,6 +18,7 @@ public abstract class Entity {
         this.width = width;
         this.position = position;
         this.setTexture(texturePath);
+        this.texturePath = texturePath;
         setRectangle();
     }
 
