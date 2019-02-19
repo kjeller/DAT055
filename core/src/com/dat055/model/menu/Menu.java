@@ -44,6 +44,7 @@ public abstract class Menu {
     public Image getBg() { return bg; }
 
     public TextButton createButton(String label) { return new TextButton(label, txtBtnStyle); }
+    public TextButton createButton(String label,TextButtonStyle style) { return new TextButton(label, style); }
 
     public TextField createTextField(String label) {
         TextField tf = new TextField(label, txtFldStyle);

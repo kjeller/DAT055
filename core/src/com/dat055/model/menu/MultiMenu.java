@@ -54,7 +54,6 @@ public class MultiMenu extends Menu {
 
         table.setPosition(0,0);
 
-        table.padTop(200);
         table.add(address).width(butX).height(butY).padBottom(padS).expandX().colspan(2).row();
         table.add(join).width(butX).height(butY).padBottom(padL).colspan(2).row();
         table.add(back).width(butX/2).height(butY).padLeft(padS).padBottom(padS).left();
@@ -117,7 +116,6 @@ public class MultiMenu extends Menu {
     public BitmapFont fontPad(BitmapFont f) {
         BitmapFont.BitmapFontData fd = f.getData();
         fd.padLeft = -5;
-        fd.padRight = -10;
         return f;
     }
 
@@ -203,7 +201,7 @@ public class MultiMenu extends Menu {
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                //controller.swapMenu("Host");
+                controller.swapMenu("Select");
                 super.touchUp(event, x, y, pointer, button);
             }
 

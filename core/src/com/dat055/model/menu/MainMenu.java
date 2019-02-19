@@ -121,7 +121,8 @@ public class MainMenu extends Menu {
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 controller.clearStage();
-                controller.startGame("maps/map_0.json");
+                controller.setMultiplayer(false);
+                controller.startGame();
                 super.touchUp(event, x, y, pointer, button);
             }
 
@@ -146,8 +147,8 @@ public class MainMenu extends Menu {
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                controller.setMultiplayer(true);
                 controller.swapMenu("Multiplayer");
-                super.touchUp(event, x, y, pointer, button);
             }
 
             @Override
