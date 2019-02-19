@@ -1,9 +1,7 @@
 package com.dat055.controller;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.utils.viewport.Viewport;
 import com.dat055.model.menu.MainMenu;
-import com.dat055.model.menu.Menu;
 import com.dat055.model.menu.MultiMenu;
 import com.dat055.model.menu.PauseMenu;
 import com.dat055.view.MenuView;
@@ -66,7 +64,15 @@ public class MenuController extends Controller{
         ((MenuModel)model).swapMenu(menu);
     }
 
-    public void startGame(String mapPath) {
-        gameController.startSingleplayerMap(mapPath);
+    public boolean startGame(String mapPath) {
+        return gameController.startSingleplayerMap(mapPath);
+    }
+
+    public boolean startMultiplayer(String mapPath, String name) {
+        return gameController.startMultiplayerMap(mapPath, name);
+    }
+
+    public boolean joinMultiplayer(String ip, String name) {
+        return gameController.joinMultiplayerMap(ip, name);
     }
 }

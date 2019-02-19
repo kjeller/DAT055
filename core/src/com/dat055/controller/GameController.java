@@ -9,7 +9,8 @@ import com.badlogic.gdx.math.Vector3;
 import com.dat055.model.entity.Player;
 import com.dat055.model.GameModel;
 import com.dat055.model.map.GameMap;
-import com.dat055.net.Server;
+import com.dat055.net.PeerNetwork;
+import com.dat055.net.PeerNetworkFactory;
 import com.dat055.view.GameView;
 
 
@@ -21,15 +22,17 @@ public class GameController extends Controller {
     private Player currentPlayer, player1, player2;
     private OrthographicCamera cam;
 
-    private boolean isRotating, isPaused, isDebug, isMultiplayer;
-
+    private boolean isRotating = false;
+    private boolean isPaused = false;
+    private boolean isDebug = false;
+    private boolean isMultiplayer = false;
     private boolean isRunning = false;
 
     private float rotationTimer = 180f;
     private float rotation = 0;
 
 
-    private Server server;
+    private PeerNetwork server;
 
     public GameController(GameModel model, GameView view) {
         super(model, view);
@@ -58,6 +61,10 @@ public class GameController extends Controller {
                     map1.update(deltaTime);
                 else
                     map2.update(deltaTime);
+            }
+
+            if(isMultiplayer && server.getIsConnected()) {
+                server.sendPlayerUpdate(currentPlayer);
             }
         }
     }
@@ -89,8 +96,8 @@ public class GameController extends Controller {
     public void render(SpriteBatch batch) {
         super.render(batch); // Render view
         ((GameView)view).setDebugString(String.format(
-                "mode: %s\nrot: %.1f\nrot.timer: %s\nisRotating: %s\nisPaused: %s",
-                mode, rotation, rotationTimer, isRotating, isPaused));
+                "mode: %s\nrot: %.1f\nrot.timer: %s\nisRotating: %s\nisPaused: %s\nisMultiplayer: %s",
+                mode, rotation, rotationTimer, isRotating, isPaused, isMultiplayer));
     }
 
     /**
@@ -144,7 +151,7 @@ public class GameController extends Controller {
      * Calls gamemodel to create a game map for a specific map.
      * @param fileName of a json file in assets/maps/
      */
-    private void startMap(String fileName) {
+    private boolean startMap(String fileName) {
         ((GameModel)model).createMap(fileName);
 
         map1 = ((GameModel)model).getGameMap1();
@@ -153,13 +160,12 @@ public class GameController extends Controller {
         player1 = map1.getPlayer();
         player2 = map2.getPlayer();
 
-        // Set default values
-        isPaused = false;
-        isRotating = false;
-        isDebug = false;
+
+        // Start running
         isRunning = true;
 
         whosOnTop(mode);
+        return true; //TODO: Fix a return false which indicates if map created successfully or not
     }
 
     /**
@@ -167,13 +173,13 @@ public class GameController extends Controller {
      * playable characters. Mainmenu will call this to start map.
      * @param fileName name of map that will be created with startMap()
      */
-    public void startSingleplayerMap(String fileName) {
-        startMap(fileName);
+    public boolean startSingleplayerMap(String fileName) {
 
         isMultiplayer = false;
         mode = Mode.FRONT;
 
         whosOnTop(mode);
+        return startMap(fileName);
     }
 
     /**
@@ -183,31 +189,63 @@ public class GameController extends Controller {
      * another player to join server.
      * @param fileName name of map that will be created with startMap()
      */
-    public void startMultiplayerMap(String fileName) {
-        startMap(fileName);
-
-        isMultiplayer = true;
+    public boolean startMultiplayerMap(String fileName, String name) {
         //Todo: start server here maybe waiting for a player to join
-        server = new Server(1337);
-        while(server.getStatus()) { } // Await player
+        server = PeerNetworkFactory.getPeerNetwork(name);
+
+        if(!successfulConnect())
+            return false;
+
+        startMap(fileName);
+        System.out.println("Map created");
 
         //Host decides this from menu
         mode = Mode.FRONT;
         whosOnTop(mode);
+        return true;
     }
 
     /**
      * Joins server and creates own server to communicate with other server
      * @param addr IP of other server
      */
-    public void joinMultiplayerMap(String addr) {
-        server = new Server(1337, "192.168.0.105");
-        // get map filename
-        isMultiplayer = true;
+    public boolean joinMultiplayerMap(String addr, String name) {
+        server = PeerNetworkFactory.getPeerNetwork(name, addr);
+
+        if(!successfulConnect()) {
+            System.out.println("Could not connect to server.");
+            return false;
+        }
+
         mode = Mode.BACK;
         whosOnTop(mode);
-        //start sending a shit ton of positions for currentPlayer
+        startMap("maps/map_0.json");
+        // TODO: Implement get map
+
+        return true;
     }
+
+    /**
+     * Waits for other player and checks if timeout occurs
+     * @return true if successful
+     */
+    private boolean successfulConnect() {
+        // Wait for other player to join
+        while(server.getIsWaiting()) {}
+
+        // Check if there was a timeout
+        if(server.getIsTimeout()) {
+            System.out.println("Server timed out!");
+            server.close();
+            isRunning = false;
+            return false;
+            //TODO: Metod för att återgå till meny
+        }
+        isMultiplayer = true;
+        return true;
+    }
+
+    // === Toggle methods and helper methods ==
 
     /**
      * Decides who is the top player based on mode
