@@ -23,18 +23,13 @@ public class GameController extends Controller {
     private Player currentPlayer, player1, player2;
     private OrthographicCamera cam;
 
-    private boolean isRotating;
-    private boolean isPaused;
-    private boolean isDebug;
-    private boolean isMultiplayer;
-    private boolean isRunning;
+    private boolean isRotating, isPaused, isDebug, isMultiplayer, isRunning;
 
-    private float rotationTimer = 180f;
-    private float rotation = 0;
+    private float rotationTimer;
+    private float rotation;
 
 
     private PeerNetwork server;
-    private MenuController menuController;
 
     public GameController(GameModel model, GameView view) {
         super(model, view);
@@ -169,7 +164,14 @@ public class GameController extends Controller {
         isDebug = false;
         isMultiplayer = false;
 
+        rotationTimer = 180f;
+
+        // Sets current player based on mode
         whosOnTop(mode);
+
+        // Set camera position to current player to avoid panning to player at start
+        Vector2 camStartPos = currentPlayer.getPosition().cpy();
+        cam.position.set(new Vector3(camStartPos.x, camStartPos.y, 0));
         return true; //TODO: Fix a return false which indicates if map created successfully or not
     }
 
@@ -179,11 +181,8 @@ public class GameController extends Controller {
      * @param fileName name of map that will be created with startMap()
      */
     public boolean startSingleplayerMap(String fileName) {
-
         isMultiplayer = false;
         mode = Mode.FRONT;
-
-        whosOnTop(mode);
         return startMap(fileName);
     }
 
@@ -206,7 +205,6 @@ public class GameController extends Controller {
 
         //Host decides this from menu
         mode = Mode.FRONT;
-        whosOnTop(mode);
         return true;
     }
 
@@ -223,7 +221,6 @@ public class GameController extends Controller {
         }
 
         mode = Mode.BACK;
-        whosOnTop(mode);
         startMap("maps/map_0.json");
         // TODO: Implement get map
 
@@ -259,12 +256,13 @@ public class GameController extends Controller {
      */
     private void whosOnTop(Mode mode) {
         if(mode == Mode.FRONT) {
-            ((GameView)view).setRotation(360f);
+            rotation = 360f;
             currentPlayer = player1;
         } else {
-            ((GameView)view).setRotation(0);
+            rotation = 0;
             currentPlayer = player2;
         }
+        ((GameView)view).setRotation(rotation);
         ((GameView)view).setMode(mode);
     }
 
