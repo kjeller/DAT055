@@ -149,20 +149,43 @@ public class GameMapFactory {
 
                 if(current.name.equals("enemy")) {
                     //Todo: add different enemy types to make it easier for map boi
-                    entity = new Enemy(start, current.getString("sprite"), "enemy" );
+                    entity = new Enemy(start, current.getString("sprite"), "enemy");
                 }
                 else if(current.name.equals("door")) {
                     //TODO: Door goes here
-                    entity = new Door(start, 128, 64, current.getString("sprite"));
+                    entity = new Door(start, 128, 64, current.getString("sprite"), current.getString("id"));
+                    JsonValue required = current.get("rqs");
+                    Door door = (Door)entity;
+                    for(JsonValue req : required){
+                        door.addRequired(req.asString());
+                    }
                 }
                 else if(current.name.equals("button")) {
                     JsonValue button = current.child;
-
-                    entity = new Button(start, 64, 64, current.getString("sprite"));
-                    entity.addObserver((Door)entities.get(1));
-                }
+                    entity = new Button(start, 64, 64, current.getString("sprite"),
+                                        current.getString("id"), current.getString("target"));
+                    }
                 if(entity != null)
                     entities.add(entity);
+            }
+        }
+
+        Button entityButton;
+        Door entityDoor;
+        for(Entity entity : entities){
+            //Checks all buttons in entities
+            if(entity instanceof Button){
+                entityButton = (Button) entity;
+                for(Entity entity2 : entities){
+                    //Checks all doors in entities
+                    if(entity2 instanceof Door){
+                        entityDoor = (Door)entity2;
+                        //If Doors ID is in buttons target, make door observer for button
+                        if((entityDoor.getId()).equals(entityButton.getTarget())){
+                            entityButton.addObserver(entityDoor);
+                        }
+                    }
+                }
             }
         }
         entities.add(player); // Adds player to list
