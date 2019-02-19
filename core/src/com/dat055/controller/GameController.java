@@ -9,8 +9,8 @@ import com.badlogic.gdx.math.Vector3;
 import com.dat055.model.entity.Player;
 import com.dat055.model.GameModel;
 import com.dat055.model.map.GameMap;
-import com.dat055.net.Multiplayer;
 import com.dat055.net.PeerNetwork;
+import com.dat055.net.PeerNetworkFactory;
 import com.dat055.view.GameView;
 
 
@@ -22,8 +22,10 @@ public class GameController extends Controller {
     private Player currentPlayer, player1, player2;
     private OrthographicCamera cam;
 
-    private boolean isRotating, isPaused, isDebug, isMultiplayer;
-
+    private boolean isRotating = false;
+    private boolean isPaused = false;
+    private boolean isDebug = false;
+    private boolean isMultiplayer = false;
     private boolean isRunning = false;
 
     private float rotationTimer = 180f;
@@ -61,7 +63,7 @@ public class GameController extends Controller {
                     map2.update(deltaTime);
             }
 
-            if(isMultiplayer) {
+            if(isMultiplayer && server.getIsConnected()) {
                 server.sendPlayerUpdate(currentPlayer);
             }
         }
@@ -94,8 +96,8 @@ public class GameController extends Controller {
     public void render(SpriteBatch batch) {
         super.render(batch); // Render view
         ((GameView)view).setDebugString(String.format(
-                "mode: %s\nrot: %.1f\nrot.timer: %s\nisRotating: %s\nisPaused: %s",
-                mode, rotation, rotationTimer, isRotating, isPaused));
+                "mode: %s\nrot: %.1f\nrot.timer: %s\nisRotating: %s\nisPaused: %s\nisMultiplayer: %s",
+                mode, rotation, rotationTimer, isRotating, isPaused, isMultiplayer));
     }
 
     /**
@@ -158,10 +160,7 @@ public class GameController extends Controller {
         player1 = map1.getPlayer();
         player2 = map2.getPlayer();
 
-        // Set default values
-        isPaused = false;
-        isRotating = false;
-        isDebug = false;
+        // Start running
         isRunning = true;
 
         whosOnTop(mode);
@@ -193,16 +192,18 @@ public class GameController extends Controller {
 
         isMultiplayer = true;
         //Todo: start server here maybe waiting for a player to join
-        server = new PeerNetwork(1337);
+        server = PeerNetworkFactory.getPeerNetwork("Kjelle");
 
         // Wait for peer to join
-        while(server.getStatus()) {
-            if(server.getTimeOut())
-                System.out.println("Server timed out!");
+        while(server.getIsWaiting()) {}
+        if(server.getIsTimeout()) {
+            System.out.println("Server timed out!");
+            server.close();
+            isRunning = false;
+            return;
+            //TODO: Metod för att återgå till meny
         }
-
-        System.out.println("Noice");
-
+        System.out.println("Map created");
         //Host decides this from menu
         mode = Mode.FRONT;
         whosOnTop(mode);
@@ -213,12 +214,18 @@ public class GameController extends Controller {
      * @param addr IP of other server
      */
     public void joinMultiplayerMap(String addr) {
-        server = new PeerNetwork(1337, addr);
+        server = PeerNetworkFactory.getPeerNetwork("Kjelle", addr);
 
         // Wait for peer to accept join request
-        while(server.getStatus()) {
-
+        while(server.getIsWaiting()) {
+            if(server.getIsTimeout()) {
+                System.out.println("Server timed out!");
+                server.close();
+                isRunning = false;
+                //TODO: Metod för att återgå till meny
+            }
         }
+
         // get map filename
         isMultiplayer = true;
         mode = Mode.BACK;

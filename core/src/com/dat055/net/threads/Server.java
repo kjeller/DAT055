@@ -39,6 +39,14 @@ public class Server extends Thread {
         } catch (IOException ignored) {}
     }
 
+    /**
+     * Interrupts thread and closes socket
+     */
+    public void close() {
+        socket.close();
+        this.interrupt();
+    }
+
     public byte[] getData() { return data; }
     public DatagramPacket getCurrent() { return current; }
 }

@@ -12,27 +12,38 @@ import java.io.*;
 import java.net.*;
 
 public class PeerNetwork extends Thread {
+    private final int PERIOD = 2;   // ms
+    private final int TIMEOUT = 10; // Time until timout in seconds
     private Client client;
     private Server server;
-    private boolean waitForPeer = true;
+    private String name; // Name of this peer
+
+    private float timeout = 0;
+    private boolean isWaitingForPeer = true;
+    private boolean isTimeOut = false;
+    private boolean isConnected = false;
 
     /**
      * Ready-to-join-another-peer-constructor
-     * @param port
-     * @param destAddr
+     * @param client
+     * @param server
      */
-    public PeerNetwork(Client client, Server server) {
-       this.server = server;
-       this.client = client;
+    public PeerNetwork(String name, Client client, Server server) {
+        this.name = name;
+        this.server = server;
+        this.client = client;
+        server.start();
+        client.start();
         start();
     }
 
     /**
      * Awaits-another-peer-to-join-constructor
-     * @param port
      */
-    public PeerNetwork(Server server) {
+    public PeerNetwork(String name, Server server) {
+        this.name = name;
         this.server = server;
+        server.start();
         start();
     }
 
@@ -40,9 +51,16 @@ public class PeerNetwork extends Thread {
     public void run() {
         while(!interrupted()) {
             try {
-                Thread.sleep(20);
-            } catch (InterruptedException e) {
-                break;
+                Thread.sleep(PERIOD);
+            } catch (InterruptedException e) { break; }
+
+            // Calculate if there is a timeout
+            if(isWaitingForPeer) {
+                timeout += (float)PERIOD/1000;
+                if(timeout >= TIMEOUT) {
+                    isTimeOut = true;
+                    isWaitingForPeer = false;
+                }
             }
             receiveMessage();
         }
@@ -51,10 +69,11 @@ public class PeerNetwork extends Thread {
     /**
      * Closes socket, client and server then tries to stop all threads within network
      */
-    private void close() {
-        socket.close(); //TODO: Close socket for server and client
-        server.interrupt();
-        client.interrupt();
+    public void close() {
+        if(server != null)
+            server.close();
+        if(client != null)
+            client.close();
         this.interrupt();
     }
 
@@ -85,7 +104,7 @@ public class PeerNetwork extends Thread {
      * Deserializes message and translates op codes to determine what to do
      */
     private void receiveMessage() {
-        byte[] data = receiver.getData();
+        byte[] data = server.getData();
         if(data == null) { return; }
         ObjectInputStream objIn;
         Message msg;
@@ -95,13 +114,13 @@ public class PeerNetwork extends Thread {
             objIn.close();
 
             // Translate messages
-            if(msg != null && waitForPeer) {
+            if(msg != null && isWaitingForPeer) {
                 switch (msg.getOp()) {
                     case Protocol.OP_JOIN:
                         System.out.println((JoinMessage)msg);
                         if(setClient(server.getCurrent().getAddress()))  // Sets send address to other peer
-                            waitForPeer = false;
-                        sendJoinRequest("kjelle"); //TODO: Fix this too
+                            isWaitingForPeer = false;
+                        sendJoinRequest(name); //TODO: Fix this too
                         break;
 
                     case Protocol.OP_PLAYER: System.out.println((PlayerMessage)msg);break;
@@ -128,7 +147,9 @@ public class PeerNetwork extends Thread {
      * Call this to see if another player has joined
      * @return
      */
-    public boolean getStatus() {
-        return waitForPeer;
+    public boolean getIsWaiting() {
+        return isWaitingForPeer;
     }
+    public boolean getIsTimeout() {return isTimeOut;}
+    public boolean getIsConnected() { return isConnected; }
 }
