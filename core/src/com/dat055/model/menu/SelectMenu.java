@@ -142,8 +142,15 @@ public class SelectMenu extends Menu {
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                if (textButtonGroup.getChecked() != null)
+                if (controller.multiplayer)
+                    controller.name = "Beelzebub";
+
+                if (textButtonGroup.getChecked() != null) {
+                    controller.clearStage();
                     controller.currentMap = textButtonGroup.getChecked().getText().toString();
+                    controller.startGame();
+                }
+
                 System.out.println(controller.currentMap);
                 super.touchUp(event, x, y, pointer, button);
             }

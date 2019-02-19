@@ -8,8 +8,9 @@ import com.dat055.model.MenuModel;
 
 public class MenuController extends Controller{
     private boolean visible;
-    private boolean multiplayer;
+    public boolean multiplayer;
     public String currentMap;
+    public String name;
 
     public MenuController() {
         super(new MenuModel(), new MenuView());
@@ -40,13 +41,18 @@ public class MenuController extends Controller{
         ((MenuModel)model).resize(width, height);
     }
 
-    public void startGame() {
+    public boolean startGame() {
         if (multiplayer) {
-            ((GameController)ctrl).startMultiplayerMap("maps/" + currentMap + ".json");
+            System.out.println("Hosting the map: maps/" + currentMap + ".json as: "+ name);
+            return ((GameController)ctrl).startMultiplayerMap("maps/" + currentMap + ".json", name);
         } else {
-            ((GameController)ctrl).startSingleplayerMap("maps/" + currentMap + ".json");
+            System.out.println("Starting the map: maps/" + currentMap + ".json");
+            return ((GameController)ctrl).startSingleplayerMap("maps/" + currentMap + ".json");
         }
+    }
 
+    public boolean joinGame(String ip) {
+        return ((GameController)ctrl).joinMultiplayerMap(ip, name);
     }
 
     public void toggleVisibility() {
@@ -71,6 +77,8 @@ public class MenuController extends Controller{
     public void swapMenu(String menu) {
         ((MenuModel)model).swapMenu(menu);
     }
+
+    public void togglePause() { ((GameController)ctrl).togglePause(); }
     /*
     public boolean startMultiplayer(String mapPath, String name) {
         return ((GameController)ctrl).startMultiplayerMap(mapPath, name);
