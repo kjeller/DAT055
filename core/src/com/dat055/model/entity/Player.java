@@ -44,6 +44,7 @@ public class Player extends Character {
     @Override
     public void update(float deltaTime) {
         // TODO: Toggle methods for booleans?
+
         if (isAlive) {
             if (hook != null) {
                 hookMovement();
@@ -51,9 +52,10 @@ public class Player extends Character {
             }
             if (maxVelocity.x > 5)
                 normalizeMaxVelocityX(deltaTime);
-            super.update(deltaTime);
-            updateInvincible(deltaTime);
+
         }
+        super.update(deltaTime);
+        updateInvincible(deltaTime);
     }
 
     /**
@@ -68,9 +70,10 @@ public class Player extends Character {
      * @param deltaTime time since last frame.
      */
     private void hookUpdate(float deltaTime) {
-        hook.setPlayerPosX((int)position.x);
+        hook.setPlayerPosX((int)rect.x);
+        hook.setOriginPosition(new Vector2(rect.x, rect.y));
         hook.update(deltaTime);
-        hook.setOriginPosition(position);
+
         if (hook.getRemoved())
             hook = null;
     }
@@ -136,12 +139,12 @@ public class Player extends Character {
         return isInvincible;
     }
     private void normalizeMaxVelocityX(float deltaTime) {
-        maxVelocity.x -= 8 * deltaTime;
+        maxVelocity.x -= 10 * deltaTime;
         if (maxVelocity.x < 5.5 && maxVelocity.x > 4.5)
             maxVelocity.x = 5;
     }
     private void toggleMovingWithHook() {
-        movingWithHook = (movingWithHook) ? false : true;
+        movingWithHook = !movingWithHook;
     }
 
     @Override

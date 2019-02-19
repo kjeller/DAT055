@@ -1,6 +1,9 @@
 package com.dat055.model.entity;
 
+import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
@@ -14,6 +17,10 @@ public class Hook extends Entity {
     private boolean remove;
     private boolean hasGrip;
     private float playerPosX;
+    private Polygon wire2;
+    private PolygonSpriteBatch pb;
+    // test is pretty much wire2 in rectangle form.
+    private Rectangle test;
 
     Hook(Vector2 position, int height, int width, String texturePath, float maxLength, Vector2 initDirection) {
         super(position, height, width, texturePath);
@@ -31,6 +38,9 @@ public class Hook extends Entity {
         remove = false;
         apexReached = false;
         wire = new Rectangle(0, 0, 0, 3);
+
+        wire2 = new Polygon();
+
         direction = new Vector2(Vector2.Zero);
         wire.x = (initDirection.x > 0) ? position.x + 64 : position.x;
         wire.y = position.y + 48;
@@ -39,6 +49,10 @@ public class Hook extends Entity {
     @Override
     public void update(float deltaTime) {
         wire.width += (apexReached) ? -velocity : velocity;
+        if (initDirection.x < 0) {
+            wire.x += (!apexReached) ? -velocity : velocity;
+        }
+        setWire2();
         if (wire.width >= maxLength)
             apexReached = true;
 
@@ -47,9 +61,23 @@ public class Hook extends Entity {
         else
             hookLeft();
 
-        if (!hasGrip)
-            position.y = wire.y;
+        if (!hasGrip) {
+            position.y = (initDirection.y > 0) ? test.y+test.height : test.y;
+        }
         rect.setPosition(position.x, position.y-height/2);
+    }
+    /**
+     * Handle when hook is shot to the right
+     */
+    private void hookRight() {
+        if (!hasGrip) {
+            //setWire2();
+            position.x = test.x + test.width;
+            if (position.x <= playerPosX+64)
+                remove = true;
+        } else
+            wire.width = position.x-(playerPosX+64);
+
     }
 
     /**
@@ -57,27 +85,14 @@ public class Hook extends Entity {
      */
     private void hookLeft() {
         if (!hasGrip) {
-            wire.x += (!apexReached) ? -velocity : velocity;
-            position.x = wire.x-width;
-            if (position.x+width > wire.x+wire.width)
+            position.x = test.x - width;
+            if (test.x+test.width > playerPosX) {
                 remove = true;
-        } else
-            wire.width = playerPosX - wire.x;
+            }
+        } else {
+            wire.width = playerPosX - position.x-width;
+        }
     }
-
-    /**
-     * Handle when hook is shot to the right
-     */
-    private void hookRight() {
-        if (!hasGrip) {
-            position.x = wire.x+wire.width;
-            if (position.x < wire.x)
-                remove = true;
-        } else
-            wire.width = position.x-(playerPosX+64);
-
-    }
-
 
     @Override
     public void action(String act) {
@@ -87,6 +102,7 @@ public class Hook extends Entity {
     @Override
     public void draw(SpriteBatch sb, float rotation) {
         super.draw(sb, rotation, new Vector2(0, -25));
+        //TODO: Fix hook rotation + flipping.
     }
     /**
      * Set position where hook should originate from.
@@ -96,7 +112,28 @@ public class Hook extends Entity {
         wire.x = (initDirection.x > 0) ? pos.x + 64 : pos.x-wire.width;
         wire.y = pos.y + 48;
     }
+    private void setWire2() {
+        wire2 = new Polygon(new float []{ wire.x, wire.y,
+                wire.x, wire.y + wire.height,
+                wire.x + wire.width, wire.y + wire.height,
+                wire.x + wire.width, wire.y});
 
+        if (initDirection.x > 0) {
+            wire2.setOrigin(wire.x, wire.y+wire.height/2);
+            if (initDirection.y > 0)
+                wire2.rotate(20);
+            else if (initDirection.y < 0)
+                wire2.rotate(-20);
+        } else {
+            wire2.setOrigin(wire.x+wire.width, wire.y+wire.height/2);
+            if (initDirection.y > 0)
+                wire2.rotate(-20);
+            else if (initDirection.y < 0)
+                wire2.rotate(20);
+        }
+        Rectangle temp = new Rectangle(wire2.getBoundingRectangle());
+        test = new Rectangle((int)temp.x, (int)temp.y, (int)temp.width, (int)temp.height);
+    }
     // Get and set methods galore.
     boolean getHasGrip() {
         return hasGrip;
@@ -108,7 +145,10 @@ public class Hook extends Entity {
         return remove;
     }
     public Rectangle getWire() {
-        return wire;
+        return test;
+    }
+    public Polygon getWire2() {
+        return wire2;
     }
 
     public void setApexReached(boolean val) {

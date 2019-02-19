@@ -70,8 +70,7 @@ public class CollisionHandler {
             checkChangeDirection(character);
 
         // Check certain specific cases before usual collision check
-        if (!checkIfFalling(tileMap.getTile((int)((character.getPosition().x+character.getWidth())/tileSize),
-                (int)(character.getPosition().y-1)/tileSize)))
+        if (!checkIfFalling(character))
             character.setGrounded(false);
 
         if (checkBeforeCollision(character))
@@ -110,7 +109,7 @@ public class CollisionHandler {
             if ((intersection = checkIfWallCollision(hook, tileList)) != null) {
 
                 hook.setApexReached(true);
-                if (!checkYCollision(intersection))
+                if (checkXCollision(intersection))
                     hook.setHasGrip(true);
                 Tile tile = getCurrentTile(hook.getPosition());
                 if (tile.getRect().contains(hook.getRect()))
@@ -118,7 +117,7 @@ public class CollisionHandler {
 
             }
             else if ((intersection = checkIfEntityCollision(hook)) != null) {
-                hook.setApexReached(true);
+                 //hook.setApexReached(true);
 
 
                 }
@@ -308,7 +307,7 @@ public class CollisionHandler {
         else if (character.getVelocity().y != 0 && character.getDirection().y > 0) {
             tile = getCurrentTile(new Vector2(position.x+width/2, position.y+height+1));//tileMap.getTile((int)((position.x+width/2)/tileSize), (int)(position.y+height+1)/tileSize);
             // Check if entity is rising to stop a movement bug.
-            if (getCurrentTile(position).getState()) {
+            if (tile.getState()) {
                 character.setYPosition((int)tile.getRect().y-height);
                 character.setDirectionY(-1);
                 character.setYVelocity(0);
@@ -318,15 +317,17 @@ public class CollisionHandler {
     }
 
     /**
-     * Check if tile (that is below the player) is solid.
-     * @param tile tile that is tested.
+     * Check if tiles that are below the player are solid.
+     * @param character character that is tested.
      * @return return whether the tile is solid or not.
      */
-    private boolean checkIfFalling(Tile tile) {
-        if (tile == null)
+    private boolean checkIfFalling(Character character) {
+        if (getCurrentTile(new Vector2(character.getRect().x, character.getRect().y-1)).getState() ||
+                getCurrentTile(new Vector2(character.getRect().x + character.getRect().width, character.getRect().y-1)).getState())
             return true;
-        return tile.getState();
+        return false;
     }
+
 
     /**
      * Method that changes an enemy's direction.

@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Rectangle;
 import com.dat055.model.collision.CollisionHandler;
 import com.dat055.model.entity.*;
@@ -89,6 +90,7 @@ public class GameMap {
                 if(hook != null) {
                     drawRectangle(hook.getRect(), PLAYER_RECTANGLE, renderer);
                     drawRectangle(hook.getWire(), PLAYER_RECTANGLE, renderer);
+                    drawPolygon(hook.getWire2(), Color.WHITE, renderer);
                 }
             }
 
@@ -100,6 +102,12 @@ public class GameMap {
                     drawRectangle(tile.getRect(), TILE_RECTANGLE, renderer);
             }
         }
+    }
+    public void drawPolygon(Polygon polygon, Color color, ShapeRenderer renderer) {
+        renderer.begin(ShapeRenderer.ShapeType.Line);
+        renderer.setColor(Color.WHITE);
+        renderer.polygon(polygon.getTransformedVertices());
+        renderer.end();
     }
 
     /**

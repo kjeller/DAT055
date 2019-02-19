@@ -187,7 +187,8 @@ public abstract class Character extends Entity {
     public void setXAcceleration(int x) { acceleration.x = x; }
     public void setGrounded(boolean val) { isGrounded = val; }
     public void setMoving(boolean val) {isMoving = val;}
-    public void setLookingDirection(Vector2 dir) {lookingDirection.set(dir); }
+    public void setLookingDirectionX(int dir) {lookingDirection.x = dir; }
+    public void setLookingDirectionY(int dir) {lookingDirection.y = dir; }
     public void setDirectionY(int val) { direction.y = val; }
 
     public Vector2 getDirection() { return direction; }
@@ -201,10 +202,10 @@ public abstract class Character extends Entity {
      */
     public String toString() {
         return super.toString() + String.format("hp: %d,\nvelocity: (%.1f, %.1f),\n acc: (%.1f, %.1f),\n" +
-                        "dir: (%.1f, %.1f), lookDir: %.1f,\nisGrounded: %s," +
+                        "dir: (%.1f, %.1f), lookDir: (%.0f, %.0f),\nisGrounded: %s," +
                         "\nisAlive: %s,\nisMoving: %s\n",
                 healthPoints, velocity.x, velocity.y, acceleration.x, acceleration.y, direction.x,
-                direction.y, lookingDirection.x, isGrounded, isAlive, isMoving);
+                direction.y, lookingDirection.x, lookingDirection.y, isGrounded, isAlive, isMoving);
     }
 
 }
