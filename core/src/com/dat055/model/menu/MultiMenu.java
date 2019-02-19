@@ -114,9 +114,27 @@ public class MultiMenu extends Menu {
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 ip = address.getText();
                 System.out.println("[Multi:115]Debug: " + "IP input: " + ip);
+                if(ip != null || ip.equals(""))
+                    controller.joinMultiplayer(ip, "Default name"); //TODO: Name from a textfield
                 super.touchUp(event, x, y, pointer, button);
             }
         });
+
+        host.addListener(new ClickListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                return super.touchDown(event, x, y, pointer, button);
+            }
+
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                controller.startMultiplayer("maps/map_0.json", "Default name");
+                //TODO: Be able to change map and name
+                super.touchUp(event, x, y, pointer, button);
+            }
+
+        });
+
 
         back.addListener(new ClickListener() {
             @Override
@@ -131,6 +149,7 @@ public class MultiMenu extends Menu {
             }
 
         });
+
 
         address.addListener(new FocusListener() {
             @Override

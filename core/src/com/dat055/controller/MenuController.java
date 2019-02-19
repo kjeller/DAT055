@@ -56,10 +56,15 @@ public class MenuController extends Controller{
         ((MenuModel)model).swapMenu(menu);
     }
 
-    public void startGame(String mapPath) {
-       // gameController.startSingleplayerMap(mapPath);
-        gameController.startMultiplayerMap(mapPath);
-        //gameController.joinMultiplayerMap("192.168.0.105");
-        //gameController.togglePause();
+    public boolean startGame(String mapPath) {
+        return gameController.startSingleplayerMap(mapPath);
+    }
+
+    public boolean startMultiplayer(String mapPath, String name) {
+        return gameController.startMultiplayerMap(mapPath, name);
+    }
+
+    public boolean joinMultiplayer(String ip, String name) {
+        return gameController.joinMultiplayerMap(ip, name);
     }
 }
