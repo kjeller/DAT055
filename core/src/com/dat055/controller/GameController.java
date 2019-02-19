@@ -23,11 +23,11 @@ public class GameController extends Controller {
     private Player currentPlayer, player1, player2;
     private OrthographicCamera cam;
 
-    private boolean isRotating = false;
-    private boolean isPaused = false;
-    private boolean isDebug = false;
-    private boolean isMultiplayer = false;
-    private boolean isRunning = false;
+    private boolean isRotating;
+    private boolean isPaused;
+    private boolean isDebug;
+    private boolean isMultiplayer;
+    private boolean isRunning;
 
     private float rotationTimer = 180f;
     private float rotation = 0;
@@ -164,6 +164,10 @@ public class GameController extends Controller {
 
         // Start running
         isRunning = true;
+        isRotating = false;
+        isPaused = false;
+        isDebug = false;
+        isMultiplayer = false;
 
         whosOnTop(mode);
         return true; //TODO: Fix a return false which indicates if map created successfully or not
