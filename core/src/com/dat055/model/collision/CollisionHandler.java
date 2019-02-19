@@ -117,7 +117,7 @@ public class CollisionHandler {
 
             }
             else if ((intersection = checkIfEntityCollision(hook)) != null) {
-                 //hook.setApexReached(true);
+                 hook.setApexReached(true);
 
 
                 }
