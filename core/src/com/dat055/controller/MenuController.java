@@ -9,12 +9,10 @@ import com.dat055.model.MenuModel;
 
 public class MenuController extends Controller{
     private boolean visible;
-    private GameController gameController;
 
-    public MenuController(GameController gameController) {
+    public MenuController() {
         super(new MenuModel(), new MenuView());
         visible = true;
-        this.gameController = gameController;
 
         ((MenuModel)model).includeMenu("Main", new MainMenu(this));
         ((MenuModel)model).includeMenu("Multiplayer", new MultiMenu(this));
@@ -64,15 +62,25 @@ public class MenuController extends Controller{
         ((MenuModel)model).swapMenu(menu);
     }
 
+   // === GameController calls ===
+
     public boolean startGame(String mapPath) {
-        return gameController.startSingleplayerMap(mapPath);
+        return ((GameController)ctrl).startSingleplayerMap(mapPath);
     }
 
     public boolean startMultiplayer(String mapPath, String name) {
-        return gameController.startMultiplayerMap(mapPath, name);
+        return ((GameController)ctrl).startMultiplayerMap(mapPath, name);
     }
 
     public boolean joinMultiplayer(String ip, String name) {
-        return gameController.joinMultiplayerMap(ip, name);
+        return ((GameController)ctrl).joinMultiplayerMap(ip, name);
+    }
+
+    public void togglePause() {
+        ((GameController)ctrl).togglePause();
+    }
+
+    public void setController(GameController ctrl) {
+        super.setController(ctrl);
     }
 }

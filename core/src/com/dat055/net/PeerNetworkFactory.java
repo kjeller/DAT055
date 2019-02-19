@@ -8,6 +8,9 @@ import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 
+/**
+ * Creates a PeerNetwork based on parameters given
+ */
 public abstract class PeerNetworkFactory {
     public static final int PORT = 1337;
     /**

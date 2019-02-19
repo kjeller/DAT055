@@ -1,6 +1,5 @@
 package com.dat055.net.threads;
 
-import javax.xml.crypto.Data;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;

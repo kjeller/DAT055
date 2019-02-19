@@ -4,8 +4,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.dat055.model.entity.Player;
 
 public class PlayerMessage extends Message {
-    Vector2 position;
-    Vector2 lookingDirection;
+    private Vector2 position;
+    private Vector2 lookingDirection;
     boolean isAlive;
 
     public PlayerMessage(Player player) {

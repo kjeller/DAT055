@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.FocusListener;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.utils.Align;
+import com.dat055.controller.GameController;
 import com.dat055.controller.MenuController;
 
 public class PauseMenu extends Menu {
@@ -50,10 +51,9 @@ public class PauseMenu extends Menu {
 
         table.setPosition(0,0);
 
-        table.padTop(200);
-        table.add().width(butX).height(butY).padBottom(padS).expandX().row();
-        table.add(settings).width(butX).height(butY).padBottom(padL).row();
-        table.add(menu).width(butX).height(butY).padBottom(padL).row();
+        table.add(resume).width(butX).height(butY).padBottom(padS).expandX().row();
+        table.add(settings).width(butX).height(butY).padBottom(padS).row();
+        table.add(menu).width(butX).height(butY).padBottom(padS).row();
 
 
         super.table = table;
@@ -112,7 +112,7 @@ public class PauseMenu extends Menu {
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                // Unpause
+                controller.togglePause();
                 super.touchUp(event, x, y, pointer, button);
             }
 

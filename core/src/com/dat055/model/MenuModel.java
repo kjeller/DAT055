@@ -28,8 +28,10 @@ public class MenuModel extends Model {
 
     public void swapMenu(String menu) {
         stage.clear();
-        menus.get(menu).getBg().setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        stage.addActor(menus.get(menu).getBg());
+        if(menus.get(menu).getBg() != null) {
+            menus.get(menu).getBg().setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+            stage.addActor(menus.get(menu).getBg());
+        }
         Table tbl = menus.get(menu).getTable();
         tbl.setFillParent(true);
         stage.addActor(tbl);

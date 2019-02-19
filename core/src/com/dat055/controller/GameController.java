@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.dat055.model.entity.Player;
 import com.dat055.model.GameModel;
 import com.dat055.model.map.GameMap;
+import com.dat055.model.menu.Menu;
 import com.dat055.net.PeerNetwork;
 import com.dat055.net.PeerNetworkFactory;
 import com.dat055.view.GameView;
@@ -33,6 +34,7 @@ public class GameController extends Controller {
 
 
     private PeerNetwork server;
+    private MenuController menuController;
 
     public GameController(GameModel model, GameView view) {
         super(model, view);
@@ -40,33 +42,32 @@ public class GameController extends Controller {
 
     @Override
     public void update(float deltaTime) {
-        if(map1 != null || map2 != null) {
-            if(!isPaused)
-                updateCamera(deltaTime);    // Updates camera
-            checkKeyboardInput();           // Handles keyboard input
+        if(!isPaused)
+            updateCamera(deltaTime);        // Updates camera
+        checkKeyboardInput();           // Handles keyboard input
 
-            // tile rotation map transition
-            if(isRotating && !isPaused)
-                rotationTimer+= 2f;
-            if(rotationTimer >= 180f) {
-                isRotating = false;
-                rotationTimer = 180f;
-            }
-            rotation = mode == Mode.FRONT ? 180f + rotationTimer : rotationTimer; // Sets rotation for planes
-            ((GameView)view).setRotation(rotation);
-
-            // Time break
-            if(!isRotating && !isPaused) {
-                if(mode == Mode.FRONT)
-                    map1.update(deltaTime);
-                else
-                    map2.update(deltaTime);
-            }
-
-            if(isMultiplayer && server.getIsConnected()) {
-                server.sendPlayerUpdate(currentPlayer);
-            }
+        // tile rotation map transition
+        if(isRotating && !isPaused)
+            rotationTimer+= 2f;
+        if(rotationTimer >= 180f) {
+            isRotating = false;
+            rotationTimer = 180f;
         }
+        rotation = mode == Mode.FRONT ? 180f + rotationTimer : rotationTimer; // Sets rotation for planes
+        ((GameView)view).setRotation(rotation);
+
+        // Time break
+        if(!isRotating && !isPaused) {
+            if(mode == Mode.FRONT)
+                map1.update(deltaTime);
+            else
+                map2.update(deltaTime);
+        }
+
+        if(isMultiplayer && server.getIsConnected()) {
+            server.sendPlayerUpdate(currentPlayer);
+        }
+
     }
 
     /**
@@ -96,8 +97,8 @@ public class GameController extends Controller {
     public void render(SpriteBatch batch) {
         super.render(batch); // Render view
         ((GameView)view).setDebugString(String.format(
-                "mode: %s\nrot: %.1f\nrot.timer: %s\nisRotating: %s\nisPaused: %s\nisMultiplayer: %s",
-                mode, rotation, rotationTimer, isRotating, isPaused, isMultiplayer));
+                "mode: %s\nrot: %.1f\nrot.timer: %s\nisRotating: %s\nisPaused: %s\nisDebug: %s\nisMultiplayer: %s",
+                mode, rotation, rotationTimer, isRotating, isPaused, isDebug, isMultiplayer));
     }
 
     /**
@@ -279,25 +280,23 @@ public class GameController extends Controller {
             isRotating = true; // Will start adding to rotation timer in update
         }
     }
+
     public void togglePause() {
-        if(isPaused)
-            isPaused = false;
-        else
-            isPaused = true;
+        isPaused = !isPaused;
+        if(isPaused) {
+            ((MenuController)ctrl).swapMenu("Pause");
+        }
+        ((MenuController)ctrl).toggleVisibility();
     }
     private void toggleDebug() {
-        if(isDebug)
-            isDebug = false;
-        else {
-            isDebug = true;
-        }
+        isDebug = !isDebug;
         ((GameView) view).setDebug(isDebug);
     }
 
     public String toString() {
         return String.format("-currentPlayer: %s \n-GameMap1: %s \n-GameMap2: %s", currentPlayer, map1, map2);
     }
-
+    public void setController(MenuController ctrl) { super.setController(ctrl); }
     public boolean isPaused() { return  isPaused;}
     public boolean isRunning() { return isRunning;}
 }

@@ -6,6 +6,6 @@ public abstract class Protocol {
     public static final char OP_LEAVE = 0xFF;
 
     // Player OP codes
-    public static final char OP_PLAYER= 0x01;
+    public static final char OP_PLAYER = 0x01;
     public static final char OP_HOOK = 0x02;
 }

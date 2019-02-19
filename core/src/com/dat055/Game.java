@@ -22,7 +22,10 @@ public class Game extends ApplicationAdapter {
 
 		GameModel gameModel = new GameModel();
 		gameController = new GameController(gameModel, new GameView(gameModel));
-		menuController = new MenuController(gameController);
+		menuController = new MenuController();
+
+		menuController.setController(gameController);
+		gameController.setController(menuController);
 	}
 
 	@Override

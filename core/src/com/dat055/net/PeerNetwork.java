@@ -11,6 +11,10 @@ import com.dat055.net.threads.Client;
 import java.io.*;
 import java.net.*;
 
+/**
+ * A Client and Server running on computer to communicate with other
+ * peers.
+ */
 public class PeerNetwork extends Thread {
     private final int PERIOD = 2;   // ms
     private final int TIMEOUT = 10; // Time until timout in seconds
@@ -113,8 +117,9 @@ public class PeerNetwork extends Thread {
             msg = (Message) objIn.readObject();
             objIn.close();
 
-            // Translate messages
+            // Translate messages to a format which can be handled.
             if(msg != null && isWaitingForPeer) {
+                // Translate OP code in message and cast based on code.
                 switch (msg.getOp()) {
                     case Protocol.OP_JOIN:
                         System.out.println((JoinMessage)msg);

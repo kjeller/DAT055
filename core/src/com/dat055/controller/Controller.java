@@ -4,9 +4,12 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.dat055.model.Model;
 import com.dat055.view.View;
 
+import javax.naming.ldap.Control;
+
 public abstract class Controller {
     protected View view;
     protected Model model;
+    protected Controller ctrl;
 
     Controller(Model model, View view) {
         this.view = view;
@@ -21,4 +24,8 @@ public abstract class Controller {
     public void render() {}
 
     public void resize(int width, int height) {}
+
+    protected void setController(Controller ctrl) {
+        this.ctrl = ctrl;
+    }
 }
