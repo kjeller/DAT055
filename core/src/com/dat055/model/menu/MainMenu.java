@@ -65,8 +65,6 @@ public class MainMenu extends Menu {
         table.add(credits).width(butX/2).height(butY).padLeft(padS).padBottom(padS).left();
         table.add(verNr).width(butX/2).height(butY).padRight(padS).padBottom(padS).right();
 
-        table.setDebug(true);
-
         super.table = table;
     }
 
@@ -195,7 +193,7 @@ public class MainMenu extends Menu {
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                System.exit(0);
+                Gdx.app.exit();
                 super.touchUp(event, x, y, pointer, button);
             }
 
