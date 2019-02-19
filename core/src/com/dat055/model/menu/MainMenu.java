@@ -120,7 +120,6 @@ public class MainMenu extends Menu {
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                controller.toggleVisibility();
                 controller.clearStage();
                 controller.startGame("maps/map_0.json");
                 super.touchUp(event, x, y, pointer, button);

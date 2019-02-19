@@ -1,9 +1,8 @@
 package com.dat055.controller;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.utils.viewport.Viewport;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.dat055.model.menu.MainMenu;
-import com.dat055.model.menu.Menu;
 import com.dat055.model.menu.MultiMenu;
 import com.dat055.model.menu.PauseMenu;
 import com.dat055.view.MenuView;
@@ -11,12 +10,10 @@ import com.dat055.model.MenuModel;
 
 public class MenuController extends Controller{
     private boolean visible;
-    private GameController gameController;
 
-    public MenuController(GameController gameController) {
+    public MenuController() {
         super(new MenuModel(), new MenuView());
         visible = true;
-        this.gameController = gameController;
 
         ((MenuModel)model).includeMenu("Main", new MainMenu(this));
         ((MenuModel)model).includeMenu("Multiplayer", new MultiMenu(this));
@@ -50,7 +47,7 @@ public class MenuController extends Controller{
 
     @Override
     public void render() {
-        if (visible) ((MenuView)view).draw(((MenuModel)model).getStage());
+        if(visible)((MenuView)view).draw(((MenuModel)model).getStage());
     }
 
     public void clearStage() {
@@ -61,12 +58,31 @@ public class MenuController extends Controller{
     public float getHeight() {
         return ((MenuModel)model).getStage().getHeight();
     }
+    public void setVisible(boolean visible) { this.visible = visible; }
 
     public void swapMenu(String menu) {
         ((MenuModel)model).swapMenu(menu);
     }
 
-    public void startGame(String mapPath) {
-        gameController.startSingleplayerMap(mapPath);
+   // === GameController calls ===
+
+    public boolean startGame(String mapPath) {
+        return ((GameController)ctrl).startSingleplayerMap(mapPath);
+    }
+
+    public boolean startMultiplayer(String mapPath, String name) {
+        return ((GameController)ctrl).startMultiplayerMap(mapPath, name);
+    }
+
+    public boolean joinMultiplayer(String ip, String name) {
+        return ((GameController)ctrl).joinMultiplayerMap(ip, name);
+    }
+
+    public void togglePause() {
+        ((GameController)ctrl).togglePause();
+    }
+
+    public void setController(GameController ctrl) {
+        super.setController(ctrl);
     }
 }

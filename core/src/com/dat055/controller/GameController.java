@@ -99,30 +99,19 @@ public class GameController extends Controller {
     private void checkKeyboardInput() {
         // Player input movements
         if(!isRotating && !isPaused) {
-            // == Arrow handling ==
             if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
                 currentPlayer.move(-1);
-                currentPlayer.setLookingDirectionX(-1);
+                currentPlayer.setLookingDirection(new Vector2(-1, currentPlayer.getDirection().y));
                 currentPlayer.setMoving(true);
             }
             else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
                 currentPlayer.move(1);
-                currentPlayer.setLookingDirectionX(1);
+                currentPlayer.setLookingDirection(new Vector2(1, currentPlayer.getDirection().y));
                 currentPlayer.setMoving(true);
             } else {
                 currentPlayer.setMoving(false);
                 currentPlayer.move(0);
             }
-            if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
-                currentPlayer.setLookingDirectionY(1);
-            }
-            else if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-                currentPlayer.setLookingDirectionY(-1);
-            } else {
-                currentPlayer.setLookingDirectionY(0);
-            }
-
-
             if (Gdx.input.isKeyJustPressed(Input.Keys.CONTROL_LEFT))
                 currentPlayer.attack();
 
@@ -253,10 +242,17 @@ public class GameController extends Controller {
         }
     }
     public void togglePause() {
-        isPaused = !isPaused;
+        if(isPaused)
+            isPaused = false;
+        else
+            isPaused = true;
     }
     private void toggleDebug() {
-        isDebug = !isDebug;
+        if(isDebug)
+            isDebug = false;
+        else {
+            isDebug = true;
+        }
         ((GameView) view).setDebug(isDebug);
     }
 

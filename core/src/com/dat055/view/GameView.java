@@ -13,8 +13,9 @@ import com.dat055.model.map.GameMap;
 public class GameView extends View{
     private ShapeRenderer renderer;
     private Mode mode;
-    private boolean debug = false;
     private float rotation = 0;
+
+    private boolean debug = false;
     private String debugString;
 
     public GameView(GameModel gameModel) {
@@ -34,6 +35,8 @@ public class GameView extends View{
         if(debug) {
             batch.end();
             renderer.setProjectionMatrix(((GameModel)model).getCam().combined);
+
+            // Map specific debug tec
             if(mode == Mode.FRONT) {
                 map1.renderRectangles(renderer);
                 batch.begin();
@@ -43,13 +46,15 @@ public class GameView extends View{
                 batch.begin();
                 map2.drawEntityText(((GameModel)model).getFont(), batch);
             }
+
+            //Debug text for whole map
             BitmapFont font = ((GameModel)model).getFont();
             Camera cam = ((GameModel)model).getCam();
-            batch.setProjectionMatrix(cam.combined);
             font.setColor(Color.WHITE);
             font.draw(batch, debugString,
                     cam.position.x - Gdx.graphics.getWidth()/2,
                     cam.position.y+Gdx.graphics.getHeight()/2);
+            batch.setProjectionMatrix(cam.combined);
         }
     }
 

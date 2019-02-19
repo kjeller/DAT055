@@ -20,9 +20,11 @@ public class Game extends ApplicationAdapter {
 	public void create () {
 		batch = new SpriteBatch();
 
-		GameModel gameModel = new GameModel();
-		gameController = new GameController(gameModel, new GameView(gameModel));
-		menuController = new MenuController(gameController);
+		gameController = new GameController();
+		menuController = new MenuController();
+
+		menuController.setController(gameController);
+		gameController.setController(menuController);
 	}
 
 	@Override
@@ -43,8 +45,8 @@ public class Game extends ApplicationAdapter {
 		batch.begin();
 		if(gameController.isRunning())
 			gameController.render(batch);
-		menuController.render();
 		batch.end();
+		menuController.render();
 	}
 
 	@Override

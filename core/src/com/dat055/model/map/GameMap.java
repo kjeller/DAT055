@@ -37,7 +37,6 @@ public class GameMap {
     public void update(float deltaTime) {
         Iterator it =  entities.iterator();
         // Updates entities position, health etc.
-
         while (it.hasNext()) {
             Entity entity = (Entity)it.next();
             entity.update(deltaTime);
