@@ -2,16 +2,15 @@ package com.dat055.controller;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.dat055.model.menu.MainMenu;
-import com.dat055.model.menu.Menu;
-import com.dat055.model.menu.MultiMenu;
-import com.dat055.model.menu.PauseMenu;
+import com.dat055.model.menu.*;
 import com.dat055.view.MenuView;
 import com.dat055.model.MenuModel;
 
 public class MenuController extends Controller{
     private boolean visible;
     private GameController gameController;
+    private boolean multiplayer;
+    public String currentMap;
 
     public MenuController(GameController gameController) {
         super(new MenuModel(), new MenuView());
@@ -19,12 +18,13 @@ public class MenuController extends Controller{
         this.gameController = gameController;
 
         ((MenuModel)model).includeMenu("Main", new MainMenu(this));
-        ((MenuModel)model).includeMenu("Multiplayer", new MultiMenu(this));
-        ((MenuModel)model).includeMenu("Pause", new PauseMenu(this));
-
         Gdx.input.setInputProcessor(((MenuModel)model).getStage());
 
         swapMenu("Main");
+
+        ((MenuModel)model).includeMenu("Multiplayer", new MultiMenu(this));
+        ((MenuModel)model).includeMenu("Pause", new PauseMenu(this));
+        ((MenuModel)model).includeMenu("Select", new SelectMenu(this));
     }
 
     @Override
@@ -33,12 +33,26 @@ public class MenuController extends Controller{
     }
 
     @Override
+    public void render() {
+        if (visible) ((MenuView)view).draw(((MenuModel)model).getStage());
+    }
+
+    @Override
     public void resize(int width, int height) {
         ((MenuModel)model).resize(width, height);
     }
 
+    public void startGame() {
+        if (multiplayer) {
+            gameController.startMultiplayerMap("maps/" + currentMap + ".json");
+        } else {
+            gameController.startSingleplayerMap("maps/" + currentMap + ".json");
+        }
+
+    }
+
     public void toggleVisibility() {
-        if (visible == true)
+        if (visible)
             visible = false;
         else
             visible = true;
@@ -48,25 +62,15 @@ public class MenuController extends Controller{
         return visible;
     }
 
-    @Override
-    public void render() {
-        if (visible) ((MenuView)view).draw(((MenuModel)model).getStage());
-    }
-
     public void clearStage() {
         ((MenuModel)model).getStage().clear();
     }
 
     public float getWidth()  { return ((MenuModel)model).getStage().getWidth();  }
-    public float getHeight() {
-        return ((MenuModel)model).getStage().getHeight();
-    }
+    public float getHeight() { return ((MenuModel)model).getStage().getHeight(); }
+    public void setMultiplayer(boolean b) { multiplayer = b; }
 
     public void swapMenu(String menu) {
         ((MenuModel)model).swapMenu(menu);
-    }
-
-    public void startGame(String mapPath) {
-        gameController.startSingleplayerMap(mapPath);
     }
 }
