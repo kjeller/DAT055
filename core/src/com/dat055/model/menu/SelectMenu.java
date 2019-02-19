@@ -37,7 +37,6 @@ public class SelectMenu extends Menu {
         padLarge = width/2;
         padSmall = height/2;
 
-
         initStyles(height);
 
         back = createButton("Back");
@@ -45,16 +44,17 @@ public class SelectMenu extends Menu {
 
         Table table = new Table();
         table.setSize(controller.getWidth(),controller.getWidth());
-        table.top();
+        Table subTable = new Table();
 
         table.setPosition(0,0);
         files = Gdx.files.internal("maps/").list();
         for(FileHandle file: files) {
             TextButton tb = createButton(file.nameWithoutExtension(), checkedStyle);
             textButtonGroup.add(tb);
-            table.add(tb).width(width).height(height).padBottom(padSmall).colspan(2).expandX().expandY().row();
+            subTable.add(tb).width(width).height(height).padBottom(padSmall).expandX().row();
         }
 
+        table.add(subTable).padBottom(padSmall).colspan(2).expandX().expandY().row();
         table.add(back).width(width/2).height(height).padLeft(padSmall).padBottom(padSmall).bottom().left();
         table.add(select).width(width/2).height(height).padRight(padSmall).padBottom(padSmall).bottom().right();
 
