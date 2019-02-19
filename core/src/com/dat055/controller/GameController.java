@@ -28,11 +28,11 @@ public class GameController extends Controller {
     private float rotationTimer;
     private float rotation;
 
-
     private PeerNetwork server;
 
-    public GameController(GameModel model, GameView view) {
-        super(model, view);
+    public GameController() {
+        super(new GameModel(), null);
+        // view is created in startMap()
     }
 
     @Override
@@ -164,6 +164,8 @@ public class GameController extends Controller {
         isDebug = false;
         isMultiplayer = false;
 
+        view = new GameView((GameModel)model);
+
         rotationTimer = 180f;
 
         // Sets current player based on mode
@@ -220,7 +222,7 @@ public class GameController extends Controller {
             return false;
         }
 
-        mode = Mode.BACK;
+        mode = Mode.BACK; //TODO: This will be set from message from other peer
         startMap("maps/map_0.json");
         // TODO: Implement get map
 
@@ -287,8 +289,10 @@ public class GameController extends Controller {
         isPaused = !isPaused;
         if(isPaused) {
             ((MenuController)ctrl).swapMenu("Pause");
+        } else {
+            ((MenuController)ctrl).clearStage();
         }
-        ((MenuController)ctrl).toggleVisibility();
+        //((MenuController)ctrl).setVisible(isPaused);
     }
     private void toggleDebug() {
         isDebug = !isDebug;

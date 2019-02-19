@@ -1,6 +1,7 @@
 package com.dat055.controller;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.dat055.model.menu.MainMenu;
 import com.dat055.model.menu.MultiMenu;
 import com.dat055.model.menu.PauseMenu;
@@ -46,7 +47,7 @@ public class MenuController extends Controller{
 
     @Override
     public void render() {
-        if (visible) ((MenuView)view).draw(((MenuModel)model).getStage());
+        if(visible)((MenuView)view).draw(((MenuModel)model).getStage());
     }
 
     public void clearStage() {
@@ -57,6 +58,7 @@ public class MenuController extends Controller{
     public float getHeight() {
         return ((MenuModel)model).getStage().getHeight();
     }
+    public void setVisible(boolean visible) { this.visible = visible; }
 
     public void swapMenu(String menu) {
         ((MenuModel)model).swapMenu(menu);
