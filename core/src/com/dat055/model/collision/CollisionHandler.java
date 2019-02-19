@@ -322,8 +322,11 @@ public class CollisionHandler {
      * @return return whether the tile is solid or not.
      */
     private boolean checkIfFalling(Character character) {
-        if (getCurrentTile(new Vector2(character.getRect().x, character.getRect().y-1)).getState() ||
-                getCurrentTile(new Vector2(character.getRect().x + character.getRect().width, character.getRect().y-1)).getState())
+        Tile tile1 = getCurrentTile(new Vector2(character.getRect().x, character.getRect().y-1));
+        Tile tile2 = getCurrentTile(new Vector2(character.getRect().x + character.getRect().width, character.getRect().y-1));
+
+        if (tile1 != null && tile1.getState() ||
+                tile2 != null && tile2.getState())
             return true;
         return false;
     }
