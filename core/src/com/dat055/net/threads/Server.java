@@ -11,16 +11,19 @@ public class Server extends Thread {
     private DatagramSocket socket;
     private DatagramPacket current; // will be used to determine where to packet came from
     private byte[] data;
+    int t = 0;
 
     public Server(DatagramSocket socket) {
         this.socket = socket;
+        System.out.println(this);
     }
 
     @Override
     public void run() {
         while(!interrupted()) {
+            System.out.println("[Line: 22] Server running." + t++);
             try {
-                Thread.sleep(20);
+                Thread.sleep(1000);
             } catch (InterruptedException e) { break; }
             receive();
         }
@@ -33,7 +36,7 @@ public class Server extends Thread {
         if(socket.isConnected()) {
             data = new byte[1024];
             current = new DatagramPacket(data, data.length);
-
+            System.out.printf("--Received package from %s!\n", current.getAddress());
             try {
                 socket.receive(current);
             } catch (IOException ignored) {}
@@ -44,10 +47,15 @@ public class Server extends Thread {
      * Interrupts thread and closes socket
      */
     public void close() {
+        System.out.println("Server thread will be closed.");
         socket.close();
         this.interrupt();
     }
 
     public byte[] getData() { return data; }
     public DatagramPacket getCurrent() { return current; }
+
+    public String toString() {
+        return String.format("Server: %s:%s", socket.getLocalAddress().getHostAddress(), socket.getLocalPort());
+    }
 }

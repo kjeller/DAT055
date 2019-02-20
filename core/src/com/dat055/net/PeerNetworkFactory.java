@@ -63,8 +63,13 @@ public abstract class PeerNetworkFactory {
             destAddr = InetAddress.getByName(addr);
             client = new Client(new DatagramSocket(), destAddr, PORT);
         }
-        catch (UnknownHostException e) { return null; }
-        catch (SocketException e) { return null; }
+        catch (UnknownHostException e) {
+            e.printStackTrace();
+            return null;
+        } catch (SocketException e) {
+            e.printStackTrace();
+        return null;
+        }
         return client;
     }
 
@@ -78,7 +83,7 @@ public abstract class PeerNetworkFactory {
         try {
             server = new Server(new DatagramSocket(PORT));
         } catch (SocketException e) {
-            System.out.println(e);
+            e.printStackTrace();
             return null;
         }
         return server;
