@@ -3,6 +3,7 @@ package com.dat055.controller;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -88,7 +89,7 @@ public class GameController extends Controller {
     }
 
     @Override
-    public void render(SpriteBatch batch) {
+    public void render(PolygonSpriteBatch batch) {
         super.render(batch); // Render view
         ((GameView)view).setDebugString(String.format(
                 "mode: %s\nrot: %.1f\nrot.timer: %s\nisRotating: %s\nisPaused: %s\nisDebug: %s\nisMultiplayer: %s",

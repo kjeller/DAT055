@@ -1,5 +1,6 @@
 package com.dat055.model.map.tile;
 
+import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.StringBuilder;
 
@@ -13,7 +14,7 @@ public class TileMap {
         map = new Tile[width][height];
     }
 
-    public void render(SpriteBatch batch, float rotation) {
+    public void render(PolygonSpriteBatch batch, float rotation) {
         for(int i = 0; i < width; i++) {
             for(int j = 0; j < height; j++) {
                 if(map[i][j] != null)

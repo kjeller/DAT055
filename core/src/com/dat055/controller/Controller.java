@@ -1,5 +1,6 @@
 package com.dat055.controller;
 
+import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.dat055.model.Model;
 import com.dat055.view.View;
@@ -18,7 +19,7 @@ public abstract class Controller {
 
     public void update(float deltaTime) {}
 
-    public void render(SpriteBatch batch) {
+    public void render(PolygonSpriteBatch batch) {
         view.render(batch);
     }
     public void render() {}
