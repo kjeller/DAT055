@@ -33,14 +33,13 @@ public class Server extends Thread {
      * Receive a packet from socket
      */
     private void receive() {
-        if(socket.isConnected()) {
-            data = new byte[1024];
-            current = new DatagramPacket(data, data.length);
+        byte[] data = new byte[1024];
+        current = new DatagramPacket(data, data.length);
+        try {
+            socket.receive(current);
+            this.data = data;
             System.out.printf("--Received package from %s!\n", current.getAddress());
-            try {
-                socket.receive(current);
-            } catch (IOException ignored) {}
-        }
+        } catch (IOException ignored) {}
     }
 
     /**

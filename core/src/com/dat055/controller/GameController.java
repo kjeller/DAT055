@@ -230,8 +230,9 @@ public class GameController extends Controller {
             return false;
 
         this.net = net;
-        net.sendJoinRequest(name);
+        net.sendJoinRequest(); // Sends a join request to other peer
 
+        // Awaits answer.
         if(!successfulConnect()) {
             System.out.println("Could not connect to net.");
             return false;

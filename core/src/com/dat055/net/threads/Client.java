@@ -41,7 +41,7 @@ public class Client extends Thread {
         if(data != null) {
             DatagramPacket packet = new DatagramPacket(data, data.length, destAddr, port);
             try {
-                System.out.printf("Client sent packet to %s \n", destAddr.getHostAddress());
+                System.out.printf("==> Client sent packet to %s \n", destAddr.getHostAddress());
                 socket.send(packet);
             } catch (IOException e) { System.out.println(e); }
         }
@@ -51,7 +51,7 @@ public class Client extends Thread {
      * Interrupts thread and closes socket
      */
     public void close() {
-        System.out.println("Client thread will be closed.");
+        System.out.println("!!Client thread will be closed.!!");
         socket.close();
         this.interrupt();
     }

@@ -16,7 +16,7 @@ import java.net.*;
  * peers.
  */
 public class PeerNetwork extends Thread {
-    private final int PERIOD = 2;   // ms
+    private final int PERIOD = 1000;   // ms
     private final int TIMEOUT = 10; // Time until timout in seconds
     private Client client;
     private Server server;
@@ -57,54 +57,49 @@ public class PeerNetwork extends Thread {
             try {
                 Thread.sleep(PERIOD);
             } catch (InterruptedException e) { break; }
+
             // Calculate if there is a timeout
-            /* if(isWaitingForPeer) {
+             if(isWaitingForPeer) {
                 timeout += (float)PERIOD/1000;
                 if(timeout >= TIMEOUT) {
+                    System.out.println("Timeout!");
                     isTimeOut = true;
                     isWaitingForPeer = false;
                 }
-            }*/
-            receiveMessage();
+            }
+            handleMessage();
         }
-    }
-
-    /**
-     * Closes socket, client and server then tries to stop all threads within network
-     */
-    public void close() {
-        if(server != null)
-            server.close();
-        if(client != null)
-            client.close();
-        this.interrupt();
     }
 
     /**
      * Deserializes message and translates op codes to determine what to do
      */
-    private void receiveMessage() {
-        byte[] data = server.getData();
-        if(data == null)  return;
-        System.out.println("Peernetwork got data from Server.");
+    private void handleMessage() {
+        byte[] data;
+        if((data = server.getData())== null)
+            return;
+        System.out.println("-Peernetwork got data from Server.");
         ObjectInputStream objIn;
         Message msg;
         try {
             objIn =  new ObjectInputStream(new ByteArrayInputStream(data));
             msg = (Message) objIn.readObject();
             objIn.close();
-            System.out.println("Message de-serializes read!");
+            data = null; // Clear data for next read - this is needed to get the "handshake" right
+            System.out.println("--Message de-serializes read!");
+
             // Translate messages to a format which can be handled.
-            if(msg != null && isWaitingForPeer) {
+            if(msg != null) {
                 // Translate OP code in message and cast based on code.
                 switch (msg.getOp()) {
                     case Protocol.OP_JOIN:
-                        System.out.println((JoinMessage)msg);
-                        if(isWaitingForPeer)
-                            setClient(server.getCurrent().getAddress());
+                        System.out.println(msg);
+                        if(isWaitingForPeer && client == null)
+                            if(setClient(server.getCurrent().getAddress()))
+                                isWaitingForPeer = false;
                         break;
 
-                    case Protocol.OP_PLAYER: System.out.println((PlayerMessage)msg);break;
+                    case Protocol.OP_PLAYER: System.out.println(msg);break;
                     case Protocol.OP_HOOK: break;
                     case Protocol.OP_LEAVE: close(); break;
                 }
@@ -113,10 +108,8 @@ public class PeerNetwork extends Thread {
         } catch (ClassNotFoundException e) {e.printStackTrace();}
     }
 
-    public void sendJoinRequest(String name) { sendMessage(new JoinMessage(name)); }
-    public void sendPlayerUpdate(Player player) {
-        sendMessage(new PlayerMessage(player));
-    }
+    public void sendJoinRequest() { sendMessage(new JoinMessage(name)); }
+    public void sendPlayerUpdate(Player player) { sendMessage(new PlayerMessage(player)); }
 
     /**
      * Serializes message and tells Client to start send message
@@ -129,10 +122,8 @@ public class PeerNetwork extends Thread {
             objOut = new ObjectOutputStream(out);
             objOut.writeObject(msg);
         } catch (IOException ignored) {}
-        System.out.println("Message put in client!");
+        System.out.println("==> Message put in client!");
         client.dataToBeSent(out.toByteArray());
-        if(!client.isAlive())
-            client.start();
     }
 
     /**
@@ -141,6 +132,7 @@ public class PeerNetwork extends Thread {
      * @return true if it worked, false if it did not work
      */
     private boolean setClient (InetAddress addr) {
+        System.out.println("=== Client created! ===");
         return (client = PeerNetworkFactory.getClient(addr)) != null;
     }
 
@@ -148,9 +140,18 @@ public class PeerNetwork extends Thread {
      * Call this to see if another player has joined
      * @return
      */
-    public boolean getIsWaiting() {
-        return isWaitingForPeer;
-    }
+    public boolean getIsWaiting() { return isWaitingForPeer; }
     public boolean getIsTimeout() {return isTimeOut;}
     public boolean getIsConnected() { return isConnected; }
+
+    /**
+     * Closes socket, client and server then tries to stop all threads within network
+     */
+    public void close() {
+        if(server != null)
+            server.close();
+        if(client != null)
+            client.close();
+        this.interrupt();
+    }
 }
