@@ -95,6 +95,7 @@ public class PeerNetwork extends Thread {
                 switch (msg.getOp()) {
                     case Protocol.OP_JOIN:
                         peer = ((JoinMessage)msg).getName();
+                        System.out.println(peer);
                         // Get name of peer
                         if(isWaitingForPeer && client == null)
                             if(setClient(server.getCurrent().getAddress()))
@@ -110,7 +111,7 @@ public class PeerNetwork extends Thread {
         } catch (ClassNotFoundException e) {e.printStackTrace();}
     }
 
-    public void sendJoinRequest() { sendMessage(new JoinMessage("test")); }
+    public void sendJoinRequest() { sendMessage(new JoinMessage(name)); }
     public void sendPlayerUpdate(Player player) { sendMessage(new PlayerMessage(player)); }
 
     /**

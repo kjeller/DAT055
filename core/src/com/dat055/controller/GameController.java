@@ -229,7 +229,7 @@ public class GameController extends Controller {
         if(net == null)
             return false;
         this.net = net;
-        net.sendJoinRequest(); // Sends a join request to other peer
+        this.net.sendJoinRequest(); // Sends a join request to other peer
 
         // Awaits answer.
         if(!getConnectionToPeer())
