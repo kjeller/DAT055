@@ -19,7 +19,11 @@ public abstract class PeerNetworkFactory {
      * @return peer network
      */
     public static PeerNetwork getPeerNetwork(String name, String addr) {
-        return new PeerNetwork(name, getClient(addr), getServer());
+        Client client = getClient(addr);
+        Server server = getServer();
+        if(client == null || server == null)
+            return null;
+        return new PeerNetwork(name, client, server);
     }
 
     /**
@@ -27,7 +31,10 @@ public abstract class PeerNetworkFactory {
      * @return peer network
      */
     public static PeerNetwork getPeerNetwork(String name) {
-        return new PeerNetwork(name, getServer());
+        Server server = getServer();
+        if(server == null)
+            return null;
+        return new PeerNetwork(name, server);
     }
 
     /**
@@ -71,6 +78,7 @@ public abstract class PeerNetworkFactory {
         try {
             server = new Server(new DatagramSocket(PORT));
         } catch (SocketException e) {
+            System.out.println(e);
             return null;
         }
         return server;
