@@ -21,6 +21,7 @@ public class PeerNetwork extends Thread {
     private Client client;
     private Server server;
     private String name; // Name of this peer
+    private String peer; // Name of peer
 
     private float timeout = 0;
     private boolean isWaitingForPeer = true;
@@ -93,7 +94,8 @@ public class PeerNetwork extends Thread {
                 // Translate OP code in message and cast based on code.
                 switch (msg.getOp()) {
                     case Protocol.OP_JOIN:
-                        System.out.println(msg);
+                        peer = ((JoinMessage)msg).getName();
+                        // Get name of peer
                         if(isWaitingForPeer && client == null)
                             if(setClient(server.getCurrent().getAddress()))
                                 isWaitingForPeer = false;
@@ -108,7 +110,7 @@ public class PeerNetwork extends Thread {
         } catch (ClassNotFoundException e) {e.printStackTrace();}
     }
 
-    public void sendJoinRequest() { sendMessage(new JoinMessage(name)); }
+    public void sendJoinRequest() { sendMessage(new JoinMessage("test")); }
     public void sendPlayerUpdate(Player player) { sendMessage(new PlayerMessage(player)); }
 
     /**
@@ -143,6 +145,7 @@ public class PeerNetwork extends Thread {
     public boolean getIsWaiting() { return isWaitingForPeer; }
     public boolean getIsTimeout() {return isTimeOut;}
     public boolean getIsConnected() { return isConnected; }
+    public String getPeerName() { return peer; }
 
     /**
      * Closes socket, client and server then tries to stop all threads within network

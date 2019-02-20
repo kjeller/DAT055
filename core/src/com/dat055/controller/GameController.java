@@ -209,7 +209,7 @@ public class GameController extends Controller {
 
         this.net = net;
 
-        if(!successfulConnect())
+        if(!getConnectionToPeer())
             return false;
 
         startMap(fileName);
@@ -228,15 +228,12 @@ public class GameController extends Controller {
         PeerNetwork net = PeerNetworkFactory.getPeerNetwork(name, addr);
         if(net == null)
             return false;
-
         this.net = net;
         net.sendJoinRequest(); // Sends a join request to other peer
 
         // Awaits answer.
-        if(!successfulConnect()) {
-            System.out.println("Could not connect to net.");
+        if(!getConnectionToPeer())
             return false;
-        }
 
         mode = Mode.BACK; //TODO: This will be set from message from other peer
         startMap("maps/map_0.json");
@@ -249,7 +246,7 @@ public class GameController extends Controller {
      * Waits for other player and checks if timeout occurs
      * @return true if successful
      */
-    private boolean successfulConnect() {
+    private boolean getConnectionToPeer() {
         // Wait for other player to join
         while(net.getIsWaiting()) {}
 

@@ -46,7 +46,7 @@ public class Server extends Thread {
      * Interrupts thread and closes socket
      */
     public void close() {
-        System.out.println("Server thread will be closed.");
+        System.out.println("Server thread and socket will be closed.");
         socket.close();
         this.interrupt();
     }
