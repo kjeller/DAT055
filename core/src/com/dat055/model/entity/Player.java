@@ -37,7 +37,10 @@ public class Player extends Character {
 
     @Override
     public void draw(SpriteBatch sb, float rotation) {
+        if (isInvincible)
+            sb.setColor(1, 1, 1, 0.5f);
         super.draw(sb, rotation);
+        sb.setColor(1,1,1, 1);
         if (hook != null)
             hook.draw(sb, rotation);
     }
