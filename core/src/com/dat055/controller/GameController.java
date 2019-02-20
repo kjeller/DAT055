@@ -230,7 +230,7 @@ public class GameController extends Controller {
             return false;
 
         this.net = net;
-
+        net.sendJoinRequest(name);
 
         if(!successfulConnect()) {
             System.out.println("Could not connect to net.");
