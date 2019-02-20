@@ -16,13 +16,18 @@ public abstract class Entity extends Observable {
     Rectangle rect;
 
     public Entity(Vector2 position, int height, int width, String texturePath) {
+        this(position, height, width);
+        this.setTexture(texturePath);
+        this.texturePath = texturePath;
+    }
+    public Entity(Vector2 position, int height, int width) {
         this.height = height;
         this.width = width;
         this.position = position;
-        this.setTexture(texturePath);
         this.texturePath = texturePath;
         setRectangle();
     }
+    
 
     /**
      * act is action that the entity takes

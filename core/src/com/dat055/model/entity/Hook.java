@@ -24,8 +24,8 @@ public class Hook extends Entity {
     private Rectangle test;
     private TextureAtlas atlas;
 
-    Hook(Vector2 position, int height, int width, String texturePath, float maxLength, Vector2 initDirection) {
-        super(position, height, width, texturePath);
+    Hook(Vector2 position, int height, int width, float maxLength, Vector2 initDirection) {
+        super(position, height, width);
         this.initDirection = new Vector2(initDirection);
         this.maxLength = maxLength;
         textureSet();

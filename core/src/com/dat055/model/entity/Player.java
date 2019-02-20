@@ -66,7 +66,7 @@ public class Player extends Character {
      * @return the newly generated hook.
      */
     private Hook generateHook() {
-        return new Hook(new Vector2(position), 20, 20, "hook.png", 250.0f, lookingDirection);
+        return new Hook(new Vector2(position), 20, 20, 250.0f, lookingDirection);
     }
     /**
      * Method that sets up the hook's update method.
