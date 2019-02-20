@@ -42,6 +42,7 @@ public class Game extends ApplicationAdapter {
 
 
 		// Draw
+		batch.enableBlending();
 		batch.begin();
 		if(gameController.isRunning())
 			gameController.render(batch);

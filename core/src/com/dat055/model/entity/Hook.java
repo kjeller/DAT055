@@ -1,7 +1,8 @@
 package com.dat055.model.entity;
 
-import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Rectangle;
@@ -12,23 +13,43 @@ public class Hook extends Entity {
     private float maxLength;
     private Rectangle wire;
     private Vector2 initDirection;
-    private Vector2 direction;
     private boolean apexReached;
     private boolean remove;
     private boolean hasGrip;
     private float playerPosX;
+    private float rotate;
     private Polygon wire2;
     private PolygonSpriteBatch pb;
     // test is pretty much wire2 in rectangle form.
     private Rectangle test;
+    private TextureAtlas atlas;
 
-    Hook(Vector2 position, int height, int width, String texturePath, float maxLength, Vector2 initDirection) {
-        super(position, height, width, texturePath);
+    Hook(Vector2 position, int height, int width, float maxLength, Vector2 initDirection) {
+        super(position, height, width);
         this.initDirection = new Vector2(initDirection);
         this.maxLength = maxLength;
+        textureSet();
         initialize();
     }
+    private Sprite getSprite(String region) {
+        atlas = new TextureAtlas(Gdx.files.internal("textures/spritesheets/hook/hookSheet.atlas"));
+        TextureRegion r =  atlas.findRegion(region);
+        if (r == null)
+            return null;
+        return new Sprite(r);
+    }
+    private void textureSet() {
+        String name;
+        if (initDirection.y > 0)
+            name = (initDirection.x > 0) ? "hookupright" : "hookupleft";
+        else if (initDirection.y == 0)
+            name = (initDirection.x > 0) ? "hookright" : "hookleft";
+        else
+            name = (initDirection.x > 0) ? "hookdownright": "hookdownleft";
 
+        sprite = getSprite(name);
+        sprite.setColor(1, 1, 1, 0f);
+    }
     /**
      * Initialize the hook correctly.
      */
@@ -38,10 +59,8 @@ public class Hook extends Entity {
         remove = false;
         apexReached = false;
         wire = new Rectangle(0, 0, 0, 3);
-
         wire2 = new Polygon();
-
-        direction = new Vector2(Vector2.Zero);
+        rotate = 20;
         wire.x = (initDirection.x > 0) ? position.x + 64 : position.x;
         wire.y = position.y + 48;
     }
@@ -121,15 +140,15 @@ public class Hook extends Entity {
         if (initDirection.x > 0) {
             wire2.setOrigin(wire.x, wire.y+wire.height/2);
             if (initDirection.y > 0)
-                wire2.rotate(20);
+                wire2.rotate(rotate);
             else if (initDirection.y < 0)
-                wire2.rotate(-20);
+                wire2.rotate(-rotate);
         } else {
             wire2.setOrigin(wire.x+wire.width, wire.y+wire.height/2);
             if (initDirection.y > 0)
-                wire2.rotate(-20);
+                wire2.rotate(-rotate);
             else if (initDirection.y < 0)
-                wire2.rotate(20);
+                wire2.rotate(rotate);
         }
         Rectangle temp = new Rectangle(wire2.getBoundingRectangle());
         test = new Rectangle((int)temp.x, (int)temp.y, (int)temp.width, (int)temp.height);
