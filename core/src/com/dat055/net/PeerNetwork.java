@@ -61,6 +61,7 @@ public class PeerNetwork extends Thread {
             // Calculate if there is a timeout
             if(isWaitingForPeer) {
                 timeout += (float)PERIOD/1000;
+                System.out.println(timeout);
                 if(timeout >= TIMEOUT) {
                     isTimeOut = true;
                     isWaitingForPeer = false;

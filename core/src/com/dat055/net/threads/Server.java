@@ -30,12 +30,14 @@ public class Server extends Thread {
      * Receive a packet from socket
      */
     private void receive() {
-        data = new byte[1024];
-        current = new DatagramPacket(data, data.length);
+        if(socket.isConnected()) {
+            data = new byte[1024];
+            current = new DatagramPacket(data, data.length);
 
-        try {
-            socket.receive(current);
-        } catch (IOException ignored) {}
+            try {
+                socket.receive(current);
+            } catch (IOException ignored) {}
+        }
     }
 
     /**

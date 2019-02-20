@@ -9,7 +9,6 @@ import com.badlogic.gdx.math.Vector3;
 import com.dat055.model.entity.Player;
 import com.dat055.model.GameModel;
 import com.dat055.model.map.GameMap;
-import com.dat055.model.menu.Menu;
 import com.dat055.net.PeerNetwork;
 import com.dat055.net.PeerNetworkFactory;
 import com.dat055.view.GameView;
@@ -28,7 +27,7 @@ public class GameController extends Controller {
     private float rotationTimer;
     private float rotation;
 
-    private PeerNetwork server;
+    private PeerNetwork net;
 
     public GameController() {
         super(new GameModel(), null);
@@ -59,8 +58,8 @@ public class GameController extends Controller {
                 map2.update(deltaTime);
         }
 
-        if(isMultiplayer && server.getIsConnected()) {
-            server.sendPlayerUpdate(currentPlayer);
+        if(isMultiplayer && net.getIsConnected()) {
+            net.sendPlayerUpdate(currentPlayer);
         }
 
     }
@@ -200,12 +199,15 @@ public class GameController extends Controller {
      * Starts a multiplayer map where each player is assigned a
      * playable character. Switching between characters not enabled.
      * Mainmenu will call this to start map. Host then needs to wait for
-     * another player to join server.
+     * another player to join net.
      * @param fileName name of map that will be created with startMap()
      */
     public boolean startMultiplayerMap(String fileName, String name) {
-        //Todo: start server here maybe waiting for a player to join
-        server = PeerNetworkFactory.getPeerNetwork(name);
+        PeerNetwork net = PeerNetworkFactory.getPeerNetwork(name);
+        if(net == null)
+            return false;
+
+        this.net = net;
 
         if(!successfulConnect())
             return false;
@@ -219,14 +221,19 @@ public class GameController extends Controller {
     }
 
     /**
-     * Joins server and creates own server to communicate with other server
-     * @param addr IP of other server
+     * Joins net and creates own net to communicate with other net
+     * @param addr IP of other net
      */
     public boolean joinMultiplayerMap(String addr, String name) {
-        server = PeerNetworkFactory.getPeerNetwork(name, addr);
+        PeerNetwork net = PeerNetworkFactory.getPeerNetwork(name, addr);
+        if(net == null)
+            return false;
+
+        this.net = net;
+
 
         if(!successfulConnect()) {
-            System.out.println("Could not connect to server.");
+            System.out.println("Could not connect to net.");
             return false;
         }
 
@@ -243,12 +250,12 @@ public class GameController extends Controller {
      */
     private boolean successfulConnect() {
         // Wait for other player to join
-        while(server.getIsWaiting()) {}
+        while(net.getIsWaiting()) {}
 
         // Check if there was a timeout
-        if(server.getIsTimeout()) {
+        if(net.getIsTimeout()) {
             System.out.println("Server timed out!");
-            server.close();
+            net.close();
             isRunning = false;
             return false;
             //TODO: Metod för att återgå till meny
