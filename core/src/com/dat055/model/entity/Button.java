@@ -8,13 +8,15 @@ import com.badlogic.gdx.math.Vector2;
 public class Button extends Entity {
     private boolean isActive = false;
     private float disableTime;
+    private float timer;
     private String id;
     private String target;
 
-    public Button(Vector2 position, int height, int width, String texturePath, String id, String target) {
+    public Button(Vector2 position, int height, int width, String texturePath, String id, String target, int timer) {
         super(position, height, width, texturePath);
         this.id = id;
         this.target = target;
+        this.timer = timer;
     }
     /**
      * Changes the Buttons state to active
@@ -25,7 +27,7 @@ public class Button extends Entity {
         isActive = true;
         setChanged();
         notifyObservers(id);
-        disableTime = 4;
+        disableTime = timer;
         this.setTexture("textures/interactables/buttonActive.png");
     }
 

@@ -6,8 +6,8 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.dat055.model.entity.Player;
 import com.dat055.model.GameModel;
+import com.dat055.model.entity.Player;
 import com.dat055.model.map.GameMap;
 import com.dat055.net.PeerNetwork;
 import com.dat055.view.GameView;
@@ -68,7 +68,7 @@ public class GameController extends Controller {
      * @param deltaTime
      */
     private void updateCamera(float deltaTime) {
-        float effectiveViewportWidth = cam.viewportWidth * cam.zoom;
+        float effectiveViewportWidth = cam.viewportWidth * cam.zoom ;
         float effectiveViewportHeight = cam.viewportHeight * cam.zoom;
 
         // Camera transition to player
@@ -78,11 +78,14 @@ public class GameController extends Controller {
         camPosition.x += Math.round((playerPosition.x - camPosition.x) * lerp * deltaTime);
         camPosition.y += Math.round((playerPosition.y - camPosition.y) * lerp * deltaTime);
 
-        if(camPosition.x >= effectiveViewportWidth)
-            cam.position.x = effectiveViewportWidth;
+        if(camPosition.x  >= ((map1.getWidth() - 10) *  60) ) {
+            cam.position.x = (map1.getWidth() -10) *  60 ;
+        }
+        if(camPosition.x - 66*10 <= 0)
+            cam.position.x = 66*10;
 
-        if(camPosition.y >= effectiveViewportHeight)
-            cam.position.y = effectiveViewportHeight;
+        if(camPosition.y >= (map1.getWidth() -10) *  60 )
+            cam.position.y = (map1.getWidth() -10) *  60 ;
         cam.update();
     }
 
@@ -123,7 +126,6 @@ public class GameController extends Controller {
             }
             if (Gdx.input.isKeyJustPressed(Input.Keys.CONTROL_LEFT))
                 currentPlayer.attack();
-
             if (Gdx.input.isKeyPressed(Input.Keys.SPACE))
                 currentPlayer.jump();
             if(!isMultiplayer)
@@ -283,6 +285,7 @@ public class GameController extends Controller {
                 mode = Mode.FRONT;
             }
             ((GameView)view).setMode(mode);
+
 
             rotationTimer = 0; // Resets timer
             isRotating = true; // Will start adding to rotation timer in update
