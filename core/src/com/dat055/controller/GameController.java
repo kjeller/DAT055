@@ -4,14 +4,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.dat055.model.entity.Player;
 import com.dat055.model.GameModel;
 import com.dat055.model.map.GameMap;
 import com.dat055.net.PeerNetwork;
-import com.dat055.net.PeerNetworkFactory;
 import com.dat055.view.GameView;
 
 
@@ -204,12 +202,7 @@ public class GameController extends Controller {
      * @param fileName name of map that will be created with startMap()
      */
     public boolean startMultiplayerMap(String fileName, String name) {
-        PeerNetwork net = PeerNetworkFactory.getPeerNetwork(name);
-        if(net == null)
-            return false;
-        this.net = net;
-        net.setMap(fileName);
-        startMap(fileName);
+        net = new PeerNetwork(name, 1337, fileName);
 
         if(!getConnectionToPeer())
             return false;
@@ -218,6 +211,7 @@ public class GameController extends Controller {
 
         //Host decides this from menu
         mode = Mode.FRONT;
+        startMap(fileName);
         return true;
     }
 
@@ -226,18 +220,14 @@ public class GameController extends Controller {
      * @param addr IP of other net
      */
     public boolean joinMultiplayerMap(String addr, String name) {
-        PeerNetwork net = PeerNetworkFactory.getPeerNetwork(name, addr);
-        if(net == null)
-            return false;
-        this.net = net;
-        this.net.sendJoinRequest(); // Sends a join request to other peer
+        net = new PeerNetwork(name, addr, 1337);
 
         // Awaits answer.
         if(!getConnectionToPeer())
             return false;
 
         mode = Mode.BACK; //TODO: This will be set from message from other peer
-        startMap("maps/map_0.json");
+        startMap(net.getChoosenMap());
         // TODO: Implement get map
 
         return true;
@@ -258,7 +248,7 @@ public class GameController extends Controller {
             return false;
             //TODO: Metod för att återgå till meny
         }
-        System.out.println("Successfully established connection to " + net.getPeerName());
+
         isMultiplayer = true;
         return true;
     }
