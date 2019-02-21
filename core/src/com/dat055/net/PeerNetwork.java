@@ -19,6 +19,9 @@ public class PeerNetwork extends Thread {
     private final int PERIOD = 1000;   // ms
     private final int TIMEOUT = 10; // Time until timout in seconds
 
+    private ServerSocket serverSocket;
+    private Socket clientSocket;
+
     private Client client;
     private Server server;
 
@@ -33,10 +36,7 @@ public class PeerNetwork extends Thread {
     private boolean isConnected;
 
     private float timeout;
-    /**
-     * Sets default values
-     * @param name
-     */
+
     private PeerNetwork(String name) {
         this.name = name;
         isWaitingForPeer = true;
@@ -45,11 +45,6 @@ public class PeerNetwork extends Thread {
         timeout = 0;
     }
 
-    /**
-     * Ready-to-join-another-peer-constructor
-     * @param client
-     * @param server
-     */
     public PeerNetwork(String name, Client client, Server server) {
         this(name);
         this.server = server;
@@ -59,9 +54,6 @@ public class PeerNetwork extends Thread {
         start();
     }
 
-    /**
-     * Awaits-another-peer-to-join-constructor
-     */
     public PeerNetwork(String name, Server server) {
         this(name);
         this.server = server;
@@ -77,7 +69,7 @@ public class PeerNetwork extends Thread {
             } catch (InterruptedException e) { break; }
 
             // Calculate if there is a timeout
-             if(isWaitingForPeer) {
+            /*if(isWaitingForPeer) {
                 timeout += (float)PERIOD/1000;
                 if(timeout >= TIMEOUT) {
                     System.out.println("PeerNetwork timed out!");
@@ -85,16 +77,20 @@ public class PeerNetwork extends Thread {
                     isWaitingForPeer = false;
                     close();
                 }
-            }
-            handleMessage();
+            }*/
+            if(client.isConnected())
+                handleChanges();
         }
     }
 
     /**
-     * Deserializes message and translates op codes to determine what to do next.
-     * This method is called by run() for threads
+     * Handles UDP packets sent from other peer
+     * by deserializing message and translating the op code in the msg.
+     * It then determines what the host will answer with.
+     * This method is called by thread if tcp connection has been
+     * established.
      */
-    private void handleMessage() {
+    private void handleChanges() {
         byte[] data;
         if((data = server.getData())== null)
             return;
@@ -126,7 +122,7 @@ public class PeerNetwork extends Thread {
                             }
                             isWaitingForPeer = false;
                             isConnected = true;
-                        } //else{ client.dataToBeSent(null); } // Prevents client from spamming same messages
+                        } //else{ client.setPacketData(null); } // Prevents client from spamming same messages
                         break;
 
                     case Protocol.OP_PLAYER: System.out.println(msg);break;
@@ -153,7 +149,7 @@ public class PeerNetwork extends Thread {
             objOut.writeObject(msg);
         } catch (IOException ignored) {}
         System.out.println("==> Message put in client!");
-        client.dataToBeSent(out.toByteArray());
+        client.setPacketData(out.toByteArray());
     }
 
     /**
@@ -179,11 +175,18 @@ public class PeerNetwork extends Thread {
     /**
      * Closes socket, client and server then tries to stop all threads within network
      */
-    public void close() {
+    private void close() {
         if(server != null)
             server.close();
         if(client != null)
             client.close();
         this.interrupt();
+    }
+
+    private void startAll() {
+        if(client != null)
+            client.start();
+        if(server != null)
+            server.start();
     }
 }
