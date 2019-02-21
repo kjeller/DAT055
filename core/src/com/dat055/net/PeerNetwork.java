@@ -111,16 +111,19 @@ public class PeerNetwork extends Thread {
                 // Translate OP code in message and cast based on code.
                 switch (msg.getOp()) {
                     case Protocol.OP_JOIN:
-                        peer = ((JoinMessage)msg).getName();    // Get name of peer
-                        System.out.println(peer + " has joined the battle!");
+                        if(!isConnected) {
+                            peer = ((JoinMessage)msg).getName();    // Get name of peer
+                            System.out.println(peer + " has joined the battle!");
 
-                        // Create a client for this peer if needed. (host side only)
-                        if(isWaitingForPeer && client == null)
-                            if(setClient(server.getCurrent().getAddress())) {
-                                sendJoinRequest();  // Sends join request to peer
-                                isWaitingForPeer = false;
-                                isConnected = true;
+                            // Create a client for this peer if needed. (host side only)
+                            if(isWaitingForPeer && client == null) {
+                                if(setClient(server.getCurrent().getAddress())) {
+                                    sendJoinRequest();  // Sends join request to peer
+                                    isWaitingForPeer = false;
+                                    isConnected = true;
+                                }
                             }
+                        }
                         break;
 
                     case Protocol.OP_PLAYER: System.out.println(msg);break;
