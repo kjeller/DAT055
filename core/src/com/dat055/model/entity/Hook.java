@@ -57,7 +57,6 @@ public class Hook extends Entity {
             name = (initDirection.x > 0) ? "hookdownright": "hookdownleft";
 
         sprite = getSprite(name);
-        //sprite.setY
 
         texture = new Texture("wire.png");
         texture.setWrap(Repeat, Repeat);
@@ -74,7 +73,7 @@ public class Hook extends Entity {
         wire2 = new Polygon();
         rotate = 20;
         wire.x = (initDirection.x > 0) ? position.x + 64 : position.x;
-        wire.y = position.y + 47;
+        //wire.y = position.y + 47;
     }
 
     @Override
@@ -107,8 +106,9 @@ public class Hook extends Entity {
             if (position.x <= playerPosX+64)
                 remove = true;
         } else {
-            wire.width = position.x-(playerPosX+64);
-            wire.y = position.y;
+            wire.setWidth(position.x-(playerPosX+64));
+            test.setY(originPos.y);
+            wire.setY(position.y);
         }
 
 
@@ -125,6 +125,7 @@ public class Hook extends Entity {
             }
         } else {
             wire.width = playerPosX - position.x-width;
+            wire.y = position.y;
         }
     }
 
@@ -136,7 +137,7 @@ public class Hook extends Entity {
     @Override
     public void draw(PolygonSpriteBatch sb, float rotation) {
         poly.draw(sb);
-        super.draw(sb, rotation, new Vector2(-2, -23));
+        super.draw(sb, rotation, new Vector2(-5, -23));
 
 
     }
@@ -158,7 +159,7 @@ public class Hook extends Entity {
                 wire.x + wire.width, wire.y + wire.height,
                 wire.x + wire.width, wire.y});
         PolygonRegion p = new PolygonRegion(new TextureRegion(texture), wire2.getVertices(),
-                new short[] {0, 2, 3, 0, 1, 2 });
+                new short[] {0, 1, 2, 0, 2, 3 });
         poly = new PolygonSprite(p);
         //TODO: Fix this stupid angle thing
         if (initDirection.x > 0) {
@@ -201,6 +202,16 @@ public class Hook extends Entity {
                     wire2.rotate(rotate);
                     poly.rotate(rotate);
                 }
+            } else {
+                /**
+                 * While hook has grip
+                 */
+                wire2.setOrigin(position.x+width/2, position.y+height/2);
+                poly.setOrigin(position.x+width/2, position.y+height/2);
+
+                wire2.rotate(getAngle());
+                poly.rotate(getAngle());
+
             }
 
 
@@ -235,18 +246,8 @@ public class Hook extends Entity {
         playerPosX = x;
     }
     private float getAngle() {
-        //int hypothenuse = (int)Math.sqrt(Math.pow((double)test.width,2) + Math.pow((double)test.height, 2));
-        //System.out.println(hypothenuse + " ~= " + wire.width);
-       // System.out.printf("hook.x = %f, wire.x = %f\n", position.x, wire.x);
-        //System.out.printf("test.width = %f, wire.width = %f\n", test.width, wire.width);
-
-
-
-        float angle = (float) Math.toDegrees(Math.acos((originPos.y-position.y)/wire.width));
-
-        /*if (angle < 0) {
-            angle += 360;
-        }*/
+        float angle = (initDirection.x > 0) ? (float) Math.toDegrees(Math.acos((originPos.y-position.y)/wire.width))
+                : (float) Math.toDegrees(Math.acos((position.y-originPos.y)/wire.width));
         return angle-90;
     }
 }

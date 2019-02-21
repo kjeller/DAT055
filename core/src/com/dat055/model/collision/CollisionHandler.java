@@ -70,7 +70,7 @@ public class CollisionHandler {
             checkChangeDirection(character);
 
         // Check certain specific cases before usual collision check
-        if (!checkIfFalling(character))
+        if (checkIfFalling(character))
             character.setGrounded(false);
 
         if (checkBeforeCollision(character))
@@ -121,7 +121,6 @@ public class CollisionHandler {
 
 
                 }
-                //TODO: Add behavior to entity collision.
         }
     }
 
@@ -323,12 +322,15 @@ public class CollisionHandler {
      */
     private boolean checkIfFalling(Character character) {
         Tile tile1 = getCurrentTile(new Vector2(character.getRect().x, character.getRect().y-1));
-        Tile tile2 = getCurrentTile(new Vector2(character.getRect().x + character.getRect().width, character.getRect().y-1));
-
+        Tile tile2 = getCurrentTile(new Vector2(character.getRect().x + character.getRect().width-1, character.getRect().y-1));
+        Tile tile3 = getCurrentTile(new Vector2(character.getRect().x + character.getRect().width/2, character.getRect().y-1));
         if (tile1 != null && tile1.getState() ||
-                tile2 != null && tile2.getState())
-            return true;
-        return false;
+            tile2 != null && tile2.getState() ||
+            tile3 != null && tile3.getState()) {
+            return false;
+        }
+
+        return true;
     }
 
 

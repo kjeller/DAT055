@@ -125,7 +125,6 @@ public class GameController extends Controller {
             }
             if (Gdx.input.isKeyJustPressed(Input.Keys.CONTROL_LEFT))
                 currentPlayer.attack();
-
             if (Gdx.input.isKeyPressed(Input.Keys.SPACE))
                 currentPlayer.jump();
             if(!isMultiplayer)
