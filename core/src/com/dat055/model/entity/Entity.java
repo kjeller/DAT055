@@ -1,7 +1,9 @@
 package com.dat055.model.entity;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
@@ -45,11 +47,11 @@ public abstract class Entity extends Observable {
     /**
      * Generic method for drawing an entity
      */
-    public void draw(SpriteBatch sb, float rotation) {
+    public void draw(PolygonSpriteBatch sb, float rotation) {
         draw(sb, rotation, Vector2.Zero);
     }
 
-    public void draw(SpriteBatch batch, float rotation, Vector2 offset) {
+    public void draw(PolygonSpriteBatch batch, float rotation, Vector2 offset) {
         sprite.setFlip(rotation > 90  && rotation < 270, false); // Rotates sprite correctly to plane
 
         batch.draw(sprite, position.x+offset.x, position.y+offset.y, width/2, -position.y,

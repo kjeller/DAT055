@@ -2,6 +2,7 @@ package com.dat055.model.map;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Polygon;
@@ -50,7 +51,7 @@ public class GameMap {
         }
     }
 
-    public void render(SpriteBatch batch, float rotation) {
+    public void render(PolygonSpriteBatch batch, float rotation) {
         for(Entity entity : entities) {
             entity.draw(batch, rotation);
         }
@@ -121,7 +122,7 @@ public class GameMap {
         renderer.rect(rectangle.x, rectangle.y, rectangle.width, rectangle.height);
         renderer.end();
     }
-    public void drawEntityText(BitmapFont font, SpriteBatch batch){
+    public void drawEntityText(BitmapFont font, PolygonSpriteBatch batch){
         for(Entity entity : entities)
             font.draw(batch, entity.toString(),
                     entity.getPosition().x , entity.getPosition().y+300);

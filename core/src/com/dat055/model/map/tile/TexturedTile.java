@@ -1,5 +1,6 @@
 package com.dat055.model.map.tile;
 
+import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
@@ -24,7 +25,7 @@ public class TexturedTile extends Tile {
     }
 
     @Override
-    public void draw(SpriteBatch batch, float rotation) {
+    public void draw(PolygonSpriteBatch batch, float rotation) {
         batch.draw(sprite, x, y, 32, -y,
                 box.width, box.height, 1,1, rotation);
     }

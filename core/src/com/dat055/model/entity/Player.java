@@ -1,5 +1,6 @@
 package com.dat055.model.entity;
 
+import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 
@@ -36,7 +37,7 @@ public class Player extends Character {
     }
 
     @Override
-    public void draw(SpriteBatch sb, float rotation) {
+    public void draw(PolygonSpriteBatch sb, float rotation) {
         if (isInvincible)
             sb.setColor(1, 1, 1, 0.5f);
         super.draw(sb, rotation);
