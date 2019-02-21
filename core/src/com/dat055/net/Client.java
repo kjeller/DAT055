@@ -46,7 +46,7 @@ public class Client extends Thread {
         System.out.println("Tries to connect");
         try {
             ps = new Socket(addr, port);
-            System.out.println("Client connected!");
+            System.out.println("Socket created!");
             out = new ObjectOutputStream(ps.getOutputStream());
             in = new ObjectInputStream(ps.getInputStream());
 

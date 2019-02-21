@@ -210,6 +210,7 @@ public class GameController extends Controller {
 
         //Host decides this from menu
         mode = Mode.FRONT;
+        isMultiplayer = true;
         startMap(fileName);
         return true;
     }
@@ -224,7 +225,7 @@ public class GameController extends Controller {
         mode = Mode.BACK; //TODO: This will be set from message from other peer
         //startMap(net.getChoosenMap());
         // TODO: Implement get map
-
+        isMultiplayer = true;
         return true;
     }
 

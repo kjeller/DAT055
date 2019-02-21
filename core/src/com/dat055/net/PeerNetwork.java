@@ -96,29 +96,30 @@ public class PeerNetwork extends Thread {
                     close();
                 }
             }*/
-            Message msg = readMessage();
-            if(msg != null) {
-                // Translate OP code in message and cast based on code.
-                switch (msg.getOp()) {
-                    case OP_JOIN:
-                        otherClient = ((JoinMessage)msg).getName();
-                        String choosenMap = ((JoinMessage) msg).getMap();
-                        System.out.println(otherClient);
+            if(client.isConnected()) {
+                Message msg = readMessage();
+                if(msg != null) {
+                    // Translate OP code in message and cast based on code.
+                    switch (msg.getOp()) {
+                        case OP_JOIN:
+                            otherClient = ((JoinMessage)msg).getName();
+                            String choosenMap = ((JoinMessage) msg).getMap();
+                            System.out.println(otherClient);
 
-                        // Assign map to peer
-                        if(choosenMap != null) {
-                            this.choosenMap = choosenMap;
-                            System.out.printf("Map %s selected.");
-                        }
+                            // Assign map to peer
+                            if(choosenMap != null) {
+                                this.choosenMap = choosenMap;
+                                System.out.printf("Map %s selected.");
+                            }
 
-                        break;
-                    case OP_CHAR_SEL:
-                        System.out.println("Character select time!");
-                        //TODO: Somehow get menucontroller method call here?
-                        break;
+                            break;
+                        case OP_CHAR_SEL:
+                            System.out.println("Character select time!");
+                            //TODO: Somehow get menucontroller method call here?
+                            break;
+                    }
                 }
             }
-
 
             // Send udp packets if client is connected
             if(client.isConnected())
