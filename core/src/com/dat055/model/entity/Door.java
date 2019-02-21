@@ -11,7 +11,7 @@ import java.util.Observer;
 public class Door extends Entity implements Observer {
     private ObjectMap<String, Boolean> requirements;
     private boolean isOpen = false;
-    private String texturePath;
+    private boolean isSolid = true;
     private String id;
 
 
@@ -32,11 +32,13 @@ public class Door extends Entity implements Observer {
         if(requirements.containsValue(false, true)){
             if(texturePath == "textures/interactables/doorOpen.png") {
                 this.isOpen = false;
+                this.isSolid = true;
                 setTexture("textures/interactables/doorClosed.png");
                 this.texturePath = "textures/interactables/doorClosed.png";
                 }
             } else {
             this.isOpen = true;
+            this.isSolid = false;
             setTexture("textures/interactables/doorOpen.png");
             this.texturePath = "textures/interactables/doorOpen.png";
         }
@@ -85,10 +87,7 @@ public class Door extends Entity implements Observer {
 
     }
 
-    public boolean getState(){
-        return isOpen;
-    }
-    public String getId(){
-        return id;
-    }
+    public boolean getState()   { return isOpen; }
+    public String getId()       { return id; }
+    public boolean getSolid(){ return isSolid; }
 }

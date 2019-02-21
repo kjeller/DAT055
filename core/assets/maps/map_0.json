@@ -19,8 +19,7 @@
   "entities" : [
     {"player"  : {"position" : [0,  1], "sprite" : "textures/blue_penguin_64x80.png"}},
     {"door"    : {"position" : [22, 1], "rqs"    : ["b1", "b2"], "id"  : "d1", "sprite" : "textures/interactables/doorClosed.png"}},
-    {"button"  : {"position" : [18, 1], "id"     : "b1", "target"      : "d1", "sprite" : "textures/interactables/ButtonInactive.png"}},
-    {"button"  : {"position" : [17, 2], "id"     : "b2", "target"      : "d1", "sprite" : "textures/interactables/ButtonInactive.png"}}
+    {"button"  : {"position" : [18, 1],"timer" : 5, "id"     : "b1", "target"      : "d1", "sprite" : "textures/interactables/ButtonInactive.png"}}
   ]},
     {
     "properties"  : {"width" : 12, "height": 12, "desc" : "shadow",
@@ -38,6 +37,8 @@
               2, 2, 2, 2, 0, 0, 2, 2, 1, 0, 0, 0,
               2, 2, 2, 2, 0, 0, 2, 2, 2, 1, 1, 1],
     "entities"    : [
-    {"player"     : {"position" : [0, 5], "sprite" :  "textures/red_penguin_64x80.png"}}]
+      {"player"     : {"position" : [0, 5], "sprite"  :  "textures/red_penguin_64x80.png"}},
+      {"button"     : {"position" : [10, 1], "timer" : 5, "id"     : "b2", "target"      : "d1", "sprite" : "textures/interactables/ButtonInactive.png"}}]
+
   }]
 }

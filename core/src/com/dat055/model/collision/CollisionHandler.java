@@ -217,14 +217,16 @@ public class CollisionHandler {
                 if (entity instanceof Player && mapEntity instanceof Enemy) {
                     enemyInteraction(intersection, (Player) entity, (Enemy) mapEntity);
                 }
-                if (entity instanceof Hook && mapEntity instanceof Button) {
+                if ((entity instanceof Hook || entity instanceof Player) && mapEntity instanceof Button) {
                     Button button = (Button) mapEntity;
                     if (!button.getActive()) {
                         button.activate();
                     }
                 }
                 if(entity instanceof Hook && mapEntity instanceof Door){
-                    return intersection;
+                    if(((Door)mapEntity).getSolid()){
+                       return intersection;
+                    }
                 }
                 if(entity instanceof Player && mapEntity instanceof Door){
                     if(!((Door) mapEntity).getState()){

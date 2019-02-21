@@ -23,16 +23,18 @@ public class GameMap {
 
     private String name, id;  // name: map_0 or map_1, id is the id is json file
     private TileMap tileMap;
+    private int width;
 
     private ArrayList<Entity> entities; // List of all entities on map, players included
     private Player player;  // a reference to player - makes it easier to control player
     private CollisionHandler colHandler;
 
-    public GameMap(TileMap tileMap, ArrayList<Entity> entities, Player player, String name) {
+    public GameMap(TileMap tileMap, ArrayList<Entity> entities, Player player, String name, int width) {
         this.tileMap = tileMap;
         this.entities = entities;
         this.player = player;
         this.name = name;
+        this.width = width;
         colHandler = new CollisionHandler(this);
     }
     public void update(float deltaTime) {
@@ -134,6 +136,7 @@ public class GameMap {
     public Player getPlayer() { return player;}
     public String getName() { return name; }
     public String getId() { return id; }
+    public int getWidth(){ return width; }
     public String toString() {
         return  String.format("GameMap: %s \n -TileMap: %s \n -Player: %s \n -Entities: %s \n",
                 this.name, this.tileMap, this.player, this.entities);
