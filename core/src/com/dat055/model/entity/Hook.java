@@ -24,6 +24,7 @@ public class Hook extends Entity {
     private PolygonSpriteBatch pb;
     private Texture texture;
     private PolygonSprite poly;
+    private Vector2 originPos;
     // test is pretty much wire2 in rectangle form.
     private Rectangle test;
     private TextureAtlas atlas;
@@ -31,7 +32,9 @@ public class Hook extends Entity {
     Hook(Vector2 position, int height, int width, float maxLength, Vector2 initDirection) {
         super(position, height, width);
         this.initDirection = new Vector2(initDirection);
+        originPos = new Vector2(Vector2.Zero);
         pb = new PolygonSpriteBatch();
+
 
         this.maxLength = maxLength;
         textureSet();
@@ -103,8 +106,11 @@ public class Hook extends Entity {
             position.x = test.x + test.width;
             if (position.x <= playerPosX+64)
                 remove = true;
-        } else
+        } else {
             wire.width = position.x-(playerPosX+64);
+            wire.y = position.y;
+        }
+
 
     }
 
@@ -139,52 +145,68 @@ public class Hook extends Entity {
      * @param pos position
      */
     void setOriginPosition(Vector2 pos) {
+        originPos.x = (initDirection.x > 0) ? pos.x + 64 : pos.x-wire.width;
+        originPos.y = pos.y+48;
         wire.x = (initDirection.x > 0) ? pos.x + 64 : pos.x-wire.width;
-        wire.y = pos.y + 48;
+
+        if (!hasGrip)
+            wire.y = pos.y + 48;
     }
     private void setWire2() {
         wire2 = new Polygon(new float []{ wire.x, wire.y,
                 wire.x, wire.y + wire.height,
                 wire.x + wire.width, wire.y + wire.height,
                 wire.x + wire.width, wire.y});
-
         PolygonRegion p = new PolygonRegion(new TextureRegion(texture), wire2.getVertices(),
-                new short[] {0, 1, 2, 0, 2, 3 });
+                new short[] {0, 2, 3, 0, 1, 2 });
         poly = new PolygonSprite(p);
         //TODO: Fix this stupid angle thing
-        /*if (test != null)
-            System.out.println(getAngle());*/
         if (initDirection.x > 0) {
-            wire2.setOrigin(wire.x, wire.y+wire.height/2);
-            poly.setOrigin(wire.x, wire.y+wire.height/2);
-            //poly.setOrigin(wire2.getX(), wire2.getY());
-            if (initDirection.y > 0) {
-                wire2.rotate(rotate);
-                poly.rotate(rotate);
+            if (!hasGrip) {
+                wire2.setOrigin(wire.x, wire.y+wire.height/2);
+                poly.setOrigin(wire.x, wire.y+wire.height/2);
+
+                if (initDirection.y > 0) {
+                    wire2.rotate(rotate);
+                    poly.rotate(rotate);
+                }
+
+                else if (initDirection.y < 0) {
+                    wire2.rotate(-rotate);
+                    poly.rotate(-rotate);
+                }
+            } else {
+                /**
+                 * While hook has grip
+                 */
+                wire2.setOrigin(position.x, position.y+height/2);
+                poly.setOrigin(position.x, position.y+height/2);
+
+                wire2.rotate(getAngle());
+                poly.rotate(getAngle());
             }
 
-            else if (initDirection.y < 0) {
-                wire2.rotate(-rotate);
-                poly.rotate(-rotate);
-            }
+
 
         } else {
-            wire2.setOrigin(wire.x+wire.width, wire.y+wire.height/2);
-            poly.setOrigin(wire.x+wire.width, wire.y+wire.height/2);
-            if (initDirection.y > 0) {
-                wire2.rotate(-rotate);
-                poly.rotate(-rotate);
+            if (!hasGrip) {
+                wire2.setOrigin(wire.x+wire.width, wire.y+wire.height/2);
+                poly.setOrigin(wire.x+wire.width, wire.y+wire.height/2);
+                if (initDirection.y > 0) {
+                    wire2.rotate(-rotate);
+                    poly.rotate(-rotate);
+                }
+
+                else if (initDirection.y < 0) {
+                    wire2.rotate(rotate);
+                    poly.rotate(rotate);
+                }
             }
 
-            else if (initDirection.y < 0) {
-                wire2.rotate(rotate);
-                poly.rotate(rotate);
-            }
 
         }
         Rectangle temp = new Rectangle(wire2.getBoundingRectangle());
         test = new Rectangle((int)temp.x, (int)temp.y, (int)temp.width, (int)temp.height);
-
     }
     // Get and set methods galore.
     boolean getHasGrip() {
@@ -213,11 +235,18 @@ public class Hook extends Entity {
         playerPosX = x;
     }
     private float getAngle() {
-        float angle = (float) Math.toDegrees(Math.atan2((test.x+test.width) - test.x, (test.y+test.height) - test.y));
+        //int hypothenuse = (int)Math.sqrt(Math.pow((double)test.width,2) + Math.pow((double)test.height, 2));
+        //System.out.println(hypothenuse + " ~= " + wire.width);
+       // System.out.printf("hook.x = %f, wire.x = %f\n", position.x, wire.x);
+        //System.out.printf("test.width = %f, wire.width = %f\n", test.width, wire.width);
 
-        if (angle < 0) {
+
+
+        float angle = (float) Math.toDegrees(Math.acos((originPos.y-position.y)/wire.width));
+
+        /*if (angle < 0) {
             angle += 360;
-        }
-        return angle;
+        }*/
+        return angle-90;
     }
 }
