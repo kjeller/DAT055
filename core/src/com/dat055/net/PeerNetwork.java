@@ -119,10 +119,10 @@ public class PeerNetwork extends Thread {
                             if(isWaitingForPeer && client == null) {
                                 if(setClient(server.getCurrent().getAddress())) {
                                     sendJoinRequest();  // Sends join request to peer
-                                    isWaitingForPeer = false;
-                                    isConnected = true;
                                 }
                             }
+                            isWaitingForPeer = false;
+                            isConnected = true;
                         }
                         break;
 
