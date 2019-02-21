@@ -18,15 +18,31 @@ import java.net.*;
 public class PeerNetwork extends Thread {
     private final int PERIOD = 1000;   // ms
     private final int TIMEOUT = 10; // Time until timout in seconds
+
     private Client client;
     private Server server;
+
+    // Peer properties
     private String name; // Name of this peer
     private String peer; // Name of peer
 
-    private float timeout = 0;
-    private boolean isWaitingForPeer = true;
-    private boolean isTimeOut = false;
-    private boolean isConnected = false;
+    // Booleans
+    private boolean isWaitingForPeer;
+    private boolean isTimeOut;
+    private boolean isConnected;
+
+    private float timeout;
+    /**
+     * Sets default values
+     * @param name
+     */
+    private PeerNetwork(String name) {
+        this.name = name;
+        isWaitingForPeer = true;
+        isTimeOut = false;
+        isConnected = false;
+        timeout = 0;
+    }
 
     /**
      * Ready-to-join-another-peer-constructor
@@ -34,7 +50,7 @@ public class PeerNetwork extends Thread {
      * @param server
      */
     public PeerNetwork(String name, Client client, Server server) {
-        this.name = name;
+        this(name);
         this.server = server;
         this.client = client;
         server.start();
@@ -46,7 +62,7 @@ public class PeerNetwork extends Thread {
      * Awaits-another-peer-to-join-constructor
      */
     public PeerNetwork(String name, Server server) {
-        this.name = name;
+        this(name);
         this.server = server;
         server.start();
         start();
@@ -73,7 +89,8 @@ public class PeerNetwork extends Thread {
     }
 
     /**
-     * Deserializes message and translates op codes to determine what to do
+     * Deserializes message and translates op codes to determine what to do next.
+     * This method is called by run() for threads
      */
     private void handleMessage() {
         byte[] data;
@@ -94,12 +111,16 @@ public class PeerNetwork extends Thread {
                 // Translate OP code in message and cast based on code.
                 switch (msg.getOp()) {
                     case Protocol.OP_JOIN:
-                        peer = ((JoinMessage)msg).getName();
-                        System.out.println(peer);
-                        // Get name of peer
+                        peer = ((JoinMessage)msg).getName();    // Get name of peer
+                        System.out.println(peer + " has joined the battle!");
+
+                        // Create a client for this peer if needed. (host side only)
                         if(isWaitingForPeer && client == null)
-                            if(setClient(server.getCurrent().getAddress()))
+                            if(setClient(server.getCurrent().getAddress())) {
+                                sendJoinRequest();  // Sends join request to peer
                                 isWaitingForPeer = false;
+                                isConnected = true;
+                            }
                         break;
 
                     case Protocol.OP_PLAYER: System.out.println(msg);break;
