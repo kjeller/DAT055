@@ -47,7 +47,6 @@ public class PeerNetwork extends Thread {
         isTimeOut = false;
         isConnected = false;
         timeout = 0;
-        runServer();
     }
 
     /**
@@ -58,6 +57,7 @@ public class PeerNetwork extends Thread {
     public PeerNetwork(String name, int listenPort, String choosenMap) {
         this(name, listenPort);
         this.choosenMap = choosenMap;
+        runServer();
     }
 
     /**
@@ -69,11 +69,10 @@ public class PeerNetwork extends Thread {
     public PeerNetwork(String name, String addr, int listenPort) {
         this(name, listenPort);
         try {
+            System.out.printf("Socket created for for %s:%d", addr, listenPort);
             client = new Client(InetAddress.getByName(addr), listenPort);
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-        }
-        start();
+        } catch (UnknownHostException e) { System.out.println("Unknown host"); }
+        runServer();
     }
 
 

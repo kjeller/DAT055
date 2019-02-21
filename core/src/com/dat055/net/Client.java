@@ -26,15 +26,7 @@ public class Client extends Thread {
         this.addr = addr;
         this.port = port;
         data = new byte[1024];
-        System.out.println(this);
-        getClient();
-    }
-
-    public Client(Socket ps) {
-        this.ps = ps;
-        data = new byte[1024];
-        System.out.println(this);
-        getClient();
+        connect();
     }
 
     @Override
@@ -49,8 +41,9 @@ public class Client extends Thread {
         }
     }
 
-    public void getClient() {
+    public void connect() {
         ps = null;
+        System.out.println("Tries to connect");
         try {
             ps = new Socket(addr, port);
             System.out.println("Client connected!");
@@ -115,11 +108,6 @@ public class Client extends Thread {
      */
     public void setPacketData(byte[] data) {
         this.data = data;
-    }
-
-    public String toString() {
-        return String.format("Client: [source] %s:%s, [dest]: %s:%d",
-                ds.getLocalAddress(), ds.getLocalPort(), addr.toString(), port);
     }
 
     public boolean isConnected() { return ps.isConnected(); }
