@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.dat055.model.GameModel;
@@ -83,8 +82,8 @@ public class GameController extends Controller {
         if(camPosition.x  >= ((map1.getWidth() - 10) *  60) ) {
             cam.position.x = (map1.getWidth() -10) *  60 ;
         }
-        if(camPosition.x - 64*10 <= 0)
-            cam.position.x = 64*10;
+        if(camPosition.x - 66*10 <= 0)
+            cam.position.x = 66*10;
 
         if(camPosition.y >= (map1.getWidth() -10) *  60 )
             cam.position.y = (map1.getWidth() -10) *  60 ;
