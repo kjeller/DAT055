@@ -3,10 +3,7 @@ package com.dat055.net;
 import com.dat055.net.threads.Server;
 import com.dat055.net.threads.Client;
 
-import java.net.DatagramSocket;
-import java.net.InetAddress;
-import java.net.SocketException;
-import java.net.UnknownHostException;
+import java.net.*;
 
 /**
  * Creates a PeerNetwork based on parameters given
@@ -19,7 +16,11 @@ public abstract class PeerNetworkFactory {
      * @return peer network
      */
     public static PeerNetwork getPeerNetwork(String name, String addr) {
-        return new PeerNetwork(name, getClient(addr), getServer());
+        Client client = getClient(addr);
+        Server server = getServer();
+        if(client == null || server == null)
+            return null;
+        return new PeerNetwork(name, client, server);
     }
 
     /**
@@ -27,7 +28,10 @@ public abstract class PeerNetworkFactory {
      * @return peer network
      */
     public static PeerNetwork getPeerNetwork(String name) {
-        return new PeerNetwork(name, getServer());
+        Server server = getServer();
+        if(server == null)
+            return null;
+        return new PeerNetwork(name, server);
     }
 
     /**
@@ -38,7 +42,8 @@ public abstract class PeerNetworkFactory {
     public static Client getClient(InetAddress addr) {
         Client client;
         try {
-            client = new Client(new DatagramSocket(), addr, PORT);
+            client = new Client(new Socket(),
+                    new DatagramSocket(), addr, PORT);
         }
         catch (SocketException e) { return null; }
         return client;
@@ -54,10 +59,16 @@ public abstract class PeerNetworkFactory {
         Client client;
         try {
             destAddr = InetAddress.getByName(addr);
-            client = new Client(new DatagramSocket(), destAddr, PORT);
+            client = new Client(new Socket(),
+                    new DatagramSocket(), destAddr, PORT);
         }
-        catch (UnknownHostException e) { return null; }
-        catch (SocketException e) { return null; }
+        catch (UnknownHostException e) {
+            e.printStackTrace();
+            return null;
+        } catch (SocketException e) {
+            e.printStackTrace();
+        return null;
+        }
         return client;
     }
 
@@ -71,6 +82,7 @@ public abstract class PeerNetworkFactory {
         try {
             server = new Server(new DatagramSocket(PORT));
         } catch (SocketException e) {
+            e.printStackTrace();
             return null;
         }
         return server;

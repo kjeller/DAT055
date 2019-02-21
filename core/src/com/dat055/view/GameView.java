@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.dat055.controller.GameController.Mode;
@@ -23,7 +24,7 @@ public class GameView extends View{
         renderer = new ShapeRenderer();
     }
 
-    public void render(SpriteBatch batch) {
+    public void render(PolygonSpriteBatch batch) {
         GameMap map1 = ((GameModel)model).getGameMap1();
         GameMap map2 = ((GameModel)model).getGameMap2();
         batch.setProjectionMatrix(((GameModel)model).getCam().combined);    // Set camera for batch

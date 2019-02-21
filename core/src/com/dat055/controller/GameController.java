@@ -3,6 +3,7 @@ package com.dat055.controller;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -27,7 +28,7 @@ public class GameController extends Controller {
     private float rotationTimer;
     private float rotation;
 
-    private PeerNetwork server;
+    private PeerNetwork net;
 
     public GameController() {
         super(new GameModel(), null);
@@ -58,8 +59,8 @@ public class GameController extends Controller {
                 map2.update(deltaTime);
         }
 
-        if(isMultiplayer && server.getIsConnected()) {
-            server.sendPlayerUpdate(currentPlayer);
+        if(isMultiplayer && net.getIsConnected()) {
+            net.sendPlayerUpdate(currentPlayer);
         }
 
     }
@@ -91,7 +92,7 @@ public class GameController extends Controller {
     }
 
     @Override
-    public void render(SpriteBatch batch) {
+    public void render(PolygonSpriteBatch batch) {
         super.render(batch); // Render view
         ((GameView)view).setDebugString(String.format(
                 "mode: %s\nrot: %.1f\nrot.timer: %s\nisRotating: %s\nisPaused: %s\nisDebug: %s\nisMultiplayer: %s",
@@ -202,17 +203,20 @@ public class GameController extends Controller {
      * Starts a multiplayer map where each player is assigned a
      * playable character. Switching between characters not enabled.
      * Mainmenu will call this to start map. Host then needs to wait for
-     * another player to join server.
+     * another player to join net.
      * @param fileName name of map that will be created with startMap()
      */
     public boolean startMultiplayerMap(String fileName, String name) {
-        //Todo: start server here maybe waiting for a player to join
-        server = PeerNetworkFactory.getPeerNetwork(name);
+        PeerNetwork net = PeerNetworkFactory.getPeerNetwork(name);
+        if(net == null)
+            return false;
+        this.net = net;
+        net.setMap(fileName);
+        startMap(fileName);
 
-        if(!successfulConnect())
+        if(!getConnectionToPeer())
             return false;
 
-        startMap(fileName);
         System.out.println("Map created");
 
         //Host decides this from menu
@@ -221,16 +225,19 @@ public class GameController extends Controller {
     }
 
     /**
-     * Joins server and creates own server to communicate with other server
-     * @param addr IP of other server
+     * Joins net and creates own net to communicate with other net
+     * @param addr IP of other net
      */
     public boolean joinMultiplayerMap(String addr, String name) {
-        server = PeerNetworkFactory.getPeerNetwork(name, addr);
-
-        if(!successfulConnect()) {
-            System.out.println("Could not connect to server.");
+        PeerNetwork net = PeerNetworkFactory.getPeerNetwork(name, addr);
+        if(net == null)
             return false;
-        }
+        this.net = net;
+        this.net.sendJoinRequest(); // Sends a join request to other peer
+
+        // Awaits answer.
+        if(!getConnectionToPeer())
+            return false;
 
         mode = Mode.BACK; //TODO: This will be set from message from other peer
         startMap("maps/map_0.json");
@@ -243,18 +250,18 @@ public class GameController extends Controller {
      * Waits for other player and checks if timeout occurs
      * @return true if successful
      */
-    private boolean successfulConnect() {
+    private boolean getConnectionToPeer() {
         // Wait for other player to join
-        while(server.getIsWaiting()) {}
+        while(net.getIsWaiting()) {}
 
         // Check if there was a timeout
-        if(server.getIsTimeout()) {
+        if(net.getIsTimeout()) {
             System.out.println("Server timed out!");
-            server.close();
             isRunning = false;
             return false;
             //TODO: Metod för att återgå till meny
         }
+        System.out.println("Successfully established connection to " + net.getPeerName());
         isMultiplayer = true;
         return true;
     }

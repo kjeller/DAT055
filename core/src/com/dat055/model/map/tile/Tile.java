@@ -1,5 +1,6 @@
 package com.dat055.model.map.tile;
 
+import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 
@@ -16,7 +17,7 @@ public class Tile {
         box = new Rectangle(x, y, tileSize, tileSize);
     }
 
-    public void draw(SpriteBatch batch, float rotation) {}
+    public void draw(PolygonSpriteBatch batch, float rotation) {}
 
     public String toString() {
         return String.format("tile @ (%.2f, %.2f)\n", x, y);

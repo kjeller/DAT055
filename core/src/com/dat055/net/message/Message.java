@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  * Message used to update other peer.
  */
-public abstract class Message implements Serializable {
+public class Message implements Serializable {
     protected char op;
 
     public Message(char op) {

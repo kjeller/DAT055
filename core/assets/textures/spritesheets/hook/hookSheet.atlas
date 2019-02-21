@@ -1,0 +1,48 @@
+
+hookSheet.png
+size: 256,64
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+hookdownleft
+  rotate: false
+  xy: 2, 2
+  size: 25, 48
+  orig: 25, 48
+  offset: 0, 0
+  index: -1
+hookdownright
+  rotate: false
+  xy: 29, 2
+  size: 25, 48
+  orig: 25, 48
+  offset: 0, 0
+  index: -1
+hookleft
+  rotate: false
+  xy: 56, 2
+  size: 25, 48
+  orig: 25, 48
+  offset: 0, 0
+  index: -1
+hookright
+  rotate: false
+  xy: 83, 2
+  size: 25, 48
+  orig: 25, 48
+  offset: 0, 0
+  index: -1
+hookupleft
+  rotate: false
+  xy: 110, 2
+  size: 25, 48
+  orig: 25, 48
+  offset: 0, 0
+  index: -1
+hookupright
+  rotate: false
+  xy: 137, 2
+  size: 25, 48
+  orig: 25, 48
+  offset: 0, 0
+  index: -1

@@ -1,5 +1,6 @@
 package com.dat055.model.entity;
 
+import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.ObjectMap;
@@ -77,7 +78,7 @@ public class Door extends Entity implements Observer {
     }
 
     @Override
-    public void draw(SpriteBatch sb, float rotation) {
+    public void draw(PolygonSpriteBatch sb, float rotation) {
         super.draw(sb, rotation);
     }
 
