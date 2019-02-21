@@ -124,7 +124,7 @@ public class PeerNetwork extends Thread {
                             }
                             isWaitingForPeer = false;
                             isConnected = true;
-                        } else{ client.dataToBeSent(null); } // Prevents client from spamming same messages
+                        } //else{ client.dataToBeSent(null); } // Prevents client from spamming same messages
                         break;
 
                     case Protocol.OP_PLAYER: System.out.println(msg);break;
