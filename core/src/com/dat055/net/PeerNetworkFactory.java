@@ -3,10 +3,7 @@ package com.dat055.net;
 import com.dat055.net.threads.Server;
 import com.dat055.net.threads.Client;
 
-import java.net.DatagramSocket;
-import java.net.InetAddress;
-import java.net.SocketException;
-import java.net.UnknownHostException;
+import java.net.*;
 
 /**
  * Creates a PeerNetwork based on parameters given
@@ -45,7 +42,8 @@ public abstract class PeerNetworkFactory {
     public static Client getClient(InetAddress addr) {
         Client client;
         try {
-            client = new Client(new DatagramSocket(), addr, PORT);
+            client = new Client(new Socket(),
+                    new DatagramSocket(), addr, PORT);
         }
         catch (SocketException e) { return null; }
         return client;
@@ -61,7 +59,8 @@ public abstract class PeerNetworkFactory {
         Client client;
         try {
             destAddr = InetAddress.getByName(addr);
-            client = new Client(new DatagramSocket(), destAddr, PORT);
+            client = new Client(new Socket(),
+                    new DatagramSocket(), destAddr, PORT);
         }
         catch (UnknownHostException e) {
             e.printStackTrace();
