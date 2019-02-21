@@ -119,12 +119,12 @@ public class PeerNetwork extends Thread {
                             if(isWaitingForPeer && client == null) {
                                 if(setClient(server.getCurrent().getAddress())) {
                                     sendJoinRequest();  // Sends join request to peer
-                                    client.start();
+                                    client.start();     // Tell client to start sending to other peer
                                 }
                             }
                             isWaitingForPeer = false;
                             isConnected = true;
-                        }
+                        } else{ client.dataToBeSent(null); } // Prevents client from spamming same messages
                         break;
 
                     case Protocol.OP_PLAYER: System.out.println(msg);break;
