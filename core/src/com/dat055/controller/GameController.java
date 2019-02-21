@@ -57,7 +57,7 @@ public class GameController extends Controller {
                 map2.update(deltaTime);
         }
 
-        if(isMultiplayer && net.getIsConnected()) {
+        if(isMultiplayer && net.isConnected()) {
             net.sendPlayerUpdate(currentPlayer);
         }
 
@@ -206,9 +206,6 @@ public class GameController extends Controller {
     public boolean startMultiplayerMap(String fileName, String name) {
         net = new PeerNetwork(name, 1337, fileName);
 
-        if(!getConnectionToPeer())
-            return false;
-
         System.out.println("Map created");
 
         //Host decides this from menu
@@ -224,12 +221,8 @@ public class GameController extends Controller {
     public boolean joinMultiplayerMap(String addr, String name) {
         net = new PeerNetwork(name, addr, 1337);
 
-        // Awaits answer.
-        if(!getConnectionToPeer())
-            return false;
-
         mode = Mode.BACK; //TODO: This will be set from message from other peer
-        startMap(net.getChoosenMap());
+        //startMap(net.getChoosenMap());
         // TODO: Implement get map
 
         return true;
@@ -241,10 +234,10 @@ public class GameController extends Controller {
      */
     private boolean getConnectionToPeer() {
         // Wait for other player to join
-        while(net.getIsWaiting()) {}
+        while(net.isWaiting()) {}
 
         // Check if there was a timeout
-        if(net.getIsTimeout()) {
+        if(net.isTimeout()) {
             System.out.println("Server timed out!");
             isRunning = false;
             return false;

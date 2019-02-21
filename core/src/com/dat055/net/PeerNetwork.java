@@ -4,10 +4,11 @@ import com.dat055.model.entity.Player;
 import com.dat055.net.message.JoinMessage;
 import com.dat055.net.message.Message;
 import com.dat055.net.message.PlayerMessage;
-import com.dat055.net.message.Protocol;
 
 import java.io.*;
 import java.net.*;
+
+import static com.dat055.net.message.Protocol.*;
 
 
 /**
@@ -29,7 +30,8 @@ public class PeerNetwork extends Thread {
     private DatagramPacket current; // will be used to determine where to packet came from
     private byte[] data; // data is put here after deserialization
 
-    private Client client;  // Client added to server
+    private Client client;  // Client used to communicate with other server
+    private String otherClient;
 
     // Server properties
     private String name; // Name of this client
@@ -58,6 +60,7 @@ public class PeerNetwork extends Thread {
         this(name, listenPort);
         this.choosenMap = choosenMap;
         runServer();
+        writeMessage(new Message(OP_CHAR_SEL));
     }
 
     /**
@@ -93,6 +96,29 @@ public class PeerNetwork extends Thread {
                     close();
                 }
             }*/
+            Message msg = readMessage();
+            if(msg != null) {
+                // Translate OP code in message and cast based on code.
+                switch (msg.getOp()) {
+                    case OP_JOIN:
+                        otherClient = ((JoinMessage)msg).getName();
+                        String choosenMap = ((JoinMessage) msg).getMap();
+                        System.out.println(otherClient);
+
+                        // Assign map to peer
+                        if(choosenMap != null) {
+                            this.choosenMap = choosenMap;
+                            System.out.printf("Map %s selected.");
+                        }
+
+                        break;
+                    case OP_CHAR_SEL:
+                        System.out.println("Character select time!");
+                        //TODO: Somehow get menucontroller method call here?
+                        break;
+                }
+            }
+
 
             // Send udp packets if client is connected
             if(client.isConnected())
@@ -107,16 +133,19 @@ public class PeerNetwork extends Thread {
             ss = new ServerSocket(listenPort);
             System.out.println("Waiting for other client..");
             Socket cs = ss.accept(); // Wait for connection
+            isConnected = true;
             System.out.println("Client connected: " + cs);
             out = new ObjectOutputStream(cs.getOutputStream()); // ObjectOutputStream before inputstream!
             in = new ObjectInputStream(cs.getInputStream());
 
+            // Creates new client for hosting peer
             if(client == null)
                 setClient(cs.getInetAddress());
-            writeMessage(new Message(Protocol.OP_JOIN)); // Writes to connected client
+
+            writeMessage(new JoinMessage(name, choosenMap)); // Writes to connected client
 
             // Create a datagramsocket to handle udp connection
-            ds = new DatagramSocket(listenPort);
+            //ds = new DatagramSocket(listenPort);
             start();
         } catch (Exception e) { System.out.println(e); }
     }
@@ -181,16 +210,15 @@ public class PeerNetwork extends Thread {
             if(msg != null) {
                 // Translate OP code in message and cast based on code.
                 switch (msg.getOp()) {
-                    case Protocol.OP_PLAYER: System.out.println(msg);break;
-                    case Protocol.OP_HOOK: break;
-                    case Protocol.OP_LEAVE: close(); break;
+                    case OP_PLAYER: System.out.println(msg);break;
+                    case OP_HOOK: break;
+                    case OP_LEAVE: close(); break;
                 }
             }
         } catch (IOException ignored) {
         } catch (ClassNotFoundException e) {e.printStackTrace();}
     }
 
-    public void sendJoinRequest() { sendMessage(new JoinMessage(name)); }
     public void sendPlayerUpdate(Player player) { sendMessage(new PlayerMessage(player)); }
 
     /**
@@ -219,12 +247,14 @@ public class PeerNetwork extends Thread {
      * Call this to see if another player has joined
      * @return
      */
-    public boolean getIsWaiting() { return isWaitingForPeer; }
-    public boolean getIsTimeout() {return isTimeOut;}
-    public boolean getIsConnected() { return isConnected; }
+    public boolean isWaiting() { return isWaitingForPeer; }
+    public boolean isTimeout() {return isTimeOut;}
+    public boolean isConnected() { return isConnected; }
     public byte[] getData() { return data; }
     public DatagramPacket getCurrent() { return current; }
     public String getChoosenMap() { return choosenMap; }
+    public String getOtherClient() { return otherClient;}
+    public String getAddress() { return client.getAddress(); }
 
     /**
      * Closes socket, client and server then tries to stop all threads within network
@@ -240,5 +270,5 @@ public class PeerNetwork extends Thread {
         this.interrupt();
     }
 
-    public String getAddress() { return client.getAddress(); }
+
 }
