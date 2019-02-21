@@ -207,13 +207,13 @@ public class GameController extends Controller {
         PeerNetwork net = PeerNetworkFactory.getPeerNetwork(name);
         if(net == null)
             return false;
-
         this.net = net;
+        net.setMap(fileName);
+        startMap(fileName);
 
         if(!getConnectionToPeer())
             return false;
 
-        startMap(fileName);
         System.out.println("Map created");
 
         //Host decides this from menu
@@ -254,11 +254,11 @@ public class GameController extends Controller {
         // Check if there was a timeout
         if(net.getIsTimeout()) {
             System.out.println("Server timed out!");
-            net.close();
             isRunning = false;
             return false;
             //TODO: Metod för att återgå till meny
         }
+        System.out.println("Successfully established connection to " + net.getPeerName());
         isMultiplayer = true;
         return true;
     }

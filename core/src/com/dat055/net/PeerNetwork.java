@@ -25,6 +25,7 @@ public class PeerNetwork extends Thread {
     // Peer properties
     private String name; // Name of this peer
     private String peer; // Name of peer
+    private String choosenMap;
 
     // Booleans
     private boolean isWaitingForPeer;
@@ -79,9 +80,10 @@ public class PeerNetwork extends Thread {
              if(isWaitingForPeer) {
                 timeout += (float)PERIOD/1000;
                 if(timeout >= TIMEOUT) {
-                    System.out.println("Timeout!");
+                    System.out.println("PeerNetwork timed out!");
                     isTimeOut = true;
                     isWaitingForPeer = false;
+                    close();
                 }
             }
             handleMessage();
@@ -163,6 +165,7 @@ public class PeerNetwork extends Thread {
         System.out.println("=== Client created! ===");
         return (client = PeerNetworkFactory.getClient(addr)) != null;
     }
+    public void setMap(String map) {choosenMap = map;}
 
     /**
      * Call this to see if another player has joined
