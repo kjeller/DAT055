@@ -86,7 +86,7 @@ public class GameMapFactory {
             } catch (Exception e) { System.out.println(e);
             }
         return new GameMap(jsonToTileMap(map, atlas),
-                getEntities(map, player), player, map.get(MAP_PROPERTIES).getString(MAP_DESC));
+                getEntities(map, player), player, map.get(MAP_PROPERTIES).getString(MAP_DESC), map.get(MAP_PROPERTIES).getInt("width"));
     }
 
     /**
@@ -163,7 +163,8 @@ public class GameMapFactory {
                 else if(current.name.equals("button")) {
                     JsonValue button = current.child;
                     entity = new Button(start, 64, 64, current.getString("sprite"),
-                                        current.getString("id"), current.getString("target"));
+                                        current.getString("id"), current.getString("target"),
+                                        current.getInt("timer"));
                     }
                 if(entity != null)
                     entities.add(entity);
