@@ -16,7 +16,7 @@ import static com.dat055.net.message.Protocol.*;
  * peers.
  */
 public class PeerNetwork extends Thread {
-    private final int PERIOD = 1;   // ms
+    private final int PERIOD = 1000;   // ms
     private final int TIMEOUT = 10; // Time until timout in seconds
 
     // TCP communication
@@ -222,7 +222,7 @@ public class PeerNetwork extends Thread {
     public Message readMessage() {
         try {
             return (Message)in.readObject();
-        } catch (Exception e) {System.out.println("Connection lost."); close(); }
+        } catch (Exception e) {System.out.println("Connection lost.");}
         return null;
     }
 
@@ -233,6 +233,7 @@ public class PeerNetwork extends Thread {
         try {
             byte[] data = new byte[1024];
             current = new DatagramPacket(data, data.length);
+            ds.setSoTimeout(1000);
             ds.receive(current);
             System.out.printf("<=== Received package from %s!\n", current.getAddress());
             return data;
