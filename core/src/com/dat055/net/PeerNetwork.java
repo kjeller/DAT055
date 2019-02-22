@@ -16,7 +16,7 @@ import static com.dat055.net.message.Protocol.*;
  * peers.
  */
 public class PeerNetwork extends Thread {
-    private final int PERIOD = 1000;   // ms
+    private final int PERIOD = 1;   // ms
     private final int TIMEOUT = 10; // Time until timout in seconds
 
     // TCP communication

@@ -39,7 +39,7 @@ public class Client extends Thread {
         while(!interrupted()) {
             System.out.println("[Line: 27] Client running."+t++);
             try {
-                Thread.sleep(1000);
+                Thread.sleep(1);
             } catch (InterruptedException e) { break; }
             sendPacket();
         }
