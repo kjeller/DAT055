@@ -188,7 +188,7 @@ public class PeerNetwork extends Thread {
         byte[] data = readDatagramPacket();
         if(data == null)
             return;
-        System.out.println("-Peernetwork got data from Server.");
+        System.out.println("Data deserialized to be handled.");
         ObjectInputStream objIn;
         Message msg;
         try {
@@ -241,9 +241,9 @@ public class PeerNetwork extends Thread {
             byte[] data = new byte[1024];
             current = new DatagramPacket(data, data.length);
             ds.receive(current);
-            System.out.printf("--Received package from %s!\n", current.getAddress());
+            System.out.printf("<=== Received package from %s!\n", current.getAddress());
             return data;
-        } catch (IOException ignored) {}
+        } catch (IOException e) { System.out.println(e);}
         return null;
     }
 
