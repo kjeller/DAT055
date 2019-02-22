@@ -26,6 +26,11 @@ public class Client extends Thread {
         this.addr = addr;
         this.port = port;
         data = new byte[1024];
+        try {
+            ds = new DatagramSocket();
+        } catch (SocketException e) {
+            e.printStackTrace();
+        }
         connect();
     }
 
