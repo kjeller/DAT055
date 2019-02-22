@@ -186,8 +186,8 @@ public class Hook extends Entity {
                 wire2.setOrigin(position.x, position.y+height/2);
                 poly.setOrigin(position.x, position.y+height/2);
 
-                wire2.rotate(getAngle());
-                poly.rotate(getAngle());
+                wire2.setRotation(getAngle());
+                poly.setRotation(getAngle());
             }
 
 
@@ -212,8 +212,8 @@ public class Hook extends Entity {
                 wire2.setOrigin(position.x+width/2, position.y+height/2);
                 poly.setOrigin(position.x+width/2, position.y+height/2);
 
-                wire2.rotate(getAngle());
-                poly.rotate(getAngle());
+                wire2.setRotation(getAngle());
+                poly.setRotation(getAngle());
 
             }
 

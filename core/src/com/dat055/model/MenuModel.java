@@ -1,8 +1,10 @@
 package com.dat055.model;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.utils.ObjectMap;
 import com.dat055.model.menu.Menu;
 
 import java.util.HashMap;
@@ -14,8 +16,23 @@ public class MenuModel extends Model {
     private Stage stage;
 
     public MenuModel() {
+        musicBank = new ObjectMap();
         stage = new Stage();
         menus = new HashMap<String, Menu>();
+        initMusic();
+    }
+
+    @Override
+    public void initMusic() {
+        musicBank.put("title", loadMusic("title.mp3"));
+    }
+
+    @Override
+    public void playMusic(String ost) {
+        Music music = musicBank.get(ost);
+        if (ost.equals("title"))
+            music.setVolume(0.3f);
+        music.play();
     }
 
     public void includeMenu(String label, Menu menu) {

@@ -1,9 +1,11 @@
 package com.dat055.model;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.ObjectMap;
 import com.dat055.model.entity.DebugCamera;
 import com.dat055.model.entity.Player;
 import com.dat055.model.map.GameMap;
@@ -20,6 +22,21 @@ public class GameModel extends Model {
         debugFont = new BitmapFont(Gdx.files.internal("fonts/Mincho.fnt"),
                 Gdx.files.internal("fonts/Mincho.png"), false);
         debugFont.getData().setScale(0.4f, 0.4f);
+        musicBank = new ObjectMap();
+        initMusic();
+    }
+
+    @Override
+    public void initMusic() {
+        musicBank.put("map_01", loadMusic("map_01.mp3"));
+    }
+
+    @Override
+    public void playMusic(String ost) {
+        Music music = musicBank.get(ost);
+        if (ost.equals("map_01"))
+            music.setVolume(0.3f);
+        music.play();
     }
 
     /**

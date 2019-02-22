@@ -175,6 +175,8 @@ public class PauseMenu extends Menu {
             @Override
             public void exit (InputEvent event, float x, float y, int pointer, Actor toActor) {
                 menu.setStyle(txtBtnStyle);
+                controller.getCtrl().getModel().stopMusic();
+                controller.getModel().playMusic("title");
                 super.enter(event,x,y,pointer,toActor);
             }
         });

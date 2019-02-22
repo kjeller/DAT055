@@ -1,4 +1,6 @@
 package com.dat055.model.entity;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -6,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.ObjectMap;
 
 import java.util.Observable;
 
@@ -16,6 +19,7 @@ public abstract class Entity extends Observable {
     Sprite sprite;
     String texturePath;
     Rectangle rect;
+    ObjectMap<String, Sound> soundBank;
 
     public Entity(Vector2 position, int height, int width, String texturePath) {
         this(position, height, width);
@@ -28,8 +32,22 @@ public abstract class Entity extends Observable {
         this.position = position;
         this.texturePath = texturePath;
         setRectangle();
+        initSounds();
     }
-    
+
+    //TODO: Move this to Model
+    private Sound loadFile(String file) {
+        return Gdx.audio.newSound(Gdx.files.internal("audio/sfx/" + file));
+    }
+
+    private void initSounds() {
+        soundBank = new ObjectMap();
+        soundBank.put("takedamage", loadFile("oof.mp3"));
+        soundBank.put("jump", loadFile("jump.wav"));
+    }
+    void playSound(String sound) {
+        soundBank.get(sound).play();
+    }
 
     /**
      * act is action that the entity takes

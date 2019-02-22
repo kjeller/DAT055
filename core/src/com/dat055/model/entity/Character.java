@@ -84,6 +84,7 @@ public abstract class Character extends Entity {
         if (isGrounded) {
             isGrounded = false;
             velocity.y = 8;
+            playSound("jump");
         }
     }
 

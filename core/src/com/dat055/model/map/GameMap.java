@@ -36,6 +36,7 @@ public class GameMap {
         this.name = name;
         this.width = width;
         colHandler = new CollisionHandler(this);
+
     }
     public void update(float deltaTime) {
         Iterator it =  entities.iterator();

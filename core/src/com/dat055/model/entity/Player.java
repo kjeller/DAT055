@@ -1,7 +1,6 @@
 package com.dat055.model.entity;
 
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 
 public class Player extends Character {
@@ -116,6 +115,7 @@ public class Player extends Character {
         super.takeDamage(damage);
         isInvincible = true;
         iframes = 2;
+        playSound("takedamage");
     }
 
     /**

@@ -29,4 +29,5 @@ public abstract class Controller {
     protected void setController(Controller ctrl) {
         this.ctrl = ctrl;
     }
+    public Model getModel() { return model; }
 }
