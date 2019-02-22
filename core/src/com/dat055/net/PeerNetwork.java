@@ -109,10 +109,8 @@ public class PeerNetwork extends Thread {
                 close();
             }
 
-
             // Handle receiving of UDP packets
             if(isRunning) {
-                readDatagramPacket();
                 handlePackets();
             }
         }
