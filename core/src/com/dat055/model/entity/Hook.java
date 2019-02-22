@@ -138,7 +138,7 @@ public class Hook extends Entity {
     public void draw(PolygonSpriteBatch sb, float rotation) {
 
         poly.draw(sb);
-        poly.setOrigin(poly.getWidth()/2, -poly.getY());
+        poly.setOrigin(poly.getWidth()/2, -position.y);
         poly.setRotation(rotation);
         super.draw(sb, rotation, new Vector2(-5, -23));
 

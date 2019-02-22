@@ -20,6 +20,11 @@ public class PlayerMessage extends Message {
                 position.x, position.y, lookingDirection.x, lookingDirection.y, isAlive);
     }
 
+    public void setPlayerProperties(Player player) {
+        player.setPosition(position);
+        player.setLookingDirection(lookingDirection);
+        player.setIsAlive(isAlive);
+    }
     public Vector2 getPosition() { return position; }
     public Vector2 getDir() { return lookingDirection; }
     public boolean getIsAlive () { return isAlive; }

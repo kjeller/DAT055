@@ -10,7 +10,6 @@ import com.dat055.model.GameModel;
 import com.dat055.model.entity.Player;
 import com.dat055.model.map.GameMap;
 import com.dat055.net.PeerNetwork;
-import com.dat055.net.PeerNetworkFactory;
 import com.dat055.view.GameView;
 
 
@@ -58,10 +57,15 @@ public class GameController extends Controller {
                 map2.update(deltaTime);
         }
 
-        if(isMultiplayer && net.getIsConnected()) {
+        if(isMultiplayer && net.isConnected()) {
             net.sendPlayerUpdate(currentPlayer);
-        }
 
+            if(currentPlayer == player1) {
+                net.updatePlayer(player2);
+            } else {
+                net.updatePlayer(player1);
+            }
+        }
     }
 
     /**
@@ -206,20 +210,14 @@ public class GameController extends Controller {
      * @param fileName name of map that will be created with startMap()
      */
     public boolean startMultiplayerMap(String fileName, String name) {
-        PeerNetwork net = PeerNetworkFactory.getPeerNetwork(name);
-        if(net == null)
-            return false;
-        this.net = net;
-        net.setMap(fileName);
-        startMap(fileName);
-
-        if(!getConnectionToPeer())
-            return false;
+        net = new PeerNetwork(name, 1337, fileName);
 
         System.out.println("Map created");
 
         //Host decides this from menu
         mode = Mode.FRONT;
+        isMultiplayer = true;
+        startMap(fileName);
         return true;
     }
 
@@ -228,19 +226,12 @@ public class GameController extends Controller {
      * @param addr IP of other net
      */
     public boolean joinMultiplayerMap(String addr, String name) {
-        PeerNetwork net = PeerNetworkFactory.getPeerNetwork(name, addr);
-        if(net == null)
-            return false;
-        this.net = net;
-        this.net.sendJoinRequest(); // Sends a join request to other peer
-
-        // Awaits answer.
-        if(!getConnectionToPeer())
-            return false;
+        net = new PeerNetwork(name, addr, 1337);
 
         mode = Mode.BACK; //TODO: This will be set from message from other peer
-        startMap("maps/map_0.json");
+        //startMap(net.getChoosenMap());
         // TODO: Implement get map
+        isMultiplayer = true;
 
         return true;
     }
@@ -251,16 +242,16 @@ public class GameController extends Controller {
      */
     private boolean getConnectionToPeer() {
         // Wait for other player to join
-        while(net.getIsWaiting()) {}
+        while(net.isWaiting()) {}
 
         // Check if there was a timeout
-        if(net.getIsTimeout()) {
+        if(net.isTimeout()) {
             System.out.println("Server timed out!");
             isRunning = false;
             return false;
             //TODO: Metod för att återgå till meny
         }
-        System.out.println("Successfully established connection to " + net.getPeerName());
+
         isMultiplayer = true;
         return true;
     }

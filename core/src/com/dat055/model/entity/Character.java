@@ -190,7 +190,9 @@ public abstract class Character extends Entity {
     public void setMoving(boolean val) {isMoving = val;}
     public void setLookingDirectionX(int dir) {lookingDirection.x = dir; }
     public void setLookingDirectionY(int dir) {lookingDirection.y = dir; }
+    public void setLookingDirection(Vector2 dir) {lookingDirection = dir;}
     public void setDirectionY(int val) { direction.y = val; }
+    public void setIsAlive(boolean bool) { isAlive = bool;}
 
     public Vector2 getDirection() { return direction; }
     public Vector2 getVelocity() { return velocity; }
