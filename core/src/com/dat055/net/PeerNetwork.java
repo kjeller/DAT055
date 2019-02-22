@@ -118,7 +118,7 @@ public class PeerNetwork extends Thread {
                             this.choosenMap = choosenMap;
                             System.out.printf("Map %s selected.\n", choosenMap);
                         }
-                        writeMessage(new Message(OP_CHAR_SEL));
+                        client.writeMessage(new Message(OP_CHAR_SEL));
                         break;
                     case OP_CHAR_SEL:
                         System.out.println("=== CHAR_SEL ===");
@@ -127,7 +127,7 @@ public class PeerNetwork extends Thread {
                         client.start();
                         break;
                     case OP_LEAVE:
-                        writeMessage(new Message(OP_LEAVE));
+                        client.writeMessage(new Message(OP_LEAVE));
                         close();
                         break;
                 }
