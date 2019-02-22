@@ -29,7 +29,6 @@ public class PeerNetwork extends Thread {
     private DatagramSocket ds;
     private DatagramPacket current; // will be used to determine where to packet came from
     private PlayerMessage lastPlayerMessage;
-    private byte[] data; // data is put here after deserialization
 
     private Client client;  // Client used to communicate with other server
     private String otherClient;
@@ -55,7 +54,7 @@ public class PeerNetwork extends Thread {
             ds = new DatagramSocket(listenPort);
             System.out.printf("Created datagramsocket for port %d\n", listenPort);
         } catch (SocketException e) {
-            e.printStackTrace();
+            System.out.println("Could not create datagramsocket!");
         }
     }
 
@@ -195,7 +194,6 @@ public class PeerNetwork extends Thread {
         try {
             objIn =  new ObjectInputStream(new ByteArrayInputStream(data));
             msg = (Message) objIn.readObject();
-            data = null; // Clear data for next read - this is needed to get the "handshake" right
             System.out.println("--Message de-serializes read!");
 
             // Translate messages to a format which can be handled.
@@ -210,7 +208,7 @@ public class PeerNetwork extends Thread {
                 }
             }
         } catch (IOException ignored) {
-        } catch (ClassNotFoundException e) {e.printStackTrace();}
+        } catch (ClassNotFoundException e) { System.out.println("Class not found when deserialization.");}
     }
 
     /**
@@ -243,7 +241,6 @@ public class PeerNetwork extends Thread {
             byte[] data = new byte[1024];
             current = new DatagramPacket(data, data.length);
             ds.receive(current);
-            this.data = data;
             System.out.printf("--Received package from %s!\n", current.getAddress());
             return data;
         } catch (IOException ignored) {}
@@ -272,7 +269,7 @@ public class PeerNetwork extends Thread {
         try {
             objOut = new ObjectOutputStream(out);
             objOut.writeObject(msg);
-            //System.out.printf("Msg: %s [SERIALIZED]\n", msg);
+            System.out.printf("Msg: %s [SERIALIZED]\n", msg);
         } catch (IOException ignored) {}
         client.setPacketData(out.toByteArray());
     }
@@ -291,7 +288,6 @@ public class PeerNetwork extends Thread {
     public boolean isRunning() { return isRunning; }
     public boolean isConnected() { return client.isConnected(); }
 
-    public byte[] getData() { return data; }
     public DatagramPacket getCurrent() { return current; }
     public String getChoosenMap() { return choosenMap; }
     public String getOtherClient() { return otherClient;}
