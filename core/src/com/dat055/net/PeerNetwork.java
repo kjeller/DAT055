@@ -42,6 +42,7 @@ public class PeerNetwork extends Thread {
     private boolean isReady;
 
     private float timeout;
+    int t = 0;
 
     private PeerNetwork(String name, int listenPort) {
         this.name = name;
@@ -55,7 +56,6 @@ public class PeerNetwork extends Thread {
         } catch (SocketException e) {
             e.printStackTrace();
         }
-        start();
     }
 
     /**
@@ -85,10 +85,10 @@ public class PeerNetwork extends Thread {
         runServer();
     }
 
-
     @Override
     public void run() {
         while(!interrupted()) {
+            System.out.println("[Line: 90] PeerNetwork running."+t++);
             try {
                 Thread.sleep(PERIOD);
             } catch (InterruptedException e) { break; }
@@ -119,7 +119,7 @@ public class PeerNetwork extends Thread {
         System.out.println("Trying to start server..");
         try {
             ss = new ServerSocket(listenPort);
-            System.out.println("Waiting for other client..");
+            System.out.println("ServerSocket created! \nWaiting for other client..");
             Socket cs = ss.accept(); // Wait for connection
             System.out.println("Client connected: " + cs);
             out = new ObjectOutputStream(cs.getOutputStream()); // ObjectOutputStream before inputstream!
@@ -140,7 +140,7 @@ public class PeerNetwork extends Thread {
     private void handleServerResponses() {
         Message msg = readMessage();    // Server receive message
         if(msg != null) {
-            // Translate OP code in message and cast based on code.
+            // Translate OP code in message and cast message based on code.
             switch (msg.getOp()) {
                 case OP_JOIN:
                     System.out.println("=== JOIN ===");

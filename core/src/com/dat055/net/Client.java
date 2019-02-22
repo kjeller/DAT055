@@ -41,8 +41,6 @@ public class Client extends Thread {
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) { break; }
-            if(ps.isConnected())
-                sendPacket();
             if(ds.isConnected())
                 sendPacket();
         }
@@ -50,7 +48,6 @@ public class Client extends Thread {
 
     public void connect() {
         ps = null;
-        System.out.println("Tries to connect");
         try {
             ps = new Socket(addr, port);
             System.out.println("Socket created!");
