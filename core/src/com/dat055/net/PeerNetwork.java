@@ -307,6 +307,7 @@ public class PeerNetwork extends Thread {
                 ss.close();
             } catch (IOException e) { e.printStackTrace(); }
         }
+        ds.close();
         if(client != null)
             client.close();
         this.interrupt();

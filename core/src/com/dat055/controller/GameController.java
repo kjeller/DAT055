@@ -231,7 +231,6 @@ public class GameController extends Controller {
         while(!net.isRunning()); // wait for map to be set
         System.out.println("Map choosen from server: " + net.getChoosenMap());
         startMap(net.getChoosenMap());
-        // TODO: Implement get map
         isMultiplayer = true;
 
         return true;
