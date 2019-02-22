@@ -97,33 +97,33 @@ public class PeerNetwork extends Thread {
                     close();
                 }
             }*/
-            if(client.isConnected()) {
-                Message msg = readMessage();
-                if(msg != null) {
-                    // Translate OP code in message and cast based on code.
-                    switch (msg.getOp()) {
-                        case OP_JOIN:
-                            otherClient = ((JoinMessage)msg).getName();
-                            String choosenMap = ((JoinMessage) msg).getMap();
-                            System.out.println(otherClient);
 
-                            // Assign map to peer
-                            if(choosenMap != null) {
-                                this.choosenMap = choosenMap;
-                                System.out.printf("Map %s selected.");
-                            }
+            Message msg = client.readMessage();
+            if(msg != null) {
+                // Translate OP code in message and cast based on code.
+                switch (msg.getOp()) {
+                    case OP_JOIN:
+                        otherClient = ((JoinMessage)msg).getName();
+                        String choosenMap = ((JoinMessage) msg).getMap();
+                        System.out.println(otherClient);
 
-                            break;
-                        case OP_CHAR_SEL:
-                            System.out.println("Character select time!");
-                            //TODO: Somehow get menucontroller method call here?
-                            break;
-                        case OP_LEAVE:
-                            writeMessage(new Message(OP_LEAVE));
-                            close();
-                            break;
-                    }
+                        // Assign map to peer
+                        if(choosenMap != null) {
+                            this.choosenMap = choosenMap;
+                            System.out.printf("Map %s selected.");
+                        }
+
+                        break;
+                    case OP_CHAR_SEL:
+                        System.out.println("Character select time!");
+                        //TODO: Somehow get menucontroller method call here?
+                        break;
+                    case OP_LEAVE:
+                        writeMessage(new Message(OP_LEAVE));
+                        close();
+                        break;
                 }
+
                 handleUpdates();
             }
 
@@ -176,7 +176,7 @@ public class PeerNetwork extends Thread {
     public Message readMessage() {
         try {
             return (Message)in.readObject();
-        } catch (Exception e) {System.out.println("Connection lost."); }
+        } catch (Exception e) {System.out.println("Connection lost."); close(); }
         return null;
     }
 
@@ -227,7 +227,7 @@ public class PeerNetwork extends Thread {
         } catch (ClassNotFoundException e) {e.printStackTrace();}
     }
 
-    public void updatePlayer(Player player) { lastPlayerMessage.setPlayerProperties(player); }
+    public void updatePlayer(Player player) { if(lastPlayerMessage != null)lastPlayerMessage.setPlayerProperties(player); }
 
     public void sendPlayerUpdate(Player player) { sendMessage(new PlayerMessage(player)); }
 

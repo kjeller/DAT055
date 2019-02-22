@@ -175,7 +175,6 @@ public class GameController extends Controller {
         isRotating = false;
         isPaused = false;
         isDebug = false;
-        isMultiplayer = false;
 
         view = new GameView((GameModel)model);
 
