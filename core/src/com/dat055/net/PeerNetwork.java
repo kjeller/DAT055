@@ -102,36 +102,9 @@ public class PeerNetwork extends Thread {
                     close();
                 }
             }*/
+            if(client.isConnected())
+                handleServerResponses();
 
-            Message msg = client.readMessage();
-            if(msg != null) {
-                // Translate OP code in message and cast based on code.
-                switch (msg.getOp()) {
-                    case OP_JOIN:
-                        System.out.println("=== JOIN ===");
-                        otherClient = ((JoinMessage)msg).getName();
-                        String choosenMap = ((JoinMessage) msg).getMap();
-                        System.out.printf("Message from other peer: %s\n", msg);
-
-                        // Assign map to peer
-                        if(choosenMap != null) {
-                            this.choosenMap = choosenMap;
-                            System.out.printf("Map %s selected.\n", choosenMap);
-                        }
-                        client.writeMessage(new Message(OP_CHAR_SEL));
-                        break;
-                    case OP_CHAR_SEL:
-                        System.out.println("=== CHAR_SEL ===");
-                        //TODO: Somehow get menucontroller method call here?
-                        isReady = true;
-                        client.start();
-                        break;
-                    case OP_LEAVE:
-                        client.writeMessage(new Message(OP_LEAVE));
-                        close();
-                        break;
-                }
-            }
             // Handle receiving of UDP packets
             handlePackets();
         }
@@ -151,16 +124,48 @@ public class PeerNetwork extends Thread {
             out = new ObjectOutputStream(cs.getOutputStream()); // ObjectOutputStream before inputstream!
             in = new ObjectInputStream(cs.getInputStream());
 
-            // Creates new client for hosting peer
+            // Creates new client to send messages to other peer server
             if(client == null)
                 setClient(cs.getInetAddress());
 
-            writeMessage(new JoinMessage(name, choosenMap)); // Writes to connected client
+            client.writeMessage(new JoinMessage(name, choosenMap)); // Writes to connected client
 
             // Create a datagramsocket to handle udp connection
             //ds = new DatagramSocket(listenPort);
             start();
         } catch (Exception e) { System.out.println(e); }
+    }
+
+    private void handleServerResponses() {
+        Message msg = readMessage();    // Server receive message
+        if(msg != null) {
+            // Translate OP code in message and cast based on code.
+            switch (msg.getOp()) {
+                case OP_JOIN:
+                    System.out.println("=== JOIN ===");
+                    otherClient = ((JoinMessage)msg).getName();
+                    String choosenMap = ((JoinMessage) msg).getMap();
+                    System.out.printf("Message from other peer: %s\n", msg);
+
+                    // Assign map to peer
+                    if(choosenMap != null) {
+                        this.choosenMap = choosenMap;
+                        System.out.printf("Map %s selected.\n", choosenMap);
+                    }
+                    client.writeMessage(new Message(OP_CHAR_SEL));
+                    break;
+                case OP_CHAR_SEL:
+                    System.out.println("=== CHAR_SEL ===");
+                    //TODO: Somehow get menucontroller method call here?
+                    isReady = true;
+                    client.start();
+                    break;
+                case OP_LEAVE:
+                    client.writeMessage(new Message(OP_LEAVE));
+                    close();
+                    break;
+            }
+        }
     }
 
     /**
