@@ -74,7 +74,6 @@ public class PeerNetwork extends Thread {
     /**
      * The one who joins uses this
      * @param name of this server
-     * @param client to connect to other server
      * @param listenPort
      */
     public PeerNetwork(String name, String addr, int listenPort) {
@@ -189,7 +188,7 @@ public class PeerNetwork extends Thread {
      * established.
      */
     private void handlePackets() {
-        readDatagramPacket();
+        byte[] data = readDatagramPacket();
         if(data == null)
             return;
         System.out.println("-Peernetwork got data from Server.");
@@ -241,14 +240,16 @@ public class PeerNetwork extends Thread {
     /**
      * Receive a packet from DatagramSocket
      */
-    private void readDatagramPacket() {
-        byte[] data = new byte[1024];
-        current = new DatagramPacket(data, data.length);
+    private byte[] readDatagramPacket() {
         try {
+            byte[] data = new byte[1024];
+            current = new DatagramPacket(data, data.length);
             ds.receive(current);
             this.data = data;
             System.out.printf("--Received package from %s!\n", current.getAddress());
+            return data;
         } catch (IOException ignored) {}
+        return null;
     }
 
     /**
