@@ -41,8 +41,7 @@ public class Client extends Thread {
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) { break; }
-            if(ds.isConnected())
-                sendPacket();
+            sendPacket();
         }
     }
 
