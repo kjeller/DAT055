@@ -16,7 +16,7 @@ public class PlayerMessage extends Message {
     }
 
     public String toString() {
-        return super.toString() + String.format("pos:(%d, %d), dir:(%d, %d), alive: %s",
+        return super.toString() + String.format("pos:(%.1f, %.1f), dir:(%.1f, %.1f), alive: %s",
                 position.x, position.y, lookingDirection.x, lookingDirection.y, isAlive);
     }
 
