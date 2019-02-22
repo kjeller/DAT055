@@ -210,6 +210,8 @@ public class GameController extends Controller {
      */
     public boolean startMultiplayerMap(String fileName, String name) {
         net = new PeerNetwork(name, 1337, fileName);
+        if(!net.runServer())
+            return false;
 
         System.out.println("Map created");
 
@@ -226,6 +228,8 @@ public class GameController extends Controller {
      */
     public boolean joinMultiplayerMap(String addr, String name) {
         net = new PeerNetwork(name, addr, 1337);
+        if(!net.runServer())
+            return false;
 
         mode = Mode.BACK; //TODO: This will be set from message from other peer
         while(!net.isRunning()); // wait for map to be set

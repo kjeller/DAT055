@@ -25,7 +25,6 @@ public class Client extends Thread {
     public Client(InetAddress addr, int port) {
         this.addr = addr;
         this.port = port;
-        data = new byte[1024];
         try {
             ds = new DatagramSocket();
         } catch (SocketException e) {
@@ -87,7 +86,7 @@ public class Client extends Thread {
         if(data != null) {
             DatagramPacket packet = new DatagramPacket(data, data.length, addr, port);
             try {
-                System.out.printf("==> Client sent UDP packet to %s \n", addr.getHostAddress());
+                System.out.printf("==> Client sent UDP packet to %s:%d \n", addr.getHostAddress(), port);
                 ds.send(packet);
             } catch (IOException e) { System.out.println(e); }
         }

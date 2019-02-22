@@ -66,7 +66,6 @@ public class PeerNetwork extends Thread {
     public PeerNetwork(String name, int listenPort, String choosenMap) {
         this(name, listenPort);
         this.choosenMap = choosenMap;
-        runServer();
     }
 
     /**
@@ -80,7 +79,6 @@ public class PeerNetwork extends Thread {
             System.out.printf("Socket created for for %s:%d\n", addr, listenPort);
             client = new Client(InetAddress.getByName(addr), listenPort);
         } catch (UnknownHostException e) { System.out.println("Unknown host"); }
-        runServer();
     }
 
     @Override
@@ -115,12 +113,13 @@ public class PeerNetwork extends Thread {
     /**
      * Creates a serversocket for a specific port and waits for a connection
      */
-    public void runServer() {
+    public boolean runServer() {
         ss = null;
         System.out.println("Trying to start server..");
         try {
             ss = new ServerSocket(listenPort);
             System.out.println("ServerSocket created! \nWaiting for other client..");
+            ss.setSoTimeout(1000);
             Socket cs = ss.accept(); // Wait for connection
             System.out.println("Client connected: " + cs);
             out = new ObjectOutputStream(cs.getOutputStream()); // ObjectOutputStream before inputstream!
@@ -132,7 +131,8 @@ public class PeerNetwork extends Thread {
 
             client.writeMessage(new JoinMessage(name, choosenMap)); // Writes to connected client
             start();
-        } catch (Exception e) { System.out.println("Fakkkk");}
+        } catch (Exception e) { System.out.println("Server timed out, closing threads."); close(); return false;}
+        return true;
     }
 
     private void handleServerResponses() {
@@ -233,7 +233,8 @@ public class PeerNetwork extends Thread {
         try {
             byte[] data = new byte[1024];
             current = new DatagramPacket(data, data.length);
-            ds.setSoTimeout(1000);
+            ds.setSoTimeout(100);
+
             ds.receive(current);
             System.out.printf("<=== Received package from %s!\n", current.getAddress());
             return data;
