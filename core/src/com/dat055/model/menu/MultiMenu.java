@@ -136,8 +136,8 @@ public class MultiMenu extends Menu {
                 System.out.println("[Multi:136]Debug: " + "IP input: " + ip);
                 controller.name = "Kjeller";    //TODO: Name from a textfield
                 if(ip != null || !(ip.equals(""))) {
-                    if(controller.joinGame(ip));
-                        controller.clearStage();
+                    controller.clearStage();
+                    controller.joinGame(ip);
                 }
                         //TODO: Create label or something..
                 super.touchUp(event, x, y, pointer, button);
