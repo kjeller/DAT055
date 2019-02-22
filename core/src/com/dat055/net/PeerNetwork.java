@@ -50,6 +50,11 @@ public class PeerNetwork extends Thread {
         isTimeOut = false;
         isReady = false;
         timeout = 0;
+        try {
+            ds = new DatagramSocket(listenPort);
+        } catch (SocketException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -126,7 +131,7 @@ public class PeerNetwork extends Thread {
                     }
                 }
                 // Handle receiving of UDP packets
-                handleUpdates();
+                handlePackets();
             }
         }
     }
@@ -164,7 +169,7 @@ public class PeerNetwork extends Thread {
      * This method is called by thread if tcp connection has been
      * established.
      */
-    private void handleUpdates() {
+    private void handlePackets() {
         readDatagramPacket();
         if(data == null)
             return;
@@ -249,7 +254,7 @@ public class PeerNetwork extends Thread {
         try {
             objOut = new ObjectOutputStream(out);
             objOut.writeObject(msg);
-            System.out.printf("Msg: %s [SERIALIZED]\n", msg);
+            //System.out.printf("Msg: %s [SERIALIZED]\n", msg);
         } catch (IOException ignored) {}
         client.setPacketData(out.toByteArray());
     }
