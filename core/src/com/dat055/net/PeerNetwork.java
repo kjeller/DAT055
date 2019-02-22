@@ -107,7 +107,8 @@ public class PeerNetwork extends Thread {
                 handleServerResponses();
 
             // Handle receiving of UDP packets
-            //handlePackets();
+            if(isReady)
+                handlePackets();
         }
     }
 
@@ -157,8 +158,11 @@ public class PeerNetwork extends Thread {
                     break;
                 case OP_CHAR_SEL:
                     System.out.println("=== CHAR_SEL ===");
+                    System.out.println("nothing happens here yet");
                     //TODO: Somehow get menucontroller method call here?
                     isReady = true;
+
+                    System.out.println("Started client!");
                     client.start();
                     break;
                 case OP_LEAVE:
