@@ -89,7 +89,7 @@ public class PeerNetwork extends Thread {
             System.out.println("[Line: 90] PeerNetwork running."+t++);
             try {
                 Thread.sleep(PERIOD);
-            } catch (InterruptedException e) { break; }
+            } catch (InterruptedException e) { System.out.println(e);break; }
 
             // Calculate if there is a timeout
             /*if(isWaitingForPeer) {
@@ -264,7 +264,7 @@ public class PeerNetwork extends Thread {
         try {
             objOut = new ObjectOutputStream(out);
             objOut.writeObject(msg);
-            System.out.printf("Msg: %s [SERIALIZED]\n", msg);
+            //System.out.printf("Msg: %s [SERIALIZED]\n", msg);
         } catch (IOException ignored) {}
         client.setPacketData(out.toByteArray());
     }
