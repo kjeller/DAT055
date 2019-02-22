@@ -70,6 +70,7 @@ public abstract class Entity extends Observable {
     }
     public void setXPosition(int x) { position.x = x; rect.x = position.x; }
     public void setYPosition(int y) { position.y = y; rect.y = position.y; }
+    public void setPosition(Vector2 position) { this.position = position; }
 
     public Vector2 getPosition() {
         return position;

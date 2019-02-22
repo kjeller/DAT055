@@ -28,6 +28,7 @@ public class PeerNetwork extends Thread {
     // UDP communication
     private DatagramSocket ds;
     private DatagramPacket current; // will be used to determine where to packet came from
+    private PlayerMessage lastPlayerMessage;
     private byte[] data; // data is put here after deserialization
 
     private Client client;  // Client used to communicate with other server
@@ -117,13 +118,18 @@ public class PeerNetwork extends Thread {
                             System.out.println("Character select time!");
                             //TODO: Somehow get menucontroller method call here?
                             break;
+                        case OP_LEAVE:
+                            writeMessage(new Message(OP_LEAVE));
+                            close();
+                            break;
                     }
                 }
+                handleUpdates();
             }
 
             // Send udp packets if client is connected
-            if(client.isConnected())
-                receiveDatagramPacket();
+            /* if(client.isConnected())
+                receiveDatagramPacket();*/
         }
     }
 
@@ -170,7 +176,7 @@ public class PeerNetwork extends Thread {
     public Message readMessage() {
         try {
             return (Message)in.readObject();
-        } catch (Exception e) { e.printStackTrace(); }
+        } catch (Exception e) {System.out.println("Connection lost."); }
         return null;
     }
 
@@ -203,7 +209,6 @@ public class PeerNetwork extends Thread {
         try {
             objIn =  new ObjectInputStream(new ByteArrayInputStream(data));
             msg = (Message) objIn.readObject();
-            objIn.close();
             data = null; // Clear data for next read - this is needed to get the "handshake" right
             System.out.println("--Message de-serializes read!");
 
@@ -211,7 +216,9 @@ public class PeerNetwork extends Thread {
             if(msg != null) {
                 // Translate OP code in message and cast based on code.
                 switch (msg.getOp()) {
-                    case OP_PLAYER: System.out.println(msg);break;
+                    case OP_PLAYER:
+                        lastPlayerMessage = (PlayerMessage)msg;
+                        break;
                     case OP_HOOK: break;
                     case OP_LEAVE: close(); break;
                 }
@@ -219,6 +226,8 @@ public class PeerNetwork extends Thread {
         } catch (IOException ignored) {
         } catch (ClassNotFoundException e) {e.printStackTrace();}
     }
+
+    public void updatePlayer(Player player) { lastPlayerMessage.setPlayerProperties(player); }
 
     public void sendPlayerUpdate(Player player) { sendMessage(new PlayerMessage(player)); }
 

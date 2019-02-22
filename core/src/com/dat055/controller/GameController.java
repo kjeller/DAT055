@@ -59,8 +59,13 @@ public class GameController extends Controller {
 
         if(isMultiplayer && net.isConnected()) {
             net.sendPlayerUpdate(currentPlayer);
-        }
 
+            if(currentPlayer == player1) {
+                net.updatePlayer(player2);
+            } else {
+                net.updatePlayer(player1);
+            }
+        }
     }
 
     /**
@@ -226,6 +231,7 @@ public class GameController extends Controller {
         //startMap(net.getChoosenMap());
         // TODO: Implement get map
         isMultiplayer = true;
+
         return true;
     }
 

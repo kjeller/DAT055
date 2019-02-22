@@ -7,6 +7,7 @@ public class JoinMessage extends Message {
     public JoinMessage(String name, String map) {
         super(Protocol.OP_JOIN);
         this.name = name;
+        this.map = map;
     }
 
     public String getName() {
