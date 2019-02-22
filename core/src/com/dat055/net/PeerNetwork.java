@@ -110,7 +110,7 @@ public class PeerNetwork extends Thread {
                         // Assign map to peer
                         if(choosenMap != null) {
                             this.choosenMap = choosenMap;
-                            System.out.printf("Map %s selected.");
+                            System.out.printf("Map %s selected.", choosenMap);
                         }
 
                         break;
