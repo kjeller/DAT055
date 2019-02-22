@@ -117,6 +117,7 @@ public class PeerNetwork extends Thread {
                                 this.choosenMap = choosenMap;
                                 System.out.printf("Map %s selected.", choosenMap);
                             }
+                            writeMessage(new Message(OP_CHAR_SEL));
                             break;
                         case OP_CHAR_SEL:
                             System.out.println("Character select time!");
