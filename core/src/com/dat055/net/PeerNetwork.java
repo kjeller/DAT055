@@ -107,7 +107,7 @@ public class PeerNetwork extends Thread {
                 handleServerResponses();
 
             // Handle receiving of UDP packets
-            handlePackets();
+            //handlePackets();
         }
     }
 
