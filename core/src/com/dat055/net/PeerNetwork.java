@@ -53,6 +53,7 @@ public class PeerNetwork extends Thread {
         timeout = 0;
         try {
             ds = new DatagramSocket(listenPort);
+            System.out.printf("Created datagramsocket for port %d\n", listenPort);
         } catch (SocketException e) {
             e.printStackTrace();
         }
@@ -79,7 +80,7 @@ public class PeerNetwork extends Thread {
     public PeerNetwork(String name, String addr, int listenPort) {
         this(name, listenPort);
         try {
-            System.out.printf("Socket created for for %s:%d", addr, listenPort);
+            System.out.printf("Socket created for for %s:%d\n", addr, listenPort);
             client = new Client(InetAddress.getByName(addr), listenPort);
         } catch (UnknownHostException e) { System.out.println("Unknown host"); }
         runServer();
@@ -115,7 +116,7 @@ public class PeerNetwork extends Thread {
     /**
      * Creates a serversocket for a specific port and waits for a connection
      */
-    public void runServer() {
+    public boolean runServer() {
         ss = null;
         System.out.println("Trying to start server..");
         try {
@@ -135,7 +136,8 @@ public class PeerNetwork extends Thread {
             // Create a datagramsocket to handle udp connection
             //ds = new DatagramSocket(listenPort);
             start();
-        } catch (Exception e) { System.out.println(e); }
+            return  true;
+        } catch (Exception e) { return false; }
     }
 
     private void handleServerResponses() {
