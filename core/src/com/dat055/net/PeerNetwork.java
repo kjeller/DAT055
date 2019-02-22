@@ -103,8 +103,6 @@ public class PeerNetwork extends Thread {
             }*/
             if(client.isConnected()) {
                 handleServerResponses();
-            } else {
-                close();
             }
 
             // Handle receiving of UDP packets
