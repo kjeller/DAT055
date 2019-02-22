@@ -99,7 +99,8 @@ public class Client extends Thread {
         System.out.println("!!Client thread and ds will be closed.!!");
         ds.close();
         try {
-            ps.close();
+            if(ps != null)
+                ps.close();
         } catch (IOException e) { e.printStackTrace(); }
         this.interrupt();
     }

@@ -119,7 +119,7 @@ public class PeerNetwork extends Thread {
         try {
             ss = new ServerSocket(listenPort);
             System.out.println("ServerSocket created! \nWaiting for other client..");
-            ss.setSoTimeout(1000);
+            ss.setSoTimeout(10000);
             Socket cs = ss.accept(); // Wait for connection
             System.out.println("Client connected: " + cs);
             out = new ObjectOutputStream(cs.getOutputStream()); // ObjectOutputStream before inputstream!
