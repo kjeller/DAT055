@@ -165,6 +165,7 @@ public class PeerNetwork extends Thread {
      * established.
      */
     private void handleUpdates() {
+        readDatagramPacket();
         if(data == null)
             return;
         System.out.println("-Peernetwork got data from Server.");
@@ -248,7 +249,7 @@ public class PeerNetwork extends Thread {
         try {
             objOut = new ObjectOutputStream(out);
             objOut.writeObject(msg);
-            System.out.printf("Msg: %s [SERIALIZED]", msg);
+            System.out.printf("Msg: %s [SERIALIZED]\n", msg);
         } catch (IOException ignored) {}
         client.setPacketData(out.toByteArray());
     }
