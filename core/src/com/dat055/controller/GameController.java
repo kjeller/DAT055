@@ -228,30 +228,10 @@ public class GameController extends Controller {
         net = new PeerNetwork(name, addr, 1337);
 
         mode = Mode.BACK; //TODO: This will be set from message from other peer
-        //startMap(net.getChoosenMap());
+        startMap(net.getChoosenMap());
         // TODO: Implement get map
         isMultiplayer = true;
 
-        return true;
-    }
-
-    /**
-     * Waits for other player and checks if timeout occurs
-     * @return true if successful
-     */
-    private boolean getConnectionToPeer() {
-        // Wait for other player to join
-        while(net.isWaiting()) {}
-
-        // Check if there was a timeout
-        if(net.isTimeout()) {
-            System.out.println("Server timed out!");
-            isRunning = false;
-            return false;
-            //TODO: Metod för att återgå till meny
-        }
-
-        isMultiplayer = true;
         return true;
     }
 

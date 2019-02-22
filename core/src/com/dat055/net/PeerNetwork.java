@@ -39,7 +39,6 @@ public class PeerNetwork extends Thread {
     private String choosenMap;
     private boolean isWaitingForPeer;
     private boolean isTimeOut;
-    private boolean isConnected;
 
     private float timeout;
 
@@ -48,7 +47,6 @@ public class PeerNetwork extends Thread {
         this.listenPort = listenPort;
         isWaitingForPeer = true;
         isTimeOut = false;
-        isConnected = false;
         timeout = 0;
     }
 
@@ -97,33 +95,33 @@ public class PeerNetwork extends Thread {
                     close();
                 }
             }*/
+            if(client.isConnected()) {
+                Message msg = client.readMessage();
+                if(msg != null) {
+                    // Translate OP code in message and cast based on code.
+                    switch (msg.getOp()) {
+                        case OP_JOIN:
+                            otherClient = ((JoinMessage)msg).getName();
+                            String choosenMap = ((JoinMessage) msg).getMap();
+                            System.out.printf("Message from other peer: %s", msg);
 
-            Message msg = client.readMessage();
-            if(msg != null) {
-                // Translate OP code in message and cast based on code.
-                switch (msg.getOp()) {
-                    case OP_JOIN:
-                        otherClient = ((JoinMessage)msg).getName();
-                        String choosenMap = ((JoinMessage) msg).getMap();
-                        System.out.println(otherClient);
+                            // Assign map to peer
+                            if(choosenMap != null) {
+                                this.choosenMap = choosenMap;
+                                System.out.printf("Map %s selected.", choosenMap);
+                            }
 
-                        // Assign map to peer
-                        if(choosenMap != null) {
-                            this.choosenMap = choosenMap;
-                            System.out.printf("Map %s selected.", choosenMap);
-                        }
-
-                        break;
-                    case OP_CHAR_SEL:
-                        System.out.println("Character select time!");
-                        //TODO: Somehow get menucontroller method call here?
-                        break;
-                    case OP_LEAVE:
-                        writeMessage(new Message(OP_LEAVE));
-                        close();
-                        break;
+                            break;
+                        case OP_CHAR_SEL:
+                            System.out.println("Character select time!");
+                            //TODO: Somehow get menucontroller method call here?
+                            break;
+                        case OP_LEAVE:
+                            writeMessage(new Message(OP_LEAVE));
+                            close();
+                            break;
+                    }
                 }
-
                 handleUpdates();
             }
 
@@ -140,7 +138,6 @@ public class PeerNetwork extends Thread {
             ss = new ServerSocket(listenPort);
             System.out.println("Waiting for other client..");
             Socket cs = ss.accept(); // Wait for connection
-            isConnected = true;
             System.out.println("Client connected: " + cs);
             out = new ObjectOutputStream(cs.getOutputStream()); // ObjectOutputStream before inputstream!
             in = new ObjectInputStream(cs.getInputStream());
@@ -259,7 +256,7 @@ public class PeerNetwork extends Thread {
      */
     public boolean isWaiting() { return isWaitingForPeer; }
     public boolean isTimeout() {return isTimeOut;}
-    public boolean isConnected() { return isConnected; }
+    public boolean isConnected() { return client.isConnected(); }
     public byte[] getData() { return data; }
     public DatagramPacket getCurrent() { return current; }
     public String getChoosenMap() { return choosenMap; }
