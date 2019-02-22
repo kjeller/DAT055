@@ -108,6 +108,7 @@ public class PeerNetwork extends Thread {
                     // Translate OP code in message and cast based on code.
                     switch (msg.getOp()) {
                         case OP_JOIN:
+                            System.out.println("=== JOIN ===");
                             otherClient = ((JoinMessage)msg).getName();
                             String choosenMap = ((JoinMessage) msg).getMap();
                             System.out.printf("Message from other peer: %s", msg);
@@ -120,7 +121,7 @@ public class PeerNetwork extends Thread {
                             writeMessage(new Message(OP_CHAR_SEL));
                             break;
                         case OP_CHAR_SEL:
-                            System.out.println("Character select time!");
+                            System.out.println("=== CHAR_SEL ===");
                             //TODO: Somehow get menucontroller method call here?
                             isReady = true;
                             client.start();
