@@ -39,6 +39,7 @@ public class PeerNetwork extends Thread {
     private String choosenMap;
     private boolean isWaitingForPeer;
     private boolean isTimeOut;
+    private boolean isReady;
 
     private float timeout;
 
@@ -47,6 +48,7 @@ public class PeerNetwork extends Thread {
         this.listenPort = listenPort;
         isWaitingForPeer = true;
         isTimeOut = false;
+        isReady = false;
         timeout = 0;
     }
 
@@ -109,6 +111,7 @@ public class PeerNetwork extends Thread {
                             if(choosenMap != null) {
                                 this.choosenMap = choosenMap;
                                 System.out.printf("Map %s selected.", choosenMap);
+                                isReady = true;
                             }
 
                             break;
@@ -256,6 +259,7 @@ public class PeerNetwork extends Thread {
      */
     public boolean isWaiting() { return isWaitingForPeer; }
     public boolean isTimeout() {return isTimeOut;}
+    public boolean isReady() { return isReady; }
     public boolean isConnected() { return client.isConnected(); }
     public byte[] getData() { return data; }
     public DatagramPacket getCurrent() { return current; }
