@@ -18,6 +18,7 @@
               1, 1, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1],
   "entities" : [
     {"player"  : {"position" : [0,  1], "sprite" : "textures/blue_penguin_64x80.png"}},
+    {"enemy"   : {"position" : [6,  1], "sprite" : "textures/naner_64x64.png"}},
     {"door"    : {"position" : [22, 1], "rqs"    : ["b1", "b2"], "id"  : "d1", "sprite" : "textures/interactables/doorClosed.png"}},
     {"button"  : {"position" : [18, 1],"timer" : 5, "id"     : "b1", "target"      : "d1", "sprite" : "textures/interactables/ButtonInactive.png"}}
   ]},

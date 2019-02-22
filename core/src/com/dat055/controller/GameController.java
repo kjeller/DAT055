@@ -183,6 +183,7 @@ public class GameController extends Controller {
         // Set camera position to current player to avoid panning to player at start
         Vector2 camStartPos = currentPlayer.getPosition().cpy();
         cam.position.set(new Vector3(camStartPos.x, camStartPos.y, 0));
+        model.playMusic("map_01");
         return true; //TODO: Fix a return false which indicates if map created successfully or not
     }
 

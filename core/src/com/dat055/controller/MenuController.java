@@ -20,10 +20,10 @@ public class MenuController extends Controller{
         Gdx.input.setInputProcessor(((MenuModel)model).getStage());
 
         swapMenu("Main");
-
         ((MenuModel)model).includeMenu("Multiplayer", new MultiMenu(this));
         ((MenuModel)model).includeMenu("Pause", new PauseMenu(this));
         ((MenuModel)model).includeMenu("Select", new SelectMenu(this));
+        model.playMusic("title");
     }
 
     @Override
@@ -68,6 +68,7 @@ public class MenuController extends Controller{
 
     public void clearStage() {
         ((MenuModel)model).getStage().clear();
+        model.stopMusic();
     }
 
     public float getWidth()  { return ((MenuModel)model).getStage().getWidth();  }
@@ -92,4 +93,5 @@ public class MenuController extends Controller{
     public void setController(GameController ctrl) {
         super.setController(ctrl);
     }
+    public GameController getCtrl() { return (GameController)ctrl; }
 }

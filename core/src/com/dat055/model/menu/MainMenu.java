@@ -23,7 +23,6 @@ public class MainMenu extends Menu {
 
     public MainMenu(MenuController cntr) {
         super("UI/Delta.jpg");
-
         this.controller = cntr;
         createTable(Gdx.graphics.getWidth()/4,Gdx.graphics.getHeight()/18);
     }
