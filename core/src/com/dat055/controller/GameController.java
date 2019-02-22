@@ -57,7 +57,7 @@ public class GameController extends Controller {
                 map2.update(deltaTime);
         }
 
-        if(isMultiplayer && net.isConnected()) {
+        if(isMultiplayer && net.isRunning()) {
             net.sendPlayerUpdate(currentPlayer);
 
             if(currentPlayer == player1) {
@@ -228,7 +228,7 @@ public class GameController extends Controller {
         net = new PeerNetwork(name, addr, 1337);
 
         mode = Mode.BACK; //TODO: This will be set from message from other peer
-        while(!net.isReady()); // wait for map to be set
+        while(!net.isRunning()); // wait for map to be set
         System.out.println("Map choosen from server: " + net.getChoosenMap());
         startMap(net.getChoosenMap());
         // TODO: Implement get map

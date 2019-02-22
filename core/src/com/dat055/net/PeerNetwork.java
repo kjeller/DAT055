@@ -39,7 +39,7 @@ public class PeerNetwork extends Thread {
     private String choosenMap;
     private boolean isWaitingForPeer;
     private boolean isTimeOut;
-    private boolean isReady;
+    private boolean isRunning;
 
     private float timeout;
     int t = 0;
@@ -49,7 +49,7 @@ public class PeerNetwork extends Thread {
         this.listenPort = listenPort;
         isWaitingForPeer = true;
         isTimeOut = false;
-        isReady = false;
+        isRunning = false;
         timeout = 0;
         try {
             ds = new DatagramSocket(listenPort);
@@ -107,7 +107,7 @@ public class PeerNetwork extends Thread {
                 handleServerResponses();
 
             // Handle receiving of UDP packets
-            if(isReady)
+            if(isRunning)
                 handlePackets();
         }
     }
@@ -160,7 +160,7 @@ public class PeerNetwork extends Thread {
                     System.out.println("=== CHAR_SEL ===");
                     System.out.println("nothing happens here yet");
                     //TODO: Somehow get menucontroller method call here?
-                    isReady = true;
+                    isRunning = true;
 
                     System.out.println("Started client!");
                     client.start();
@@ -281,7 +281,7 @@ public class PeerNetwork extends Thread {
      */
     public boolean isWaiting() { return isWaitingForPeer; }
     public boolean isTimeout() {return isTimeOut;}
-    public boolean isReady() { return isReady; }
+    public boolean isRunning() { return isRunning; }
     public boolean isConnected() { return client.isConnected(); }
 
     public byte[] getData() { return data; }
