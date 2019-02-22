@@ -55,6 +55,7 @@ public class PeerNetwork extends Thread {
         } catch (SocketException e) {
             e.printStackTrace();
         }
+        start();
     }
 
     /**
