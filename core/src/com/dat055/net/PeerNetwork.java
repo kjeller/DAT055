@@ -67,7 +67,6 @@ public class PeerNetwork extends Thread {
         this(name, listenPort);
         this.choosenMap = choosenMap;
         runServer();
-        writeMessage(new Message(OP_CHAR_SEL));
     }
 
     /**
@@ -118,7 +117,7 @@ public class PeerNetwork extends Thread {
     /**
      * Creates a serversocket for a specific port and waits for a connection
      */
-    public boolean runServer() {
+    public void runServer() {
         ss = null;
         System.out.println("Trying to start server..");
         try {
@@ -134,12 +133,8 @@ public class PeerNetwork extends Thread {
                 setClient(cs.getInetAddress());
 
             client.writeMessage(new JoinMessage(name, choosenMap)); // Writes to connected client
-
-            // Create a datagramsocket to handle udp connection
-            //ds = new DatagramSocket(listenPort);
             start();
-            return  true;
-        } catch (Exception e) { return false; }
+        } catch (Exception e) { System.out.println("Fakkkk");}
     }
 
     private void handleServerResponses() {
