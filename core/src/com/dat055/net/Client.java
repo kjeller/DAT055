@@ -43,6 +43,8 @@ public class Client extends Thread {
             } catch (InterruptedException e) { break; }
             if(ps.isConnected())
                 sendPacket();
+            if(ds.isConnected())
+                sendPacket();
         }
     }
 

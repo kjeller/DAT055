@@ -116,13 +116,13 @@ public class PeerNetwork extends Thread {
                             if(choosenMap != null) {
                                 this.choosenMap = choosenMap;
                                 System.out.printf("Map %s selected.", choosenMap);
-                                isReady = true;
                             }
-                            client.start();
                             break;
                         case OP_CHAR_SEL:
                             System.out.println("Character select time!");
                             //TODO: Somehow get menucontroller method call here?
+                            isReady = true;
+                            client.start();
                             break;
                         case OP_LEAVE:
                             writeMessage(new Message(OP_LEAVE));
