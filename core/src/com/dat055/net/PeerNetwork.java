@@ -113,7 +113,7 @@ public class PeerNetwork extends Thread {
                                 System.out.printf("Map %s selected.", choosenMap);
                                 isReady = true;
                             }
-
+                            client.start();
                             break;
                         case OP_CHAR_SEL:
                             System.out.println("Character select time!");
@@ -125,15 +125,15 @@ public class PeerNetwork extends Thread {
                             break;
                     }
                 }
+                // Handle receiving of UDP packets
                 handleUpdates();
             }
-
-            // Send udp packets if client is connected
-            /* if(client.isConnected())
-                receiveDatagramPacket();*/
         }
     }
 
+    /**
+     * Creates a serversocket for a specific port and waits for a connection
+     */
     public void runServer() {
         ss = null;
         System.out.println("Trying to start server..");
@@ -155,42 +155,6 @@ public class PeerNetwork extends Thread {
             //ds = new DatagramSocket(listenPort);
             start();
         } catch (Exception e) { System.out.println(e); }
-    }
-
-
-    /**
-     * Write message to output stream - will be sent to clients input stream
-     * @param msg that will be sent
-     */
-    public void writeMessage(Message msg) {
-        try {
-            out.writeObject(msg);
-            System.out.printf("Msg: {%s} sent to other client. \n", msg);
-        } catch (IOException ignored) {}
-    }
-
-    /**
-     * Reads message from stream - from client
-     * @return message from stream
-     */
-    public Message readMessage() {
-        try {
-            return (Message)in.readObject();
-        } catch (Exception e) {System.out.println("Connection lost."); close(); }
-        return null;
-    }
-
-    /**
-     * Receive a packet from DatagramSocket
-     */
-    private void receiveDatagramPacket() {
-        byte[] data = new byte[1024];
-        current = new DatagramPacket(data, data.length);
-        try {
-            ds.receive(current);
-            this.data = data;
-            System.out.printf("--Received package from %s!\n", current.getAddress());
-        } catch (IOException ignored) {}
     }
 
     /**
@@ -227,26 +191,67 @@ public class PeerNetwork extends Thread {
         } catch (ClassNotFoundException e) {e.printStackTrace();}
     }
 
-    public void updatePlayer(Player player) { if(lastPlayerMessage != null)lastPlayerMessage.setPlayerProperties(player); }
-
-    public void sendPlayerUpdate(Player player) { sendMessage(new PlayerMessage(player)); }
+    /**
+     * Write message to output stream - will be sent to clients input stream
+     * @param msg that will be sent
+     */
+    public void writeMessage(Message msg) {
+        try {
+            out.writeObject(msg);
+            System.out.printf("Msg: {%s} sent to other client. \n", msg);
+        } catch (IOException ignored) {}
+    }
 
     /**
-     * Serializes message and tells Client to start send message
+     * Reads message from stream - from client
+     * @return message from stream
+     */
+    public Message readMessage() {
+        try {
+            return (Message)in.readObject();
+        } catch (Exception e) {System.out.println("Connection lost."); close(); }
+        return null;
+    }
+
+    /**
+     * Receive a packet from DatagramSocket
+     */
+    private void readDatagramPacket() {
+        byte[] data = new byte[1024];
+        current = new DatagramPacket(data, data.length);
+        try {
+            ds.receive(current);
+            this.data = data;
+            System.out.printf("--Received package from %s!\n", current.getAddress());
+        } catch (IOException ignored) {}
+    }
+
+    /**
+     * Updates player with last received message
+     * @param player
+     */
+    public void updatePlayer(Player player) { if(lastPlayerMessage != null)lastPlayerMessage.setPlayerProperties(player); }
+
+    /**
+     * Packages player updates to client
+     * @param player
+     */
+    public void sendPlayerUpdate(Player player) { setClientPacketData(new PlayerMessage(player)); }
+
+    /**
+     * Serializes message and set to client
      * @param msg
      */
-    private void sendMessage(Message msg) {
+    private void setClientPacketData(Message msg) {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         ObjectOutputStream objOut;
         try {
             objOut = new ObjectOutputStream(out);
             objOut.writeObject(msg);
+            System.out.printf("Msg: %s [SERIALIZED]", msg);
         } catch (IOException ignored) {}
-        System.out.println("==> Message put in client!");
         client.setPacketData(out.toByteArray());
     }
-
-
     private void setClient (InetAddress addr) {
         System.out.println("=== Client created! ===");
         client = new Client(addr, listenPort);
@@ -261,6 +266,7 @@ public class PeerNetwork extends Thread {
     public boolean isTimeout() {return isTimeOut;}
     public boolean isReady() { return isReady; }
     public boolean isConnected() { return client.isConnected(); }
+
     public byte[] getData() { return data; }
     public DatagramPacket getCurrent() { return current; }
     public String getChoosenMap() { return choosenMap; }
