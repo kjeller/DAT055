@@ -27,7 +27,9 @@ public class Client extends Thread {
         this.port = port;
         try {
             ds = new DatagramSocket();
+            System.out.printf("[Client] Created Datagramsocket %s\n", ds);
             ds.connect(addr, port); // Only send to target
+            System.out.printf("[Client] Connected DatagramSocket to %s:%s.\n", addr, port);
         } catch (SocketException e) {
             e.printStackTrace();
         }
@@ -37,7 +39,7 @@ public class Client extends Thread {
     @Override
     public void run() {
         while(!interrupted()) {
-            System.out.println("[Line: 27] Client running."+t++);
+            System.out.println("Client running."+t++);
             try {
                 Thread.sleep(20);
             } catch (InterruptedException e) { break; }
@@ -53,7 +55,7 @@ public class Client extends Thread {
         ps = null;
         try {
             ps = new Socket(addr, port);
-            System.out.println("Socket created!");
+            System.out.println("[Client] Socket created!");
             out = new ObjectOutputStream(ps.getOutputStream());
             in = new ObjectInputStream(ps.getInputStream());
 
@@ -67,7 +69,7 @@ public class Client extends Thread {
     public void writeMessage(Message msg) {
         try {
             out.writeObject(msg);
-            System.out.printf("Msg: {%s} sent to other peer. \n", msg);
+            System.out.printf("[Client] Msg: {%s} sent to other peer. \n", msg);
         } catch (IOException ignored) {}
     }
 
@@ -91,7 +93,7 @@ public class Client extends Thread {
         if(data != null) {
             DatagramPacket packet = new DatagramPacket(data, data.length, addr, port);
             try {
-                System.out.printf("==> Client sent UDP packet to %s:%d \n", addr.getHostAddress(), port);
+                System.out.printf("==> [Client] sent UDP packet to %s:%d \n", addr.getHostAddress(), port);
                 ds.send(packet);
             } catch (IOException e) { System.out.println(e); }
         }

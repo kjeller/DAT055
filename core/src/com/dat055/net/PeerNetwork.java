@@ -52,9 +52,9 @@ public class PeerNetwork extends Thread {
         timeout = 0;
         try {
             ds = new DatagramSocket(listenPort);
-            System.out.printf("Created datagramsocket for port %d\n", listenPort);
+            System.out.printf("[Server] Created datagramsocket for port %d\n", listenPort);
         } catch (SocketException e) {
-            System.out.println("Could not create datagramsocket!");
+            System.out.println("[Server] Could not create datagramsocket!");
         }
     }
 
@@ -76,7 +76,7 @@ public class PeerNetwork extends Thread {
     public PeerNetwork(String name, String addr, int listenPort) {
         this(name, listenPort);
         try {
-            System.out.printf("Socket created for for %s:%d\n", addr, listenPort);
+            System.out.printf("[Server] Socket created for for %s:%d\n", addr, listenPort);
             client = new Client(InetAddress.getByName(addr), listenPort);
         } catch (UnknownHostException e) { System.out.println("Unknown host"); }
     }
@@ -84,7 +84,7 @@ public class PeerNetwork extends Thread {
     @Override
     public void run() {
         while(!interrupted()) {
-            System.out.println("[Line: 90] PeerNetwork running."+t++);
+            System.out.println("PeerNetwork running."+t++);
             try {
                 Thread.sleep(PERIOD);
             } catch (InterruptedException e) { System.out.println(e);break; }
@@ -115,13 +115,13 @@ public class PeerNetwork extends Thread {
      */
     public boolean runServer() {
         ss = null;
-        System.out.println("Trying to start server..");
+        System.out.println("[Server] Trying to start server..");
         try {
             ss = new ServerSocket(listenPort);
-            System.out.println("ServerSocket created! \nWaiting for other client..");
+            System.out.println("[Server] ServerSocket created! \nWaiting for other client..");
             ss.setSoTimeout(10000);
             Socket cs = ss.accept(); // Wait for connection
-            System.out.println("Client connected: " + cs);
+            System.out.println("[Server] Client connected: " + cs);
             out = new ObjectOutputStream(cs.getOutputStream()); // ObjectOutputStream before inputstream!
             in = new ObjectInputStream(cs.getInputStream());
 
@@ -131,7 +131,7 @@ public class PeerNetwork extends Thread {
 
             client.writeMessage(new JoinMessage(name, choosenMap)); // Writes to connected client
             start();
-        } catch (Exception e) { System.out.println("Server timed out, closing threads."); close(); return false;}
+        } catch (Exception e) { System.out.println("[Server] Server timed out, closing threads."); close(); return false;}
         return true;
     }
 
@@ -144,12 +144,12 @@ public class PeerNetwork extends Thread {
                     System.out.println("=== JOIN ===");
                     otherClient = ((JoinMessage)msg).getName();
                     String choosenMap = ((JoinMessage) msg).getMap();
-                    System.out.printf("Message from other peer: %s\n", msg);
+                    System.out.printf("[Server] Message from other peer: %s\n", msg);
 
                     // Assign map to peer
                     if(choosenMap != null) {
                         this.choosenMap = choosenMap;
-                        System.out.printf("Map %s selected.\n", choosenMap);
+                        System.out.printf("[Server] Map %s selected.\n", choosenMap);
                     }
                     client.writeMessage(new Message(OP_CHAR_SEL));
                     break;
@@ -159,8 +159,8 @@ public class PeerNetwork extends Thread {
                     //TODO: Somehow get menucontroller method call here?
                     isRunning = true;
 
-                    System.out.println("Started client!");
-                    client.start();
+                    System.out.println("[Server] Started client!");
+                    client.start(); // start sending udp packets
                     break;
                 case OP_LEAVE:
                     client.writeMessage(new Message(OP_LEAVE));
@@ -181,13 +181,12 @@ public class PeerNetwork extends Thread {
         byte[] data = readDatagramPacket();
         if(data == null)
             return;
-        System.out.println("Data deserialized to be handled.");
+        System.out.println("[Server] Data deserialized to be handled.");
         ObjectInputStream objIn;
         Message msg;
         try {
             objIn =  new ObjectInputStream(new ByteArrayInputStream(data));
             msg = (Message) objIn.readObject();
-            System.out.println("--Message de-serializes read!");
 
             // Translate messages to a format which can be handled.
             if(msg != null) {
@@ -195,6 +194,7 @@ public class PeerNetwork extends Thread {
                 switch (msg.getOp()) {
                     case OP_PLAYER:
                         lastPlayerMessage = (PlayerMessage)msg;
+                        System.out.printf("Msg: %s\n", lastPlayerMessage);
                         break;
                     case OP_HOOK: break;
                     case OP_LEAVE: close(); break;
