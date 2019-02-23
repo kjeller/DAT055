@@ -28,6 +28,7 @@ public class Client extends Thread {
         data = new byte[1024];
         try {
             ds = new DatagramSocket();
+            ds.connect(addr, port); // Only send to target
         } catch (SocketException e) {
             e.printStackTrace();
         }
@@ -41,8 +42,11 @@ public class Client extends Thread {
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) { break; }
-            if(ds.isConnected())
+            if(ds.isConnected()) {
                 sendPacket();
+            } else {
+                close();
+            }
         }
     }
 
