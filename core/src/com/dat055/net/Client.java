@@ -25,7 +25,6 @@ public class Client extends Thread {
     public Client(InetAddress addr, int port) {
         this.addr = addr;
         this.port = port;
-        data = new byte[1024];
         try {
             ds = new DatagramSocket();
             ds.connect(addr, port); // Only send to target
@@ -40,7 +39,7 @@ public class Client extends Thread {
         while(!interrupted()) {
             System.out.println("[Line: 27] Client running."+t++);
             try {
-                Thread.sleep(1000);
+                Thread.sleep(20);
             } catch (InterruptedException e) { break; }
             if(ds.isConnected()) {
                 sendPacket();
@@ -92,7 +91,7 @@ public class Client extends Thread {
         if(data != null) {
             DatagramPacket packet = new DatagramPacket(data, data.length, addr, port);
             try {
-                System.out.printf("==> Client sent UDP packet to %s \n", addr.getHostAddress());
+                System.out.printf("==> Client sent UDP packet to %s:%d \n", addr.getHostAddress(), port);
                 ds.send(packet);
             } catch (IOException e) { System.out.println(e); }
         }
@@ -105,7 +104,8 @@ public class Client extends Thread {
         System.out.println("!!Client thread and ds will be closed.!!");
         ds.close();
         try {
-            ps.close();
+            if(ps != null)
+                ps.close();
         } catch (IOException e) { e.printStackTrace(); }
         this.interrupt();
     }

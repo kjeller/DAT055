@@ -29,7 +29,6 @@ public class PeerNetwork extends Thread {
     private DatagramSocket ds;
     private DatagramPacket current; // will be used to determine where to packet came from
     private PlayerMessage lastPlayerMessage;
-    private byte[] data; // data is put here after deserialization
 
     private Client client;  // Client used to communicate with other server
     private String otherClient;
@@ -55,7 +54,7 @@ public class PeerNetwork extends Thread {
             ds = new DatagramSocket(listenPort);
             System.out.printf("Created datagramsocket for port %d\n", listenPort);
         } catch (SocketException e) {
-            e.printStackTrace();
+            System.out.println("Could not create datagramsocket!");
         }
     }
 
@@ -67,14 +66,11 @@ public class PeerNetwork extends Thread {
     public PeerNetwork(String name, int listenPort, String choosenMap) {
         this(name, listenPort);
         this.choosenMap = choosenMap;
-        runServer();
-        writeMessage(new Message(OP_CHAR_SEL));
     }
 
     /**
      * The one who joins uses this
      * @param name of this server
-     * @param client to connect to other server
      * @param listenPort
      */
     public PeerNetwork(String name, String addr, int listenPort) {
@@ -83,7 +79,6 @@ public class PeerNetwork extends Thread {
             System.out.printf("Socket created for for %s:%d\n", addr, listenPort);
             client = new Client(InetAddress.getByName(addr), listenPort);
         } catch (UnknownHostException e) { System.out.println("Unknown host"); }
-        runServer();
     }
 
     @Override
@@ -92,7 +87,7 @@ public class PeerNetwork extends Thread {
             System.out.println("[Line: 90] PeerNetwork running."+t++);
             try {
                 Thread.sleep(PERIOD);
-            } catch (InterruptedException e) { break; }
+            } catch (InterruptedException e) { System.out.println(e);break; }
 
             // Calculate if there is a timeout
             /*if(isWaitingForPeer) {
@@ -104,12 +99,14 @@ public class PeerNetwork extends Thread {
                     close();
                 }
             }*/
-            if(client.isConnected())
+            if(client.isConnected()) {
                 handleServerResponses();
+            }
 
             // Handle receiving of UDP packets
-            if(isRunning)
+            if(isRunning) {
                 handlePackets();
+            }
         }
     }
 
@@ -122,6 +119,7 @@ public class PeerNetwork extends Thread {
         try {
             ss = new ServerSocket(listenPort);
             System.out.println("ServerSocket created! \nWaiting for other client..");
+            ss.setSoTimeout(10000);
             Socket cs = ss.accept(); // Wait for connection
             System.out.println("Client connected: " + cs);
             out = new ObjectOutputStream(cs.getOutputStream()); // ObjectOutputStream before inputstream!
@@ -132,12 +130,9 @@ public class PeerNetwork extends Thread {
                 setClient(cs.getInetAddress());
 
             client.writeMessage(new JoinMessage(name, choosenMap)); // Writes to connected client
-
-            // Create a datagramsocket to handle udp connection
-            //ds = new DatagramSocket(listenPort);
             start();
-            return  true;
-        } catch (Exception e) { return false; }
+        } catch (Exception e) { System.out.println("Server timed out, closing threads."); close(); return false;}
+        return true;
     }
 
     private void handleServerResponses() {
@@ -183,16 +178,15 @@ public class PeerNetwork extends Thread {
      * established.
      */
     private void handlePackets() {
-        readDatagramPacket();
+        byte[] data = readDatagramPacket();
         if(data == null)
             return;
-        System.out.println("-Peernetwork got data from Server.");
+        System.out.println("Data deserialized to be handled.");
         ObjectInputStream objIn;
         Message msg;
         try {
             objIn =  new ObjectInputStream(new ByteArrayInputStream(data));
             msg = (Message) objIn.readObject();
-            data = null; // Clear data for next read - this is needed to get the "handshake" right
             System.out.println("--Message de-serializes read!");
 
             // Translate messages to a format which can be handled.
@@ -207,7 +201,7 @@ public class PeerNetwork extends Thread {
                 }
             }
         } catch (IOException ignored) {
-        } catch (ClassNotFoundException e) {e.printStackTrace();}
+        } catch (ClassNotFoundException e) { System.out.println("Class not found when deserialization.");}
     }
 
     /**
@@ -228,21 +222,24 @@ public class PeerNetwork extends Thread {
     public Message readMessage() {
         try {
             return (Message)in.readObject();
-        } catch (Exception e) {System.out.println("Connection lost."); close(); }
+        } catch (Exception e) {System.out.println("Connection lost.");}
         return null;
     }
 
     /**
      * Receive a packet from DatagramSocket
      */
-    private void readDatagramPacket() {
-        byte[] data = new byte[1024];
-        current = new DatagramPacket(data, data.length);
+    private byte[] readDatagramPacket() {
         try {
+            byte[] data = new byte[1024];
+            current = new DatagramPacket(data, data.length);
+            ds.setSoTimeout(100);
+
             ds.receive(current);
-            this.data = data;
-            System.out.printf("--Received package from %s!\n", current.getAddress());
-        } catch (IOException ignored) {}
+            System.out.printf("<=== Received package from %s!\n", current.getAddress());
+            return data;
+        } catch (IOException e) { System.out.println(e);}
+        return null;
     }
 
     /**
@@ -286,7 +283,6 @@ public class PeerNetwork extends Thread {
     public boolean isRunning() { return isRunning; }
     public boolean isConnected() { return client.isConnected(); }
 
-    public byte[] getData() { return data; }
     public DatagramPacket getCurrent() { return current; }
     public String getChoosenMap() { return choosenMap; }
     public String getOtherClient() { return otherClient;}
@@ -301,6 +297,7 @@ public class PeerNetwork extends Thread {
                 ss.close();
             } catch (IOException e) { e.printStackTrace(); }
         }
+        ds.close();
         if(client != null)
             client.close();
         this.interrupt();
