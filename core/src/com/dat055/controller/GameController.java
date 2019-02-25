@@ -10,6 +10,7 @@ import com.dat055.model.GameModel;
 import com.dat055.model.entity.Player;
 import com.dat055.model.map.GameMap;
 import com.dat055.net.PeerNetwork;
+import com.dat055.net.Server;
 import com.dat055.view.GameView;
 
 
@@ -26,7 +27,7 @@ public class GameController extends Controller {
     private float rotationTimer;
     private float rotation;
 
-    private PeerNetwork net;
+    private Server server;
 
     public GameController() {
         super(new GameModel(), null);
@@ -57,13 +58,13 @@ public class GameController extends Controller {
                 map2.update(deltaTime);
         }
 
-        if(isMultiplayer && net.isRunning()) {
-            net.sendPlayerUpdate(currentPlayer);
+        if(isMultiplayer && server.isRunning()) {
+            server.sendPlayerUpdate(currentPlayer);
 
             if(currentPlayer == player1) {
-                net.updatePlayer(player2);
+                server.updatePlayer(player2);
             } else {
-                net.updatePlayer(player1);
+                server.updatePlayer(player1);
             }
         }
     }
@@ -205,12 +206,12 @@ public class GameController extends Controller {
      * Starts a multiplayer map where each player is assigned a
      * playable character. Switching between characters not enabled.
      * Mainmenu will call this to start map. Host then needs to wait for
-     * another player to join net.
+     * another player to join server.
      * @param fileName name of map that will be created with startMap()
      */
     public boolean startMultiplayerMap(String fileName, String name) {
-        net = new PeerNetwork(name, 1337, fileName);
-        if(!net.runServer())
+        server = new Server(name, 1337);
+        if(!server.startServer(fileName))
             return false;
 
         System.out.println("Map created");
@@ -223,18 +224,18 @@ public class GameController extends Controller {
     }
 
     /**
-     * Joins net and creates own net to communicate with other net
-     * @param addr IP of other net
+     * Joins server and creates own server to communicate with other server
+     * @param addr IP of other server
      */
     public boolean joinMultiplayerMap(String addr, String name) {
-        net = new PeerNetwork(name, addr, 1337);
-        if(!net.runServer())
+        server = new Server(name, 1337);
+        if(!server.startServerAndClient(addr))
             return false;
 
         mode = Mode.BACK; //TODO: This will be set from message from other peer
-        while(!net.isRunning()); // wait for map to be set
-        System.out.println("Map choosen from server: " + net.getChoosenMap());
-        startMap(net.getChoosenMap());
+        while(!server.isRunning()); // wait for map to be set
+        System.out.println("Map choosen from server: " + server.getChosenMap());
+        startMap(server.getChosenMap());
         isMultiplayer = true;
 
         return true;

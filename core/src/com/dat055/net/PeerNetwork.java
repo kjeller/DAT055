@@ -12,7 +12,7 @@ import static com.dat055.net.message.Protocol.*;
 
 
 /**
- * A Client and Server running on computer to communicate with other
+ * A Client_old and Server running on computer to communicate with other
  * peers.
  */
 public class PeerNetwork extends Thread {
@@ -30,7 +30,7 @@ public class PeerNetwork extends Thread {
     private DatagramPacket current; // will be used to determine where to packet came from
     private PlayerMessage lastPlayerMessage;
 
-    private Client client;  // Client used to communicate with other server
+    private Client_old client;  // Client_old used to communicate with other server
     private String otherClient;
 
     // Server properties
@@ -77,7 +77,7 @@ public class PeerNetwork extends Thread {
         this(name, listenPort);
         try {
             System.out.printf("Socket created for for %s:%d\n", addr, listenPort);
-            client = new Client(InetAddress.getByName(addr), listenPort);
+            client = new Client_old(InetAddress.getByName(addr), listenPort);
         } catch (UnknownHostException e) { System.out.println("Unknown host"); }
     }
 
@@ -121,7 +121,7 @@ public class PeerNetwork extends Thread {
             System.out.println("ServerSocket created! \nWaiting for other client..");
             ss.setSoTimeout(10000);
             Socket cs = ss.accept(); // Wait for connection
-            System.out.println("Client connected: " + cs);
+            System.out.println("Client_old connected: " + cs);
             out = new ObjectOutputStream(cs.getOutputStream()); // ObjectOutputStream before inputstream!
             in = new ObjectInputStream(cs.getInputStream());
 
@@ -264,13 +264,12 @@ public class PeerNetwork extends Thread {
         try {
             objOut = new ObjectOutputStream(out);
             objOut.writeObject(msg);
-            //System.out.printf("Msg: %s [SERIALIZED]\n", msg);
         } catch (IOException ignored) {}
         client.setPacketData(out.toByteArray());
     }
     private void setClient (InetAddress addr) {
-        System.out.println("=== Client created! ===");
-        client = new Client(addr, listenPort);
+        System.out.println("=== Client_old created! ===");
+        client = new Client_old(addr, listenPort);
     }
     public void setMap(String map) {choosenMap = map;}
 
