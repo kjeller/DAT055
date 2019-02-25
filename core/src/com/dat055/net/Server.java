@@ -44,14 +44,14 @@ public class Server extends Thread{
         this.port = port;
         this.name = name;
         isRunning = false;
+        tcpHandler = new TCPHandler(this);
+        udpHandler = new UDPHandler(this);
     }
 
     /**
      * Creates server socket and waits for socket to connect.
      */
     private boolean initialize() {
-        tcpHandler = new TCPHandler(this);
-        udpHandler = new UDPHandler(this);
         try {
             ss = new ServerSocket(port);
             System.out.println("[Server] Serversocket created on port " + port);
@@ -79,8 +79,7 @@ public class Server extends Thread{
      * @return
      */
     public boolean startServerAndClient(String addr) {
-        client = new Client(addr, port);
-        tcpHandler.setClient(client);
+        tcpHandler.setClient(client = new Client(addr, port));
         System.out.println("[Server] Created a client");
         return startServer(null);
     }
