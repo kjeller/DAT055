@@ -201,16 +201,17 @@ public class Server extends Thread {
                         this.chosenMap = chosenMap;
                         System.out.printf("Map %s selected.\n", chosenMap);
                     }
-                    client.writeMessage(new Message(OP_CHAR_SEL));
+                    //client.writeMessage(new Message(OP_CHAR_SEL));
+                    isRunning = true;
                     break;
                 case OP_CHAR_SEL:
                     System.out.println("=== CHAR_SEL ===");
                     System.out.println("nothing happens here yet");
                     //TODO: Somehow get menucontroller method call here?
-                    isRunning = true;
+                    //isRunning = true;
 
                     System.out.println("Started client!");
-                    client.start();
+                    //client.start();
                     break;
                 case OP_LEAVE:
                     client.writeMessage(new Message(OP_LEAVE));
