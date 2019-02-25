@@ -27,14 +27,12 @@ public class Client extends Thread {
             this.hostname = InetAddress.getByName(hostname);
         } catch (UnknownHostException ignored) {}
         initialize();
-        start();
     }
 
     public Client(InetAddress hostname, int port) {
        this(port);
        this.hostname = hostname;
        initialize();
-       start();
     }
 
     private void initialize() {
@@ -43,6 +41,9 @@ public class Client extends Thread {
             out = new ObjectOutputStream(cs.getOutputStream());
             in = new ObjectInputStream(cs.getInputStream());
             ds = new DatagramSocket();
+            System.out.println("[Client] Sockets created");
+            start();
+            System.out.println("[Client] Started thread.");
         } catch (IOException ignored) {}
     }
 

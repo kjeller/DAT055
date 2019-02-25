@@ -54,6 +54,7 @@ public class Server extends Thread {
             out = new ObjectOutputStream(cs.getOutputStream());
             in = new ObjectInputStream(cs.getInputStream());
 
+            // For host - create client
             if(client == null)
                 client = new Client(cs.getInetAddress(), port);
 
