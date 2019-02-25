@@ -6,7 +6,7 @@ public abstract class Protocol {
     public static final char OP_LEAVE = 0xFF;
     public static final char OP_CHAR_SEL = 0xE0;
 
-    // Player OP codes - used for UDP communcation
+    // Player OP codes - used for UDPHandler communcation
     public static final char OP_PLAYER = 0x01;
     public static final char OP_HOOK = 0x02;
 }

@@ -1,17 +1,20 @@
 package com.dat055.net;
 
-import com.dat055.net.message.Message;
+import com.dat055.net.threads.TCPHandler;
+import com.dat055.net.threads.UDPHandler;
 
 import java.io.*;
 import java.net.*;
 
-public class Client extends Thread {
+public class Client extends Thread{
     private final int PERIOD = 50;
     private Socket cs;
     private ObjectInputStream in;
     private ObjectOutputStream out;
+    TCPHandler tcpHandler;
 
     private DatagramSocket ds;
+    UDPHandler udpHandler;
 
     private int port;
     private InetAddress hostname;
@@ -41,6 +44,8 @@ public class Client extends Thread {
             out = new ObjectOutputStream(cs.getOutputStream());
             in = new ObjectInputStream(cs.getInputStream());
             ds = new DatagramSocket();
+            tcpHandler = new TCPHandler(this); // Create a tcphandler to send messages
+            udpHandler = new UDPHandler(this);
             System.out.println("[Client] Sockets created");
         } catch (IOException ignored) {}
     }
@@ -54,49 +59,12 @@ public class Client extends Thread {
             } catch (InterruptedException ignored) {}
             if(cs != null) {
                 if(cs.isConnected()) {
-                    sendUDP();
+                    udpHandler.send(ds, data, hostname, port);
                 }
             }
         }
     }
 
-    /**
-     * Creates new thread that awaits tcp response.
-     */
-    private void receiveTCP() {
-        Thread t = new Thread(this::sendUDP);
-        t.start();
-        t.interrupt();
-    }
-
-    /**
-     * Write message to output stream - will be sent to clients input stream
-     * @param msg that will be sent
-     */
-    public boolean writeMessage(Message msg) {
-        if(cs.isConnected()) {
-            try {
-                out.writeObject(msg);
-                System.out.printf("[Client] {%s} sent to server. \n", msg);
-                //out.reset();
-                return true;
-            } catch (IOException ignored) {}
-        }
-        return false;
-    }
-
-    /**
-     * Sends packet to addr
-     */
-    private void sendUDP() {
-        if(data != null) {
-            DatagramPacket packet = new DatagramPacket(data, data.length, hostname, port);
-            try {
-                System.out.printf("==> Client sent UDP packet to %s:%d \n", hostname.getHostAddress(), port);
-                ds.send(packet);
-            } catch (IOException e) { System.out.println(e); }
-        }
-    }
 
     /**
      * Sets data that will be carried in a datagram packet
@@ -108,4 +76,7 @@ public class Client extends Thread {
 
     public boolean isConnected() { return cs.isConnected(); }
     public String getAddress() { return cs.getInetAddress().getHostAddress(); }
+    public byte[] getData() { return data; }
+    public DatagramSocket getDatagramSocket() { return ds; }
+    public ObjectOutputStream getOut() { return out; }
 }

@@ -9,7 +9,6 @@ import com.badlogic.gdx.math.Vector3;
 import com.dat055.model.GameModel;
 import com.dat055.model.entity.Player;
 import com.dat055.model.map.GameMap;
-import com.dat055.net.PeerNetwork;
 import com.dat055.net.Server;
 import com.dat055.view.GameView;
 

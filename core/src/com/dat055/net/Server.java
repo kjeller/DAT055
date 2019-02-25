@@ -4,28 +4,32 @@ import com.dat055.model.entity.Player;
 import com.dat055.net.message.JoinMessage;
 import com.dat055.net.message.Message;
 import com.dat055.net.message.PlayerMessage;
+import com.dat055.net.threads.TCPHandler;
+import com.dat055.net.threads.UDPHandler;
 
 import java.io.*;
 import java.net.*;
 
 import static com.dat055.net.message.Protocol.*;
 
-public class Server extends Thread {
+public class Server extends Thread{
     private final int PERIOD = 50;
 
-    // TCP communication
+    // TCPHandler communication
     private ServerSocket ss;
     private Socket cs; // Connected socket
     private ObjectOutputStream out;
     private ObjectInputStream in;
+    private TCPHandler tcpHandler;
 
     private Client client; // Client that communicates with other server
 
     // UDP communication
     private DatagramSocket ds;
     private DatagramPacket current;
+    private UDPHandler udpHandler;
 
-    // Last message received (UDP)
+    // Last message received (UDPHandler)
     private PlayerMessage lastPlayerMessage;
 
     // Server properties
@@ -57,10 +61,12 @@ public class Server extends Thread {
             // For host - create client
             if(client == null) {
                 client = new Client(cs.getInetAddress(), port);
-                client.writeMessage(new JoinMessage(name, chosenMap));
+                tcpHandler.writeClientMessage(new JoinMessage(name, chosenMap));
             }
+            tcpHandler.start();
+            udpHandler.start();
 
-            ds = new DatagramSocket(port);  // Create datagramsocket to receive UDP packets
+            ds = new DatagramSocket(port);  // Create datagramsocket to receive UDPHandler packets
         } catch (IOException e) { System.out.println(e); return false;}
         return true;
     }
@@ -94,10 +100,7 @@ public class Server extends Thread {
                     initialize(); // Initialize server and gets socket connected
             } else {
                 // Check if socket is still connected
-                if(cs.isConnected()) {
-                    receiveTCP();
-                    receiveUDP();
-                } else {
+                if(!cs.isConnected()) {
                     cs = null;
                     isRunning = false;
                     System.out.println("[Server] Lost connection to client.");
@@ -114,60 +117,24 @@ public class Server extends Thread {
             ss.close();
         } catch (IOException ignored) {}
         ds.close();
+        tcpHandler.interrupt();
+        udpHandler.interrupt();
+        client.tcpHandler.interrupt();
+        client.udpHandler.interrupt();
+
         this.interrupt();
     }
 
-    /**
-     * Creates new thread that awaits tcp response.
-     */
-    private void receiveTCP() {
-        Thread t = new Thread(() -> {
-            handleServerResponses(readMessage());
-        });
-        t.start();
-        t.interrupt();
-    }
+    // == Functions that handle the responses TCPHandler/UDPHandler ==
 
     /**
-     * Creates new thread that awaits udp packets
-     */
-    private void receiveUDP() {
-        Thread t = new Thread(() -> {
-            try {
-                byte[] data = new byte[1024];
-                current = new DatagramPacket(data, data.length);
-                ds.receive(current);
-                System.out.printf("<=== Received package from %s!\n", current.getAddress());
-                handlePackets(data);
-            } catch (IOException e) { System.out.println(e);}
-        });
-        t.start();
-        t.interrupt();
-    }
-
-    /**
-     * Reads message from stream - from client
-     * @return message from stream
-     */
-    public Message readMessage() {
-        try {
-            if(in != null)
-                return (Message)in.readObject();
-        } catch (Exception e) { System.out.println(e); }
-        return null;
-    }
-
-
-    // == Functions that handle the responses TCP/UDP ==
-
-    /**
-     * Handles UDP packets sent from other client
+     * Handles UDPHandler packets sent from other client
      * by deserializing message and translating the op code in the msg.
      * It then determines what the host will answer with.
      * This method is called by thread if a client is connected
      * to serversocket.
      */
-    private void handlePackets(byte[] data) {
+    public void handlePackets(byte[] data) {
         if(data == null)
             return;
         System.out.println("Data deserialized to be handled.");
@@ -193,11 +160,11 @@ public class Server extends Thread {
     }
 
     /**
-     * Handle TCP messages and responds to them. This is basically
+     * Handle TCPHandler messages and responds to them. This is basically
      * the flow of the server.
      * @param msg
      */
-    private void handleServerResponses(Message msg) {
+    public void handleServerResponses(Message msg) {
         if(msg != null) {
             // Translate OP code in message and cast message based on code.
             switch (msg.getOp()) {
@@ -210,10 +177,11 @@ public class Server extends Thread {
                     if(chosenMap != null) {
                         this.chosenMap = chosenMap;
                         System.out.printf("Map %s selected.\n", chosenMap);
-                        client.writeMessage(new JoinMessage(name, null));
+                        tcpHandler.writeClientMessage(new JoinMessage(name, null));
                     }
-                    client.writeMessage(new Message(OP_CHAR_SEL));
+                    tcpHandler.writeClientMessage(new Message(OP_CHAR_SEL));
                     isRunning = true;
+                    client.start();
                     break;
                 case OP_CHAR_SEL:
                     System.out.println("=== CHAR_SEL ===");
@@ -225,7 +193,7 @@ public class Server extends Thread {
                     //client.start();
                     break;
                 case OP_LEAVE:
-                    client.writeMessage(new Message(OP_LEAVE));
+                    tcpHandler.writeClientMessage(new Message(OP_LEAVE));
                     close();
                     break;
             }
@@ -265,5 +233,10 @@ public class Server extends Thread {
 
     public String getClientName() { return cs.getInetAddress().getHostName(); }
     public String getChosenMap() { return chosenMap; }
+    public DatagramSocket getDatagramSocket() { return ds; }
+    public ObjectOutputStream getOut() { return out; }
+    public ObjectInputStream getIn() { return in; }
+
     public boolean isRunning() { return isRunning; }
+    public boolean isConnected() { return cs.isConnected(); }
 }
