@@ -85,4 +85,6 @@ public class TCPHandler extends Thread {
         }
         return false;
     }
+
+    public void setClient(Client client) { this.client = client; }
 }

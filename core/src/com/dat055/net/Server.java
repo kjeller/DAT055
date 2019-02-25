@@ -63,6 +63,7 @@ public class Server extends Thread{
             // For host - create client
             if(client == null) {
                 client = new Client(cs.getInetAddress(), port);
+                tcpHandler.setClient(client);
                 tcpHandler.writeClientMessage(new JoinMessage(name, chosenMap));
             }
             tcpHandler.start();
