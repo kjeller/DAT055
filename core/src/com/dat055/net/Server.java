@@ -80,6 +80,7 @@ public class Server extends Thread{
      */
     public boolean startServerAndClient(String addr) {
         client = new Client(addr, port);
+        tcpHandler.setClient(client);
         System.out.println("[Server] Created a client");
         return startServer(null);
     }
