@@ -26,12 +26,14 @@ public class Client extends Thread {
         try {
             this.hostname = InetAddress.getByName(hostname);
         } catch (UnknownHostException ignored) {}
+        initialize();
         start();
     }
 
     public Client(InetAddress hostname, int port) {
        this(port);
        this.hostname = hostname;
+       initialize();
        start();
     }
 
@@ -49,26 +51,14 @@ public class Client extends Thread {
             try {
                 Thread.sleep(PERIOD);
             } catch (InterruptedException ignored) {}
-            if(cs == null) {
-                initialize();
-            } else {
+            if(cs != null) {
                 if(cs.isConnected()) {
-                    receiveTCP();
                     sendUDP();
                 }
             }
         }
     }
 
-    /**
-     * Writes to outputstream to connected client
-     * @param msg
-     */
-    private void sendTCP(String msg) {
-        try {
-            out.writeUTF(msg);
-        } catch (IOException ignored) { }
-    }
 
     /**
      * Creates new thread that awaits tcp response.
