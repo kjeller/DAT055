@@ -90,7 +90,6 @@ public class Server extends Thread {
                 e.printStackTrace();
             }
             if(cs == null) {
-                if(!cs.isConnected())
                     initialize();
             } else {
                 if(cs.isConnected()) {
