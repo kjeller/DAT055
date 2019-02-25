@@ -203,7 +203,7 @@ public class Server extends Thread {
                         this.chosenMap = chosenMap;
                         System.out.printf("Map %s selected.\n", chosenMap);
                     }
-                    //client.writeMessage(new Message(OP_CHAR_SEL));
+                    client.writeMessage(new Message(OP_CHAR_SEL));
                     isRunning = true;
                     break;
                 case OP_CHAR_SEL:
