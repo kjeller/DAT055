@@ -76,11 +76,15 @@ public class Client extends Thread {
      * Write message to output stream - will be sent to clients input stream
      * @param msg that will be sent
      */
-    public void writeMessage(Message msg) {
-        try {
-            out.writeObject(msg);
-            System.out.printf("[Client] {%s} sent to server. \n", msg);
-        } catch (IOException ignored) {}
+    public boolean writeMessage(Message msg) {
+        if(cs.isConnected()) {
+            try {
+                out.writeObject(msg);
+                System.out.printf("[Client] {%s} sent to server. \n", msg);
+                return true;
+            } catch (IOException ignored) {}
+        }
+        return false;
     }
 
     /**
