@@ -50,6 +50,8 @@ public class Server extends Thread{
      * Creates server socket and waits for socket to connect.
      */
     private boolean initialize() {
+        tcpHandler = new TCPHandler(this);
+        udpHandler = new UDPHandler(this);
         try {
             ss = new ServerSocket(port);
             System.out.println("[Server] Serversocket created on port " + port);
