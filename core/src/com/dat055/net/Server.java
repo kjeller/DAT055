@@ -59,17 +59,18 @@ public class Server extends Thread{
             System.out.println("[Server] A client has connected to the server!");
             out = new ObjectOutputStream(cs.getOutputStream());
             in = new ObjectInputStream(cs.getInputStream());
+            ds = new DatagramSocket(port);  // Create datagramsocket to receive UDPHandler packets
 
             // For host - create client
             if(client == null) {
-                client = new Client(cs.getInetAddress(), port);
-                tcpHandler.setClient(client);
+                tcpHandler.setClient(client = new Client(cs.getInetAddress(), port));
                 tcpHandler.writeClientMessage(new JoinMessage(name, chosenMap));
+                //client.start();
             }
             tcpHandler.start();
+            System.out.println("TCP handler started");
             udpHandler.start();
-
-            ds = new DatagramSocket(port);  // Create datagramsocket to receive UDPHandler packets
+            System.out.println("UDP handler started");
         } catch (IOException e) { System.out.println(e); return false;}
         return true;
     }

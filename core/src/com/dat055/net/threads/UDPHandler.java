@@ -25,12 +25,10 @@ public class UDPHandler extends Thread {
     public void run() {
         while(!interrupted()) {
             try {
-                Thread.sleep(20);
+                Thread.sleep(1);
             } catch (InterruptedException e) { break; }
-
             receive();
         }
-
     }
 
     /**

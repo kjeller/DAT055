@@ -23,7 +23,7 @@ public class TCPHandler extends Thread {
 
     public void run() {
         try {
-            Thread.sleep(20);
+            Thread.sleep(1);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -62,7 +62,6 @@ public class TCPHandler extends Thread {
             try {
                 out.writeObject(msg);
                 System.out.printf("[Client] {%s} sent to server. \n", msg);
-                //out.reset();
                 return true;
             } catch (IOException ignored) {}
         }

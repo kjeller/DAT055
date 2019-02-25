@@ -65,7 +65,6 @@ public class Client extends Thread{
         }
     }
 
-
     /**
      * Sets data that will be carried in a datagram packet
      * @param data
