@@ -11,7 +11,7 @@ import java.net.*;
 import static com.dat055.net.message.Protocol.*;
 
 public class Server extends Thread {
-    private final int PERIOD = 1;
+    private final int PERIOD = 50;
 
     // TCP communication
     private ServerSocket ss;
