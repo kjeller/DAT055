@@ -107,6 +107,7 @@ public class Server extends Thread{
                 if(!cs.isConnected()) {
                     cs = null;
                     isRunning = false;
+                    close();
                     System.out.println("[Server] Lost connection to client.");
                 }
             }
@@ -228,11 +229,6 @@ public class Server extends Thread{
             objOut.writeObject(msg);
         } catch (IOException ignored) {}
         client.setPacketData(out.toByteArray());
-    }
-
-    private void setClient (InetAddress addr) {
-        System.out.println("=== Client created! ===");
-        client = new Client(addr, port);
     }
 
     public String getClientName() { return cs.getInetAddress().getHostName(); }
