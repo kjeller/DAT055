@@ -42,8 +42,6 @@ public class Client extends Thread {
             in = new ObjectInputStream(cs.getInputStream());
             ds = new DatagramSocket();
             System.out.println("[Client] Sockets created");
-            start();
-            System.out.println("[Client] Started thread.");
         } catch (IOException ignored) {}
     }
 

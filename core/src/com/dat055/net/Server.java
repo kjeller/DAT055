@@ -58,6 +58,7 @@ public class Server extends Thread {
             if(client == null)
                 client = new Client(cs.getInetAddress(), port);
 
+            client.start();
             client.writeMessage(new JoinMessage(name, chosenMap));
 
             ds = new DatagramSocket(port);  // Create datagramsocket to receive UDP packets
