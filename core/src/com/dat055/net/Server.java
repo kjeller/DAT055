@@ -146,7 +146,7 @@ public class Server extends Thread {
     public Message readMessage() {
         try {
             return (Message)in.readObject();
-        } catch (Exception e) {System.out.println("Connection lost.");}
+        } catch (Exception e) { System.out.println(e); }
         return null;
     }
 

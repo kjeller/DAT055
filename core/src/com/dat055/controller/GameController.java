@@ -215,6 +215,7 @@ public class GameController extends Controller {
             return false;
 
         System.out.println("Map created");
+        //TODO: Skapa loadingscreen-tråd
         while(!server.isRunning()); // wait for map to be set
         //Host decides this from menu
         mode = Mode.FRONT;

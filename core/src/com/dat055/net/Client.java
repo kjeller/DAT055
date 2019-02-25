@@ -47,10 +47,12 @@ public class Client extends Thread {
         } catch (IOException ignored) {}
     }
 
+    private int t = 0;
     public void run() {
         while(!interrupted()) {
             try {
                 Thread.sleep(PERIOD);
+                System.out.println("[Client] " + t++);
             } catch (InterruptedException ignored) {}
             if(cs != null) {
                 if(cs.isConnected()) {
