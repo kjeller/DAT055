@@ -55,11 +55,12 @@ public class Server extends Thread {
             in = new ObjectInputStream(cs.getInputStream());
 
             // For host - create client
-            if(client == null)
+            if(client == null) {
                 client = new Client(cs.getInetAddress(), port);
+                client.writeMessage(new JoinMessage(name, chosenMap));
+            }
 
             client.start();
-            client.writeMessage(new JoinMessage(name, chosenMap));
 
             ds = new DatagramSocket(port);  // Create datagramsocket to receive UDP packets
         } catch (IOException e) { return false;}
@@ -90,12 +91,18 @@ public class Server extends Thread {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+            // If there exist no socket connected to server
             if(cs == null) {
-                    initialize();
+                    initialize(); // Initialize server and gets socket connected
             } else {
+                // Check if socket is still connected
                 if(cs.isConnected()) {
                     receiveTCP();
                     receiveUDP();
+                } else {
+                    cs = null;
+                    isRunning = false;
+                    System.out.println("[Server] Lost connection to client.");
                 }
             }
         }

@@ -60,7 +60,6 @@ public class Client extends Thread {
         }
     }
 
-
     /**
      * Creates new thread that awaits tcp response.
      */
