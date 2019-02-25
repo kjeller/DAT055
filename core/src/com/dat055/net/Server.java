@@ -83,6 +83,11 @@ public class Server extends Thread {
 
     public void run() {
         while(!interrupted()) {
+            try {
+                Thread.sleep(1);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             if(cs == null) {
                 initialize();
             } else {
