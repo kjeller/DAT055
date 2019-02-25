@@ -76,12 +76,9 @@ public class Server extends Thread {
 
     public boolean startServer(String chosenMap) {
         this.chosenMap = chosenMap;
-        if(initialize()) {
-            start();
-            System.out.println("[Server] Thread started.");
-            return true;
-        }
-        return false;
+        start();
+        System.out.println("[Server] Thread started.");
+        return true;
     }
 
     public void run() {
