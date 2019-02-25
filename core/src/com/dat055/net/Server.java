@@ -84,7 +84,7 @@ public class Server extends Thread {
     public void run() {
         while(!interrupted()) {
             try {
-                Thread.sleep(1);
+                Thread.sleep(PERIOD);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
