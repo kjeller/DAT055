@@ -2,6 +2,7 @@ package com.dat055.controller;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.dat055.model.menu.SettingsMenu;
 import com.dat055.model.menu.*;
 import com.dat055.view.MenuView;
 import com.dat055.model.MenuModel;
@@ -23,6 +24,7 @@ public class MenuController extends Controller{
         ((MenuModel)model).includeMenu("Multiplayer", new MultiMenu(this));
         ((MenuModel)model).includeMenu("Pause", new PauseMenu(this));
         ((MenuModel)model).includeMenu("Select", new SelectMenu(this));
+        ((MenuModel)model).includeMenu("Settings", new SettingsMenu(this));
         model.playMusic("title");
     }
 

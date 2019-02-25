@@ -1,4 +1,4 @@
-package com.dat055.Model.Menu;
+package com.dat055.model.menu;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -19,12 +19,11 @@ public class SettingsMenu extends Menu {
     private ArrayList<TextButton> list = new ArrayList();
     private Image image;
     private TextButton video, audio, other, back;
+    private Label resolution, fullscreen, graphics, volume;
     public SettingsMenu(MenuController ctrl) {
         super("UI/Delta.jpg");
         initTxtBtnStyle();
         initLblStyle();
-
-        //super.getBg("UI/but1.png");
 
         list.add(video);
         list.add(audio);
@@ -34,26 +33,35 @@ public class SettingsMenu extends Menu {
         // Table table = new Table();
         Table topTable = new Table();
 
-        //table.setWidth(controller.getWidth());
-        //table.align(Align.center | Align.bottom);
+
         topTable.setWidth(controller.getWidth());
         topTable.setHeight(controller.getHeight());
         topTable.align(Align.center | Align.top);
 
         topTable.setPosition(0, 0);
-        // table.setPosition(0, Gdx.graphics.getHeight());
 
         video = createButton("Video");
         audio = createButton("Audio");
         other = createButton("Other");
         back = createButton("Back");
 
+        resolution = new Label("Resolution",lblStyle);
+        fullscreen = new Label("FullScreen",lblStyle);
+        volume = new Label("Volume",lblStyle);
+
+
         addListeners();
 
-        topTable.add(back).width(150).height(40).padBottom(40).padLeft(40).left();
-        topTable.add(video).width(150).height(40);
-        topTable.add(audio).width(150).height(40);
-        topTable.add(other).width(150).height(40);
+        topTable.add(back).width(150).height(40);
+        topTable.add(video).width(170).height(40);
+        topTable.add(audio).width(170).height(40);
+        topTable.add(other).width(170).height(40).row();
+        topTable.add();
+        topTable.add(resolution).padTop(20).height(40).padBottom(20).row();
+        topTable.add();
+        topTable.add(fullscreen).height(40).padBottom(20).row();
+        topTable.add();
+        topTable.add(volume).height(40);
 
         super.table = topTable;
     }
@@ -92,7 +100,7 @@ public class SettingsMenu extends Menu {
 
     private void initLblStyle() {
         Label.LabelStyle lblStyle = new Label.LabelStyle();
-        lblStyle.font = super.generateFont(26);
+        lblStyle.font = super.generateFont(36);
         lblStyle.fontColor = Color.WHITE;
         super.lblStyle = lblStyle;
     }
