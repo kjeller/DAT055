@@ -74,13 +74,20 @@ public class Client extends Thread {
      * Creates new thread that awaits tcp response.
      */
     private void receiveTCP() {
-        Thread t = new Thread(() -> {
-            try {
-                System.out.println("Received TCP: " + in.readUTF());
-            } catch (IOException ignored) {}
-        });
+        Thread t = new Thread(this::sendUDP);
         t.start();
         t.interrupt();
+    }
+
+    /**
+     * Write message to output stream - will be sent to clients input stream
+     * @param msg that will be sent
+     */
+    public void writeMessage(Message msg) {
+        try {
+            out.writeObject(msg);
+            System.out.printf("[Client] {%s} sent to server. \n", msg);
+        } catch (IOException ignored) {}
     }
 
     /**
@@ -102,17 +109,6 @@ public class Client extends Thread {
      */
     public void setPacketData(byte[] data) {
         this.data = data;
-    }
-
-    /**
-     * Write message to output stream - will be sent to clients input stream
-     * @param msg that will be sent
-     */
-    public void writeMessage(Message msg) {
-        try {
-            out.writeObject(msg);
-            System.out.printf("Msg: {%s} sent to other client. \n", msg);
-        } catch (IOException ignored) {}
     }
 
     public boolean isConnected() { return cs.isConnected(); }

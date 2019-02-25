@@ -57,7 +57,7 @@ public class Server extends Thread {
             if(client == null)
                 client = new Client(cs.getInetAddress(), port);
 
-            writeMessage(new JoinMessage(name, chosenMap));
+            client.writeMessage(new JoinMessage(name, chosenMap));
 
             ds = new DatagramSocket(port);  // Create datagramsocket to receive UDP packets
         } catch (IOException e) { return false;}
@@ -134,17 +134,6 @@ public class Server extends Thread {
         });
         t.start();
         t.interrupt();
-    }
-
-    /**
-     * Write message to output stream - will be sent to clients input stream
-     * @param msg that will be sent
-     */
-    private void writeMessage(Message msg) {
-        try {
-            out.writeObject(msg);
-            System.out.printf("TCP: {%s} sent to other client. \n", msg);
-        } catch (IOException ignored) {}
     }
 
     /**
