@@ -78,6 +78,7 @@ public class Client extends Thread {
             try {
                 out.writeObject(msg);
                 System.out.printf("[Client] {%s} sent to server. \n", msg);
+                //out.reset();
                 return true;
             } catch (IOException ignored) {}
         }

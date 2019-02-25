@@ -61,7 +61,7 @@ public class Server extends Thread {
             }
 
             ds = new DatagramSocket(port);  // Create datagramsocket to receive UDP packets
-        } catch (IOException e) { return false;}
+        } catch (IOException e) { System.out.println(e); return false;}
         return true;
     }
 
@@ -151,7 +151,8 @@ public class Server extends Thread {
      */
     public Message readMessage() {
         try {
-            return (Message)in.readObject();
+            if(in != null)
+                return (Message)in.readObject();
         } catch (Exception e) { System.out.println(e); }
         return null;
     }

@@ -53,7 +53,7 @@ public class PeerNetwork extends Thread {
         try {
             ds = new DatagramSocket(listenPort);
             System.out.printf("Created datagramsocket for port %d\n", listenPort);
-        } catch (SocketException e) {
+        } catch (IOException e) {
             System.out.println("Could not create datagramsocket!");
         }
     }
