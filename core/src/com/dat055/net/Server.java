@@ -11,7 +11,7 @@ import java.net.*;
 import static com.dat055.net.message.Protocol.*;
 
 public class Server extends Thread {
-    private final int PERIOD = 1000;
+    private final int PERIOD = 1;
 
     // TCP communication
     private ServerSocket ss;
@@ -83,9 +83,6 @@ public class Server extends Thread {
 
     public void run() {
         while(!interrupted()) {
-            try {
-                Thread.sleep(PERIOD);
-            } catch (InterruptedException e) { break; }
             if(cs == null) {
                 initialize();
             } else {
