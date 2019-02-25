@@ -60,8 +60,6 @@ public class Server extends Thread {
                 client.writeMessage(new JoinMessage(name, chosenMap));
             }
 
-            client.start();
-
             ds = new DatagramSocket(port);  // Create datagramsocket to receive UDP packets
         } catch (IOException e) { return false;}
         return true;
@@ -211,6 +209,7 @@ public class Server extends Thread {
                     if(chosenMap != null) {
                         this.chosenMap = chosenMap;
                         System.out.printf("Map %s selected.\n", chosenMap);
+                        client.writeMessage(new JoinMessage(name, null));
                     }
                     client.writeMessage(new Message(OP_CHAR_SEL));
                     isRunning = true;
