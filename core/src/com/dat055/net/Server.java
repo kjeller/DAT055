@@ -13,8 +13,6 @@ import java.net.*;
 import static com.dat055.net.message.Protocol.*;
 
 public class Server extends Thread{
-    private final int PERIOD = 50;
-
     // TCPHandler communication
     private ServerSocket ss;
     private Socket cs; // Connected socket
@@ -49,6 +47,23 @@ public class Server extends Thread{
     }
 
     /**
+     * Starts server and creates a client that responds to other server
+     * @return
+     */
+    public boolean startServerAndClient(String addr) {
+        tcpHandler.setClient(client = new Client(addr, port));
+        System.out.println("[Server] Created a client");
+        return startServer(null);
+    }
+
+    public boolean startServer(String chosenMap) {
+        this.chosenMap = chosenMap;
+        start();
+        System.out.println("[Server] Thread started.");
+        return true;
+    }
+
+    /**
      * Creates server socket and waits for socket to connect.
      */
     private boolean initialize() {
@@ -75,30 +90,8 @@ public class Server extends Thread{
         return true;
     }
 
-    /**
-     * Starts server and creates a client that responds to other server
-     * @return
-     */
-    public boolean startServerAndClient(String addr) {
-        tcpHandler.setClient(client = new Client(addr, port));
-        System.out.println("[Server] Created a client");
-        return startServer(null);
-    }
-
-    public boolean startServer(String chosenMap) {
-        this.chosenMap = chosenMap;
-        start();
-        System.out.println("[Server] Thread started.");
-        return true;
-    }
-
     public void run() {
         while(!interrupted()) {
-            try {
-                Thread.sleep(PERIOD);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
             // If there exist no socket connected to server
             if(cs == null) {
                     initialize(); // Initialize server and gets socket connected
@@ -186,6 +179,7 @@ public class Server extends Thread{
                     }
                     tcpHandler.writeClientMessage(new Message(OP_CHAR_SEL));
                     isRunning = true;
+                    System.out.printf("isRunning: %s\n", isRunning);
                     client.start();
                     break;
                 case OP_CHAR_SEL:

@@ -22,6 +22,7 @@ public class Client extends Thread{
 
     private Client(int port) {
         this.port = port;
+        data = new byte[1024];
     }
 
     public Client(String hostname, int port) {

@@ -22,14 +22,7 @@ public class TCPHandler extends Thread {
     }
 
     public void run() {
-        while(!interrupted()) {
-            try {
-                Thread.sleep(1);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            receive();
-        }
+        while(!interrupted()) { receive(); }
     }
 
     /**
