@@ -51,16 +51,13 @@ public class Client extends Thread{
         } catch (IOException ignored) {}
     }
 
-    private int t = 0;
     public void run() {
         while(!interrupted()) {
-            try {
-                Thread.sleep(PERIOD);
-                System.out.println("[Client] " + t++);
-            } catch (InterruptedException ignored) {}
             if(cs != null) {
                 if(cs.isConnected()) {
                     udpHandler.send(ds, data, hostname, port);
+                } else {
+                    interrupt();
                 }
             }
         }
@@ -75,8 +72,5 @@ public class Client extends Thread{
     }
 
     public boolean isConnected() { return cs.isConnected(); }
-    public String getAddress() { return cs.getInetAddress().getHostAddress(); }
-    public byte[] getData() { return data; }
-    public DatagramSocket getDatagramSocket() { return ds; }
     public ObjectOutputStream getOut() { return out; }
 }

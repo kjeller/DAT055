@@ -13,7 +13,7 @@ import java.net.*;
 import static com.dat055.net.message.Protocol.*;
 
 public class Server extends Thread{
-    // TCPHandler communication
+    // TCPcommunication
     private ServerSocket ss;
     private Socket cs; // Connected socket
     private ObjectOutputStream out;
@@ -48,6 +48,7 @@ public class Server extends Thread{
 
     /**
      * Starts server and creates a client that responds to other server
+     * Use this when joining another server.
      * @return
      */
     public boolean startServerAndClient(String addr) {
@@ -56,6 +57,12 @@ public class Server extends Thread{
         return startServer(null);
     }
 
+    /**
+     * Starts server when a client is not specified.
+     * Use this if you are hosting a server.
+     * @param chosenMap map chosen by player
+     * @return true if succeeded
+     */
     public boolean startServer(String chosenMap) {
         this.chosenMap = chosenMap;
         start();
@@ -83,9 +90,7 @@ public class Server extends Thread{
                 //client.start();
             }
             tcpHandler.start();
-            System.out.println("TCP handler started");
             udpHandler.start();
-            System.out.println("UDP handler started");
         } catch (IOException e) { System.out.println(e); return false;}
         return true;
     }
@@ -94,7 +99,7 @@ public class Server extends Thread{
         while(!interrupted()) {
             // If there exist no socket connected to server
             if(cs == null) {
-                    initialize(); // Initialize server and gets socket connected
+                    initialize(); // Initialize server and get socket connected.
             } else {
                 // Check if socket is still connected
                 if(!cs.isConnected()) {
@@ -126,10 +131,10 @@ public class Server extends Thread{
     // == Functions that handle the responses TCPHandler/UDPHandler ==
 
     /**
-     * Handles UDPHandler packets sent from other client
-     * by deserializing message and translating the op code in the msg.
+     * Handles UDP packets sent from a client
+     * by deserializing a message and translating the op code in the msg.
      * It then determines what the host will answer with.
-     * This method is called by thread if a client is connected
+     * This method is called by a UDPHandler.
      * to serversocket.
      */
     public void handlePackets(byte[] data) {
@@ -158,7 +163,7 @@ public class Server extends Thread{
     }
 
     /**
-     * Handle TCPHandler messages and responds to them. This is basically
+     * Handle TCP messages and responds to them. This is basically
      * the flow of the server.
      * @param msg
      */

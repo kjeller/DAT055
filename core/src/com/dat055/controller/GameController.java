@@ -232,11 +232,12 @@ public class GameController extends Controller {
         if(!server.startServerAndClient(addr))
             return false;
 
-        mode = Mode.BACK; //TODO: This will be set from message from other peer
         while(!server.isRunning()); // wait for map to be set
+
         System.out.println("Map choosen from server: " + server.getChosenMap());
-        startMap(server.getChosenMap());
+        mode = Mode.BACK; //TODO: This will be set from message from other peer
         isMultiplayer = true;
+        startMap(server.getChosenMap());
 
         return true;
     }
