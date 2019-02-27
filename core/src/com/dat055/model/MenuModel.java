@@ -26,21 +26,43 @@ public class MenuModel extends Model {
         stage.getViewport().update(width, height, true);
     }
 
+    /**
+     * This method swaps to the current {@link Menu} to the selected one
+     * @param menu A string that is used as a key to the hashmap of  menus
+     */
     public void swapMenu(String menu) {
         stage.clear();
-        if(menus.get(menu).getBg() != null) {
-            menus.get(menu).getBg().setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-            stage.addActor(menus.get(menu).getBg());
+        Menu next = menus.get(menu);
+        next.updateTable();
+        if(next.getBg() != null) {
+            next.getBg().setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+            stage.addActor(next.getBg());
         }
-        Table tbl = menus.get(menu).getTable();
+        Table tbl = next.getTable();
         tbl.setFillParent(true);
         stage.addActor(tbl);
         currentMenu = menu;
     }
 
+    /**
+     * Updates the current {@link Menu}, then acts the stage (updates it)
+     */
+    public void update() {
+        menus.get(currentMenu).updateTable();
+        stage.act();
+    }
+
+    /**
+     * A get-method
+     * @return Returns the stage
+     */
     public Stage getStage() {
         return stage;
     }
 
+    /**
+     * A method that names the current {@link Menu}
+     * @return
+     */
     public String getCurrentMenu() { return currentMenu; }
 }

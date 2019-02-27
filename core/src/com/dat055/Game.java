@@ -40,7 +40,6 @@ public class Game extends ApplicationAdapter {
 		if(gameController.isRunning())
 			gameController.update(deltaTime);
 
-
 		// Draw
 		batch.begin();
 		if(gameController.isRunning())

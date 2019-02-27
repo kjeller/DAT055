@@ -21,16 +21,16 @@ public class MainMenu extends Menu {
     private TextButtonStyle hoverStyle;
 
     public MainMenu(MenuController cntr) {
-        super("UI/Delta.jpg");
+        super(false, "UI/Delta.jpg");
 
         this.controller = cntr;
-        createTable(Gdx.graphics.getWidth()/4,Gdx.graphics.getHeight()/18);
+        createTable();
     }
 
     @Override
-    public void createTable(int width, int height) {
-        // Initiate the styles used by super
-        initStyles(height);
+    public void createTable() {
+        int width = Gdx.graphics.getWidth()/4;
+        int height = Gdx.graphics.getHeight()/18;
 
         // Create the actors
         play = createButton("Play");
@@ -52,7 +52,7 @@ public class MainMenu extends Menu {
         padL = butX/3;
         padS = butY/2;
 
-        Table table = new Table();
+        Table table = super.table;
         table.setSize(controller.getWidth(),controller.getHeight());
         table.bottom();
 
@@ -64,49 +64,10 @@ public class MainMenu extends Menu {
         table.add(exit).width(butX).height(butY).padBottom(padL).colspan(2).row();
         table.add(credits).width(butX/2).height(butY).padLeft(padS).padBottom(padS).left();
         table.add(verNr).width(butX/2).height(butY).padRight(padS).padBottom(padS).right();
-
-        super.table = table;
-    }
-
-    private void initStyles(int height) {
-        initLblStyle(height);
-        initTxtBtnStyle(height);
-    }
-
-    private void initTxtBtnStyle(int height) {
-        TextButtonStyle txtBtnStyle;
-        BitmapFont font = generateFont(height-Gdx.graphics.getHeight()/50);
-
-        Skin skin = new Skin(Gdx.files.internal("UI/ui.json"));
-        TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("UI/ui.atlas"));
-        skin.addRegions(atlas);
-
-        txtBtnStyle = new TextButton.TextButtonStyle();
-
-        txtBtnStyle.font = font;
-        txtBtnStyle.fontColor = Color.BLACK;
-        txtBtnStyle.downFontColor = Color.WHITE;
-
-        txtBtnStyle.up = skin.getDrawable("but1_pressed");
-        txtBtnStyle.down = skin.getDrawable("but1");
-
-        hoverStyle = new TextButtonStyle(txtBtnStyle);
-        hoverStyle.up = skin.getDrawable("but1");
-        hoverStyle.fontColor = Color.WHITE;
-
-        super.txtBtnStyle = txtBtnStyle;
-    }
-
-    private void initLblStyle(int height) {
-        LabelStyle lblStyle = new Label.LabelStyle();
-        lblStyle.font = generateFont(height-Gdx.graphics.getHeight()/30);
-        lblStyle.fontColor = Color.WHITE;
-        super.lblStyle = lblStyle;
     }
 
     /**
-     * A meaty function that stores every buttons listener.
-     * Does a lot of stuff, trust me.
+     * Adds a listener to every actor active in the table (meaty method)
      */
 
     private void addListeners() {

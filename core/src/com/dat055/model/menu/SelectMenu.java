@@ -16,98 +16,61 @@ import java.util.ArrayList;
 public class SelectMenu extends Menu {
     private MenuController controller;
     private FileHandle[] files;
-    private TextButton back, select, current;
+    private TextButton back, select;
     private ButtonGroup<TextButton> textButtonGroup;
-    private TextButton.TextButtonStyle hoverStyle, checkedStyle;
 
     public SelectMenu(MenuController ctrl) {
-        super("UI/Delta.jpg");
+        super(false, "UI/Delta.jpg");
         textButtonGroup = new ButtonGroup<TextButton>();
         textButtonGroup.setMaxCheckCount(1);
         textButtonGroup.setMinCheckCount(0);
         textButtonGroup.setUncheckLast(true);
 
         controller = ctrl;
-        createTable(Gdx.graphics.getWidth()/3,Gdx.graphics.getHeight()/18);
+        createTable();
     }
 
     @Override
-    public void createTable(int width, int height) {
-        int padLarge, padSmall;
-        padLarge = width/2;
-        padSmall = height/2;
+    public void createTable() {
+        int width = Gdx.graphics.getWidth()/4;
+        int height = Gdx.graphics.getHeight()/18;
 
         initStyles(height);
 
         back = createButton("Back");
         select = createButton("Select");
 
-        Table table = new Table();
+        addListeners();
+
+        layoutTable(width, height);
+    }
+
+    private void layoutTable(int width, int height) {
+        int padLarge, padSmall;
+        padLarge = width/2;
+        padSmall = height/2;
+
+        Table table = super.table;
         table.setSize(controller.getWidth(),controller.getWidth());
-        Table subTable = new Table();
 
         table.setPosition(0,0);
+
+        table.add(createSubTable(padSmall)).padBottom(padSmall).colspan(2).expandX().expandY().row();
+        table.add(back).width(width/2).height(height).padLeft(padSmall).padBottom(padSmall).bottom().left();
+        table.add(select).width(width/2).height(height).padRight(padSmall).padBottom(padSmall).bottom().right();
+    }
+
+    private Table createSubTable(int padding) {
+        Table table = new Table();
         files = Gdx.files.internal("maps/").list();
         for(FileHandle file: files) {
             TextButton tb = createButton(file.nameWithoutExtension(), checkedStyle);
             textButtonGroup.add(tb);
-            subTable.add(tb).width(width).height(height).padBottom(padSmall).expandX().row();
+            table.add(tb).width(Gdx.graphics.getWidth()/3).height(Gdx.graphics.getHeight()/16).padBottom(padding).expandX().row();
         }
-
-        table.add(subTable).padBottom(padSmall).colspan(2).expandX().expandY().row();
-        table.add(back).width(width/2).height(height).padLeft(padSmall).padBottom(padSmall).bottom().left();
-        table.add(select).width(width/2).height(height).padRight(padSmall).padBottom(padSmall).bottom().right();
-
-        table.setDebug(true);
-
-        addListeners();
-
-        super.table = table;
+        return table;
     }
 
-    private void initStyles(int height) {
-        initTxtBtnStyle(height);
-        initLblStyle(height);
-    }
-
-    private void initTxtBtnStyle(int height) {
-        TextButton.TextButtonStyle txtBtnStyle = new TextButton.TextButtonStyle();
-
-        Skin skin = new Skin(Gdx.files.internal("UI/ui.json"));
-        TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("UI/ui.atlas"));
-        skin.addRegions(atlas);
-
-        txtBtnStyle.font = generateFont(height-Gdx.graphics.getHeight()/50);
-        txtBtnStyle.fontColor = Color.BLACK;
-        txtBtnStyle.downFontColor = Color.WHITE;
-
-        txtBtnStyle.up = skin.getDrawable("but1_pressed");
-        txtBtnStyle.down = skin.getDrawable("but1");
-
-        hoverStyle = new TextButton.TextButtonStyle(txtBtnStyle);
-        hoverStyle.up = skin.getDrawable("but1");
-        hoverStyle.fontColor = Color.WHITE;
-
-        checkedStyle = new TextButton.TextButtonStyle(txtBtnStyle);
-        checkedStyle.checked = skin.getDrawable("but1");
-        checkedStyle.checkedFontColor = Color.WHITE;
-
-        super.txtBtnStyle = txtBtnStyle;
-    }
-
-    private void initLblStyle(int height) {
-        Label.LabelStyle lblStyle = new Label.LabelStyle();
-        lblStyle.font = generateFont(height-Gdx.graphics.getHeight()/60);
-        lblStyle.fontColor = Color.WHITE;
-        super.lblStyle = lblStyle;
-    }
-
-    public BitmapFont fontPad(BitmapFont f) {
-        BitmapFont.BitmapFontData fd = f.getData();
-        fd.padLeft = -5;
-        fd.padRight = -10;
-        return f;
-    }
     private void addListeners() {
         back.addListener(new ClickListener() {
             @Override
@@ -117,7 +80,10 @@ public class SelectMenu extends Menu {
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                controller.swapMenu("Multiplayer");
+                if (controller.multiplayer)
+                    controller.swapMenu("Multiplayer");
+                else
+                    controller.swapMenu("Main");
                 super.touchUp(event, x, y, pointer, button);
             }
 
@@ -142,16 +108,14 @@ public class SelectMenu extends Menu {
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                if (controller.multiplayer)
-                    controller.name = "Beelzebub";
-
-                if (textButtonGroup.getChecked() != null) {
+                if (controller.multiplayer) {
+                    controller.swapMenu("Character");
+                    //controller.name = "Beelzebub";
+                } else if (textButtonGroup.getChecked() != null) {
                     controller.clearStage();
                     controller.currentMap = textButtonGroup.getChecked().getText().toString();
                     controller.startGame();
                 }
-
-                System.out.println(controller.currentMap);
                 super.touchUp(event, x, y, pointer, button);
             }
 

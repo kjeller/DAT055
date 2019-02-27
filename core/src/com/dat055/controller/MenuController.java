@@ -8,7 +8,12 @@ import com.dat055.model.MenuModel;
 
 public class MenuController extends Controller{
     private boolean visible;
-    public boolean multiplayer;
+    public boolean multiplayer; // A flag
+    public boolean host;
+    private boolean isCharOne;
+    private boolean charOneBlocked = false;
+    private boolean charTwoBlocked = false;
+    private boolean updatableMenu;
     public String currentMap;
     public String name;
 
@@ -24,11 +29,13 @@ public class MenuController extends Controller{
         ((MenuModel)model).includeMenu("Multiplayer", new MultiMenu(this));
         ((MenuModel)model).includeMenu("Pause", new PauseMenu(this));
         ((MenuModel)model).includeMenu("Select", new SelectMenu(this));
+        ((MenuModel)model).includeMenu("Character", new CharacterMenu(this));
     }
 
     @Override
     public void update(float dt) {
-        ((MenuModel)model).getStage().act(dt);
+        if (updatableMenu)
+            ((MenuModel)model).update();
     }
 
     @Override
@@ -72,11 +79,14 @@ public class MenuController extends Controller{
 
     public float getWidth()  { return ((MenuModel)model).getStage().getWidth();  }
     public float getHeight() { return ((MenuModel)model).getStage().getHeight(); }
+
+    public boolean isCharOne() { return isCharOne; }
+    public boolean isCharOneBlocked() { return charOneBlocked; }
+    public boolean isCharTwoBlocked() { return charTwoBlocked; }
+
     public void setMultiplayer(boolean b) { multiplayer = b; }
 
-    public void swapMenu(String menu) {
-        ((MenuModel)model).swapMenu(menu);
-    }
+    public void swapMenu(String menu) { ((MenuModel)model).swapMenu(menu); }
 
     public void togglePause() { ((GameController)ctrl).togglePause(); }
     /*
