@@ -22,12 +22,7 @@ public class TCPHandler extends Thread {
     }
 
     public void run() {
-        try {
-            Thread.sleep(20);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        receive();
+        while(!interrupted()) { receive(); }
     }
 
     /**
@@ -62,7 +57,6 @@ public class TCPHandler extends Thread {
             try {
                 out.writeObject(msg);
                 System.out.printf("[Client] {%s} sent to server. \n", msg);
-                //out.reset();
                 return true;
             } catch (IOException ignored) {}
         }
@@ -70,7 +64,7 @@ public class TCPHandler extends Thread {
     }
 
     /**
-     * Write message to output stream - to server
+     * Write message to output stream - from server
      * @param msg that will be sent
      */
     public boolean writeServerMessage(Message msg) {
@@ -79,7 +73,6 @@ public class TCPHandler extends Thread {
             try {
                 out.writeObject(msg);
                 System.out.printf("[Client] {%s} sent to server. \n", msg);
-                //out.reset();
                 return true;
             } catch (IOException ignored) {}
         }

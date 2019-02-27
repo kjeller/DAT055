@@ -23,14 +23,7 @@ public class UDPHandler extends Thread {
     }
 
     public void run() {
-        while(!interrupted()) {
-            try {
-                Thread.sleep(20);
-            } catch (InterruptedException e) { break; }
-
-            receive();
-        }
-
+        while(!interrupted()) { receive(); }
     }
 
     /**
@@ -48,7 +41,7 @@ public class UDPHandler extends Thread {
 
 
     /**
-     * Sends packet to addr
+     * Sends datagram to a host
      */
     public void send(DatagramSocket socket, byte[] data, InetAddress hostname, int port) {
         if(data != null) {

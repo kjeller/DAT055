@@ -215,7 +215,15 @@ public class GameController extends Controller {
 
         System.out.println("Map created");
         //TODO: Skapa loadingscreen-tråd
-        while(!server.isRunning()); // wait for map to be set
+
+        while(true) {
+            if(!server.isRunning()) {
+                try {
+                    Thread.sleep(0);
+                } catch (InterruptedException ignored) {}
+            } else { break; }
+        }
+
         //Host decides this from menu
         mode = Mode.FRONT;
         isMultiplayer = true;
@@ -232,11 +240,18 @@ public class GameController extends Controller {
         if(!server.startServerAndClient(addr))
             return false;
 
-        mode = Mode.BACK; //TODO: This will be set from message from other peer
-        while(!server.isRunning()); // wait for map to be set
+        while(true) {
+            if(!server.isRunning()) {
+                try {
+                    Thread.sleep(0);
+                } catch (InterruptedException ignored) {}
+            } else { break; }
+        }
+
         System.out.println("Map choosen from server: " + server.getChosenMap());
-        startMap(server.getChosenMap());
+        mode = Mode.BACK; //TODO: This will be set from message from other peer
         isMultiplayer = true;
+        startMap(server.getChosenMap());
 
         return true;
     }

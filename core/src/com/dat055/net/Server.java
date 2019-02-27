@@ -13,9 +13,7 @@ import java.net.*;
 import static com.dat055.net.message.Protocol.*;
 
 public class Server extends Thread{
-    private final int PERIOD = 50;
-
-    // TCPHandler communication
+    // TCPcommunication
     private ServerSocket ss;
     private Socket cs; // Connected socket
     private ObjectOutputStream out;
@@ -49,6 +47,30 @@ public class Server extends Thread{
     }
 
     /**
+     * Starts server and creates a client that responds to other server
+     * Use this when joining another server.
+     * @return
+     */
+    public boolean startServerAndClient(String addr) {
+        tcpHandler.setClient(client = new Client(addr, port));
+        System.out.println("[Server] Created a client");
+        return startServer(null);
+    }
+
+    /**
+     * Starts server when a client is not specified.
+     * Use this if you are hosting a server.
+     * @param chosenMap map chosen by player
+     * @return true if succeeded
+     */
+    public boolean startServer(String chosenMap) {
+        this.chosenMap = chosenMap;
+        start();
+        System.out.println("[Server] Thread started.");
+        return true;
+    }
+
+    /**
      * Creates server socket and waits for socket to connect.
      */
     private boolean initialize() {
@@ -59,53 +81,31 @@ public class Server extends Thread{
             System.out.println("[Server] A client has connected to the server!");
             out = new ObjectOutputStream(cs.getOutputStream());
             in = new ObjectInputStream(cs.getInputStream());
+            ds = new DatagramSocket(port);  // Create datagramsocket to receive UDPHandler packets
 
             // For host - create client
             if(client == null) {
-                client = new Client(cs.getInetAddress(), port);
-                tcpHandler.setClient(client);
+                tcpHandler.setClient(client = new Client(cs.getInetAddress(), port));
                 tcpHandler.writeClientMessage(new JoinMessage(name, chosenMap));
+                //client.start();
             }
             tcpHandler.start();
             udpHandler.start();
-
-            ds = new DatagramSocket(port);  // Create datagramsocket to receive UDPHandler packets
         } catch (IOException e) { System.out.println(e); return false;}
-        return true;
-    }
-
-    /**
-     * Starts server and creates a client that responds to other server
-     * @return
-     */
-    public boolean startServerAndClient(String addr) {
-        tcpHandler.setClient(client = new Client(addr, port));
-        System.out.println("[Server] Created a client");
-        return startServer(null);
-    }
-
-    public boolean startServer(String chosenMap) {
-        this.chosenMap = chosenMap;
-        start();
-        System.out.println("[Server] Thread started.");
         return true;
     }
 
     public void run() {
         while(!interrupted()) {
-            try {
-                Thread.sleep(PERIOD);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
             // If there exist no socket connected to server
             if(cs == null) {
-                    initialize(); // Initialize server and gets socket connected
+                    initialize(); // Initialize server and get socket connected.
             } else {
                 // Check if socket is still connected
                 if(!cs.isConnected()) {
                     cs = null;
                     isRunning = false;
+                    close();
                     System.out.println("[Server] Lost connection to client.");
                 }
             }
@@ -131,10 +131,10 @@ public class Server extends Thread{
     // == Functions that handle the responses TCPHandler/UDPHandler ==
 
     /**
-     * Handles UDPHandler packets sent from other client
-     * by deserializing message and translating the op code in the msg.
+     * Handles UDP packets sent from a client
+     * by deserializing a message and translating the op code in the msg.
      * It then determines what the host will answer with.
-     * This method is called by thread if a client is connected
+     * This method is called by a UDPHandler.
      * to serversocket.
      */
     public void handlePackets(byte[] data) {
@@ -163,7 +163,7 @@ public class Server extends Thread{
     }
 
     /**
-     * Handle TCPHandler messages and responds to them. This is basically
+     * Handle TCP messages and responds to them. This is basically
      * the flow of the server.
      * @param msg
      */
@@ -184,6 +184,7 @@ public class Server extends Thread{
                     }
                     tcpHandler.writeClientMessage(new Message(OP_CHAR_SEL));
                     isRunning = true;
+                    System.out.printf("isRunning: %s\n", isRunning);
                     client.start();
                     break;
                 case OP_CHAR_SEL:
@@ -227,11 +228,6 @@ public class Server extends Thread{
             objOut.writeObject(msg);
         } catch (IOException ignored) {}
         client.setPacketData(out.toByteArray());
-    }
-
-    private void setClient (InetAddress addr) {
-        System.out.println("=== Client created! ===");
-        client = new Client(addr, port);
     }
 
     public String getClientName() { return cs.getInetAddress().getHostName(); }
