@@ -298,7 +298,7 @@ public class CollisionHandler {
         if (character.getVelocity().y < 0) {
             if (tile.getState()) {
                 if (character.getRect().x < tile.getRect().x+tile.getRect().width/2)
-                    character.setYPosition((int)tile.getRect().y + 64);
+                    character.setYPosition((int)(tile.getRect().y + tile.getRect().height));
                     character.setGrounded(true);
                     return true;
             }
@@ -356,6 +356,6 @@ public class CollisionHandler {
         return (intersection.height == intersection.width);
     }
     private Tile getCurrentTile(Vector2 position) {
-        return tileMap.getTile((int)position.x/64, (int)position.y/64);
+        return tileMap.getTile((int)position.x/tileSize, (int)position.y/tileSize);
     }
 }

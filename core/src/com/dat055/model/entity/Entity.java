@@ -12,6 +12,11 @@ import com.badlogic.gdx.utils.ObjectMap;
 
 import java.util.Observable;
 
+/**
+ * Author: Tobias Campbell
+ * Version: 2019-02-28
+ */
+
 public abstract class Entity extends Observable {
     protected int height;
     protected int width;
@@ -75,12 +80,9 @@ public abstract class Entity extends Observable {
         batch.draw(sprite, position.x+offset.x, position.y+offset.y, width/2, -position.y,
                 sprite.getWidth(), sprite.getHeight(), 1,1, rotation);
     }
-
-    //TODO: Use sprite directly from spritesheet
     public void setTexture(String texturePath) {
         sprite = new Sprite(new Texture(texturePath));
     }
-
     void setRectangle() {
         rect = new Rectangle();
         rect.setSize(width, height);

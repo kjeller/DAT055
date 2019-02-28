@@ -29,12 +29,15 @@ public class GameMap {
     private Player player;  // a reference to player - makes it easier to control player
     private CollisionHandler colHandler;
 
+    private boolean restart;
+
     public GameMap(TileMap tileMap, ArrayList<Entity> entities, Player player, String name, int width) {
         this.tileMap = tileMap;
         this.entities = entities;
         this.player = player;
         this.name = name;
         this.width = width;
+        restart = false;
         colHandler = new CollisionHandler(this);
 
     }
@@ -51,6 +54,7 @@ public class GameMap {
             }
             colHandler.checkCollision(entity);
             colHandler.checkCollision(player.getHook());
+            isDead(entity);
         }
     }
 
@@ -66,10 +70,9 @@ public class GameMap {
         }
     }
 
-    private void checkIfDead(Entity entity) {
-       /* if (entity instanceof Character) {
-
-        }*/
+    public void isDead(Entity entity) {
+        if (entity instanceof Player && !((Player)entity).getIsAlive())
+            restart = true;
     }
 
     // == Debug stuff below ==
@@ -137,6 +140,7 @@ public class GameMap {
     public Player getPlayer() { return player;}
     public String getName() { return name; }
     public String getId() { return id; }
+    public boolean getRestart() { return restart; }
     public int getWidth(){ return width; }
     public String toString() {
         return  String.format("GameMap: %s \n -TileMap: %s \n -Player: %s \n -Entities: %s \n",

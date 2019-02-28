@@ -26,7 +26,10 @@ public class GameController extends Controller {
     private float rotationTimer;
     private float rotation;
 
+    private String currentMap;
+
     private Server server;
+
 
     public GameController() {
         super(new GameModel(), null);
@@ -39,6 +42,12 @@ public class GameController extends Controller {
             updateCamera(deltaTime);        // Updates camera
         checkKeyboardInput();           // Handles keyboard input
 
+        // ((GameController)ctrl).startSingleplayerMap("maps/" + currentMap + ".json");
+
+        if (map1.getRestart() || map2.getRestart()) {
+           startMap(((GameModel)model).getCurrentMap());
+            //((GameModel)model).createMap(((GameModel)model).getCurrentMap());
+        }
         // tile rotation map transition
         if(isRotating && !isPaused)
             rotationTimer+= 2f;
@@ -161,6 +170,7 @@ public class GameController extends Controller {
      * @param fileName of a json file in assets/maps/
      */
     private boolean startMap(String fileName) {
+        System.out.println(fileName);
         ((GameModel)model).createMap(fileName);
 
         map1 = ((GameModel)model).getGameMap1();
@@ -168,7 +178,6 @@ public class GameController extends Controller {
         cam = ((GameModel)model).getCam();
         player1 = map1.getPlayer();
         player2 = map2.getPlayer();
-
 
         // Start running
         isRunning = true;

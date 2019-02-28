@@ -17,6 +17,7 @@ public class GameModel extends Model {
     private DebugCamera debugCam;
     private OrthographicCamera cam;
     private BitmapFont debugFont;
+    private String currentMap;
 
     public GameModel(){
         debugFont = new BitmapFont(Gdx.files.internal("fonts/Mincho.fnt"),
@@ -44,7 +45,9 @@ public class GameModel extends Model {
      * @param fileName name of map (json)
      */
     public void createMap(String fileName) {
+        System.out.println("Gamemodel: " + fileName);
         GameMapFactory mapFactory = new GameMapFactory(fileName);
+        currentMap = fileName;
         map1 = mapFactory.getMap();
         map2 = mapFactory.getMap();
         cam = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -55,4 +58,8 @@ public class GameModel extends Model {
     public Player getDebugCam() { return debugCam; }
     public BitmapFont getFont() { return debugFont; }
     public OrthographicCamera getCam() {return cam;}
+
+    public String getCurrentMap() {
+        return currentMap;
+    }
 }
