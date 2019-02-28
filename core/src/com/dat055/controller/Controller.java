@@ -7,6 +7,11 @@ import com.dat055.view.View;
 
 import javax.naming.ldap.Control;
 
+/**
+ * Controls what is rendered in view.
+ * @author Karl Strålman
+ * @version 2019-02-22
+ */
 public abstract class Controller {
     protected View view;
     protected Model model;

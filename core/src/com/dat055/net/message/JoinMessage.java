@@ -1,5 +1,11 @@
 package com.dat055.net.message;
 
+/**
+ * A message for sending join requests.
+ * Only used when writing to streams (TCP).
+ * @author Karl Strålman
+ * @version 2019-02-22
+ */
 public class JoinMessage extends Message {
     private String name;
     private String map;

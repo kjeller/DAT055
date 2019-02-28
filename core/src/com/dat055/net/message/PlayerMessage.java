@@ -3,6 +3,12 @@ package com.dat055.net.message;
 import com.badlogic.gdx.math.Vector2;
 import com.dat055.model.entity.Player;
 
+/**
+ * A message for sending player updates.
+ * Will be used when updating player properties.
+ * @author Karl Strålman
+ * @version 2019-02-22
+ */
 public class PlayerMessage extends Message {
     private Vector2 position;
     private Vector2 lookingDirection;

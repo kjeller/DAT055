@@ -12,7 +12,13 @@ import com.dat055.model.map.GameMap;
 import com.dat055.net.Server;
 import com.dat055.view.GameView;
 
-
+/**
+ * All logic in the game is calculated here.
+ * Moving camera, player etc. Menu calls methods
+ * here to start games.
+ * @author Karl Strålman
+ * @version 2019-02-25
+ */
 public class GameController extends Controller {
     public enum Mode {FRONT, BACK}
     private Mode mode;

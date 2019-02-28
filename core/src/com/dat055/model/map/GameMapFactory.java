@@ -16,6 +16,13 @@ import com.dat055.model.map.tile.TileMapFactory;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+/**
+ * Responisble for reading from a json file and
+ * creating a 1-2 gamemaps filling them with
+ * entities.
+ * @author Karl Strålman
+ * @version 2019-02-18
+ */
 public class GameMapFactory {
     private final int TILESIZE = 64;
     private final String MAP_PROPERTIES = "properties";

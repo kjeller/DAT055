@@ -12,6 +12,16 @@ import java.net.*;
 
 import static com.dat055.net.message.Protocol.*;
 
+/**
+ * A thread that waits for connection
+ * to a socket from another client. When connected
+ * a datagramsocket is created to receive packets
+ * from same client. This class also handles responses
+ * and is basically the connection between the game and
+ * the other peer.
+ * @author Karl Strålman
+ * @version 2019-02-26
+ */
 public class Server extends Thread{
     // TCPcommunication
     private ServerSocket ss;

@@ -8,6 +8,12 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
+/**
+ * A thread for sending/receiving TCP messages
+ * through streams for a client/server.
+ * @author Karl Strålman
+ * @version 2019-02-25
+ */
 public class TCPHandler extends Thread {
 
     private Server server;

@@ -11,6 +11,12 @@ import com.dat055.model.entity.Player;
 import com.dat055.model.map.GameMap;
 import com.dat055.model.map.GameMapFactory;
 
+/**
+ * This class is responsible for loading game assets
+ * and creating 1-2 gamemaps.
+ * @author Karl Strålman
+ * @version 2019-02-22
+ */
 public class GameModel extends Model {
     private GameMap map1;
     private GameMap map2;
