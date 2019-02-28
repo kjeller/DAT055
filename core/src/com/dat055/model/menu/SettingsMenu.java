@@ -25,7 +25,6 @@ public class SettingsMenu extends Menu {
         initTxtFldStyle(40);
 
         controller = ctrl;
-        // Table table = new Table();
         Table table = new Table();
 
         table.setWidth(controller.getWidth());
@@ -39,6 +38,8 @@ public class SettingsMenu extends Menu {
         audio = createButton("Audio");
         other = createButton("Other");
         back = createButton("Back");
+
+        //Textfield
         resText = createTextField("1024x768");
         fulText = createTextField("0");
         volText = createTextField("1");
@@ -124,7 +125,6 @@ public class SettingsMenu extends Menu {
         video.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                //buttonThing();
                 audio.setDisabled(false);
                 other.setDisabled(false);
                 video.setDisabled(true);

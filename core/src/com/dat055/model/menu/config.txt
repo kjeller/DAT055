@@ -1,0 +1,3 @@
+resolution:1024x768
+fullscreen:0
+volume:1
