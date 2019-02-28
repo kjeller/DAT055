@@ -5,12 +5,16 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.dat055.controller.GameController.Mode;
 import com.dat055.model.GameModel;
 import com.dat055.model.map.GameMap;
 
+/**
+ * Renders everything that is used in game.
+ * @author Karl Strålman
+ * @version 2019-02-21
+ */
 public class GameView extends View{
     private ShapeRenderer renderer;
     private Mode mode;

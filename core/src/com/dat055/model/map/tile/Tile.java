@@ -1,15 +1,20 @@
 package com.dat055.model.map.tile;
 
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 
+/**
+ * A tile that will be used by a tilemap.
+ * A tile has a rectangle that will be used for collision
+ * between entities.
+ * @author Karl Strålman
+ * @version 2019-02-21
+ */
 public class Tile {
-    protected float x, y;
+    protected float x, y; // Positions
 
     protected boolean isCollideable = false;
     protected Rectangle box;
-    //protected State state;
 
     Tile(float x, float y, float tileSize) {
         this.x = x;

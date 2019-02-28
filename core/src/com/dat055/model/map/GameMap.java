@@ -3,7 +3,6 @@ package com.dat055.model.map;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Rectangle;
@@ -15,13 +14,19 @@ import com.dat055.model.map.tile.TileMap;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+/**
+ * A gamemap contains a tilemap with entities.
+ * This connects the entities to the map itself.
+ * @author Karl Strålman
+ * @version 2019-02-08
+ */
 public class GameMap {
     private final Color PLAYER_RECTANGLE = Color.BLUE;
     private final Color TILE_RECTANGLE = Color.RED;
     private final Color ENEMY_RECTANGLE = Color.GOLD;
     private final Color DOOR_RECTANGLE = Color.BROWN;
 
-    private String name, id;  // name: map_0 or map_1, id is the id is json file
+    private String name;  // name: map_0 or map_1, id is the id is json file
     private TileMap tileMap;
     private int width;
 
@@ -139,7 +144,6 @@ public class GameMap {
     public ArrayList<Entity> getEntities() { return entities;}
     public Player getPlayer() { return player;}
     public String getName() { return name; }
-    public String getId() { return id; }
     public boolean getRestart() { return restart; }
     public int getWidth(){ return width; }
     public String toString() {

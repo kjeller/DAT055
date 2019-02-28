@@ -2,26 +2,19 @@ package com.dat055.model.map.tile;
 
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 /**
- * A tile with collision and a texture
+ * A tile with a texture.
+ * @author Karl Strålman
+ * @version 2019-02-21
  */
 public class TexturedTile extends Tile {
     private Sprite sprite;
-
-
-    public TexturedTile(float x, float y, float tileSize) {
-        super(x, y, tileSize);
-    }
 
     public TexturedTile(float x, float y, float tileSize, Sprite sprite) {
         super(x, y, tileSize);
         this.sprite = sprite;
         this.isCollideable = true;
-
-
-        //state = State.SOLID;
     }
 
     @Override

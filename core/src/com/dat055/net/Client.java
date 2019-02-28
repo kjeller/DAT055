@@ -6,6 +6,11 @@ import com.dat055.net.threads.UDPHandler;
 import java.io.*;
 import java.net.*;
 
+/**
+ * A thread responsible for communicating with a server.
+ * @author Karl Strålman
+ * @version 2019-02-25
+ */
 public class Client extends Thread{
     private final int PERIOD = 50;
     private Socket cs;

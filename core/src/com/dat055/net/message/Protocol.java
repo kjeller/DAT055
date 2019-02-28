@@ -1,7 +1,7 @@
 package com.dat055.net.message;
 
 public abstract class Protocol {
-    // Server OP codes - used for TCP communication
+    // Server OP codes - used for TCPHandler communication
     public static final char OP_JOIN = 0xFE;
     public static final char OP_LEAVE = 0xFF;
     public static final char OP_CHAR_SEL = 0xE0;

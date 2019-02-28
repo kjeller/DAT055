@@ -6,7 +6,13 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import com.badlogic.gdx.utils.JsonValue.JsonIterator;
 
-
+/**
+ * A factory used to create a tilemap and place tiles
+ * on the correct position. Gamemapfactory will use this
+ * to create tilemaps easier.
+ * @author Karl Strålman
+ * @version 2019-02-15
+ */
 public class TileMapFactory {
     TextureAtlas atlas;
 
