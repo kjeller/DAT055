@@ -176,7 +176,6 @@ public class GameController extends Controller {
      * @param fileName of a json file in assets/maps/
      */
     private boolean startMap(String fileName) {
-        System.out.println(fileName);
         ((GameModel)model).createMap(fileName);
 
         map1 = ((GameModel)model).getGameMap1();

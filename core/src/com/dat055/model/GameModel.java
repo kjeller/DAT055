@@ -51,7 +51,6 @@ public class GameModel extends Model {
      * @param fileName name of map (json)
      */
     public void createMap(String fileName) {
-        System.out.println("Gamemodel: " + fileName);
         GameMapFactory mapFactory = new GameMapFactory(fileName);
         currentMap = fileName;
         map1 = mapFactory.getMap();
