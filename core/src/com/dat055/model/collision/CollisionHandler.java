@@ -233,6 +233,10 @@ public class CollisionHandler {
                         horizontalCollision((Character) entity, intersection);
                     }
                 }
+                if(entity instanceof Player && mapEntity instanceof Spike){
+                    if(((Player) entity).getIsAlive())
+                    ((Spike) mapEntity).death((Player) entity);
+                }
             }
         }
         return null;

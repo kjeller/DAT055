@@ -5,11 +5,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
-import com.dat055.model.entity.Door;
-import com.dat055.model.entity.Button;
-import com.dat055.model.entity.Enemy;
-import com.dat055.model.entity.Entity;
-import com.dat055.model.entity.Player;
+import com.dat055.model.entity.*;
 import com.dat055.model.map.tile.TileMap;
 import com.dat055.model.map.tile.TileMapFactory;
 
@@ -31,6 +27,7 @@ public class GameMapFactory {
     private final String MAP_DESC = "desc";
     private final String MAP_ENTITIES = "entities";
     private final String MAP_PLAYER = "player";
+    private ArrayList<Entity> interactables = new ArrayList<Entity>();
 
     private Iterator<GameMap> iterator;
 
@@ -62,6 +59,25 @@ public class GameMapFactory {
         for(JsonValue jsonMap : root.get(MAP_NAME)) {
         GameMap map = getGameMap(jsonMap, getTextureAtlas(jsonMap));
         mapList.add(map);
+        }
+        Button entityButton;
+        Door entityDoor;
+        for (Entity entity : interactables) {
+
+            //Checks all buttons in entities
+            if (entity instanceof Button) {
+                entityButton = (Button) entity;
+                for (Entity entity2 : interactables) {
+                    //Checks all doors in entities
+                    if (entity2 instanceof Door) {
+                        entityDoor = (Door) entity2;
+                        //If Doors ID is in buttons target, make door observer for button
+                        if ((entityDoor.getId()).equals(entityButton.getTarget())) {
+                            entityButton.addObserver(entityDoor);
+                        }
+                    }
+                }
+            }
         }
         iterator = mapList.iterator();
         return true;
@@ -172,30 +188,23 @@ public class GameMapFactory {
                     entity = new Button(start, 64, 64, current.getString("sprite"),
                                         current.getString("id"), current.getString("target"),
                                         current.getInt("timer"));
+
+                    //interactables.put(entity, ((Button) entity).getId());
                     }
+                 else if(current.name.equals("spike")){
+                     JsonValue spike = current.child;
+                     entity = new Spike(start, 32, 64, current.getString("sprite"));
+                }
                 if(entity != null)
                     entities.add(entity);
             }
         }
 
-        Button entityButton;
-        Door entityDoor;
         for(Entity entity : entities){
-            //Checks all buttons in entities
-            if(entity instanceof Button){
-                entityButton = (Button) entity;
-                for(Entity entity2 : entities){
-                    //Checks all doors in entities
-                    if(entity2 instanceof Door){
-                        entityDoor = (Door)entity2;
-                        //If Doors ID is in buttons target, make door observer for button
-                        if((entityDoor.getId()).equals(entityButton.getTarget())){
-                            entityButton.addObserver(entityDoor);
-                        }
-                    }
-                }
+            if(entity instanceof Door || entity instanceof Button)
+                    interactables.add(entity);
             }
-        }
+
         entities.add(player); // Adds player to list
         return entities;
     }
