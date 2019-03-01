@@ -11,12 +11,19 @@ import com.dat055.model.entity.Player;
 import com.dat055.model.map.GameMap;
 import com.dat055.model.map.GameMapFactory;
 
+/**
+ * This class is responsible for loading game assets
+ * and creating 1-2 gamemaps.
+ * @author Karl Strålman
+ * @version 2019-02-22
+ */
 public class GameModel extends Model {
     private GameMap map1;
     private GameMap map2;
     private DebugCamera debugCam;
     private OrthographicCamera cam;
     private BitmapFont debugFont;
+    private String currentMap;
 
     public GameModel(){
         debugFont = new BitmapFont(Gdx.files.internal("fonts/Mincho.fnt"),
@@ -45,6 +52,7 @@ public class GameModel extends Model {
      */
     public void createMap(String fileName) {
         GameMapFactory mapFactory = new GameMapFactory(fileName);
+        currentMap = fileName;
         map1 = mapFactory.getMap();
         map2 = mapFactory.getMap();
         cam = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -55,4 +63,8 @@ public class GameModel extends Model {
     public Player getDebugCam() { return debugCam; }
     public BitmapFont getFont() { return debugFont; }
     public OrthographicCamera getCam() {return cam;}
+
+    public String getCurrentMap() {
+        return currentMap;
+    }
 }

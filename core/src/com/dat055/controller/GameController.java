@@ -12,7 +12,13 @@ import com.dat055.model.map.GameMap;
 import com.dat055.net.Server;
 import com.dat055.view.GameView;
 
-
+/**
+ * All logic in the game is calculated here.
+ * Moving camera, player etc. Menu calls methods
+ * here to start games.
+ * @author Karl Strålman
+ * @version 2019-02-25
+ */
 public class GameController extends Controller {
     public enum Mode {FRONT, BACK}
     private Mode mode;
@@ -26,7 +32,10 @@ public class GameController extends Controller {
     private float rotationTimer;
     private float rotation;
 
+    private String currentMap;
+
     private Server server;
+
 
     public GameController() {
         super(new GameModel(), null);
@@ -39,6 +48,12 @@ public class GameController extends Controller {
             updateCamera(deltaTime);        // Updates camera
         checkKeyboardInput();           // Handles keyboard input
 
+        // ((GameController)ctrl).startSingleplayerMap("maps/" + currentMap + ".json");
+
+        if (map1.getRestart() || map2.getRestart()) {
+           startMap(((GameModel)model).getCurrentMap());
+            //((GameModel)model).createMap(((GameModel)model).getCurrentMap());
+        }
         // tile rotation map transition
         if(isRotating && !isPaused)
             rotationTimer+= 2f;
@@ -168,7 +183,6 @@ public class GameController extends Controller {
         cam = ((GameModel)model).getCam();
         player1 = map1.getPlayer();
         player2 = map2.getPlayer();
-
 
         // Start running
         isRunning = true;

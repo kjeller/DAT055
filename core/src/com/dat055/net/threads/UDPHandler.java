@@ -8,6 +8,12 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 
+/**
+ * A thread for sending/receiving UDP packets
+ * for a client/server.
+ * @author Karl Strålman
+ * @version 2019-02-25
+ */
 public class UDPHandler extends Thread {
 
     private Client client;

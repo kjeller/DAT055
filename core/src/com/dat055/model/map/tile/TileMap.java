@@ -1,12 +1,18 @@
 package com.dat055.model.map.tile;
 
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.StringBuilder;
 
+/**
+ * A map of tiles that contains of a tile array.
+ * This class is responsible for drawing all the tiles
+ * that are drawable and adding tiles.
+ * @author Karl Strålman
+ * @version 2019-02-21
+ */
 public class TileMap {
     private Tile[][] map;
-    private int width, height;
+    private int width, height; // n of tiles width/height
 
     public TileMap(int width, int height) {
         this.width = width;
@@ -14,6 +20,11 @@ public class TileMap {
         map = new Tile[width][height];
     }
 
+    /**
+     * Renders every tile in array
+     * @param batch used to render
+     * @param rotation rotates tiles
+     */
     public void render(PolygonSpriteBatch batch, float rotation) {
         for(int i = 0; i < width; i++) {
             for(int j = 0; j < height; j++) {
@@ -23,6 +34,12 @@ public class TileMap {
         }
     }
 
+    /**
+     * Adds tile to array
+     * @param x coord x
+     * @param y coord y
+     * @param tile that will be added
+     */
     public void addTile(int x, int y, Tile tile) {
         if(x >= 0 && x < width && y >= 0 && y < height && tile != null){
             map[x][y] = tile;
