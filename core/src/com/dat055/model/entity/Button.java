@@ -1,7 +1,6 @@
 package com.dat055.model.entity;
 
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 
 
@@ -58,11 +57,7 @@ public class Button extends Entity {
     public String getTarget(){
         return target;
     }
-
-    @Override
-    public void action(String act) {
-
-    }
+    public String getId() { return id; }
 
     @Override
     public void draw(PolygonSpriteBatch sb, float rotation) {

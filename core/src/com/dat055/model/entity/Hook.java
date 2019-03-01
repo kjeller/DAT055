@@ -1,6 +1,7 @@
 package com.dat055.model.entity;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -35,10 +36,10 @@ public class Hook extends Entity {
         originPos = new Vector2(Vector2.Zero);
         pb = new PolygonSpriteBatch();
 
-
         this.maxLength = maxLength;
         textureSet();
         initialize();
+        BOUNDING_BOX_COLOR = Color.RED;
     }
     private Sprite getSprite(String region) {
         atlas = new TextureAtlas(Gdx.files.internal("textures/spritesheets/hook/hookSheet.atlas"));
@@ -130,20 +131,27 @@ public class Hook extends Entity {
     }
 
     @Override
-    public void action(String act) {
-
-    }
-
-    @Override
     public void draw(PolygonSpriteBatch sb, float rotation) {
 
         poly.draw(sb);
         poly.setOrigin(poly.getWidth()/2, -position.y);
         poly.setRotation(rotation);
         super.draw(sb, rotation, new Vector2(-5, -23));
-
-
     }
+
+    @Override
+    public void drawBoundingBox(ShapeRenderer renderer) {
+        super.drawBoundingBox(renderer);
+        drawPolygon(wire2, renderer);
+    }
+
+    private void drawPolygon(Polygon polygon, ShapeRenderer renderer) {
+        renderer.begin(ShapeRenderer.ShapeType.Line);
+        renderer.setColor(BOUNDING_BOX_COLOR);
+        renderer.polygon(polygon.getTransformedVertices());
+        renderer.end();
+    }
+
     /**
      * Set position where hook should originate from.
      * @param pos position

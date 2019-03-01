@@ -72,9 +72,13 @@ public class GameController extends Controller {
                 map2.update(deltaTime);
         }
 
+        // Multiplayer updates
         if(isMultiplayer && server.isRunning()) {
-            server.sendPlayerUpdate(currentPlayer);
+            // Only send updates if player is in motion
+            if(currentPlayer.getInMotion())
+                server.sendPlayerUpdate(currentPlayer);
 
+            // Update remote player
             if(currentPlayer == player1) {
                 server.updatePlayer(player2);
             } else {
