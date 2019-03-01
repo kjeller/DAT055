@@ -63,7 +63,6 @@ public class SettingsMenu extends Menu {
         resText = createTextField(resSetting);
         fulText = createTextField(fulSetting);
         volText = createTextField(volSetting);
-        resText.getDefaultInputListener();
 
 
         //Labels
@@ -159,9 +158,10 @@ public class SettingsMenu extends Menu {
             }
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                    settingsMap.put("resolution", resText.getMessageText());
-                    settingsMap.put("fullscreen", fulSetting);
-                    settingsMap.put("volume", volSetting);
+                    settingsMap.put("resolution", resText.getText());
+                    settingsMap.put("fullscreen", fulText.getText());
+                    settingsMap.put("volume", volText.getText());
+                    //todo:sanitize inputs
                 try{
                     configIO.save(settingsMap,"config.txt");
                     }
