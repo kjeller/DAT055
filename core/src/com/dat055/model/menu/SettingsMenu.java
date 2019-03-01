@@ -21,9 +21,9 @@ import java.util.TreeMap;
 public class SettingsMenu extends Menu {
     private MenuController controller;
     private TextButton apply ,save , back;
-    private Label resolution, fullscreen, graphics, volume;
-    private TextField resText, fulText, volText;
-    private String resSetting,fulSetting,volSetting;
+    private Label resolution, fullscreen, music, sound;
+    private TextField resField, fulField, musField,soundField;
+    private String resSetting,fulSetting,musSetting,soundSetting;
     private Map<String,String> settingsMap;
     public SettingsMenu(MenuController ctrl) {
         super("UI/Delta.jpg");
@@ -34,10 +34,6 @@ public class SettingsMenu extends Menu {
         initTxtBtnStyle();
         initLblStyle();
         initTxtFldStyle(40);
-
-        //temporary to test ConfigIO, todo: remove
-        //for(String s,)
-        settingsMap.put("a","100");
 
         controller = ctrl;
         Table table = new Table();
@@ -56,19 +52,22 @@ public class SettingsMenu extends Menu {
         //settings
         resSetting = settingsMap.get("resolution");
         fulSetting = settingsMap.get("fullscreen");
-        volSetting = settingsMap.get("volume");
+        musSetting = settingsMap.get("music");
+        soundSetting = settingsMap.get("sound");
 
 
         //Textfield
-        resText = createTextField(resSetting);
-        fulText = createTextField(fulSetting);
-        volText = createTextField(volSetting);
+        resField = createTextField(resSetting);
+        fulField = createTextField(fulSetting);
+        musField = createTextField(musSetting);
+        soundField = createTextField(soundSetting);
 
 
-        //Labels
+        //Texts
         resolution = new Label("Resolution",lblStyle);
         fullscreen = new Label("FullScreen",lblStyle);
-        volume = new Label("Volume",lblStyle);
+        music = new Label("Music",lblStyle);
+        sound = new Label("Sound",lblStyle);
 
 
 
@@ -80,13 +79,16 @@ public class SettingsMenu extends Menu {
         table.add(apply).width(170).height(40).row();
         table.add();
         table.add(resolution).padTop(20).height(40).padBottom(10);
-        table.add(resText).padTop(20).padBottom(10).row();
+        table.add(resField).padTop(20).padBottom(10).row();
         table.add();
         table.add(fullscreen).height(40).padBottom(20).padTop(10);
-        table.add(fulText).padTop(10).padBottom(20).row();
+        table.add(fulField).padTop(10).padBottom(20).row();
         table.add();
-        table.add(volume).height(40);
-        table.add(volText);
+        table.add(music).height(40);
+        table.add(musField).row();
+        table.add();
+        table.add(sound).height(40);
+        table.add(soundField);
 
         super.table = table;
     }
@@ -158,16 +160,20 @@ public class SettingsMenu extends Menu {
             }
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                    settingsMap.put("resolution", resText.getText());
-                    settingsMap.put("fullscreen", fulText.getText());
-                    settingsMap.put("volume", volText.getText());
+
+                        settingsMap.put("resolution", resField.getText());
+                        settingsMap.put("fullscreen", fulField.getText());
+                        settingsMap.put("music", musField.getText());
+                        settingsMap.put("soundeffects", soundField.getText());
+
                     //todo:sanitize inputs
-                try{
-                    configIO.save(settingsMap,"config.txt");
+                if (inputSanitizer()) {
+                    try {
+                        configIO.save(settingsMap, "config.txt");
+                    } catch (IOException e) {
+                        System.out.println("Something Hideous Intentionally Transpired");
                     }
-                catch(IOException e){
-                    System.out.println("Something Hideous Intentionally Transpired");
-                    }
+                }
             }
         });
         back.addListener(new ClickListener() {
@@ -194,5 +200,42 @@ public class SettingsMenu extends Menu {
         catch(IOException e){
             System.out.println("OH,Sugar Honey Ice Tea");
         }
+    }
+    public boolean inputSanitizer(){
+        if (resSanitizer() && fulSanitizer() && musicSanitizer() && soundSanitizer())
+            return true;
+        return false;
+    }
+    private boolean resSanitizer(){
+        if( settingsMap.put("resolution", resField.getText()).equals("1280x720") )
+            return true;
+        else if ( settingsMap.put("resolution", resField.getText()).equals("1920x1080"))
+            return true;
+        else if (settingsMap.put("resolution", resField.getText()).equals("1366x768"))
+            return true;
+        else if ( settingsMap.put("resolution", resField.getText()).equals("1600x900"))
+            return true;
+        return false;
+    }
+    private boolean fulSanitizer(){
+        if (settingsMap.put("fullscreen", fulField.getText()).equals("1"))
+            return true;
+        else if (settingsMap.put("fullscreen", fulField.getText()).equals("0"))
+            return true;
+        return false;
+    }
+    private boolean musicSanitizer(){
+        if(settingsMap.put("music", musField.getText()).equals("1"))
+            return true;
+        else if( settingsMap.put("music", musField.getText()).equals("0"))
+            return true;
+        return false;
+    }
+    private boolean soundSanitizer(){
+        if (settingsMap.put("soundeffects", soundField.getText()).equals("1"))
+            return true;
+        else if (settingsMap.put("soundeffects", soundField.getText()).equals("0"))
+            return true;
+        return false;
     }
 }
