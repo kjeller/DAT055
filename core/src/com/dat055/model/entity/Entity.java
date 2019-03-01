@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Polygon;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.*;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.ObjectMap;
@@ -78,15 +78,15 @@ public abstract class Entity extends Observable {
     }
 
     public void drawBoundingBox(ShapeRenderer renderer) {
-        drawRectangle(rect, renderer);
+        drawRectangle(rect, ShapeType.Line, renderer);
     }
 
     /**
      * Helper method for drawing a rectangle
      * @param renderer will render the rectangle
      */
-    protected void drawRectangle(Rectangle rect, ShapeRenderer renderer) {
-        renderer.begin(ShapeRenderer.ShapeType.Line);
+    protected void drawRectangle(Rectangle rect, ShapeType type, ShapeRenderer renderer) {
+        renderer.begin(type);
         renderer.setColor(BOUNDING_BOX_COLOR);
         renderer.rect(rect.x, rect.y, rect.width, rect.height);
         renderer.end();

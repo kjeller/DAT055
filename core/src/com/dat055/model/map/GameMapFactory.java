@@ -3,6 +3,7 @@ package com.dat055.model.map;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
 import com.dat055.model.entity.*;
@@ -143,26 +144,29 @@ public class GameMapFactory {
     }
 
     /**
-     * Creates an entity where a map's goal should be
-     * @param map The map that is
-     * @return
+     * Creates a {@link Goal} read from map properties
+     * @param map The current map
+     * @return returns {@link Goal}
      */
     private Goal findGoal(JsonValue map) {
-        JsonValue start = map.get(MAP_PROPERTIES).get("finish").get("position");
         int x, y;
         x = y = -1;
-        x = start.getInt(0);
-        y = start.getInt(1);
-        if(x >= 0 && y >= 0)
-            return new Goal(new Vector2(x* TILESIZE,
-                y *TILESIZE));
-        return  new Goal(Vector2.Zero);
+        try{
+            JsonValue pos = map.get(MAP_PROPERTIES).get("finish").child;
+            x = pos.getInt(0);
+            y = pos.getInt(1);
+        } catch (Exception ignored) {}
+
+        if(x >= 0 && y >= 0) {
+            return new Goal(new Vector2(x* TILESIZE,y *TILESIZE));
+        }
+        return new Goal(Vector2.Zero);
     }
 
     /**
      * Reads the map and calls the tilefactory
-     * @param map JSON object that contains map data
-     * @return A tilemap created by the tilefactory
+     * @param map {@link JsonValue} object that contains map data
+     * @return A {@link TileMap} created by the tilefactory
      */
     private TileMap jsonToTileMap(JsonValue map, TextureAtlas atlas) {
         TileMapFactory tileMapFactory = new TileMapFactory(atlas);
@@ -174,8 +178,8 @@ public class GameMapFactory {
 
     /**
      * Reads entity array from Json map file and creates the entities
-     * @param map which contains the entities
-     * @return ArrayList of these entities
+     * @param map {@link JsonValue} which contains the entities
+     * @return ArrayList of {@link Entity} in map
      */
     private ArrayList<Entity> getEntities(JsonValue map, Player player) {
         ArrayList<Entity> entities = new ArrayList<Entity>();
@@ -228,6 +232,7 @@ public class GameMapFactory {
             }
 
         entities.add(player); // Adds player to list
+        entities.add(findGoal(map));
         return entities;
     }
 }
