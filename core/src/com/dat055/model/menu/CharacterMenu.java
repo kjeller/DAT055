@@ -54,13 +54,13 @@ public class CharacterMenu extends Menu {
 
         table.setPosition(0,0);
 
-        table.add(createSubTable()).padBottom(padSmall).colspan(2).expandX().expandY().row();
+        table.setFillParent(true);
+        table.add(createSubTable()).padBottom(padSmall).colspan(2).expand().row();
         table.add(username).width(butX).height(butY).padBottom(padSmall/2).colspan(2).row();
         table.add(ready).width(butX).height(butY).padBottom(padSmall*2).colspan(2).row();
         table.add(back).width(butX/2).height(butY).padLeft(padSmall).padBottom(padSmall).bottom().left();
         table.add(start).width(butX/2).height(butY).padRight(padSmall).padBottom(padSmall).bottom().right();
-
-        //table.setDebug(true);
+        table.setDebug(true);
     }
 
     private Table createSubTable() {
@@ -69,14 +69,25 @@ public class CharacterMenu extends Menu {
 
         Button charOne = new Button(skin.getDrawable("blue"),skin.getDrawable("blue_select"), skin.getDrawable("blue_select"));
         charOne.getStyle().disabled = skin.getDrawable("blue_checked");
-        charOne.scaleBy((Gdx.graphics.getHeight() / 2) / charOne.getHeight());
+        charOne.scaleBy(Gdx.graphics.getHeight() / charOne.getHeight());
         Button charTwo = new Button(skin.getDrawable("red"), skin.getDrawable("red_select"), skin.getDrawable("red_select"));
         charTwo.getStyle().disabled = skin.getDrawable("red_checked");
-        charTwo.scaleBy((Gdx.graphics.getHeight() / 2) / charOne.getHeight());
+        charTwo.scaleBy(Gdx.graphics.getHeight() / charOne.getHeight());
 
 
         Table table = new Table();
         ButtonGroup<Button> buttonGroup = new ButtonGroup<Button>();
+        Label name1 = new Label("", lblStyle);
+        Label name2 = new Label("Lucifer", lblStyle);
+
+        buttonGroup.add(charOne);
+        buttonGroup.add(charTwo);
+
+        table.add(charOne).space(Gdx.graphics.getWidth()/30).expand();
+        table.add(charTwo).space(Gdx.graphics.getWidth()/30).expand().row();
+        //table.add(name1).space(Gdx.graphics.getWidth()/30);
+        //table.add(name2).space(Gdx.graphics.getWidth()/30);
+        table.setDebug(true);
 
         if (controller.isCharOneBlocked()) {
             charOne.setDisabled(true);

@@ -80,7 +80,7 @@ public abstract class Menu {
         skin.addRegions(atlas);
 
         txtFldStyle.font = fontPad(generateFont(height-Gdx.graphics.getHeight()/50), -5, 0);
-        txtFldStyle.fontColor = Color.BLACK;
+        txtFldStyle.fontColor = Color.WHITE;
         txtFldStyle.background = skin.getDrawable("but1");
         txtFldStyle.messageFont = generateFont(height-Gdx.graphics.getHeight()/60);
         txtFldStyle.cursor = new NinePatchDrawable(new NinePatch(new Texture("UI/cursor.9.png")));
@@ -121,6 +121,7 @@ public abstract class Menu {
 
     public TextField createTextField(String label) {
         TextField tf = new TextField(label, txtFldStyle);
+        tf.setMaxLength(24);
         return tf;
     }
 
