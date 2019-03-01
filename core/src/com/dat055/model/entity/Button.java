@@ -60,11 +60,6 @@ public class Button extends Entity {
     }
 
     @Override
-    public void action(String act) {
-
-    }
-
-    @Override
     public void draw(PolygonSpriteBatch sb, float rotation) {
         super.draw(sb, rotation);
     }

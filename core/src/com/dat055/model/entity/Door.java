@@ -82,11 +82,6 @@ public class Door extends Entity implements Observer {
         super.draw(sb, rotation);
     }
 
-    @Override
-    public void action(String act) {
-
-    }
-
     public boolean getState()   { return isOpen; }
     public String getId()       { return id; }
     public boolean getSolid(){ return isSolid; }

@@ -1,6 +1,7 @@
 package com.dat055.model.entity;
 
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 
 public class Player extends Character {
@@ -44,6 +45,14 @@ public class Player extends Character {
         if (hook != null)
             hook.draw(sb, rotation);
     }
+
+    @Override
+    public void drawBoundingBox(ShapeRenderer renderer) {
+        super.drawBoundingBox(renderer);
+        if(hook != null)
+            hook.drawBoundingBox(renderer);
+    }
+
     @Override
     public void update(float deltaTime) {
         // TODO: Toggle methods for booleans?

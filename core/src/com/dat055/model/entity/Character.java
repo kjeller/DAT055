@@ -1,7 +1,7 @@
 package com.dat055.model.entity;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 
 public abstract class Character extends Entity {
@@ -36,6 +36,7 @@ public abstract class Character extends Entity {
         isGrounded = false;
         isAlive = true;
         isMoving = false;
+        BOUNDING_BOX_COLOR = Color.BLUE;
     }
 
     /**
@@ -198,6 +199,7 @@ public abstract class Character extends Entity {
     public Vector2 getVelocity() { return velocity; }
     public Vector2 getDeltaPosition() { return deltaPosition; }
     public boolean getIsAlive() { return isAlive; }
+    public boolean getInMotion() { return (velocity.x != 0 || velocity.y !=0); }
 
     /**
      * Method that returns the entity's variables. Used for debugging.

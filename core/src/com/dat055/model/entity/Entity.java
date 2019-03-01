@@ -1,10 +1,11 @@
 package com.dat055.model.entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -18,6 +19,7 @@ import java.util.Observable;
  */
 
 public abstract class Entity extends Observable {
+    protected Color BOUNDING_BOX_COLOR;
     protected int height;
     protected int width;
     Vector2 position;
@@ -35,9 +37,9 @@ public abstract class Entity extends Observable {
         this.height = height;
         this.width = width;
         this.position = position;
-        this.texturePath = texturePath;
         setRectangle();
         initSounds();
+        BOUNDING_BOX_COLOR = Color.CYAN;
     }
 
     //TODO: Move this to Model
@@ -53,12 +55,6 @@ public abstract class Entity extends Observable {
     void playSound(String sound) {
         soundBank.get(sound).play();
     }
-
-    /**
-     * act is action that the entity takes
-     * @param act action that entity should do
-     */
-    public abstract void action(String act);
 
     /**
      * Generic methods for updating an entity
@@ -80,6 +76,22 @@ public abstract class Entity extends Observable {
         batch.draw(sprite, position.x+offset.x, position.y+offset.y, width/2, -position.y,
                 sprite.getWidth(), sprite.getHeight(), 1,1, rotation);
     }
+
+    public void drawBoundingBox(ShapeRenderer renderer) {
+        drawRectangle(rect, renderer);
+    }
+
+    /**
+     * Helper method for drawing a rectangle
+     * @param renderer will render the rectangle
+     */
+    protected void drawRectangle(Rectangle rect, ShapeRenderer renderer) {
+        renderer.begin(ShapeRenderer.ShapeType.Line);
+        renderer.setColor(BOUNDING_BOX_COLOR);
+        renderer.rect(rect.x, rect.y, rect.width, rect.height);
+        renderer.end();
+    }
+
     public void setTexture(String texturePath) {
         sprite = new Sprite(new Texture(texturePath));
     }
@@ -102,6 +114,7 @@ public abstract class Entity extends Observable {
     public int getHeight() {
         return height;
     }
+    public Color getColor() { return BOUNDING_BOX_COLOR; }
 
     @Override
     public String toString() {

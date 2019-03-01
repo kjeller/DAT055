@@ -1,6 +1,8 @@
 package com.dat055.model.map.tile;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 
 /**
@@ -14,19 +16,30 @@ public class Tile {
     protected float x, y; // Positions
 
     protected boolean isCollideable = false;
-    protected Rectangle box;
+    protected Rectangle rect;
 
     Tile(float x, float y, float tileSize) {
         this.x = x;
         this.y = y;
-        box = new Rectangle(x, y, tileSize, tileSize);
+        rect = new Rectangle(x, y, tileSize, tileSize);
     }
 
     public void draw(PolygonSpriteBatch batch, float rotation) {}
-
+    /**
+     * Helper method for drawing a rectangle
+     * @param renderer will render the rectangle
+     */
+    public void drawRectangle(ShapeRenderer renderer) {
+        if(isCollideable) {
+            renderer.begin(ShapeRenderer.ShapeType.Line);
+            renderer.setColor(Color.RED);
+            renderer.rect(rect.x, rect.y, rect.width, rect.height);
+            renderer.end();
+        }
+    }
     public String toString() {
         return String.format("tile @ (%.2f, %.2f)\n", x, y);
     }
     public boolean getState(){return isCollideable; }
-    public Rectangle getRect() {return box; };
+    public Rectangle getRect() {return rect; };
 }

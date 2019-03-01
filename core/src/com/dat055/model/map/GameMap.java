@@ -85,54 +85,20 @@ public class GameMap {
      * Will render all rectangles known to man. With predefined colors.
      * @param renderer for rendering the rectangles
      */
-    public void renderRectangles(ShapeRenderer renderer) {
+    public void drawBoundingBoxes(ShapeRenderer renderer) {
 
         for(Entity entity : entities) {
-            if (entity instanceof Player)
-                drawRectangle(entity.getRect(), PLAYER_RECTANGLE, renderer);
-            else if (entity instanceof Enemy) {
-                drawRectangle(entity.getRect(), ENEMY_RECTANGLE, renderer);
-            }
-            else if(entity instanceof Door){
-                drawRectangle(entity.getRect(), DOOR_RECTANGLE,renderer );
-            }
-            if(entity instanceof Player) {
-                Hook hook = ((Player)entity).getHook();
-                if(hook != null) {
-                    drawRectangle(hook.getRect(), PLAYER_RECTANGLE, renderer);
-                    drawRectangle(hook.getWire(), PLAYER_RECTANGLE, renderer);
-                    drawPolygon(hook.getWire2(), Color.WHITE, renderer);
-                }
-            }
-
+            entity.drawBoundingBox(renderer);
         }
+
         for(int i = 0; i < tileMap.getWidth(); i++){
             for(int j = 0; j < tileMap.getHeight(); j++){
                 Tile tile = tileMap.getTile(i, j);
-                if(tile.getState())  // If the tile is collideable
-                    drawRectangle(tile.getRect(), TILE_RECTANGLE, renderer);
+                tile.drawRectangle(renderer);
             }
         }
     }
-    public void drawPolygon(Polygon polygon, Color color, ShapeRenderer renderer) {
-        renderer.begin(ShapeRenderer.ShapeType.Line);
-        renderer.setColor(Color.WHITE);
-        renderer.polygon(polygon.getTransformedVertices());
-        renderer.end();
-    }
 
-    /**
-     * Helper method for drawing a rectangle
-     * @param rectangle the rectangle that will be drawed
-     * @param color the color of the rectangle
-     * @param renderer will render the rectangle
-     */
-    private void drawRectangle(Rectangle rectangle, Color color, ShapeRenderer renderer) {
-        renderer.begin(ShapeRenderer.ShapeType.Line);
-        renderer.setColor(color);
-        renderer.rect(rectangle.x, rectangle.y, rectangle.width, rectangle.height);
-        renderer.end();
-    }
     public void drawEntityText(BitmapFont font, PolygonSpriteBatch batch){
         for(Entity entity : entities)
             font.draw(batch, entity.toString(),
