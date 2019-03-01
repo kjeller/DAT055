@@ -118,11 +118,16 @@ public class GameMapFactory {
      * @return player object tied to map
      */
     private Player findPlayer(JsonValue map) {
+        // iterator with all entities for one map
         Iterator<JsonValue> entities = map.get(MAP_ENTITIES).child.iterator();
         JsonValue player = null;
         boolean playerFound = false;
+
+        // Search through entities
         while(entities.hasNext() && !playerFound) {
             JsonValue entity = entities.next();
+
+            // If player entity is found
             if(entity.name.equals(MAP_PLAYER)) {
                 playerFound = true;
                 player = entity;
@@ -135,6 +140,23 @@ public class GameMapFactory {
         start = new Vector2(position.getInt(0) * TILESIZE,
                 position.getInt(1) * TILESIZE);
         return new Player(start, player.getString(MAP_SPRITE), MAP_PLAYER );
+    }
+
+    /**
+     * Creates an entity where a map's goal should be
+     * @param map The map that is
+     * @return
+     */
+    private Goal findGoal(JsonValue map) {
+        JsonValue start = map.get(MAP_PROPERTIES).get("finish").get("position");
+        int x, y;
+        x = y = -1;
+        x = start.getInt(0);
+        y = start.getInt(1);
+        if(x >= 0 && y >= 0)
+            return new Goal(new Vector2(x* TILESIZE,
+                y *TILESIZE));
+        return  new Goal(Vector2.Zero);
     }
 
     /**

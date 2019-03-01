@@ -11,7 +11,7 @@ import com.badlogic.gdx.math.Vector2;
  */
 public class Goal extends Entity {
     private boolean hasBeenReached;
-    public Goal(Vector2 position, int width, int height) {
+    public Goal(Vector2 position) {
         super(position, 64, 64);
         hasBeenReached = false;
     }

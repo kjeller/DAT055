@@ -21,11 +21,6 @@ import java.util.Iterator;
  * @version 2019-02-08
  */
 public class GameMap {
-    private final Color PLAYER_RECTANGLE = Color.BLUE;
-    private final Color TILE_RECTANGLE = Color.RED;
-    private final Color ENEMY_RECTANGLE = Color.GOLD;
-    private final Color DOOR_RECTANGLE = Color.BROWN;
-
     private String name;  // name: map_0 or map_1, id is the id is json file
     private TileMap tileMap;
     private int width;

@@ -12,8 +12,4 @@ public class Spike extends Entity{
         player.takeDamage(100);
     }
 
-    @Override
-    public void action(String act) {
-
-    }
 }
