@@ -43,11 +43,11 @@ public class GameView extends View{
 
             // Map specific debug tec
             if(mode == Mode.FRONT) {
-                map1.renderRectangles(renderer);
+                map1.drawBoundingBoxes(renderer);
                 batch.begin();
                 map1.drawEntityText(((GameModel)model).getFont(), batch);
             } else {
-                map2.renderRectangles(renderer);
+                map2.drawBoundingBoxes(renderer);
                 batch.begin();
                 map2.drawEntityText(((GameModel)model).getFont(), batch);
             }
