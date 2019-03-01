@@ -13,16 +13,31 @@ import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.dat055.controller.MenuController;
 
+import java.io.IOException;
+import java.util.Map;
+import java.util.TreeMap;
+
+
 public class SettingsMenu extends Menu {
     private MenuController controller;
-    private TextButton video, audio, other, back;
+    private TextButton apply ,save , back;
     private Label resolution, fullscreen, graphics, volume;
     private TextField resText, fulText, volText;
+    private String resSetting,fulSetting,volSetting;
+    private Map<String,String> settingsMap;
     public SettingsMenu(MenuController ctrl) {
         super("UI/Delta.jpg");
+
+        settingsMap = new TreeMap<String, String>() {};
+
+        initConfig();
         initTxtBtnStyle();
         initLblStyle();
         initTxtFldStyle(40);
+
+        //temporary to test ConfigIO, todo: remove
+        //for(String s,)
+        settingsMap.put("a","100");
 
         controller = ctrl;
         Table table = new Table();
@@ -34,15 +49,22 @@ public class SettingsMenu extends Menu {
         table.setPosition(0, 0);
 
         //Buttons
-        video = createButton("Video");
-        audio = createButton("Audio");
-        other = createButton("Other");
+        save = createButton("Save");
+        apply = createButton("Apply");
         back = createButton("Back");
 
+        //settings
+        resSetting = settingsMap.get("resolution");
+        fulSetting = settingsMap.get("fullscreen");
+        volSetting = settingsMap.get("volume");
+
+
         //Textfield
-        resText = createTextField("1024x768");
-        fulText = createTextField("0");
-        volText = createTextField("1");
+        resText = createTextField(resSetting);
+        fulText = createTextField(fulSetting);
+        volText = createTextField(volSetting);
+        resText.getDefaultInputListener();
+
 
         //Labels
         resolution = new Label("Resolution",lblStyle);
@@ -55,9 +77,8 @@ public class SettingsMenu extends Menu {
 
         table.debug();
         table.add(back).width(150).height(40);
-        table.add(video).width(170).height(40);
-        table.add(audio).width(170).height(40);
-        table.add(other).width(170).height(40).row();
+        table.add(save).width(170).height(40);
+        table.add(apply).width(170).height(40).row();
         table.add();
         table.add(resolution).padTop(20).height(40).padBottom(10);
         table.add(resText).padTop(20).padBottom(10).row();
@@ -122,40 +143,31 @@ public class SettingsMenu extends Menu {
     }
 
     private void addListeners() {
-        video.addListener(new ClickListener() {
+        apply.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                audio.setDisabled(false);
-                other.setDisabled(false);
-                video.setDisabled(true);
                 return true;
             }
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
             }
         });
-        audio.addListener(new ClickListener() {
+        save.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                video.setDisabled(false);
-                other.setDisabled(false);
-                audio.setDisabled(true);
                 return true;
             }
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-            }
-        });
-        other.addListener(new ClickListener() {
-            @Override
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                video.setDisabled(false);
-                audio.setDisabled(false);
-                other.setDisabled(true);
-                return true;
-            }
-            @Override
-            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                    settingsMap.put("resolution", resText.getMessageText());
+                    settingsMap.put("fullscreen", fulSetting);
+                    settingsMap.put("volume", volSetting);
+                try{
+                    configIO.save(settingsMap,"config.txt");
+                    }
+                catch(IOException e){
+                    System.out.println("Something Hideous Intentionally Transpired");
+                    }
             }
         });
         back.addListener(new ClickListener() {
@@ -172,10 +184,15 @@ public class SettingsMenu extends Menu {
         });
     }
 
-/*    public void buttonThing() {
-        for(TextButton btn : list) {
-            btn.setDisabled(false);
+    /**
+     * laddar från config till texter
+     */
+    private void initConfig(){
+        try {
+            settingsMap = configIO.load("config.txt");
+        }
+        catch(IOException e){
+            System.out.println("OH,Sugar Honey Ice Tea");
         }
     }
-*/
 }

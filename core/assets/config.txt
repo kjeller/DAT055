@@ -1,3 +1,4 @@
-resolution:1024x768
+a:100
 fullscreen:0
+resolution:null
 volume:1
