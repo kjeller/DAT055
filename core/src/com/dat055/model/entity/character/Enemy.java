@@ -1,7 +1,11 @@
-package com.dat055.model.entity;
+package com.dat055.model.entity.character;
 
 import com.badlogic.gdx.math.Vector2;
 
+/**
+ * @author Tobias Campbell
+ * @version 17-02-2019
+ */
 public class Enemy extends Character {
 
     public Enemy(Vector2 startPosition, String texturePath, String name) {
@@ -9,9 +13,11 @@ public class Enemy extends Character {
         isMoving = true;
         lookingDirection.x = 1;
     }
-    public void action(String act) {
 
-    }
+    /**
+     * Basic logic of a simple enemy.
+     * @param deltaTime time since last frame.
+     */
     @Override
     public void update(float deltaTime) {
         super.update(deltaTime);
@@ -19,6 +25,10 @@ public class Enemy extends Character {
             move(lookingDirection.x);
         }
     }
+
+    /**
+     * Switches the enemy's direction to the other side.
+     */
     public void changeLookingDirectionX() {
         velocity.x = 0;
         lookingDirection.x = -lookingDirection.x;
