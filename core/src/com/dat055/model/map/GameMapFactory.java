@@ -7,6 +7,11 @@ import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
 import com.dat055.model.entity.*;
+import com.dat055.model.entity.character.Enemy;
+import com.dat055.model.entity.character.Player;
+import com.dat055.model.entity.interactables.Button;
+import com.dat055.model.entity.interactables.Door;
+import com.dat055.model.entity.interactables.Spike;
 import com.dat055.model.map.tile.TileMap;
 import com.dat055.model.map.tile.TileMapFactory;
 

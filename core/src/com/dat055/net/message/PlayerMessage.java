@@ -1,7 +1,7 @@
 package com.dat055.net.message;
 
 import com.badlogic.gdx.math.Vector2;
-import com.dat055.model.entity.Player;
+import com.dat055.model.entity.character.Player;
 
 /**
  * A message for sending player updates.
