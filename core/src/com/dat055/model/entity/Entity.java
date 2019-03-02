@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Polygon;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.*;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.ObjectMap;
@@ -15,25 +15,24 @@ import java.util.Observable;
 
 /**
  * Author: Tobias Campbell
- * Version: 2019-02-28
+ * Version: 22-02-2019
  */
-
 public abstract class Entity extends Observable {
     protected Color BOUNDING_BOX_COLOR;
     protected int height;
-    protected int width;
-    Vector2 position;
-    Sprite sprite;
-    String texturePath;
-    Rectangle rect;
-    ObjectMap<String, Sound> soundBank;
+    public int width;
+    protected Vector2 position;
+    protected Sprite sprite;
+    protected String texturePath;
+    protected Rectangle rect;
+    private ObjectMap<String, Sound> soundBank;
 
-    public Entity(Vector2 position, int height, int width, String texturePath) {
+    protected Entity(Vector2 position, int height, int width, String texturePath) {
         this(position, height, width);
         this.setTexture(texturePath);
         this.texturePath = texturePath;
     }
-    public Entity(Vector2 position, int height, int width) {
+    protected Entity(Vector2 position, int height, int width) {
         this.height = height;
         this.width = width;
         this.position = position;
@@ -52,7 +51,12 @@ public abstract class Entity extends Observable {
         soundBank.put("takedamage", loadFile("oof.mp3"));
         soundBank.put("jump", loadFile("jump.wav"));
     }
-    void playSound(String sound) {
+
+    /**
+     * Plays a specific sound.
+     * @param sound the filename
+     */
+    protected void playSound(String sound) {
         soundBank.get(sound).play();
     }
 
@@ -73,20 +77,20 @@ public abstract class Entity extends Observable {
     public void draw(PolygonSpriteBatch batch, float rotation, Vector2 offset) {
         sprite.setFlip(rotation > 90  && rotation < 270, false); // Rotates sprite correctly to plane
 
-        batch.draw(sprite, position.x+offset.x, position.y+offset.y, width/2, -position.y,
+        batch.draw(sprite, position.x+offset.x, position.y+offset.y, (float)width/2, -position.y,
                 sprite.getWidth(), sprite.getHeight(), 1,1, rotation);
     }
 
     public void drawBoundingBox(ShapeRenderer renderer) {
-        drawRectangle(rect, renderer);
+        drawRectangle(rect, ShapeType.Line, renderer);
     }
 
     /**
      * Helper method for drawing a rectangle
      * @param renderer will render the rectangle
      */
-    protected void drawRectangle(Rectangle rect, ShapeRenderer renderer) {
-        renderer.begin(ShapeRenderer.ShapeType.Line);
+    protected void drawRectangle(Rectangle rect, ShapeType type, ShapeRenderer renderer) {
+        renderer.begin(type);
         renderer.setColor(BOUNDING_BOX_COLOR);
         renderer.rect(rect.x, rect.y, rect.width, rect.height);
         renderer.end();
@@ -95,7 +99,7 @@ public abstract class Entity extends Observable {
     public void setTexture(String texturePath) {
         sprite = new Sprite(new Texture(texturePath));
     }
-    void setRectangle() {
+    protected void setRectangle() {
         rect = new Rectangle();
         rect.setSize(width, height);
         rect.setPosition(position.x, position.y);
@@ -103,7 +107,6 @@ public abstract class Entity extends Observable {
     public void setXPosition(int x) { position.x = x; rect.x = position.x; }
     public void setYPosition(int y) { position.y = y; rect.y = position.y; }
     public void setPosition(Vector2 position) { this.position = position; }
-
     public Vector2 getPosition() {
         return position;
     }

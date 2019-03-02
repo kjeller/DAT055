@@ -1,8 +1,14 @@
-package com.dat055.model.entity;
+package com.dat055.model.entity.character;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import com.dat055.model.entity.Entity;
+
+/**
+ * @author Tobias Campbell
+ * @version 01-03-2019
+ */
 
 public abstract class Character extends Entity {
     protected String name;
@@ -19,7 +25,7 @@ public abstract class Character extends Entity {
     boolean isMoving;
 
 
-    public Character(Vector2 position, int height, int width, String texturePath, String name, int healthPoints, Vector2 maxVelocity) {
+    Character(Vector2 position, int height, int width, String texturePath, String name, int healthPoints, Vector2 maxVelocity) {
         super(position, height, width, texturePath);
 
         this.name = name;
@@ -72,13 +78,6 @@ public abstract class Character extends Entity {
     }
 
     /**
-     *  Method for performing attacks
-     */
-    public void attack() {
-        System.out.println("Enemy attacks!");
-    }
-
-    /**
      * Method that makes the character jump.
      */
     public void jump() {
@@ -91,6 +90,7 @@ public abstract class Character extends Entity {
 
     /**
      * Method that works as a kind of physics engine for entities.
+     * Velocities, positions, etc.
      */
     @Override
     public void update(float deltaTime) {
@@ -102,6 +102,12 @@ public abstract class Character extends Entity {
             setDirection();
         }
     }
+
+    /**
+     * Method used to draw the character.
+     * @param sb spritebatch that is used.
+     * @param rotation sets the rotation when toggling between players.
+     */
     @Override
     public void draw(PolygonSpriteBatch sb, float rotation) {
         if (isAlive)
@@ -143,7 +149,6 @@ public abstract class Character extends Entity {
      * Helper method that updates the entity's acceleration.
      */
     private void updateFalling() {
-        //TODO: Longer jumping by holding jump button
         if (isGrounded) {
             velocity.y = 0;
             acceleration.y = 0;
@@ -178,11 +183,10 @@ public abstract class Character extends Entity {
      */
     private void die() {
         if (isAlive) {
-            System.out.println(name + " died!");
             isAlive = false;
         }
-
     }
+
     // Get and set methods galore.
     public void setXVelocity(int x) { velocity.x = x; }
     public void setYVelocity(int y) { velocity.y = y; }

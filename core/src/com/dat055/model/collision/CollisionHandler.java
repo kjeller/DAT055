@@ -4,7 +4,13 @@ import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.dat055.model.entity.*;
-import com.dat055.model.entity.Character;
+import com.dat055.model.entity.character.Character;
+import com.dat055.model.entity.character.Enemy;
+import com.dat055.model.entity.character.Hook;
+import com.dat055.model.entity.character.Player;
+import com.dat055.model.entity.interactables.Button;
+import com.dat055.model.entity.interactables.Door;
+import com.dat055.model.entity.interactables.Spike;
 import com.dat055.model.map.GameMap;
 import com.dat055.model.map.tile.Tile;
 import com.dat055.model.map.tile.TileMap;
@@ -13,6 +19,10 @@ import com.dat055.model.map.tile.TileMap;
 
 import java.util.ArrayList;
 
+/**
+ * @author Tobias Campbell
+ * @version 21-02-2019
+ */
 
 public class CollisionHandler {
     private final int tileSize = 64;
@@ -125,7 +135,7 @@ public class CollisionHandler {
     }
 
     /**
-     * Method to check if collision is horizontal and handle it
+     * Method to check if collision is horizontal and handles it
      * @param character entity to be tested
      * @param intersection intersection between tile and entity
      */
@@ -147,7 +157,7 @@ public class CollisionHandler {
     }
 
     /**
-     * Method to check if collision is vertical and handle it
+     * Method to check if collision is vertical and handles it
      * @param character entity to be tested
      * @param intersection intersection between tile and entity
      */
@@ -213,7 +223,6 @@ public class CollisionHandler {
                     ((Enemy) mapEntity).takeDamage(1);
                     return intersection;
                 }
-                //TODO: Fix this ugly mess
                 if (entity instanceof Player && mapEntity instanceof Enemy) {
                     enemyInteraction(intersection, (Player) entity, (Enemy) mapEntity);
                 }
@@ -241,6 +250,13 @@ public class CollisionHandler {
         }
         return null;
     }
+
+    /**
+     * Handles collision between enemy and player.
+     * @param intersection rectangle that intersects player and enemy.
+     * @param player player that is colliding.
+     * @param enemy enemy that is colliding.
+     */
     private void enemyInteraction(Rectangle intersection, Player player, Enemy enemy) {
         if (player.getInvincible())
             return;
@@ -350,15 +366,36 @@ public class CollisionHandler {
         }
     }
 
+    /**
+     * Checks if a collision is vertical depending on intersection
+     * @param intersection rectangle that forms between two colliding rectangles.
+     * @return if intersection width is greater than height
+     */
     private boolean checkYCollision(Rectangle intersection) {
         return (intersection.width > intersection.height);
     }
+    /**
+     * Checks if a collision is horizontal depending on intersection
+     * @param intersection rectangle that forms between two colliding rectangles.
+     * @return if intersection height is greater than width
+     */
     private boolean checkXCollision(Rectangle intersection) {
         return (intersection.height > intersection.width);
     }
+    /**
+     * Checks if a collision is both horizontal and vertical depending on intersection
+     * @param intersection rectangle that forms between two colliding rectangles.
+     * @return if intersection height is equal to width
+     */
     private boolean checkBothCollisions(Rectangle intersection) {
         return (intersection.height == intersection.width);
     }
+
+    /**
+     * Gets current tile from position.
+     * @param position Vector2 containing x and y positions.
+     * @return a tile from the map.
+     */
     private Tile getCurrentTile(Vector2 position) {
         return tileMap.getTile((int)position.x/tileSize, (int)position.y/tileSize);
     }

@@ -6,8 +6,8 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.ObjectMap;
-import com.dat055.model.entity.DebugCamera;
-import com.dat055.model.entity.Player;
+import com.dat055.model.entity.character.DebugCamera;
+import com.dat055.model.entity.character.Player;
 import com.dat055.model.map.GameMap;
 import com.dat055.model.map.GameMapFactory;
 

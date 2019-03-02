@@ -3,7 +3,8 @@
   "map" : [{
 
     "properties" : {"width" : 24, "height": 12, "desc" : "light",
-      "sprite" : "textures/spritesheets/tileMap/tileSheet_0.atlas"},
+      "sprite" : "textures/spritesheets/tileMap/tileSheet_0.atlas",
+      "finish" : {"position" :  [23, 1]}},
     "data" : [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
               1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
               0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0,

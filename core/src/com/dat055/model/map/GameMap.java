@@ -8,6 +8,9 @@ import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Rectangle;
 import com.dat055.model.collision.CollisionHandler;
 import com.dat055.model.entity.*;
+import com.dat055.model.entity.character.Enemy;
+import com.dat055.model.entity.character.Hook;
+import com.dat055.model.entity.character.Player;
 import com.dat055.model.map.tile.Tile;
 import com.dat055.model.map.tile.TileMap;
 

@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.dat055.model.GameModel;
-import com.dat055.model.entity.Player;
+import com.dat055.model.entity.character.Player;
 import com.dat055.model.map.GameMap;
 import com.dat055.net.Server;
 import com.dat055.view.GameView;

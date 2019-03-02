@@ -1,6 +1,6 @@
 package com.dat055.net;
 
-import com.dat055.model.entity.Player;
+import com.dat055.model.entity.character.Player;
 import com.dat055.net.message.JoinMessage;
 import com.dat055.net.message.Message;
 import com.dat055.net.message.PlayerMessage;
