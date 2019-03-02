@@ -53,7 +53,7 @@ public class SettingsMenu extends Menu {
         resSetting = settingsMap.get("resolution");
         fulSetting = settingsMap.get("fullscreen");
         musSetting = settingsMap.get("music");
-        soundSetting = settingsMap.get("sound");
+        soundSetting = settingsMap.get("soundeffects");
 
 
         //Textfield
@@ -84,8 +84,8 @@ public class SettingsMenu extends Menu {
         table.add(fullscreen).height(40).padBottom(20).padTop(10);
         table.add(fulField).padTop(10).padBottom(20).row();
         table.add();
-        table.add(music).height(40);
-        table.add(musField).row();
+        table.add(music).height(40).padBottom(20);
+        table.add(musField).padTop(10).padBottom(20).row();
         table.add();
         table.add(sound).height(40);
         table.add(soundField);
@@ -161,12 +161,11 @@ public class SettingsMenu extends Menu {
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
 
-                        settingsMap.put("resolution", resField.getText());
-                        settingsMap.put("fullscreen", fulField.getText());
-                        settingsMap.put("music", musField.getText());
-                        settingsMap.put("soundeffects", soundField.getText());
+                settingsMap.put("resolution", resField.getText());
+                settingsMap.put("fullscreen", fulField.getText());
+                settingsMap.put("music", musField.getText());
+                settingsMap.put("soundeffects", soundField.getText());
 
-                    //todo:sanitize inputs
                 if (inputSanitizer()) {
                     try {
                         configIO.save(settingsMap, "config.txt");
@@ -201,11 +200,13 @@ public class SettingsMenu extends Menu {
             System.out.println("OH,Sugar Honey Ice Tea");
         }
     }
+
     public boolean inputSanitizer(){
         if (resSanitizer() && fulSanitizer() && musicSanitizer() && soundSanitizer())
             return true;
         return false;
     }
+
     private boolean resSanitizer(){
         if( settingsMap.put("resolution", resField.getText()).equals("1280x720") )
             return true;
@@ -217,6 +218,7 @@ public class SettingsMenu extends Menu {
             return true;
         return false;
     }
+
     private boolean fulSanitizer(){
         if (settingsMap.put("fullscreen", fulField.getText()).equals("1"))
             return true;
@@ -224,6 +226,7 @@ public class SettingsMenu extends Menu {
             return true;
         return false;
     }
+
     private boolean musicSanitizer(){
         if(settingsMap.put("music", musField.getText()).equals("1"))
             return true;
@@ -231,6 +234,7 @@ public class SettingsMenu extends Menu {
             return true;
         return false;
     }
+
     private boolean soundSanitizer(){
         if (settingsMap.put("soundeffects", soundField.getText()).equals("1"))
             return true;

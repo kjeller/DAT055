@@ -1,4 +1,4 @@
-a:100
-fullscreen:0
-resolution:1024x768
-volume:1
+fullscreen:1
+music:0
+resolution:1920x1080
+soundeffects:1
