@@ -8,8 +8,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.dat055.model.entity.Entity;
 
 /**
- * An entity that will check if a player
- * has completed a map.
+ * An entity that will be used to check if
+ * a player is eligible to complete map.
  * @author Karl Strålman
  * @version 2019-02-28
  */
@@ -19,6 +19,12 @@ public class Goal extends Entity {
         BOUNDING_BOX_COLOR = Color.GOLD;
     }
 
+    /**
+     * There is no sprite for this entity hence there will
+     * be an empty draw method.
+     * @param sb
+     * @param rotation
+     */
     @Override
     public void draw(PolygonSpriteBatch sb, float rotation) {}
 

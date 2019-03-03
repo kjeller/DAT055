@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 /**
- * Responisble for reading from a json file and creating a 1-2 gamemaps
+ * Responisble for reading from a json file and creating {@link GameMap}
  * filling them with entities. Maps are returned with an iterator.
  * @author Karl Strålman
  * @version 2019-02-18

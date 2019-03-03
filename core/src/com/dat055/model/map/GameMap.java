@@ -1,15 +1,11 @@
 package com.dat055.model.map;
 
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Polygon;
-import com.badlogic.gdx.math.Rectangle;
 import com.dat055.model.collision.CollisionHandler;
 import com.dat055.model.entity.*;
 import com.dat055.model.entity.character.Enemy;
-import com.dat055.model.entity.character.Hook;
 import com.dat055.model.entity.character.Player;
 import com.dat055.model.map.tile.Tile;
 import com.dat055.model.map.tile.TileMap;
@@ -18,13 +14,14 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 /**
- * A gamemap contains a tilemap with entities.
- * This connects the entities to the map itself.
+ * A gamemap contains a {@link TileMap} and a list of {@link Entity}
+ * This connects the entities to the map itself and allows us to
+ * let entities interact with tiles.
  * @author Karl Strålman
  * @version 2019-02-08
  */
 public class GameMap {
-    private String name;  // name: map_0 or map_1, id is the id is json file
+    private String name;  // name of map
     private TileMap tileMap;
     private int width;
 
@@ -35,6 +32,14 @@ public class GameMap {
     private boolean restart;
     private boolean finished;
 
+    /**
+     * Default constructor for this gamemap
+     * @param tileMap
+     * @param entities
+     * @param player
+     * @param name
+     * @param width
+     */
     public GameMap(TileMap tileMap, ArrayList<Entity> entities, Player player, String name, int width) {
         this.tileMap = tileMap;
         this.entities = entities;
@@ -45,6 +50,10 @@ public class GameMap {
         colHandler = new CollisionHandler(this);
     }
 
+    /**
+     * Updates entities and collision for this map
+     * @param deltaTime
+     */
     public void update(float deltaTime) {
         Iterator it =  entities.iterator();
         // Player needs to actively be in goal to complete a map.
@@ -65,6 +74,11 @@ public class GameMap {
         }
     }
 
+    /**
+     * Render all entities and tiles
+     * @param batch
+     * @param rotation
+     */
     public void render(PolygonSpriteBatch batch, float rotation) {
         for(Entity entity : entities) {
             entity.draw(batch, rotation);
@@ -77,6 +91,10 @@ public class GameMap {
         }
     }
 
+    /**
+     * is called if a player dies
+     * @param entity
+     */
     public void isDead(Entity entity) {
         if (entity instanceof Player && !((Player)entity).getIsAlive())
             restart = true;
@@ -93,17 +111,14 @@ public class GameMap {
         }
     }
 
-    // == Debug stuff below ==
     /**
      * Will render all rectangles known to man. With predefined colors.
      * @param renderer for rendering the rectangles
      */
     public void drawBoundingBoxes(ShapeRenderer renderer) {
-
         for(Entity entity : entities) {
             entity.drawBoundingBox(renderer);
         }
-
         for(int i = 0; i < tileMap.getWidth(); i++){
             for(int j = 0; j < tileMap.getHeight(); j++){
                 Tile tile = tileMap.getTile(i, j);
@@ -112,19 +127,50 @@ public class GameMap {
         }
     }
 
+    /**
+     * Draws toStrings() for the entities
+     * @param font
+     * @param batch
+     */
     public void drawEntityText(BitmapFont font, PolygonSpriteBatch batch){
         for(Entity entity : entities)
             font.draw(batch, entity.toString(),
                     entity.getPosition().x , entity.getPosition().y+300);
     }
 
-    // Getters and setters
+    /**
+     * @return this map's {@link TileMap}.
+     */
     public TileMap getTileMap() { return tileMap; }
+
+    /**
+     * @return the list of entities.
+     */
     public ArrayList<Entity> getEntities() { return entities;}
+
+    /**
+     * @return player on this map.
+     */
     public Player getPlayer() { return player;}
+
+    /**
+     * @return name of this map
+     */
     public String getName() { return name; }
+
+    /**
+     * @return true if restart is true
+     */
     public boolean getRestart() { return restart; }
+
+    /**
+     * @return width of this map
+     */
     public int getWidth(){ return width; }
+
+    /**
+     * @return true if finished
+     */
     public boolean isFinished() { return finished; }
     public String toString() {
         return  String.format("GameMap: %s \n -TileMap: %s \n -Player: %s \n -Entities: %s \n",

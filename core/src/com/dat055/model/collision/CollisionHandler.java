@@ -16,8 +16,6 @@ import com.dat055.model.map.GameMap;
 import com.dat055.model.map.tile.Tile;
 import com.dat055.model.map.tile.TileMap;
 
-
-
 import java.util.ArrayList;
 
 /**

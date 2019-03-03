@@ -3,18 +3,19 @@ package com.dat055.model.map.tile;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.dat055.model.map.GameMapFactory;
 
 import com.badlogic.gdx.utils.JsonValue.JsonIterator;
 
 /**
- * A factory used to create a tilemap and place tiles
- * on the correct position. Gamemapfactory will use this
- * to create tilemaps easier.
+ * A factory used to create a {@link TileMap} and fill it with {@link Tile}
+ * on the correct position. {@link GameMapFactory} uses this class to create
+ * tilemaps easier.
  * @author Karl Strålman
  * @version 2019-02-15
  */
 public class TileMapFactory {
-    TextureAtlas atlas;
+    private TextureAtlas atlas;
 
     public TileMapFactory(TextureAtlas atlas) {
         this.atlas = atlas;
@@ -50,7 +51,6 @@ public class TileMapFactory {
             }
             map.addTile( x++,  y, temp);
         }
-        // Debug: System.out.println(map);
         return map;
     }
 

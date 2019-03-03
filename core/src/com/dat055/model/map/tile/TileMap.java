@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
 import com.badlogic.gdx.utils.StringBuilder;
 
 /**
- * A map of tiles that contains of a tile array.
+ * A map of {@link Tile}.
  * This class is responsible for drawing all the tiles
  * that are drawable and adding tiles.
  * @author Karl Strålman
@@ -58,6 +58,9 @@ public class TileMap {
         return null;
     }
 
+    /**
+     * @return all the tiles' positions
+     */
     public String toString() {
         StringBuilder sb = new StringBuilder();
         for(int i = 0; i < width; i++) {
@@ -68,9 +71,25 @@ public class TileMap {
         }
         return sb.toString();
     }
+
+    /**
+     * @return width of this tile in pixels.
+     */
     public int getWidthPixels() { return width*64; }
+
+    /**
+     * @return height of this tile in pixels.
+     */
     public int getHeightPixels() { return height*64; }
+
+    /**
+     * @return width of this tile.
+     */
     public int getWidth() { return width;}
+
+    /**
+     * @return height of this tile.
+     */
     public int getHeight() { return height;}
 
 }
