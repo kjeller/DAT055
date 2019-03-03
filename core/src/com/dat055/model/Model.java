@@ -4,6 +4,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.utils.ObjectMap;
 
+/**
+ * Base class for MenuModel and GameModel.
+ * Is responsible for both models to have music.
+ * @author Tobias Campbell
+ * @version 22-02-2019
+ */
 public abstract class Model {
     ObjectMap<String, Music> musicBank;
     Model() {}

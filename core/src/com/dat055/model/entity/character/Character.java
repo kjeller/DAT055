@@ -6,6 +6,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.dat055.model.entity.Entity;
 
 /**
+ * An entity that has properties which an enemy or
+ * a player would want, that has physics for moving.
  * @author Tobias Campbell
  * @version 01-03-2019
  */
@@ -17,7 +19,7 @@ public abstract class Character extends Entity {
     Vector2 velocity;
     private Vector2 deltaPosition;
     private Vector2 direction;
-    Vector2 oldPosition;
+    private Vector2 oldPosition;
     Vector2 maxVelocity;
     Vector2 lookingDirection;
     private boolean isGrounded;
@@ -37,7 +39,7 @@ public abstract class Character extends Entity {
         oldPosition = new Vector2(position);
         deltaPosition = new Vector2(Vector2.Zero);
         direction = new Vector2(Vector2.Zero);
-        lookingDirection = new Vector2(Vector2.Zero);
+        lookingDirection = new Vector2(1, 0);
 
         isGrounded = false;
         isAlive = true;
@@ -95,6 +97,7 @@ public abstract class Character extends Entity {
     @Override
     public void update(float deltaTime) {
         if (isAlive) {
+            setFlip();
             updateFalling();
             setVelocityX(deltaTime);
             setVelocityY(deltaTime);
@@ -160,7 +163,7 @@ public abstract class Character extends Entity {
     /**
      * Helper method that sets the entity's direction.
      */
-    void setDirection() {
+    private void setDirection() {
         deltaPosition.set(oldPosition.x-position.x, oldPosition.y-position.y);
         // direction.x = -1: left, direction.x = 1: right
         if (deltaPosition.x > 0) direction.x = -1; else if (deltaPosition.x < 0) direction.x = 1;
@@ -179,7 +182,7 @@ public abstract class Character extends Entity {
     }
 
     /**
-     * Method that kills the entity
+     * Method that kills the entity.
      */
     private void die() {
         if (isAlive) {
@@ -187,26 +190,109 @@ public abstract class Character extends Entity {
         }
     }
 
+    /**
+     * Method that flips the entity if looking in a certain direction.
+     */
+    private void setFlip() {
+        float temp;
+        temp = (lookingDirection.x > 0) ? 1 : -1;
+        sprite.setScale(temp, 1);
+    }
+
     // Get and set methods galore.
+
+    /**
+     * Set the character's horizontal velocity.
+     * @param x value to be set.
+     */
     public void setXVelocity(int x) { velocity.x = x; }
+
+    /**
+     * Set the character's vertical velocity.
+     * @param y value to be set.
+     */
     public void setYVelocity(int y) { velocity.y = y; }
+
+    /**
+     * Set the character's horizontal acceleration..
+     * @param x value to be set.
+     */
     public void setXAcceleration(int x) { acceleration.x = x; }
+
+    /**
+     * Set the character's isGrounded state.
+     * @param val value to be set.
+     */
     public void setGrounded(boolean val) { isGrounded = val; }
+
+    /**
+     * Set the character's setMoving state.
+     * @param val value to be set.
+     */
     public void setMoving(boolean val) {isMoving = val;}
+
+    /**
+     * Set the character's horizontal looking direction.
+     * @param dir value to be set.
+     */
     public void setLookingDirectionX(int dir) {lookingDirection.x = dir; }
+
+    /**
+     * Set the character's vertical looking direction.
+     * @param dir value to be set.
+     */
     public void setLookingDirectionY(int dir) {lookingDirection.y = dir; }
+
+    /**
+     * Set the character's looking direction.
+     * @param dir value to be set.
+     */
     public void setLookingDirection(Vector2 dir) {lookingDirection = dir;}
+
+    /**
+     * Set the character's vertical direction.
+     * @param val value to be set.
+     */
     public void setDirectionY(int val) { direction.y = val; }
+
+    /**
+     * Set the character's isAlive state.
+     * @param bool value to be set.
+     */
     public void setIsAlive(boolean bool) { isAlive = bool;}
 
+    /**
+     * Get the character's direction.
+     * @return direction of the character.
+     */
     public Vector2 getDirection() { return direction; }
+
+    /**
+     * Get the character's velocity.
+     * @return velocity of the character.
+     */
     public Vector2 getVelocity() { return velocity; }
+
+    /**
+     *  Get the character's deltaPosition.
+     * @return deltaPosition of the character.
+     */
     public Vector2 getDeltaPosition() { return deltaPosition; }
+
+    /**
+     * Get the character's isAlive state.
+     * @return isAlive of the character.
+     */
     public boolean getIsAlive() { return isAlive; }
+
+    /**
+     * Get if the character is in motion.
+     * @return false if not in motion, else true.
+     */
     public boolean getInMotion() { return (velocity.x != 0 || velocity.y !=0); }
 
     /**
-     * Method that returns the entity's variables. Used for debugging.
+     * Method that returns the character's variables. Used for debugging.
      * @return the string containing all data.
      */
     public String toString() {
