@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.ObjectMap;
-import com.dat055.model.entity.character.DebugCamera;
 import com.dat055.model.entity.character.Player;
 import com.dat055.model.map.GameMap;
 import com.dat055.model.map.GameMapFactory;
@@ -20,10 +19,10 @@ import com.dat055.model.map.GameMapFactory;
 public class GameModel extends Model {
     private GameMap map1;
     private GameMap map2;
-    private DebugCamera debugCam;
     private OrthographicCamera cam;
     private BitmapFont debugFont;
     private String currentMap;
+    private String nextMap;
 
     public GameModel(){
         debugFont = new BitmapFont(Gdx.files.internal("fonts/Mincho.fnt"),
@@ -47,7 +46,7 @@ public class GameModel extends Model {
     }
 
     /**
-     *
+     * Creates map1 (and map2) if given a filepath to a map
      * @param fileName name of map (json)
      */
     public void createMap(String fileName) {
@@ -55,14 +54,14 @@ public class GameModel extends Model {
         currentMap = fileName;
         map1 = mapFactory.getMap();
         map2 = mapFactory.getMap();
+        nextMap = mapFactory.getNextMap();
         cam = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        debugCam = new DebugCamera(new Vector2(Vector2.Zero));
     }
     public GameMap getGameMap1() { return map1; }
     public GameMap getGameMap2() { return map2; }
-    public Player getDebugCam() { return debugCam; }
     public BitmapFont getFont() { return debugFont; }
     public OrthographicCamera getCam() {return cam;}
+    public String getNextMap() { return nextMap; }
 
     public String getCurrentMap() {
         return currentMap;

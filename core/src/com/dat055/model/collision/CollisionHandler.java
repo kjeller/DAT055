@@ -10,6 +10,7 @@ import com.dat055.model.entity.character.Hook;
 import com.dat055.model.entity.character.Player;
 import com.dat055.model.entity.interactables.Button;
 import com.dat055.model.entity.interactables.Door;
+import com.dat055.model.entity.interactables.Goal;
 import com.dat055.model.entity.interactables.Spike;
 import com.dat055.model.map.GameMap;
 import com.dat055.model.map.tile.Tile;
@@ -245,6 +246,9 @@ public class CollisionHandler {
                 if(entity instanceof Player && mapEntity instanceof Spike){
                     if(((Player) entity).getIsAlive())
                     ((Spike) mapEntity).death((Player) entity);
+                }
+                if(entity instanceof Player && mapEntity instanceof Goal) {
+                    gameMap.setFinished();
                 }
             }
         }

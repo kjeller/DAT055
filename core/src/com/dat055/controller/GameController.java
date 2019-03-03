@@ -36,10 +36,13 @@ public class GameController extends Controller {
 
     private Server server;
 
-
     public GameController() {
         super(new GameModel(), null);
         // view is created in startMap()
+    }
+
+    private void initialize() {
+
     }
 
     @Override
@@ -48,12 +51,7 @@ public class GameController extends Controller {
             updateCamera(deltaTime);        // Updates camera
         checkKeyboardInput();           // Handles keyboard input
 
-        // ((GameController)ctrl).startSingleplayerMap("maps/" + currentMap + ".json");
 
-        if (map1.getRestart() || map2.getRestart()) {
-           startMap(((GameModel)model).getCurrentMap());
-            //((GameModel)model).createMap(((GameModel)model).getCurrentMap());
-        }
         // tile rotation map transition
         if(isRotating && !isPaused)
             rotationTimer+= 2f;
@@ -70,6 +68,14 @@ public class GameController extends Controller {
                 map1.update(deltaTime);
             else
                 map2.update(deltaTime);
+        }
+
+        if (map1.getRestart() || map2.getRestart()) {
+            resetMap(); }
+
+        // Change to next map if both players have reached their goals
+        if(map1.isFinished() && map2.isFinished()) {
+            nextMap();
         }
 
         // Multiplayer updates
@@ -184,6 +190,7 @@ public class GameController extends Controller {
 
         map1 = ((GameModel)model).getGameMap1();
         map2 = ((GameModel)model).getGameMap2();
+        currentMap = ((GameModel)model).getCurrentMap();
         cam = ((GameModel)model).getCam();
         player1 = map1.getPlayer();
         player2 = map2.getPlayer();
@@ -207,6 +214,16 @@ public class GameController extends Controller {
         model.playMusic("map_01");
         return true; //TODO: Fix a return false which indicates if map created successfully or not
     }
+
+    /**
+     * Creates next map and starts it
+     */
+    private void nextMap() { startMap(((GameModel)model).getNextMap()); }
+
+    /**
+     * Re-creates the current map and starts it
+     */
+    private void resetMap() { startMap(((GameModel)model).getCurrentMap()); }
 
     /**
      * Starts a singleplayer map where player toggles between

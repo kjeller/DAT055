@@ -33,6 +33,7 @@ public class GameMap {
     private CollisionHandler colHandler;
 
     private boolean restart;
+    private boolean finished;
 
     public GameMap(TileMap tileMap, ArrayList<Entity> entities, Player player, String name, int width) {
         this.tileMap = tileMap;
@@ -42,10 +43,13 @@ public class GameMap {
         this.width = width;
         restart = false;
         colHandler = new CollisionHandler(this);
-
     }
+
     public void update(float deltaTime) {
         Iterator it =  entities.iterator();
+        // Player needs to actively be in goal to complete a map.
+        // finished needs to be set to false before collision checking updates.
+        finished = false;
         // Updates entities position, health etc.
         while (it.hasNext()) {
             Entity entity = (Entity)it.next();
@@ -76,6 +80,17 @@ public class GameMap {
     public void isDead(Entity entity) {
         if (entity instanceof Player && !((Player)entity).getIsAlive())
             restart = true;
+    }
+
+    /**
+     * Sets finished boolean to true to determine if player has reached goal.
+     * Since player must actively be in goal, finished is reset in update()
+     */
+    public void setFinished() {
+        if(!finished) {
+            finished = true;
+            System.out.println("Goal has been reached!");
+        }
     }
 
     // == Debug stuff below ==
@@ -110,6 +125,7 @@ public class GameMap {
     public String getName() { return name; }
     public boolean getRestart() { return restart; }
     public int getWidth(){ return width; }
+    public boolean isFinished() { return finished; }
     public String toString() {
         return  String.format("GameMap: %s \n -TileMap: %s \n -Player: %s \n -Entities: %s \n",
                 this.name, this.tileMap, this.player, this.entities);
