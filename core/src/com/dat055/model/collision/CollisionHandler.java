@@ -19,6 +19,9 @@ import com.dat055.model.map.tile.TileMap;
 import java.util.ArrayList;
 
 /**
+ * Class that handles all the collision between
+ * entities and tiles. Every GameMap has its own
+ * collision handler.
  * @author Tobias Campbell
  * @version 21-02-2019
  */
@@ -98,7 +101,7 @@ public class CollisionHandler {
             edgeAdjacentCollision(character, intersection);
             //TODO: Fix corner collisions
         }
-        else if ((intersection = checkIfEntityCollision(character)) != null) {
+        else if ((checkIfEntityCollision(character)) != null) {
             System.out.println("WAOW");
         }
     }
@@ -125,7 +128,7 @@ public class CollisionHandler {
                     hook.setHasGrip(false);
 
             }
-            else if ((intersection = checkIfEntityCollision(hook)) != null) {
+            else if ((checkIfEntityCollision(hook)) != null) {
                  hook.setApexReached(true);
 
 
@@ -314,7 +317,7 @@ public class CollisionHandler {
         int width = character.getWidth();
 
         // Get tile that the player is currently in.
-        Tile tile = getCurrentTile(new Vector2(position.x+width/2, position.y));//tileMap.getTile((int)((position.x+width/2)/tileSize), (int)(position.y)/tileSize);
+        Tile tile = getCurrentTile(new Vector2(position.x+(float)width/2, position.y));//tileMap.getTile((int)((position.x+width/2)/tileSize), (int)(position.y)/tileSize);
 
         // Check if entity is falling to stop a movement bug.
         if (character.getVelocity().y < 0) {
@@ -328,7 +331,7 @@ public class CollisionHandler {
 
         // Check if entity is rising/jumping to stop a movement bug.
         else if (character.getVelocity().y != 0 && character.getDirection().y > 0) {
-            tile = getCurrentTile(new Vector2(position.x+width/2, position.y+height+1));//tileMap.getTile((int)((position.x+width/2)/tileSize), (int)(position.y+height+1)/tileSize);
+            tile = getCurrentTile(new Vector2(position.x+(float)width/2, position.y+height+1));//tileMap.getTile((int)((position.x+width/2)/tileSize), (int)(position.y+height+1)/tileSize);
             // Check if entity is rising to stop a movement bug.
             if (tile.getState()) {
                 character.setYPosition((int)tile.getRect().y-height);
@@ -348,15 +351,10 @@ public class CollisionHandler {
         Tile tile1 = getCurrentTile(new Vector2(character.getRect().x, character.getRect().y-1));
         Tile tile2 = getCurrentTile(new Vector2(character.getRect().x + character.getRect().width-1, character.getRect().y-1));
         Tile tile3 = getCurrentTile(new Vector2(character.getRect().x + character.getRect().width/2, character.getRect().y-1));
-        if (tile1 != null && tile1.getState() ||
-            tile2 != null && tile2.getState() ||
-            tile3 != null && tile3.getState()) {
-            return false;
-        }
-
-        return true;
+        return (tile1 == null || !tile1.getState()) &&
+                (tile2 == null || !tile2.getState()) &&
+                (tile3 == null || !tile3.getState());
     }
-
 
     /**
      * Method that changes an enemy's direction.
