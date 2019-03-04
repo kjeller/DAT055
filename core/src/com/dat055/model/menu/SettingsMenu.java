@@ -65,7 +65,7 @@ public class SettingsMenu extends Menu {
 
         //Texts
         resolution = new Label("Resolution",lblStyle);
-        fullscreen = new Label("FullScreen",lblStyle);
+        fullscreen = new Label("Fullscreen",lblStyle);
         music = new Label("Music",lblStyle);
         sound = new Label("Sound",lblStyle);
 
