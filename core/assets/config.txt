@@ -1,4 +1,4 @@
-fullscreen:1
+fullscreen:0
 music:0
 resolution:1920x1080
-soundeffects:1
+soundeffects:0
