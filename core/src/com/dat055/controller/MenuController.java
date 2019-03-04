@@ -33,12 +33,10 @@ public class MenuController extends Controller{
         ((MenuModel)model).getStage().act(dt);
     }
 
-    @Override
     public void render() {
         if (visible) ((MenuView)view).draw(((MenuModel)model).getStage());
     }
 
-    @Override
     public void resize(int width, int height) {
         ((MenuModel)model).resize(width, height);
     }

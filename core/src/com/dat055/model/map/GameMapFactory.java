@@ -3,7 +3,6 @@ package com.dat055.model.map;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
 import com.dat055.model.entity.*;
@@ -11,6 +10,7 @@ import com.dat055.model.entity.character.Enemy;
 import com.dat055.model.entity.character.Player;
 import com.dat055.model.entity.interactables.Button;
 import com.dat055.model.entity.interactables.Door;
+import com.dat055.model.entity.interactables.Goal;
 import com.dat055.model.entity.interactables.Spike;
 import com.dat055.model.map.tile.TileMap;
 import com.dat055.model.map.tile.TileMapFactory;
@@ -19,9 +19,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 /**
- * Responisble for reading from a json file and
- * creating a 1-2 gamemaps filling them with
- * entities.
+ * Responisble for reading from a json file and creating {@link GameMap}
+ * filling them with entities. Maps are returned with an iterator.
  * @author Karl Strålman
  * @version 2019-02-18
  */
@@ -36,6 +35,7 @@ public class GameMapFactory {
     private ArrayList<Entity> interactables = new ArrayList<Entity>();
 
     private Iterator<GameMap> iterator;
+    private String nextMap;
 
     public GameMapFactory(String fileName) {
         initialize(fileName);
@@ -62,6 +62,12 @@ public class GameMapFactory {
             root = reader.parse(Gdx.files.internal(fileName));
         } catch (Exception x) { System.out.println("Error: Map file could not be read."); return false;}
 
+        // Search for next map in JSON
+        try {
+            nextMap = root.get(MAP_PROPERTIES).getString("nextmap"); // Sets next map
+        } catch (Exception x) { System.out.println(x);}
+
+        // Reads every and creates a gamemap for every map
         for(JsonValue jsonMap : root.get(MAP_NAME)) {
         GameMap map = getGameMap(jsonMap, getTextureAtlas(jsonMap));
         mapList.add(map);
@@ -106,6 +112,12 @@ public class GameMapFactory {
         return new TextureAtlas(Gdx.files.internal(filePath));
     }
 
+    /**
+     * Use helper methods to create a gamemap with all entities for that map
+     * @param map
+     * @param atlas
+     * @return {@link GameMap} read from JSON map
+     */
     private GameMap getGameMap(JsonValue map, TextureAtlas atlas) {
         Player player = null;
             try {
@@ -240,4 +252,10 @@ public class GameMapFactory {
         entities.add(findGoal(map));
         return entities;
     }
+
+    /**
+     * Returns next map filepath
+     * @return
+     */
+    public String getNextMap() { return nextMap; }
 }

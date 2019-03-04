@@ -14,6 +14,8 @@ import com.badlogic.gdx.utils.ObjectMap;
 import java.util.Observable;
 
 /**
+ * General purpose class for entity-based objects that
+ * has all the properties that any entity would need.
  * Author: Tobias Campbell
  * Version: 22-02-2019
  */
@@ -42,12 +44,20 @@ public abstract class Entity extends Observable {
     }
 
     //TODO: Move this to Model
+    /**
+     * Loads a sound file to the sound bank.
+     * @param file filename of sound
+     * @return Sound object with the sound effect.
+     */
     private Sound loadFile(String file) {
         return Gdx.audio.newSound(Gdx.files.internal("audio/sfx/" + file));
     }
 
+    /**
+     * Initializes the sound bank ObjectMap.
+     */
     private void initSounds() {
-        soundBank = new ObjectMap();
+        soundBank = new ObjectMap<String, Sound>();
         soundBank.put("takedamage", loadFile("oof.mp3"));
         soundBank.put("jump", loadFile("jump.wav"));
     }
@@ -61,26 +71,36 @@ public abstract class Entity extends Observable {
     }
 
     /**
-     * Generic methods for updating an entity
+     * Method that updates the entity.
+     * @param deltaTime time since last frame.
      */
-    public void update(float deltaTime) {
-        // TODO: Update entity stuff
-    }
+    public void update(float deltaTime) { }
 
     /**
-     * Generic method for drawing an entity
+     * Mehod that is used to draw entitys without care for any offset.
+     * @param sb Spritebatch that is being used.
+     * @param rotation how rotated the entity is.
      */
     public void draw(PolygonSpriteBatch sb, float rotation) {
         draw(sb, rotation, Vector2.Zero);
     }
 
+    /**
+     * Method that draws an entity. Rotates the sprites correctly.
+     * @param batch Spritebatch that is being used.
+     * @param rotation how rotated the entity is.
+     * @param offset Offset from center of map.
+     */
     public void draw(PolygonSpriteBatch batch, float rotation, Vector2 offset) {
         sprite.setFlip(rotation > 90  && rotation < 270, false); // Rotates sprite correctly to plane
-
         batch.draw(sprite, position.x+offset.x, position.y+offset.y, (float)width/2, -position.y,
-                sprite.getWidth(), sprite.getHeight(), 1,1, rotation);
+                sprite.getWidth(), sprite.getHeight(), sprite.getScaleX(), 1, rotation);
     }
 
+    /**
+     * Method that draws an entity's rectangle.
+     * @param renderer renderer that draws the rectangle.
+     */
     public void drawBoundingBox(ShapeRenderer renderer) {
         drawRectangle(rect, ShapeType.Line, renderer);
     }
@@ -96,29 +116,81 @@ public abstract class Entity extends Observable {
         renderer.end();
     }
 
+    /**
+     * Sets the entity sprite.
+     * @param texturePath path to texture.
+     */
     public void setTexture(String texturePath) {
         sprite = new Sprite(new Texture(texturePath));
     }
+
+    /**
+     * Sets the entity's rectangle depending on width, height and position.
+     */
     protected void setRectangle() {
         rect = new Rectangle();
         rect.setSize(width, height);
         rect.setPosition(position.x, position.y);
     }
+
+    /**
+     * Sets the entity's and its rectangle's x-position.
+     * @param x value to be set.
+     */
     public void setXPosition(int x) { position.x = x; rect.x = position.x; }
+
+    /**
+     * Sets the entity's and its rectangle's y-position.
+     * @param y value to be set.
+     */
     public void setYPosition(int y) { position.y = y; rect.y = position.y; }
+
+    /**
+     * Sets the entity's position.
+     * @param position position to be set.
+     */
     public void setPosition(Vector2 position) { this.position = position; }
+
+    /**
+     * Get the entity's position.
+     * @return position of the entity.
+     */
     public Vector2 getPosition() {
         return position;
     }
+
+    /**
+     * Get the entity's rectangle.
+     * @return rect of the entity.
+     */
     public Rectangle getRect() { return rect; }
+
+    /**
+     * Get the entity's width.
+     * @return width of the entity.
+     */
     public int getWidth() {
         return width;
     }
+
+    /**
+     * Get the entity's height.
+     * @return height of the entity.
+     */
     public int getHeight() {
         return height;
     }
+
+    /**
+     * Get the entity's rectangle box color.
+     * @return BOUND_BOX_COLOR of the entity.
+     */
     public Color getColor() { return BOUNDING_BOX_COLOR; }
 
+    /**
+     * Method that returns the entity's variables. Used for debugging.
+     * @return the string containing all data.
+     */
     @Override
     public String toString() {
         return String.format("(h, w): (%d, %d),\npos: (%.1f, %.1f), \n" +

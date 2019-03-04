@@ -3,6 +3,8 @@ package com.dat055.model.entity.character;
 import com.badlogic.gdx.math.Vector2;
 
 /**
+ * A character that is defined as an enemy.
+ * Designed to have a specific behavior.
  * @author Tobias Campbell
  * @version 17-02-2019
  */
@@ -27,7 +29,7 @@ public class Enemy extends Character {
     }
 
     /**
-     * Switches the enemy's direction to the other side.
+     * Reverses the enemy's horizontal velocity.
      */
     public void changeLookingDirectionX() {
         velocity.x = 0;

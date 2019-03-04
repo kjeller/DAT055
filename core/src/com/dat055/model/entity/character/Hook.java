@@ -13,23 +13,29 @@ import com.dat055.model.entity.Entity;
 import static com.badlogic.gdx.graphics.Texture.TextureWrap.Repeat;
 
 /**
+ * An entity that is used as a player's weapon.
+ * Designed to shoot out from the player then
+ * retract once max length has been reached.
  * @author Tobias Campbell
  * @version 02-22-2019
  */
 public class Hook extends Entity {
-    private float maxLength;
-    private Rectangle wire;
-    private Vector2 initDirection;
     private boolean apexReached;
     private boolean remove;
     private boolean hasGrip;
     private float playerPosX;
     private float rotate;
-    private Polygon wire2;
+    private float maxLength;
+    
+    private Rectangle wire;
+    private Rectangle wire3;
+
     private Texture texture;
+    private Polygon wire2;
     private PolygonSprite poly;
+
     private Vector2 originPos;
-    private Rectangle test;
+    private Vector2 initDirection;
 
     Hook(Vector2 position, int height, int width, float maxLength, Vector2 initDirection) {
         super(position, height, width);
@@ -83,11 +89,11 @@ public class Hook extends Entity {
         wire2 = new Polygon();
         rotate = 20;
         wire.x = (initDirection.x > 0) ? position.x + 64 : position.x;
-        //wire.y = position.y + 47;
     }
 
     /**
-     * The logic of the hook.
+     * The logic of the hook. Increase length by 10 every update
+     * and shoot it out on the correct side of the player.
      * @param deltaTime time since last frame.
      */
     @Override
@@ -107,27 +113,24 @@ public class Hook extends Entity {
             hookLeft();
 
         if (!hasGrip) {
-            position.y = (initDirection.y > 0) ? test.y+test.height : test.y;
+            position.y = (initDirection.y > 0) ? wire3.y+wire3.height : wire3.y;
         }
         rect.setPosition(position.x, position.y-(float)height/2+1);
     }
 
     /**
-     * Handle when hook is shot to the right
+     * Handle when hook is shot to the right.
      */
     private void hookRight() {
         if (!hasGrip) {
-            //setWire2();
-            position.x = test.x + test.width;
+            position.x = wire3.x + wire3.width;
             if (position.x <= playerPosX+64)
                 remove = true;
         } else {
             wire.setWidth(position.x-(playerPosX+64));
-            test.setY(originPos.y);
+            wire3.setY(originPos.y);
             wire.setY(position.y);
         }
-
-
     }
 
     /**
@@ -135,8 +138,8 @@ public class Hook extends Entity {
      */
     private void hookLeft() {
         if (!hasGrip) {
-            position.x = test.x - width;
-            if (test.x+test.width > playerPosX) {
+            position.x = wire3.x - width;
+            if (wire3.x+wire3.width > playerPosX) {
                 remove = true;
             }
         } else {
@@ -158,12 +161,21 @@ public class Hook extends Entity {
         super.draw(sb, rotation, new Vector2(-5, -23));
     }
 
+    /**
+     * Draws the hook's rectangle.
+     * @param renderer renderer that draws the rectangle.
+     */
     @Override
     public void drawBoundingBox(ShapeRenderer renderer) {
         super.drawBoundingBox(renderer);
         drawPolygon(wire2, renderer);
     }
 
+    /**
+     * Draws the polygon of the wire.
+     * @param polygon polygon that is drawn.
+     * @param renderer renderer that dras the rectangle.
+     */
     private void drawPolygon(Polygon polygon, ShapeRenderer renderer) {
         renderer.begin(ShapeRenderer.ShapeType.Line);
         renderer.setColor(BOUNDING_BOX_COLOR);
@@ -187,16 +199,18 @@ public class Hook extends Entity {
      * Method that sets the wire of the hook, to angle it correctly.
      */
     private void setWire2() {
+        // Make a new polygon with the vertices of the wire2 rectangle.
         wire2 = new Polygon(new float []{ wire.x, wire.y,
                 wire.x, wire.y + wire.height,
                 wire.x + wire.width, wire.y + wire.height,
                 wire.x + wire.width, wire.y});
+
         // Sets the polygon region that makes up the wire with texture.
         PolygonRegion p = new PolygonRegion(new TextureRegion(texture), wire2.getVertices(),
                 new short[] {0, 1, 2, 0, 2, 3 });
         poly = new PolygonSprite(p);
 
-
+        // Set the origin position of the hook to rotate it correctly.
         if (initDirection.x > 0) {
             if (!hasGrip) {
                 wire2.setOrigin(wire.x, wire.y+wire.height/2);
@@ -238,7 +252,7 @@ public class Hook extends Entity {
             }
         }
         Rectangle temp = new Rectangle(wire2.getBoundingRectangle());
-        test = new Rectangle((int)temp.x, (int)temp.y, (int)temp.width, (int)temp.height);
+        wire3 = new Rectangle((int)temp.x, (int)temp.y, (int)temp.width, (int)temp.height);
     }
 
     /**
@@ -251,29 +265,50 @@ public class Hook extends Entity {
         return angle-90;
     }
 
-    // Get and set methods galore.
+    /**
+     * Get the hook's hasGrip state.
+     * @return hasGrip of the hook.
+     */
     boolean getHasGrip() {
         return hasGrip;
     }
+
+    /**
+     * Get the hook's remove state.
+     * @return remove of the hook.
+     */
     boolean getRemoved() {
         return remove;
     }
+
+    /**
+     * Get the hook's apexReached state.
+     * @return apexReached of the hook.
+     */
     public boolean getApexReached() {
         return apexReached;
     }
-    public Rectangle getWire() {
-        return test;
-    }
-    public Polygon getWire2() {
-        return wire2;
-    }
 
+    /**
+     * Set the hook's playerPosX.
+     * @param x value to be set.
+     */
     void setPlayerPosX(int x) {
         playerPosX = x;
     }
+
+    /**
+     * Set the hook's apexReached state.
+     * @param val value to be set.
+     */
     public void setApexReached(boolean val) {
         apexReached = val;
     }
+
+    /**
+     * Set the hook's hasGrip state.
+     * @param val value to be set.
+     */
     public void setHasGrip(boolean val) {
         hasGrip = val;
     }

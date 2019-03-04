@@ -5,14 +5,17 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 
 /**
+ * A character that is defined as a player.
+ * This is what a player will play as.
  * @author Tobias Campbell
  * @version 22-02-2019
  */
 public class Player extends Character {
-    private Hook hook;
     private boolean isInvincible;
-    private float iframes;
     private boolean movingWithHook;
+    private float iframes;
+
+    private Hook hook;
 
     public Player(Vector2 startPosition, String texturePath, String name) {
         super(startPosition, 80, 64, texturePath,name, 5, new Vector2(5, 20));
@@ -24,6 +27,7 @@ public class Player extends Character {
      * Player attacks by shooting a hook.
      */
     public void attack() {
+        sprite.flip(true, false);
         if (hook == null)
             hook = generateHook();
         else {
@@ -58,10 +62,9 @@ public class Player extends Character {
             hook.drawBoundingBox(renderer);
     }
     /**
-     * The logic of the player.
+     * The logic of the player. Move differently if hook has grip on wall.
      * @param deltaTime time since last frame.
      */
-
     @Override
     public void update(float deltaTime) {
         if (isAlive) {
@@ -164,10 +167,18 @@ public class Player extends Character {
         return null;
     }
 
+    /**
+     * Get the player's isInvincible state.
+     * @return isInvincible of the player.
+     */
     public boolean getInvincible() {
         return isInvincible;
     }
 
+    /**
+     * Method that returns the player's variables. Used for debugging.
+     * @return the string containing all data.
+     */
     @Override
     public String toString() {
         return super.toString() + String.format("isInvincible: %s\n", isInvincible);

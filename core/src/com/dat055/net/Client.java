@@ -12,7 +12,6 @@ import java.net.*;
  * @version 2019-02-25
  */
 public class Client extends Thread{
-    private final int PERIOD = 50;
     private Socket cs;
     private ObjectInputStream in;
     private ObjectOutputStream out;

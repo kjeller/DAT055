@@ -13,47 +13,53 @@ import com.dat055.net.Server;
 import com.dat055.view.GameView;
 
 /**
- * All logic in the game is calculated here.
- * Moving camera, player etc. Menu calls methods
- * here to start games.
+ * The flow of the game and what is to
+ * be rendered in {@link GameView} is determined here.
+ * All of the non primitive objects are created by this
+ * controller's {@link GameModel}.
+ * Example: Moving camera, player and all of the other entities etc.
+ * Methods like startGame() are used by a {@link MenuController} to start games.
  * @author Karl Strålman
  * @version 2019-02-25
  */
 public class GameController extends Controller {
+    /**
+     * Mode that determines which map is currently active
+     * and should be updated.
+     */
     public enum Mode {FRONT, BACK}
     private Mode mode;
 
+    // Objects that is created by GameModel
     private GameMap map1, map2;
     private Player currentPlayer, player1, player2;
     private OrthographicCamera cam;
 
+    // Booleans that describes different game states
     private boolean isRotating, isPaused, isDebug, isMultiplayer, isRunning;
 
+    // Used to rotate a map
     private float rotationTimer;
     private float rotation;
 
-    private String currentMap;
-
-    private Server server;
-
+    private Server server;  // Used to communicate with a remote player
 
     public GameController() {
         super(new GameModel(), null);
         // view is created in startMap()
     }
 
+    /**
+     * Updates game - the flow of the game is determined here.
+     * @param deltaTime time since last update
+     */
     @Override
     public void update(float deltaTime) {
         if(!isPaused)
             updateCamera(deltaTime);        // Updates camera
         checkKeyboardInput();           // Handles keyboard input
 
-        // ((GameController)ctrl).startSingleplayerMap("maps/" + currentMap + ".json");
 
-        if (map1.getRestart() || map2.getRestart()) {
-           startMap(((GameModel)model).getCurrentMap());
-            //((GameModel)model).createMap(((GameModel)model).getCurrentMap());
-        }
         // tile rotation map transition
         if(isRotating && !isPaused)
             rotationTimer+= 2f;
@@ -72,13 +78,25 @@ public class GameController extends Controller {
                 map2.update(deltaTime);
         }
 
-        // Multiplayer updates
+        // Restart map if either of the maps are in that state (player is dead)
+        if (map1.getRestart() || map2.getRestart()) {
+            resetMap(); }
+
+        // Change to next map if both players have reached their goals
+        if(map1.isFinished() && map2.isFinished()) {
+            nextMap();
+        }
+
+        /**
+         * Multiplayer updates received from another player
+         * and sent to that player.
+         */
         if(isMultiplayer && server.isRunning()) {
             // Only send updates if player is in motion
             if(currentPlayer.getInMotion())
                 server.sendPlayerUpdate(currentPlayer);
 
-            // Update remote player
+            // Update remote player's character
             if(currentPlayer == player1) {
                 server.updatePlayer(player2);
             } else {
@@ -88,13 +106,10 @@ public class GameController extends Controller {
     }
 
     /**
-     * Updates the camera
+     * Updates the camera to follow player and to be in bounds.
      * @param deltaTime
      */
     private void updateCamera(float deltaTime) {
-        float effectiveViewportWidth = cam.viewportWidth * cam.zoom ;
-        float effectiveViewportHeight = cam.viewportHeight * cam.zoom;
-
         // Camera transition to player
         float lerp = 2f;
         Vector2 playerPosition = currentPlayer.getPosition();
@@ -176,7 +191,8 @@ public class GameController extends Controller {
     }
 
     /**
-     * Calls gamemodel to create a game map for a specific map.
+     * Calls {@link GameModel} tied to this controller
+     * to create a game map for a specific map.
      * @param fileName of a json file in assets/maps/
      */
     private boolean startMap(String fileName) {
@@ -196,10 +212,11 @@ public class GameController extends Controller {
 
         view = new GameView((GameModel)model);
 
+        // Default value for rotationTimer
         rotationTimer = 180f;
 
         // Sets current player based on mode
-        whosOnTop(mode);
+        whoIsOnTop(mode);
 
         // Set camera position to current player to avoid panning to player at start
         Vector2 camStartPos = currentPlayer.getPosition().cpy();
@@ -209,9 +226,19 @@ public class GameController extends Controller {
     }
 
     /**
+     * Creates next map and starts it.
+     */
+    private void nextMap() { startMap(((GameModel)model).getNextMap()); }
+
+    /**
+     * Re-creates the current map and starts it.
+     */
+    private void resetMap() { startMap(((GameModel)model).getCurrentMap()); }
+
+    /**
      * Starts a singleplayer map where player toggles between
      * playable characters. Mainmenu will call this to start map.
-     * @param fileName name of map that will be created with startMap()
+     * @param fileName name of map that will be created with startMap().
      */
     public boolean startSingleplayerMap(String fileName) {
         isMultiplayer = false;
@@ -220,9 +247,10 @@ public class GameController extends Controller {
     }
 
     /**
+     * Creates a server and starts waiting for other peer to connect.
      * Starts a multiplayer map where each player is assigned a
      * playable character. Switching between characters not enabled.
-     * Mainmenu will call this to start map. Host then needs to wait for
+     * {@link MenuController} will call this to start map. Host then needs to wait for
      * another player to join server.
      * @param fileName name of map that will be created with startMap()
      */
@@ -231,13 +259,10 @@ public class GameController extends Controller {
         if(!server.startServer(fileName))
             return false;
 
-        System.out.println("Map created");
-        //TODO: Skapa loadingscreen-tråd
-
+        // Wait for server to start
         while(true) {
             if(!server.isRunning()) {
-                try {
-                    Thread.sleep(0);
+                try { Thread.sleep(0);
                 } catch (InterruptedException ignored) {}
             } else { break; }
         }
@@ -250,7 +275,9 @@ public class GameController extends Controller {
     }
 
     /**
-     * Joins server and creates own server to communicate with other server
+     * Joins server and creates own server to communicate with other server.
+     * Then starts a multiplayer map where each player is assigned a
+     * playable character. Switching between characters not enabled.
      * @param addr IP of other server
      */
     public boolean joinMultiplayerMap(String addr, String name) {
@@ -258,6 +285,7 @@ public class GameController extends Controller {
         if(!server.startServerAndClient(addr))
             return false;
 
+        // Waits for server to start
         while(true) {
             if(!server.isRunning()) {
                 try {
@@ -265,9 +293,7 @@ public class GameController extends Controller {
                 } catch (InterruptedException ignored) {}
             } else { break; }
         }
-
-        System.out.println("Map choosen from server: " + server.getChosenMap());
-        mode = Mode.BACK; //TODO: This will be set from message from other peer
+        mode = Mode.BACK;
         isMultiplayer = true;
         startMap(server.getChosenMap());
 
@@ -277,11 +303,11 @@ public class GameController extends Controller {
     // === Toggle methods and helper methods ==
 
     /**
-     * Decides who is the top player based on mode
-     * Sets currentPlayer to player on active plane
+     * Decides who is the top player based on {@link Mode}.
+     * Sets currentPlayer to player on active plane.
      * @param mode FRONT or BACK
      */
-    private void whosOnTop(Mode mode) {
+    private void whoIsOnTop(Mode mode) {
         if(mode == Mode.FRONT) {
             rotation = 360f;
             currentPlayer = player1;
@@ -292,7 +318,11 @@ public class GameController extends Controller {
         ((GameView)view).setRotation(rotation);
         ((GameView)view).setMode(mode);
     }
-
+    /**
+     * Toggles current player to other player.
+     * Only used in singeplayer mode. What player
+     * that will be toggles is determined by current {@link Mode}
+     */
     private void toggleCurrentPlayer() {
         if(!isMultiplayer) {
             if(mode == Mode.FRONT) {
@@ -310,25 +340,39 @@ public class GameController extends Controller {
             isRotating = true; // Will start adding to rotation timer in update
         }
     }
-
+    /**
+     * Toggles pause and tells {@link MenuController} to swap to a pause menu
+     */
     public void togglePause() {
         isPaused = !isPaused;
-        if(isPaused) {
-            ((MenuController)ctrl).swapMenu("Pause");
-        } else {
-            ((MenuController)ctrl).clearStage();
-        }
-        //((MenuController)ctrl).setVisible(isPaused);
+        if(isPaused) ((MenuController)ctrl).swapMenu("Pause");
+        else ((MenuController)ctrl).clearStage();
     }
+
+    /**
+     * Toggles debug mode where every entity's rectangle is rendered and
+     * properties are written to screen.
+     */
     private void toggleDebug() {
         isDebug = !isDebug;
         ((GameView) view).setDebug(isDebug);
     }
 
+    /**
+     * @return current map properties
+     */
     public String toString() {
         return String.format("-currentPlayer: %s \n-GameMap1: %s \n-GameMap2: %s", currentPlayer, map1, map2);
     }
+
+    /**
+     * Sets {@link MenuController} for this controller.
+     * @param ctrl
+     */
     public void setController(MenuController ctrl) { super.setController(ctrl); }
-    public boolean isPaused() { return  isPaused;}
+
+    /**
+     * @return true if game is running
+     */
     public boolean isRunning() { return isRunning;}
 }
