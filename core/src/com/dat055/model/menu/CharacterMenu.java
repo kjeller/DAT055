@@ -1,26 +1,25 @@
 package com.dat055.model.menu;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.FocusListener;
-import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.dat055.controller.MenuController;
 
 
+/**
+ *
+ *
+ * @author Erik Börne
+ * @version 2019-03-04
+ */
 public class CharacterMenu extends Menu {
     private MenuController controller;
     private TextField username;
     private TextButton ready, back, start;
-    private TextButton.TextButtonStyle hoverStyle, checkedStyle;
 
     public CharacterMenu(MenuController ctrl) {
         super(true, "UI/Delta.jpg");
@@ -45,8 +44,7 @@ public class CharacterMenu extends Menu {
     }
 
     private void layoutTable(int butX, int butY) {
-        int padLarge, padSmall;
-        padLarge = butX/2;
+        int padSmall;
         padSmall = butY/2;
 
         Table table = super.table;
@@ -56,10 +54,10 @@ public class CharacterMenu extends Menu {
 
         table.setFillParent(true);
         table.add(createSubTable()).padBottom(padSmall).colspan(2).expand().row();
-        table.add(username).width(butX).height(butY).padBottom(padSmall/2).colspan(2).row();
+        table.add(username).width(butX).height(butY).padBottom(padSmall >> 1).colspan(2).row();
         table.add(ready).width(butX).height(butY).padBottom(padSmall*2).colspan(2).row();
-        table.add(back).width(butX/2).height(butY).padLeft(padSmall).padBottom(padSmall).bottom().left();
-        table.add(start).width(butX/2).height(butY).padRight(padSmall).padBottom(padSmall).bottom().right();
+        table.add(back).width(butX >> 1).height(butY).padLeft(padSmall).padBottom(padSmall).bottom().left();
+        table.add(start).width(butX >> 1).height(butY).padRight(padSmall).padBottom(padSmall).bottom().right();
         table.setDebug(true);
     }
 
@@ -70,10 +68,10 @@ public class CharacterMenu extends Menu {
         Button charOne = new Button(skin.getDrawable("blue"),skin.getDrawable("blue_select"), skin.getDrawable("blue_select"));
         charOne.getStyle().disabled = skin.getDrawable("blue_checked");
         charOne.scaleBy(Gdx.graphics.getHeight() / charOne.getHeight());
+
         Button charTwo = new Button(skin.getDrawable("red"), skin.getDrawable("red_select"), skin.getDrawable("red_select"));
         charTwo.getStyle().disabled = skin.getDrawable("red_checked");
         charTwo.scaleBy(Gdx.graphics.getHeight() / charOne.getHeight());
-
 
         Table table = new Table();
         ButtonGroup<Button> buttonGroup = new ButtonGroup<Button>();
@@ -83,10 +81,12 @@ public class CharacterMenu extends Menu {
         buttonGroup.add(charOne);
         buttonGroup.add(charTwo);
 
-        table.add(charOne).space(Gdx.graphics.getWidth()/30).expand();
-        table.add(charTwo).space(Gdx.graphics.getWidth()/30).expand().row();
-        //table.add(name1).space(Gdx.graphics.getWidth()/30);
-        //table.add(name2).space(Gdx.graphics.getWidth()/30);
+        float buttonSize = Gdx.graphics.getHeight()>>2;
+        float padSize = Gdx.graphics.getWidth()>>4;
+        table.add(charOne).padRight(padSize).size(buttonSize).expand();
+        table.add(charTwo).padLeft(padSize).size(buttonSize).expand().row();
+        table.add(name1).padRight(padSize);
+        table.add(name2).padLeft(padSize);
         table.setDebug(true);
 
         if (controller.isCharOneBlocked()) {

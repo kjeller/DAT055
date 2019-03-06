@@ -1,25 +1,28 @@
 package com.dat055.model.menu;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
-import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.utils.Align;
 import com.dat055.controller.MenuController;
 
+/**
+ * This class is responsible for the creation of the main menu. It inherits from the class {@link Menu}, which is where
+ * the menu table is stored.
+ *
+ * @author Erik Börne
+ * @version 2019-03-04
+ */
 public class MainMenu extends Menu {
     private MenuController controller;
     private TextButton play, multi, settings, exit, credits;
     private Label verNr;
-    private TextButtonStyle hoverStyle;
 
+    /**
+     * The constructor of {@link MainMenu}
+     * @param cntr This is the {@link MenuController} that is used to swap menus and set flags.
+     */
     public MainMenu(MenuController cntr) {
         super(false, "UI/Delta.jpg");
 
@@ -47,10 +50,15 @@ public class MainMenu extends Menu {
         layoutTable(width, height);
     }
 
+    /**
+     *
+     * @param butX
+     * @param butY
+     */
     private void layoutTable(int butX, int butY) {
         int padL, padS;
         padL = butX/3;
-        padS = butY/2;
+        padS = butY>>1;
 
         Table table = super.table;
         table.setSize(controller.getWidth(),controller.getHeight());
@@ -62,20 +70,16 @@ public class MainMenu extends Menu {
         table.add(multi).width(butX).height(butY).padBottom(padS).colspan(2).row();
         table.add(settings).width(butX).height(butY).padBottom(padS).colspan(2).row();
         table.add(exit).width(butX).height(butY).padBottom(padL).colspan(2).row();
-        table.add(credits).width(butX/2).height(butY).padLeft(padS).padBottom(padS).left();
-        table.add(verNr).width(butX/2).height(butY).padRight(padS).padBottom(padS).right();
+        table.add(credits).width(butX>>1).height(butY).padLeft(padS).padBottom(padS).left();
+        table.add(verNr).width(butX>>1).height(butY).padRight(padS).padBottom(padS).right();
     }
 
     /**
-     * Adds a listener to every actor active in the table (meaty method)
+     * Adds a listener to every actor active in the table. A quite large method, but a necessary one at that.
      */
 
     private void addListeners() {
         play.addListener(new ClickListener() {
-            @Override
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                return true;
-            }
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {

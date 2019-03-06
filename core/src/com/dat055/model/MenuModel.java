@@ -3,19 +3,20 @@ package com.dat055.model;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.utils.ObjectMap;
 import com.dat055.model.menu.Menu;
 
 import java.util.HashMap;
 
 
 public class MenuModel extends Model {
-    private HashMap<String, Menu> menus;
+    private ObjectMap<String, Menu> menus;
     private String currentMenu;
     private Stage stage;
 
     public MenuModel() {
         stage = new Stage();
-        menus = new HashMap<String, Menu>();
+        menus = new ObjectMap<String, Menu>();
     }
 
     public void includeMenu(String label, Menu menu) {
@@ -45,7 +46,7 @@ public class MenuModel extends Model {
     }
 
     /**
-     * Updates the current {@link Menu}, then acts the stage (updates it)
+     * Updates the current {@link Menu}, then acts the stage.
      */
     public void update() {
         menus.get(currentMenu).updateTable();
@@ -53,7 +54,7 @@ public class MenuModel extends Model {
     }
 
     /**
-     * A get-method
+     * A get-method for the stage
      * @return Returns the stage
      */
     public Stage getStage() {
@@ -61,8 +62,8 @@ public class MenuModel extends Model {
     }
 
     /**
-     * A method that names the current {@link Menu}
-     * @return
+     * A method that gets the name of the current {@link Menu}.
+     * @return The current {@link Menu} as a string.
      */
     public String getCurrentMenu() { return currentMenu; }
 }
