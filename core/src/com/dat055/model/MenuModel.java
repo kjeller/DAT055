@@ -11,14 +11,14 @@ import java.util.HashMap;
 
 
 public class MenuModel extends Model {
-    private HashMap<String, Menu> menus;
+    private ObjectMap<String, Menu> menus;
     private String currentMenu;
     private Stage stage;
 
     public MenuModel() {
         musicBank = new ObjectMap();
         stage = new Stage();
-        menus = new HashMap<String, Menu>();
+        menus = new ObjectMap<String, Menu>();
         initMusic();
     }
 
@@ -43,21 +43,44 @@ public class MenuModel extends Model {
         stage.getViewport().update(width, height, true);
     }
 
+    /**
+     * This method swaps to the current {@link Menu} to the selected one
+     * @param menu A string that is used as a key to the hashmap of  menus
+     */
     public void swapMenu(String menu) {
         stage.clear();
-        if(menus.get(menu).getBg() != null) {
-            menus.get(menu).getBg().setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-            stage.addActor(menus.get(menu).getBg());
+        Menu next = menus.get(menu);
+        next.updateTable();
+        if(next.getBg() != null) {
+            next.getBg().setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+            stage.addActor(next.getBg());
         }
-        Table tbl = menus.get(menu).getTable();
+        Table tbl = next.getTable();
         tbl.setFillParent(true);
         stage.addActor(tbl);
         currentMenu = menu;
     }
 
+    /**
+     * Updates the current {@link Menu}, then acts the stage.
+     */
+    public void update() {
+        if(menus.get(currentMenu).isUpdatable())
+            menus.get(currentMenu).updateTable();
+        stage.act();
+    }
+
+    /**
+     * A get-method for the stage
+     * @return Returns the stage
+     */
     public Stage getStage() {
         return stage;
     }
 
+    /**
+     * A method that gets the name of the current {@link Menu}.
+     * @return The current {@link Menu} as a string.
+     */
     public String getCurrentMenu() { return currentMenu; }
 }
