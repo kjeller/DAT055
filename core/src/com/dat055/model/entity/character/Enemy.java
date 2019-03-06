@@ -9,7 +9,12 @@ import com.badlogic.gdx.math.Vector2;
  * @version 17-02-2019
  */
 public class Enemy extends Character {
-
+    /**
+     * Sets isMoving and lookingDirection to default values.
+     * @param startPosition position where enemy should spawn on a map.
+     * @param texturePath Path to a texture.
+     * @param name name of the enemy entity.
+     */
     public Enemy(Vector2 startPosition, String texturePath, String name) {
         super(startPosition, 64, 64, texturePath, name, 5, new Vector2(2, 20));
         isMoving = true;

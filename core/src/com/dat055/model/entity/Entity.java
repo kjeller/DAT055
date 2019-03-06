@@ -29,11 +29,27 @@ public abstract class Entity extends Observable {
     protected Rectangle rect;
     private ObjectMap<String, Sound> soundBank;
 
+    /**
+     * Initiates an entity with a texturePath, used when an entity should have a sprite.
+     * @param position Position of the lower left rectangle of the entity.
+     * @param height Height of the entity.
+     * @param width Width of the entity.
+     * @param texturePath Path to a texture.
+     */
+
     protected Entity(Vector2 position, int height, int width, String texturePath) {
         this(position, height, width);
         this.setTexture(texturePath);
         this.texturePath = texturePath;
     }
+
+    /**
+     * Used with the other constructor or alone when entity doesn't need to have a sprite.
+     * Sets the rectangle and initiates sound effects.
+     * @param position Position of the lower left rectangle of the entity.
+     * @param height Height of the entity.
+     * @param width Width of the entity.
+     */
     protected Entity(Vector2 position, int height, int width) {
         this.height = height;
         this.width = width;

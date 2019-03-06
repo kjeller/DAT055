@@ -5,18 +5,21 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 
 /**
- * A character that is defined as a player.
- * This is what a player will play as.
  * @author Tobias Campbell
  * @version 22-02-2019
  */
 public class Player extends Character {
-    private boolean isInvincible;
-    private boolean movingWithHook;
-    private float iframes;
-
     private Hook hook;
+    private boolean isInvincible;
+    private float iframes;
+    private boolean movingWithHook;
 
+    /**
+     * Sets movingWithHook and isInvincible to default values.
+     * @param startPosition position where player should spawn on a map.
+     * @param texturePath Path to a texture.
+     * @param name name of the player entity.
+     */
     public Player(Vector2 startPosition, String texturePath, String name) {
         super(startPosition, 80, 64, texturePath,name, 5, new Vector2(5, 20));
         movingWithHook = false;
@@ -27,7 +30,6 @@ public class Player extends Character {
      * Player attacks by shooting a hook.
      */
     public void attack() {
-        sprite.flip(true, false);
         if (hook == null)
             hook = generateHook();
         else {
@@ -62,9 +64,10 @@ public class Player extends Character {
             hook.drawBoundingBox(renderer);
     }
     /**
-     * The logic of the player. Move differently if hook has grip on wall.
+     * The logic of the player.
      * @param deltaTime time since last frame.
      */
+
     @Override
     public void update(float deltaTime) {
         if (isAlive) {
@@ -168,16 +171,16 @@ public class Player extends Character {
     }
 
     /**
-     * Get the player's isInvincible state.
-     * @return isInvincible of the player.
+     * Get isInvincible value.
+     * @return boolean
      */
     public boolean getInvincible() {
         return isInvincible;
     }
 
     /**
-     * Method that returns the player's variables. Used for debugging.
-     * @return the string containing all data.
+     * Get debug text for player.
+     * @return String containing good-to-know information.
      */
     @Override
     public String toString() {
