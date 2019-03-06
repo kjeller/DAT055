@@ -49,7 +49,8 @@ public class MenuModel extends Model {
      * Updates the current {@link Menu}, then acts the stage.
      */
     public void update() {
-        menus.get(currentMenu).updateTable();
+        if(menus.get(currentMenu).isUpdatable())
+            menus.get(currentMenu).updateTable();
         stage.act();
     }
 

@@ -13,7 +13,6 @@ public class MenuController extends Controller{
     private boolean isCharOne;
     private boolean charOneBlocked = false;
     private boolean charTwoBlocked = false;
-    private boolean updatableMenu;
     public String currentMap;
     public String name;
 
@@ -34,8 +33,7 @@ public class MenuController extends Controller{
 
     @Override
     public void update(float dt) {
-        if (updatableMenu)
-            ((MenuModel)model).update();
+        ((MenuModel)model).update();
     }
 
     @Override
