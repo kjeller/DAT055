@@ -11,28 +11,30 @@ import com.dat055.controller.MenuController;
 
 
 /**
- *
+ * This class is a work-in-progress. It was meant to work as a multiplayer lobby of sorts. This is where I realized that
+ * the concept of an updatable menu was needed. This is because of the static nature of menus, they don't update to
+ * external information unless recreated. Might result in a re-design of the menu system.
  *
  * @author Erik Börne
  * @version 2019-03-04
  */
 public class CharacterMenu extends Menu {
-    private MenuController controller;
     private TextField username;
     private TextButton ready, back, start;
 
+    /**
+     * The standard constructor.
+     * @param ctrl This controller is to give the menu authority to swap menus, set flags and also reach GameController
+     *             methods.
+     */
     public CharacterMenu(MenuController ctrl) {
-        super(true, "UI/Delta.jpg");
-        controller = ctrl;
+        super(ctrl,true, "UI/Delta.jpg");
         createTable();
     }
 
     @Override
     public void createTable() {
-        int width = Gdx.graphics.getWidth()/4;
-        int height = Gdx.graphics.getHeight()/18;
-        initStyles(height);
-
+        // Creates the buttons
         username = createTextField("Enter a username");
         ready = createButton("Ready");
         back = createButton("Back");
@@ -40,7 +42,7 @@ public class CharacterMenu extends Menu {
 
         addListeners();
 
-        layoutTable(width, height);
+        layoutTable( Gdx.graphics.getWidth()/4,  Gdx.graphics.getHeight()/18);
     }
 
     private void layoutTable(int butX, int butY) {

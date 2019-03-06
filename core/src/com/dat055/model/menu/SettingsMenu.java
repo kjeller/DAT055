@@ -14,17 +14,17 @@ import com.badlogic.gdx.utils.Align;
 import com.dat055.controller.MenuController;
 
 public class SettingsMenu extends Menu {
-    private MenuController controller;
     private TextButton video, audio, other, back;
     private Label resolution, fullscreen, graphics, volume;
     private TextField resText, fulText, volText;
     public SettingsMenu(MenuController ctrl) {
-        super("UI/Delta.jpg");
-        initTxtBtnStyle();
-        initLblStyle();
-        initTxtFldStyle(40);
-
+        super(ctrl, false, "UI/Delta.jpg");
         controller = ctrl;
+        createTable();
+    }
+
+    @Override
+    protected void createTable() {
         // Table table = new Table();
         Table table = new Table();
 
@@ -68,56 +68,6 @@ public class SettingsMenu extends Menu {
         table.add(volText);
 
         super.table = table;
-    }
-
-    private void initTxtBtnStyle() {
-        TextButton.TextButtonStyle txtBtnStyle = new TextButton.TextButtonStyle();
-        BitmapFont font = generateFont(30);
-
-        Skin skin = new Skin(Gdx.files.internal("UI/ui.json"));
-        TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("UI/ui.atlas"));
-        skin.addRegions(atlas);
-
-        txtBtnStyle.font = font;
-        txtBtnStyle.fontColor = Color.BLACK;
-        txtBtnStyle.downFontColor = Color.WHITE;
-        txtBtnStyle.disabledFontColor = Color.WHITE;
-
-        txtBtnStyle.up = skin.getDrawable("but1_pressed");
-        txtBtnStyle.down = skin.getDrawable("but1");
-        txtBtnStyle.disabled = skin.getDrawable("but1");
-
-        super.txtBtnStyle = txtBtnStyle;
-    }
-
-    private void initTxtFldStyle(int height) {
-        TextField.TextFieldStyle txtFldStyle = new TextField.TextFieldStyle();
-
-        Skin skin = new Skin(Gdx.files.internal("UI/ui.json"));
-        TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("UI/ui.atlas"));
-        skin.addRegions(atlas);
-
-        txtFldStyle.font = fontPad(generateFont(height-Gdx.graphics.getHeight()/50));
-        txtFldStyle.background = skin.getDrawable("but1");
-        txtFldStyle.fontColor = Color.WHITE;
-        txtFldStyle.messageFont = generateFont(height-Gdx.graphics.getHeight()/60);
-        txtFldStyle.messageFontColor = Color.RED;
-        txtFldStyle.cursor = new NinePatchDrawable(new NinePatch(new Texture("UI/cursor.9.png")));
-
-        super.txtFldStyle = txtFldStyle;
-    }
-
-    private BitmapFont fontPad(BitmapFont f) {
-        BitmapFont.BitmapFontData fd = f.getData();
-        fd.padLeft = -5;
-        return f;
-    }
-
-    private void initLblStyle() {
-        Label.LabelStyle lblStyle = new Label.LabelStyle();
-        lblStyle.font = super.generateFont(36);
-        lblStyle.fontColor = Color.WHITE;
-        super.lblStyle = lblStyle;
     }
 
     private void addListeners() {

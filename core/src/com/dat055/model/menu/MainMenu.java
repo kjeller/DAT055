@@ -15,18 +15,15 @@ import com.dat055.controller.MenuController;
  * @version 2019-03-04
  */
 public class MainMenu extends Menu {
-    private MenuController controller;
     private TextButton play, multi, settings, exit, credits;
     private Label verNr;
 
     /**
      * The constructor of {@link MainMenu}
-     * @param cntr This is the {@link MenuController} that is used to swap menus and set flags.
+     * @param ctrl This is the {@link MenuController} that is used to swap menus and set flags.
      */
-    public MainMenu(MenuController cntr) {
-        super(false, "UI/Delta.jpg");
-
-        this.controller = cntr;
+    public MainMenu(MenuController ctrl) {
+        super(ctrl,false, "UI/Delta.jpg");
         createTable();
     }
 
@@ -128,12 +125,8 @@ public class MainMenu extends Menu {
 
         settings.addListener(new ClickListener() {
             @Override
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                return true;
-            }
-
-            @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                controller.swapMenu("Settings");
                 super.touchUp(event, x, y, pointer, button);
             }
 

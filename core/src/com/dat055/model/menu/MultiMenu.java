@@ -16,16 +16,12 @@ import com.badlogic.gdx.utils.Align;
 import com.dat055.controller.MenuController;
 
 public class MultiMenu extends Menu {
-    private MenuController controller;
     String ip;
     TextButton join, host, back;
     TextField address;
-    private TextButton.TextButtonStyle hoverStyle;
 
     public MultiMenu(MenuController ctrl) {
-        super(false, "UI/Delta.jpg");
-
-        controller = ctrl;
+        super(ctrl, false, "UI/Delta.jpg");
         createTable();
     }
 

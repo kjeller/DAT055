@@ -17,14 +17,10 @@ import com.dat055.controller.GameController;
 import com.dat055.controller.MenuController;
 
 public class PauseMenu extends Menu {
-    private MenuController controller;
     String ip;
     TextButton resume, settings, menu;
-    private TextButton.TextButtonStyle hoverStyle;
     public PauseMenu(MenuController ctrl) {
-        super(false);
-
-        controller = ctrl;
+        super(ctrl);
         createTable();
     }
 

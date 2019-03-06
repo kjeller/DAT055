@@ -14,19 +14,16 @@ import java.util.ArrayList;
 
 
 public class SelectMenu extends Menu {
-    private MenuController controller;
     private FileHandle[] files;
     private TextButton back, select;
     private ButtonGroup<TextButton> textButtonGroup;
 
     public SelectMenu(MenuController ctrl) {
-        super(false, "UI/Delta.jpg");
+        super(ctrl, false, "UI/Delta.jpg");
         textButtonGroup = new ButtonGroup<TextButton>();
         textButtonGroup.setMaxCheckCount(1);
         textButtonGroup.setMinCheckCount(0);
         textButtonGroup.setUncheckLast(true);
-
-        controller = ctrl;
         createTable();
     }
 

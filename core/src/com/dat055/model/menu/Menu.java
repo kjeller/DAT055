@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
+import com.dat055.controller.MenuController;
 
 /**
  * This is the groundwork for every menu. It is responsible for holding a table that will be populated by the inheriting
@@ -23,6 +24,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 
 public abstract class Menu {
     private boolean updatable;
+    MenuController controller;
     Table table;
     LabelStyle lblStyle;
     TextButtonStyle txtBtnStyle, hoverStyle, checkedStyle;
@@ -30,23 +32,24 @@ public abstract class Menu {
     private Image bg;
 
     /**
-     * The default constructor for {@link Menu}.
+     * The default constructor for {@link Menu}. Sets the flag updatable to false.
      */
-    private Menu() {
+    Menu(MenuController ctrl) {
         lblStyle = new LabelStyle();
         txtBtnStyle = new TextButtonStyle();
         txtFldStyle = new TextFieldStyle();
         initStyles(Gdx.graphics.getHeight()/18);
         table = new Table();
-        this.updatable = false;
+        controller = ctrl;
+        updatable = false;
     }
 
     /**
      * The standard constructor for {@link Menu}.
      * @param updatable Determines if the menu should be updated every few cycles.
      */
-    Menu(boolean updatable) {
-        this();
+    Menu(MenuController controller, boolean updatable) {
+        this(controller);
         this.updatable = updatable;
     }
 
@@ -55,8 +58,8 @@ public abstract class Menu {
      * @param updatable Determines if the menu should be updated every few cycles.
      * @param bgAssetLocation This is the path from the assets folder to the background.
      */
-    Menu(boolean updatable, String bgAssetLocation) {
-        this(updatable);
+    Menu(MenuController controller, boolean updatable, String bgAssetLocation) {
+        this(controller, updatable);
         bg = new Image(new Texture(bgAssetLocation));
     }
 
