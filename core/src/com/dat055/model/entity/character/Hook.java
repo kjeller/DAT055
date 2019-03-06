@@ -96,7 +96,7 @@ public class Hook extends Entity {
         wire = new Rectangle(0, 0, 0, 3);
         wire2 = new Polygon();
         rotate = 20;
-        wire.x = (initDirection.x > 0) ? position.x + 64 : position.x;
+        wire.x = (initDirection.x > 0) ? position.x + 32 : position.x + 32;
     }
 
     /**
@@ -132,10 +132,10 @@ public class Hook extends Entity {
     private void hookRight() {
         if (!hasGrip) {
             position.x = wire3.x + wire3.width;
-            if (position.x <= playerPosX+64)
+            if (position.x <= playerPosX+32)
                 remove = true;
         } else {
-            wire.setWidth(position.x-(playerPosX+64));
+            wire.setWidth(position.x-(playerPosX+32));
             wire3.setY(originPos.y);
             wire.setY(position.y);
         }
@@ -147,11 +147,11 @@ public class Hook extends Entity {
     private void hookLeft() {
         if (!hasGrip) {
             position.x = wire3.x - width;
-            if (wire3.x+wire3.width > playerPosX) {
+            if (wire3.x+wire3.width > playerPosX+32) {
                 remove = true;
             }
         } else {
-            wire.width = playerPosX - position.x-width;
+            wire.width = playerPosX - position.x-width+32;
             wire.y = position.y;
         }
     }
@@ -198,7 +198,7 @@ public class Hook extends Entity {
     void setOriginPosition(Vector2 pos) {
         originPos.x = (initDirection.x > 0) ? pos.x + 64 : pos.x-wire.width;
         originPos.y = pos.y+48;
-        wire.x = (initDirection.x > 0) ? pos.x + 64 : pos.x-wire.width;
+        wire.x = (initDirection.x > 0) ? pos.x + 32 : pos.x-wire.width+32;
         if (!hasGrip)
             wire.y = pos.y + 48;
     }
