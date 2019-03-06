@@ -4,7 +4,13 @@ import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.dat055.model.entity.Entity;
 
-
+/**
+ * A Class that is used to handle a button entity. Uses properties gotten by
+ * the entity class. Is a observer, and is mostly observed by doors
+ * @author Marcus Schmidt
+ * @version
+ *
+**/
 public class Button extends Entity {
     private boolean isActive = false;
     private float disableTime;
