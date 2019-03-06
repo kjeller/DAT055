@@ -1,5 +1,6 @@
 package com.dat055.desktop;
 
+import com.badlogic.gdx.Files;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.dat055.Game;
@@ -11,7 +12,7 @@ public class DesktopLauncher {
 		config.width = 1280;
 		config.height = 720;
 		config.vSyncEnabled = true;
-		//config.fullscreen = true;
+		config.addIcon("textures/icon.png", Files.FileType.Internal);
 		new LwjglApplication(new Game(), config);
 	}
 }

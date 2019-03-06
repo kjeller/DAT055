@@ -81,7 +81,7 @@ public class Hook extends Entity {
         else
             name = (initDirection.x > 0) ? "hookdownright": "hookdownleft";
         sprite = getSprite(name);
-        texture = new Texture("wire.png");
+        texture = new Texture("textures/spritesheets/hook/wire.png");
         texture.setWrap(Repeat, Repeat);
     }
 

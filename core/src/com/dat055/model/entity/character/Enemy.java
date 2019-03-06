@@ -1,5 +1,6 @@
 package com.dat055.model.entity.character;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 
 /**
@@ -19,6 +20,7 @@ public class Enemy extends Character {
         super(startPosition, 64, 64, texturePath, name, 5, new Vector2(2, 20));
         isMoving = true;
         lookingDirection.x = 1;
+        BOUNDING_BOX_COLOR = Color.GOLD;
     }
 
     /**

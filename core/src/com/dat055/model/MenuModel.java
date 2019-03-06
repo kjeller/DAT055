@@ -44,11 +44,17 @@ public class MenuModel extends Model {
     }
 
     public void swapMenu(String menu) {
-        stage.clear();
-        if(menus.get(menu).getBg() != null) {
-            menus.get(menu).getBg().setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-            stage.addActor(menus.get(menu).getBg());
-        }
+        Menu current = menus.get(menu);
+        if(current != null) {
+            stage.clear();
+            Image bg = current.getBg(); // get background
+            /*The pausemenu does not have a background
+              this check is necessary for cases like that. */
+            if(bg != null) {
+                bg.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+                stage.addActor(bg);
+            }
+        } else { return; }
         Table tbl = menus.get(menu).getTable();
         tbl.setFillParent(true);
         stage.addActor(tbl);

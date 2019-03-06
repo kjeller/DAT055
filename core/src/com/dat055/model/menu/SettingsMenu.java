@@ -168,7 +168,7 @@ public class SettingsMenu extends Menu {
 
                 if (inputSanitizer()) {
                     try {
-                        configIO.save(settingsMap, "config.txt");
+                        ConfigIO.save(settingsMap, "config.txt");
                     } catch (IOException e) {
                         System.out.println("Something Hideous Intentionally Transpired");
                     }
@@ -194,7 +194,7 @@ public class SettingsMenu extends Menu {
      */
     private void initConfig(){
         try {
-            settingsMap = configIO.load("config.txt");
+            settingsMap = ConfigIO.load("config.txt");
         }
         catch(IOException e){
             System.out.println("OH,Sugar Honey Ice Tea");

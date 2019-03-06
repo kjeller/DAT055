@@ -65,7 +65,9 @@ public class GameMapFactory {
         // Search for next map in JSON
         try {
             nextMap = root.get(MAP_PROPERTIES).getString("nextmap"); // Sets next map
-        } catch (Exception x) { System.out.println(x);}
+        } catch (Exception x) {
+            nextMap = "Noone.";
+        }
 
         // Reads every and creates a gamemap for every map
         for(JsonValue jsonMap : root.get(MAP_NAME)) {
