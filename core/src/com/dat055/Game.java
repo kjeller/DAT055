@@ -42,9 +42,7 @@ public class Game extends ApplicationAdapter {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		deltaTime = Gdx.graphics.getDeltaTime();
 
-
-		if(menuController.isVisible())
-			menuController.update(deltaTime);
+		menuController.update(deltaTime);
 
 		if(gameController.isRunning())
 			gameController.update(deltaTime);
@@ -68,6 +66,6 @@ public class Game extends ApplicationAdapter {
 
 	public void pauseMenu() {
 		menuController.swapMenu("Pause");
-		menuController.toggleVisibility();
+		//menuController.toggleVisibility();
 	}
 }
