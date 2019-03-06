@@ -19,14 +19,21 @@ public class Goal extends Entity {
         super(position, 64, 64, TexturePath);
         BOUNDING_BOX_COLOR = Color.GOLD;
     }
+    public Goal(Vector2 position) {
+        super(position, 64, 64);
+        BOUNDING_BOX_COLOR = Color.GOLD;
+    }
+
     public void update(float deltaTime) {
-        if(texturePath.equals("textures/interactables/flag.png") || !isActive){
-            this.setTexture("textures/interactables/flagdown.png");
-            isActive = false;
-        }
-        if(texturePath.equals("textures/interactables/flagdown.png") && isActive){
-            this.setTexture("textures/interactables/flag.png");
-            isActive = false;
+        if(sprite != null) {
+            if(texturePath.equals("textures/interactables/flag.png") || !isActive){
+                this.setTexture("textures/interactables/flagdown.png");
+                isActive = false;
+            }
+            if(texturePath.equals("textures/interactables/flagdown.png") && isActive){
+                this.setTexture("textures/interactables/flag.png");
+                isActive = false;
+            }
         }
     }
 
@@ -40,7 +47,8 @@ public class Goal extends Entity {
      */
     @Override
     public void draw(PolygonSpriteBatch sb, float rotation) {
-        super.draw(sb, rotation);
+        if(sprite != null)
+            super.draw(sb, rotation);
     }
     @Override
     public void drawBoundingBox(ShapeRenderer renderer) {

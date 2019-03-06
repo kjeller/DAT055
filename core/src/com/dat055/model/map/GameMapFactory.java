@@ -181,7 +181,7 @@ public class GameMapFactory {
         if(x >= 0 && y >= 0) {
             return new Goal(new Vector2(x* TILESIZE,y *TILESIZE), texture);
         }
-        return new Goal(Vector2.Zero, null);
+        return new Goal(Vector2.Zero);
     }
 
     /**
