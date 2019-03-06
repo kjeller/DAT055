@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
-import com.dat055.model.entity.*;
+import com.dat055.model.entity.Entity;
 import com.dat055.model.entity.character.Enemy;
 import com.dat055.model.entity.character.Player;
 import com.dat055.model.entity.interactables.Button;
@@ -167,17 +167,19 @@ public class GameMapFactory {
      */
     private Goal findGoal(JsonValue map) {
         int x, y;
+        String texture = null;
         x = y = -1;
         try{
-            JsonValue pos = map.get(MAP_PROPERTIES).get("finish").child;
+            JsonValue pos = map.get(MAP_PROPERTIES).get("finish").get("position");
+            texture = map.get(MAP_PROPERTIES).get("finish").getString("sprite");
             x = pos.getInt(0);
             y = pos.getInt(1);
         } catch (Exception ignored) {}
 
         if(x >= 0 && y >= 0) {
-            return new Goal(new Vector2(x* TILESIZE,y *TILESIZE));
+            return new Goal(new Vector2(x* TILESIZE,y *TILESIZE), texture);
         }
-        return new Goal(Vector2.Zero);
+        return new Goal(Vector2.Zero, null);
     }
 
     /**
@@ -232,7 +234,6 @@ public class GameMapFactory {
                                         current.getString("id"), current.getString("target"),
                                         current.getInt("timer"));
 
-                    //interactables.put(entity, ((Button) entity).getId());
                     }
                  else if(current.name.equals("spike")){
                      JsonValue spike = current.child;

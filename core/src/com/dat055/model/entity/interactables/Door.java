@@ -7,7 +7,12 @@ import com.dat055.model.entity.Entity;
 
 import java.util.Observable;
 import java.util.Observer;
-
+/**
+ * A class that handles door entities. Used to block the players path until they
+ * touch a button. Is an observer, mostly observes buttons.
+ * @author Marcus Schmidt
+ *
+ **/
 public class Door extends Entity implements Observer {
     private ObjectMap<String, Boolean> requirements;
     private boolean isOpen = false;

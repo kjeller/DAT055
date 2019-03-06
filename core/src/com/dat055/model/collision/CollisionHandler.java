@@ -249,6 +249,7 @@ public class CollisionHandler {
                     ((Spike) mapEntity).death((Player) entity);
                 }
                 if(entity instanceof Player && mapEntity instanceof Goal) {
+                    ((Goal)mapEntity).activate();
                     gameMap.setFinished();
                 }
             }
