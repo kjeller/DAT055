@@ -18,6 +18,7 @@ import com.dat055.controller.MenuController;
 
 public class PauseMenu extends Menu {
     private MenuController controller;
+    public boolean mute;
     String ip;
     TextButton resume, settings, menu;
     private TextButton.TextButtonStyle hoverStyle;
@@ -40,6 +41,8 @@ public class PauseMenu extends Menu {
 
         layoutTable(width, height);
     }
+    //todo: needs documentation
+    public void setMute(boolean foo) {mute = foo;}
 
     private void layoutTable(int butX, int butY) {
         int padL, padS;
@@ -176,7 +179,7 @@ public class PauseMenu extends Menu {
             public void exit (InputEvent event, float x, float y, int pointer, Actor toActor) {
                 menu.setStyle(txtBtnStyle);
                 controller.getCtrl().getModel().stopMusic();
-                controller.getModel().playMusic("title");
+                controller.playMusic();
                 super.enter(event,x,y,pointer,toActor);
             }
         });

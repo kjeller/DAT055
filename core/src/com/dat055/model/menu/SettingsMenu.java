@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.dat055.Game;
 import com.dat055.controller.MenuController;
+import com.dat055.model.Model;
 
 import java.io.IOException;
 import java.util.Map;
@@ -22,11 +23,11 @@ import java.util.TreeMap;
 public class SettingsMenu extends Menu {
     private MenuController controller;
     private TextButton apply ,save ,back;
-    private Label resolutionX,resolutionY, fullscreen, music, sound;
+    private Label resolutionX,resolutionY, fullscreen, mute, sound;
     private TextField resFieldX,resFieldY,fulField,musField,soundField;
     private String resSettingX,resSettingY,fulSetting,musSetting,soundSetting;
-    private int resX,resY,fulInt;
-    //private boolean fulBool;
+    private int resX,resY,fulInt,mutInt;
+    private boolean muteBool;
     private Map<String,String> settingsMap;
     public SettingsMenu(MenuController ctrl) {
         super("UI/Delta.jpg");
@@ -56,7 +57,7 @@ public class SettingsMenu extends Menu {
         resSettingX = settingsMap.get("resolutionX");
         resSettingY = settingsMap.get("resolutionY");
         fulSetting = settingsMap.get("fullscreen");
-        musSetting = settingsMap.get("music");
+        musSetting = settingsMap.get("mute");
         soundSetting = settingsMap.get("soundeffects");
 
 
@@ -72,13 +73,13 @@ public class SettingsMenu extends Menu {
         resolutionX = new Label("Screen width",lblStyle);
         resolutionY = new Label("Screen height",lblStyle);
         fullscreen = new Label("Fullscreen",lblStyle);
-        music = new Label("Music",lblStyle);
+        mute = new Label("Mute music",lblStyle);
         sound = new Label("Sound",lblStyle);
 
 
         addListeners();
 
-        table.debug();
+        table.debug(); // todo: remove
         table.add(back).width(150).height(40);
         table.add(save).width(170).height(40);
         table.add(apply).width(170).height(40).row();
@@ -92,13 +93,17 @@ public class SettingsMenu extends Menu {
         table.add(fullscreen).height(40).padBottom(10).padTop(20);
         table.add(fulField).padTop(20).padBottom(10).row();
         table.add();
-        table.add(music).height(40).padBottom(10).padTop(20);
+        table.add(mute).height(40).padBottom(10).padTop(20);
         table.add(musField).padTop(20).padBottom(10).row();
         table.add();
         table.add(sound).padTop(20).height(40).padBottom(10);
         table.add(soundField).padTop(20).padBottom(10).row();
 
         super.table = table;
+    }
+
+    public boolean getMute(){
+        return muteBool;
     }
 
     private void initTxtBtnStyle() {
@@ -151,6 +156,10 @@ public class SettingsMenu extends Menu {
         super.lblStyle = lblStyle;
     }
 
+    private int parseInt(String string){
+        return Integer.parseInt(settingsMap.get(string));
+    }
+
     private void addListeners() {
         apply.addListener(new ClickListener() {
             @Override
@@ -162,16 +171,26 @@ public class SettingsMenu extends Menu {
                 settingsMap.put("resolutionX", resFieldX.getText());
                 settingsMap.put("resolutionY", resFieldY.getText());
                 settingsMap.put("fullscreen",fulField.getText());
-                resX = Integer.parseInt(settingsMap.get("resolutionX"));
-                resY = Integer.parseInt(settingsMap.get("resolutionY"));
-                fulInt = Integer.parseInt(settingsMap.get("fullscreen"));
+                settingsMap.put("mute",musField.getText());
+                resX = parseInt("resolutionX");
+                resY = parseInt("resolutionY");
+                fulInt = parseInt("fullscreen");
+                mutInt = parseInt("mute");
+
+                if (inputSanitizer() &&mutInt==1){
+                    controller.setMute(true);
+                    controller.playMusic();
+                }
+                else if(inputSanitizer()&& mutInt==0){
+                    controller.setMute(false);
+                    controller.playMusic();
+                }
 
                 if (inputSanitizer()&&fulInt==1){
                     Gdx.graphics.setWindowedMode(resX,resY);
                     Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
                     controller.resize(resX,resY);
                 }
-
                 else if (inputSanitizer()&&fulInt==0){
                     Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
                     Gdx.graphics.setWindowedMode(resX, resY);
@@ -192,7 +211,7 @@ public class SettingsMenu extends Menu {
                 settingsMap.put("resolutionX", resFieldX.getText());
                 settingsMap.put("resolutionY", resFieldY.getText());
                 settingsMap.put("fullscreen", fulField.getText());
-                settingsMap.put("music", musField.getText());
+                settingsMap.put("mute", musField.getText());
                 settingsMap.put("soundeffects", soundField.getText());
 
                 if (inputSanitizer()) {
@@ -221,7 +240,7 @@ public class SettingsMenu extends Menu {
     }
 
     /**
-     * laddar från config till texter
+     * laddar från config till texter todo: fix!!
      */
     private void initConfig(){
         try {
@@ -271,9 +290,9 @@ public class SettingsMenu extends Menu {
     }
 
     private boolean musicSanitizer(){
-        if(settingsMap.put("music", musField.getText()).equals("1"))
+        if(settingsMap.put("mute", musField.getText()).equals("1"))
             return true;
-        else if( settingsMap.put("music", musField.getText()).equals("0"))
+        else if( settingsMap.put("mute", musField.getText()).equals("0"))
             return true;
         return false;
     }

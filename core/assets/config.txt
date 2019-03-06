@@ -1,5 +1,5 @@
 fullscreen:0
-music:0
+mute:0
 resolutionX:1280
 resolutionY:720
 soundeffects:1

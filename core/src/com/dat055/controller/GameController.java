@@ -9,6 +9,8 @@ import com.badlogic.gdx.math.Vector3;
 import com.dat055.model.GameModel;
 import com.dat055.model.entity.character.Player;
 import com.dat055.model.map.GameMap;
+import com.dat055.model.menu.Menu;
+import com.dat055.model.menu.SettingsMenu;
 import com.dat055.net.Server;
 import com.dat055.view.GameView;
 
@@ -29,6 +31,9 @@ public class GameController extends Controller {
      */
     public enum Mode {FRONT, BACK}
     private Mode mode;
+
+    //todo: needs documenatation
+    public boolean mute;
 
     // Objects that is created by GameModel
     private GameMap map1, map2;
@@ -221,9 +226,21 @@ public class GameController extends Controller {
         // Set camera position to current player to avoid panning to player at start
         Vector2 camStartPos = currentPlayer.getPosition().cpy();
         cam.position.set(new Vector3(camStartPos.x, camStartPos.y, 0));
-        model.playMusic("map_01");
+        playMusic();
         return true; //TODO: Fix a return false which indicates if map created successfully or not
     }
+
+    //todo: needs documentation
+    public void setMute(boolean foo){mute = foo;}
+
+    public void playMusic(){
+        if (mute)
+            model.playMusic("map_01");
+        else if (mute)
+            model.stopMusic();
+    }
+
+
 
     /**
      * Creates next map and starts it.

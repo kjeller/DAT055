@@ -10,12 +10,14 @@ import com.dat055.model.MenuModel;
 public class MenuController extends Controller{
     private boolean visible;
     public boolean multiplayer;
+    public boolean mute;
     public String currentMap;
     public String name;
 
     public MenuController() {
         super(new MenuModel(), new MenuView());
         visible = true;
+        mute = false;
 
         ((MenuModel)model).includeMenu("Main", new MainMenu(this));
         Gdx.input.setInputProcessor(((MenuModel)model).getStage());
@@ -25,7 +27,7 @@ public class MenuController extends Controller{
         ((MenuModel)model).includeMenu("Pause", new PauseMenu(this));
         ((MenuModel)model).includeMenu("Select", new SelectMenu(this));
         ((MenuModel)model).includeMenu("Settings", new SettingsMenu(this));
-        model.playMusic("title");
+        playMusic();
     }
 
     @Override
@@ -74,9 +76,17 @@ public class MenuController extends Controller{
     public float getWidth()  { return ((MenuModel)model).getStage().getWidth();  }
     public float getHeight() { return ((MenuModel)model).getStage().getHeight(); }
     public void setMultiplayer(boolean b) { multiplayer = b; }
+    public void setMute(boolean foo) {mute = foo;}
 
     public void swapMenu(String menu) {
         ((MenuModel)model).swapMenu(menu);
+    }
+
+    public void playMusic(){
+        if(!mute)
+            model.playMusic("title");
+        else if(mute)
+            model.stopMusic();
     }
 
     public void togglePause() { ((GameController)ctrl).togglePause(); }
