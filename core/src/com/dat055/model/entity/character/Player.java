@@ -14,6 +14,12 @@ public class Player extends Character {
     private float iframes;
     private boolean movingWithHook;
 
+    /**
+     * Sets movingWithHook and isInvincible to default values.
+     * @param startPosition position where player should spawn on a map.
+     * @param texturePath Path to a texture.
+     * @param name name of the player entity.
+     */
     public Player(Vector2 startPosition, String texturePath, String name) {
         super(startPosition, 80, 64, texturePath,name, 5, new Vector2(5, 20));
         movingWithHook = false;

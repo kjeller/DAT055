@@ -26,6 +26,17 @@ public abstract class Character extends Entity {
     boolean isAlive;
     boolean isMoving;
 
+    /**
+     * Initiates acceleration, velocity, oldPosition, deltaPosition, direcition, lookingDirection.
+     * Sets isGrounded, isAlive and isMoving to default values.
+     * @param position Position of the lower left rectangle of the character entity.
+     * @param height Height of the character entity.
+     * @param width Width of the character entity.
+     * @param texturePath Path to a texture.
+     * @param name name of the character entity.
+     * @param healthPoints number of health points for the character entity.
+     * @param maxVelocity max velocity of the character entity.
+     */
 
     Character(Vector2 position, int height, int width, String texturePath, String name, int healthPoints, Vector2 maxVelocity) {
         super(position, height, width, texturePath);
