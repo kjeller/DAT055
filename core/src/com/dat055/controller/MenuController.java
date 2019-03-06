@@ -1,7 +1,6 @@
 package com.dat055.controller;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.utils.viewport.Viewport;
 import com.dat055.model.menu.SettingsMenu;
 import com.dat055.model.menu.*;
 import com.dat055.view.MenuView;
@@ -30,6 +29,7 @@ public class MenuController extends Controller{
         ((MenuModel)model).includeMenu("Select", new SelectMenu(this));
         ((MenuModel)model).includeMenu("Character", new CharacterMenu(this));
         ((MenuModel)model).includeMenu("Settings", new SettingsMenu(this));
+        //((MenuModel)model).includeMenu("Finish", new FinishedMenu(this));
         model.playMusic("title");
     }
 
@@ -38,12 +38,10 @@ public class MenuController extends Controller{
         ((MenuModel)model).update();
     }
 
-    @Override
     public void render() {
         if (visible) ((MenuView)view).draw(((MenuModel)model).getStage());
     }
 
-    @Override
     public void resize(int width, int height) {
         ((MenuModel)model).resize(width, height);
     }
@@ -90,15 +88,6 @@ public class MenuController extends Controller{
     public void swapMenu(String menu) { ((MenuModel)model).swapMenu(menu); }
 
     public void togglePause() { ((GameController)ctrl).togglePause(); }
-    /*
-    public boolean startMultiplayer(String mapPath, String name) {
-        return ((GameController)ctrl).startMultiplayerMap(mapPath, name);
-    }
-
-    public boolean joinMultiplayer(String ip, String name) {
-        return ((GameController)ctrl).joinMultiplayerMap(ip, name);
-    }
-    */
 
     public void setController(GameController ctrl) {
         super.setController(ctrl);

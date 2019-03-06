@@ -1,13 +1,18 @@
-package com.dat055.model.entity;
+package com.dat055.model.entity.interactables;
 
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.ObjectMap;
+import com.dat055.model.entity.Entity;
 
 import java.util.Observable;
 import java.util.Observer;
-
+/**
+ * A class that handles door entities. Used to block the players path until they
+ * touch a button. Is an observer, mostly observes buttons.
+ * @author Marcus Schmidt
+ *
+ **/
 public class Door extends Entity implements Observer {
     private ObjectMap<String, Boolean> requirements;
     private boolean isOpen = false;
@@ -80,11 +85,6 @@ public class Door extends Entity implements Observer {
     @Override
     public void draw(PolygonSpriteBatch sb, float rotation) {
         super.draw(sb, rotation);
-    }
-
-    @Override
-    public void action(String act) {
-
     }
 
     public boolean getState()   { return isOpen; }

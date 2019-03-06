@@ -1,6 +1,6 @@
 package com.dat055.net;
 
-import com.dat055.model.entity.Player;
+import com.dat055.model.entity.character.Player;
 import com.dat055.net.message.JoinMessage;
 import com.dat055.net.message.Message;
 import com.dat055.net.message.PlayerMessage;
@@ -63,7 +63,6 @@ public class Server extends Thread{
      */
     public boolean startServerAndClient(String addr) {
         tcpHandler.setClient(client = new Client(addr, port));
-        System.out.println("[Server] Created a client");
         return startServer(null);
     }
 
@@ -76,7 +75,6 @@ public class Server extends Thread{
     public boolean startServer(String chosenMap) {
         this.chosenMap = chosenMap;
         start();
-        System.out.println("[Server] Thread started.");
         return true;
     }
 
@@ -86,9 +84,9 @@ public class Server extends Thread{
     private boolean initialize() {
         try {
             ss = new ServerSocket(port);
-            System.out.println("[Server] Serversocket created on port " + port);
+            // Serversocket is nowcreated
             cs = ss.accept();   // Blocking method awaiting client to connect
-            System.out.println("[Server] A client has connected to the server!");
+            // A client has now connected to the server.
             out = new ObjectOutputStream(cs.getOutputStream());
             in = new ObjectInputStream(cs.getInputStream());
             ds = new DatagramSocket(port);  // Create datagramsocket to receive UDPHandler packets
@@ -97,7 +95,6 @@ public class Server extends Thread{
             if(client == null) {
                 tcpHandler.setClient(client = new Client(cs.getInetAddress(), port));
                 tcpHandler.writeClientMessage(new JoinMessage(name, chosenMap));
-                //client.start();
             }
             tcpHandler.start();
             udpHandler.start();
@@ -116,7 +113,6 @@ public class Server extends Thread{
                     cs = null;
                     isRunning = false;
                     close();
-                    System.out.println("[Server] Lost connection to client.");
                 }
             }
         }
@@ -150,13 +146,13 @@ public class Server extends Thread{
     public void handlePackets(byte[] data) {
         if(data == null)
             return;
-        System.out.println("Data deserialized to be handled.");
+        // Data deserialized to be handled
         ObjectInputStream objIn;
         Message msg;
         try {
             objIn =  new ObjectInputStream(new ByteArrayInputStream(data));
             msg = (Message) objIn.readObject();
-            System.out.println("--Message de-serializes read!");
+            // Deserialized message now read
 
             // Translate messages to a format which can be handled.
             if(msg != null) {
@@ -182,29 +178,19 @@ public class Server extends Thread{
             // Translate OP code in message and cast message based on code.
             switch (msg.getOp()) {
                 case OP_JOIN:
-                    System.out.println("=== JOIN ===");
                     String chosenMap = ((JoinMessage) msg).getMap();
-                    System.out.printf("Message from other peer: %s\n", msg);
-
                     // Assign map to peer
                     if(chosenMap != null) {
-                        this.chosenMap = chosenMap;
-                        System.out.printf("Map %s selected.\n", chosenMap);
+                        this.chosenMap = chosenMap; // map selected
+                         // Send response to other peer for getting this name.
                         tcpHandler.writeClientMessage(new JoinMessage(name, null));
                     }
                     tcpHandler.writeClientMessage(new Message(OP_CHAR_SEL));
-                    isRunning = true;
-                    System.out.printf("isRunning: %s\n", isRunning);
+                    isRunning = true; // server is now running
                     client.start();
                     break;
                 case OP_CHAR_SEL:
-                    System.out.println("=== CHAR_SEL ===");
-                    System.out.println("nothing happens here yet");
-                    //TODO: Somehow get menucontroller method call here?
-                    //isRunning = true;
-
-                    System.out.println("Started client!");
-                    //client.start();
+                    //TODO: Fix character selection here
                     break;
                 case OP_LEAVE:
                     tcpHandler.writeClientMessage(new Message(OP_LEAVE));
@@ -240,10 +226,29 @@ public class Server extends Thread{
         client.setPacketData(out.toByteArray());
     }
 
+    /**
+     * @return name of other client
+     */
     public String getClientName() { return cs.getInetAddress().getHostName(); }
+
+    /**
+     * @return chosen map.
+     */
     public String getChosenMap() { return chosenMap; }
+
+    /**
+     * @return datagramsocket used receive packets.
+     */
     public DatagramSocket getDatagramSocket() { return ds; }
+
+    /**
+     * @return outstream to other peer.
+     */
     public ObjectOutputStream getOut() { return out; }
+
+    /**
+     * @return instream to other peer.
+     */
     public ObjectInputStream getIn() { return in; }
 
     public boolean isRunning() { return isRunning; }

@@ -1,9 +1,9 @@
 {
-  "properties" : {"id" : 0, "name" : "debug map"},
+  "properties" : {"id" : 0, "name" : "debug map", "nextmap" : "maps/map_1.json"},
   "map" : [{
-
     "properties" : {"width" : 24, "height": 12, "desc" : "light",
-      "sprite" : "textures/spritesheets/tileMap/tileSheet_0.atlas"},
+      "sprite" : "textures/spritesheets/tileMap/tileSheet_0.atlas",
+      "finish" : {"position" :  [23, 1], "sprite" : "textures/interactables/flagdown.png"}},
     "data" : [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
               1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
               0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0,
@@ -18,13 +18,15 @@
               1, 1, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1],
   "entities" : [
     {"player"  : {"position" : [0,  1], "sprite" : "textures/blue_penguin_64x80.png"}},
-    {"enemy"   : {"position" : [6,  1], "sprite" : "textures/naner_64x64.png"}},
+    {"enemy"   : {"position" : [6,  1], "sprite" : "textures/wulf_64x43.png"}},
     {"door"    : {"position" : [22, 1], "rqs"    : ["b1", "b2"], "id"  : "d1", "sprite" : "textures/interactables/doorClosed.png"}},
-    {"button"  : {"position" : [18, 1],"timer" : 5, "id"     : "b1", "target"      : "d1", "sprite" : "textures/interactables/ButtonInactive.png"}}
+    {"button"  : {"position" : [18, 1],"timer" : 5, "id"     : "b1", "target"      : "d1", "sprite" : "textures/interactables/ButtonInactive.png"}},
+    {"spike"   : {"position" : [6,  1], "sprite" : "textures/interactables/Spikes.png"}}
   ]},
     {
     "properties"  : {"width" : 12, "height": 12, "desc" : "shadow",
-      "sprite" : "textures/spritesheets/tileMap/tileSheet_0.atlas"},
+      "sprite" : "textures/spritesheets/tileMap/tileSheet_1.atlas",
+      "finish" : {"position" :  [11, 1], "sprite" : "textures/interactables/flagdown.png"}},
     "data" : [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
               3, 3, 2, 2, 2, 2, 3, 3, 3, 3, 3, 2,
               0, 0, 3, 3, 3, 3, 0, 0, 0, 0, 0, 2,

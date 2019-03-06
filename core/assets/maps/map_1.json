@@ -29,7 +29,7 @@
         },
 {
   "properties"  : {"width" : 12, "height": 12, "desc" : "shadow",
-    "sprite" : "textures/spritesheets/tileMap/tileSheet_0.atlas"},
+    "sprite" : "textures/spritesheets/tileMap/tileSheet_1.atlas"},
   "data" : [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
     3, 3, 2, 2, 2, 2, 3, 3, 3, 3, 3, 2,
     0, 0, 3, 3, 3, 3, 0, 0, 0, 0, 0, 2,

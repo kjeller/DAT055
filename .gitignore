@@ -86,4 +86,7 @@ modules.xml
 # Sonarlint plugin
  .idea/sonarlint
 
+# config file
+core/config.txt
+
 # End of https://www.gitignore.io/api/intellij+all

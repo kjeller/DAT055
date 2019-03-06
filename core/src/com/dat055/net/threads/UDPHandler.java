@@ -22,8 +22,6 @@ public class UDPHandler extends Thread {
     public UDPHandler(Client client) {
         this.client = client;
     }
-
-
     public UDPHandler(Server server) {
         this.server = server;
     }
