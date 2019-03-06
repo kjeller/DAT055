@@ -17,8 +17,7 @@ import com.dat055.controller.GameController;
 import com.dat055.controller.MenuController;
 
 public class PauseMenu extends Menu {
-    String ip;
-    TextButton resume, settings, menu;
+    private TextButton resume, settings, menu;
     public PauseMenu(MenuController ctrl) {
         super(ctrl);
         createTable();
@@ -26,22 +25,17 @@ public class PauseMenu extends Menu {
 
     @Override
     public void createTable() {
-        int width = Gdx.graphics.getWidth()/4;
-        int height = Gdx.graphics.getHeight()/18;
-
         resume = createButton("Resume game");
         settings = createButton("Settings");
         menu = createButton("Exit to main menu");
 
         addListeners();
 
-        layoutTable(width, height);
+        layoutTable(Gdx.graphics.getWidth()/4, Gdx.graphics.getHeight()/18);
     }
 
     private void layoutTable(int butX, int butY) {
-        int padL, padS;
-        padL = butX/2;
-        padS = butY/2;
+        int padS = butY/2;
 
         Table table = super.table;
         table.setSize(controller.getWidth(),controller.getWidth());
@@ -51,10 +45,6 @@ public class PauseMenu extends Menu {
         table.add(resume).width(butX).height(butY).padBottom(padS).expandX().row();
         table.add(settings).width(butX).height(butY).padBottom(padS).row();
         table.add(menu).width(butX).height(butY).padBottom(padS).row();
-    }
-
-    public String getIp() {
-        return ip;
     }
 
     private void addListeners() {

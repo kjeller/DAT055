@@ -29,23 +29,16 @@ public class SelectMenu extends Menu {
 
     @Override
     public void createTable() {
-        int width = Gdx.graphics.getWidth()/4;
-        int height = Gdx.graphics.getHeight()/18;
-
-        initStyles(height);
-
         back = createButton("Back");
         select = createButton("Select");
 
         addListeners();
 
-        layoutTable(width, height);
+        layoutTable(Gdx.graphics.getWidth()/4, Gdx.graphics.getHeight()/18);
     }
 
     private void layoutTable(int width, int height) {
-        int padLarge, padSmall;
-        padLarge = width/2;
-        padSmall = height/2;
+        int padSmall = height/2;
 
         Table table = super.table;
         table.setSize(controller.getWidth(),controller.getWidth());
@@ -53,8 +46,8 @@ public class SelectMenu extends Menu {
         table.setPosition(0,0);
 
         table.add(createSubTable(padSmall)).padBottom(padSmall).colspan(2).expandX().expandY().row();
-        table.add(back).width(width/2).height(height).padLeft(padSmall).padBottom(padSmall).bottom().left();
-        table.add(select).width(width/2).height(height).padRight(padSmall).padBottom(padSmall).bottom().right();
+        table.add(back).width(width>>1).height(height).padLeft(padSmall).padBottom(padSmall).bottom().left();
+        table.add(select).width(width>>1).height(height).padRight(padSmall).padBottom(padSmall).bottom().right();
     }
 
     private Table createSubTable(int padding) {
@@ -63,6 +56,7 @@ public class SelectMenu extends Menu {
         for(FileHandle file: files) {
             TextButton tb = createButton(file.nameWithoutExtension(), checkedStyle);
             textButtonGroup.add(tb);
+            //noinspection IntegerDivisionInFloatingPointContext
             table.add(tb).width(Gdx.graphics.getWidth()/3).height(Gdx.graphics.getHeight()/16).padBottom(padding).expandX().row();
         }
         return table;
@@ -105,10 +99,10 @@ public class SelectMenu extends Menu {
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                if (controller.multiplayer) {
-                    controller.swapMenu("Character");
-                    //controller.name = "Beelzebub";
-                } else if (textButtonGroup.getChecked() != null) {
+                if (textButtonGroup.getChecked() != null) {
+                    if (controller.multiplayer)
+                        controller.name = "Beelzebub";
+
                     controller.clearStage();
                     controller.currentMap = textButtonGroup.getChecked().getText().toString();
                     controller.startGame();
