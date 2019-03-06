@@ -32,6 +32,11 @@ public class CollisionHandler {
     private ArrayList<Tile> tileList;
     private GameMap gameMap;
 
+    /**
+     * Initiates the collision handler for a specific map. gameMap is used to
+     * track entities on the level while tileMap is used to track tiles.
+     * @param map Map that the collision handler is working on.
+     */
     public CollisionHandler(GameMap map) {
         gameMap = map;
         tileMap = map.getTileMap();

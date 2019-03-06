@@ -37,6 +37,14 @@ public class Hook extends Entity {
     private Vector2 originPos;
     private Vector2 initDirection;
 
+    /**
+     * Initiates originPos, sets textures and initializes various values.
+     * @param position Position of the hook.
+     * @param height Height of the hook.
+     * @param width Width of the hook.
+     * @param maxLength Max length of the hook.
+     * @param initDirection Direction the hook is shot to.
+     */
     Hook(Vector2 position, int height, int width, float maxLength, Vector2 initDirection) {
         super(position, height, width);
         this.initDirection = new Vector2(initDirection);
