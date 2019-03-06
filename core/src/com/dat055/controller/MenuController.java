@@ -1,7 +1,6 @@
 package com.dat055.controller;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.utils.viewport.Viewport;
 import com.dat055.model.menu.SettingsMenu;
 import com.dat055.model.menu.*;
 import com.dat055.view.MenuView;
@@ -9,7 +8,11 @@ import com.dat055.model.MenuModel;
 
 public class MenuController extends Controller{
     private boolean visible;
-    public boolean multiplayer;
+    public boolean multiplayer; // A flag
+    public boolean host;
+    private boolean isCharOne;
+    private boolean charOneBlocked = false;
+    private boolean charTwoBlocked = false;
     public boolean mute;
     public String currentMap;
     public String name;
@@ -26,13 +29,14 @@ public class MenuController extends Controller{
         ((MenuModel)model).includeMenu("Multiplayer", new MultiMenu(this));
         ((MenuModel)model).includeMenu("Pause", new PauseMenu(this));
         ((MenuModel)model).includeMenu("Select", new SelectMenu(this));
+        ((MenuModel)model).includeMenu("Character", new CharacterMenu(this));
         ((MenuModel)model).includeMenu("Settings", new SettingsMenu(this));
         playMusic();
     }
 
     @Override
     public void update(float dt) {
-        ((MenuModel)model).getStage().act(dt);
+        ((MenuModel)model).update();
     }
 
     public void render() {
@@ -75,12 +79,15 @@ public class MenuController extends Controller{
 
     public float getWidth()  { return ((MenuModel)model).getStage().getWidth();  }
     public float getHeight() { return ((MenuModel)model).getStage().getHeight(); }
+
+    public boolean isCharOne() { return isCharOne; }
+    public boolean isCharOneBlocked() { return charOneBlocked; }
+    public boolean isCharTwoBlocked() { return charTwoBlocked; }
+
     public void setMultiplayer(boolean b) { multiplayer = b; }
     public void setMute(boolean foo) {mute = foo;}
 
-    public void swapMenu(String menu) {
-        ((MenuModel)model).swapMenu(menu);
-    }
+    public void swapMenu(String menu) { ((MenuModel)model).swapMenu(menu); }
 
     public void playMusic(){
         if(!mute)
@@ -90,15 +97,6 @@ public class MenuController extends Controller{
     }
 
     public void togglePause() { ((GameController)ctrl).togglePause(); }
-    /*
-    public boolean startMultiplayer(String mapPath, String name) {
-        return ((GameController)ctrl).startMultiplayerMap(mapPath, name);
-    }
-
-    public boolean joinMultiplayer(String ip, String name) {
-        return ((GameController)ctrl).joinMultiplayerMap(ip, name);
-    }
-    */
 
     public void setController(GameController ctrl) {
         super.setController(ctrl);

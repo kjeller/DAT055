@@ -5,7 +5,7 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.TreeMap;
 
-public class configIO {
+public class ConfigIO {
     public static void save(Map<String,String> bindings,String fileName) throws IOException {
         PrintWriter printWriter = new PrintWriter(new FileWriter(fileName));
         for (Map.Entry<String,String> e: bindings.entrySet())

@@ -107,7 +107,6 @@ public class GameMap {
     public void setFinished() {
         if(!finished) {
             finished = true;
-            System.out.println("Goal has been reached!");
         }
     }
 

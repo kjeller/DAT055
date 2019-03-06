@@ -92,7 +92,7 @@ public class GameController extends Controller {
             nextMap();
         }
 
-        /**
+        /*
          * Multiplayer updates received from another player
          * and sent to that player.
          */
@@ -112,7 +112,7 @@ public class GameController extends Controller {
 
     /**
      * Updates the camera to follow player and to be in bounds.
-     * @param deltaTime
+     * @param deltaTime time since last update
      */
     private void updateCamera(float deltaTime) {
         // Camera transition to player
@@ -201,6 +201,8 @@ public class GameController extends Controller {
      * @param fileName of a json file in assets/maps/
      */
     private boolean startMap(String fileName) {
+        if(fileName.equals("Noone.")){}
+            //TODO: Change to "finished"
         ((GameModel)model).createMap(fileName);
 
         map1 = ((GameModel)model).getGameMap1();
@@ -257,7 +259,7 @@ public class GameController extends Controller {
      * playable characters. Mainmenu will call this to start map.
      * @param fileName name of map that will be created with startMap().
      */
-    public boolean startSingleplayerMap(String fileName) {
+    boolean startSingleplayerMap(String fileName) {
         isMultiplayer = false;
         mode = Mode.FRONT;
         return startMap(fileName);
@@ -271,7 +273,7 @@ public class GameController extends Controller {
      * another player to join server.
      * @param fileName name of map that will be created with startMap()
      */
-    public boolean startMultiplayerMap(String fileName, String name) {
+    boolean startMultiplayerMap(String fileName, String name) {
         server = new Server(name, 1337);
         if(!server.startServer(fileName))
             return false;
@@ -297,7 +299,7 @@ public class GameController extends Controller {
      * playable character. Switching between characters not enabled.
      * @param addr IP of other server
      */
-    public boolean joinMultiplayerMap(String addr, String name) {
+    boolean joinMultiplayerMap(String addr, String name) {
         server = new Server(name, 1337);
         if(!server.startServerAndClient(addr))
             return false;
@@ -360,7 +362,7 @@ public class GameController extends Controller {
     /**
      * Toggles pause and tells {@link MenuController} to swap to a pause menu
      */
-    public void togglePause() {
+    void togglePause() {
         isPaused = !isPaused;
         if(isPaused) ((MenuController)ctrl).swapMenu("Pause");
         else ((MenuController)ctrl).clearStage();
@@ -384,7 +386,7 @@ public class GameController extends Controller {
 
     /**
      * Sets {@link MenuController} for this controller.
-     * @param ctrl
+     * @param ctrl sets menucontroller for this controller
      */
     public void setController(MenuController ctrl) { super.setController(ctrl); }
 
