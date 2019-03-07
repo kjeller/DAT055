@@ -15,8 +15,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.dat055.controller.MenuController;
 
 /**
- * This is the groundwork for every menu. It is responsible for holding a table that will be populated by the inheriting
- * class. It also provides som standard styles for the menus and holds the menu background.
+ * This is the groundwork for every {@link Menu}. It is responsible for holding a {@link Table} that will be
+ * populated by the inheriting class. It also provides som standard styles for the menus and holds the menu background.
  *
  * @author Erik Börne
  * @version 2019-03-04
@@ -48,7 +48,7 @@ public abstract class Menu {
      * The standard constructor for {@link Menu}.
      * @param updatable Determines if the menu should be updated every few cycles.
      */
-    Menu(MenuController controller, boolean updatable) {
+    private Menu(MenuController controller, boolean updatable) {
         this(controller);
         this.updatable = updatable;
     }
@@ -80,7 +80,7 @@ public abstract class Menu {
      * Initializes the most common styles used in the menus.
      * @param height This is the height used for fonts.
      */
-    void initStyles(int height) {
+    private void initStyles(int height) {
         initTxtBtnStyle(height);
         initTxtFldStyle(height);
         initLblStyle(height);
@@ -207,14 +207,14 @@ public abstract class Menu {
      * @param style This is the {@link TextButtonStyle} that is used for the button produced.
      * @return The {@link TextButton} that has been produced.
      */
-    public TextButton createButton(String label, TextButtonStyle style) { return new TextButton(label, style); }
+    TextButton createButton(String label, TextButtonStyle style) { return new TextButton(label, style); }
 
     /**
      * Creates a text field that displays a given text. The maximum length of input is set to 24.
      * @param label Is the text that
      * @return The created text field.
      */
-    public TextField createTextField(String label) {
+    TextField createTextField(String label) {
         TextField tf = new TextField(label, txtFldStyle);
         tf.setMaxLength(24);
         return tf;
@@ -225,7 +225,7 @@ public abstract class Menu {
      * @param size Size is the fonts size in pixels.
      * @return The method returns the font created.
      */
-    public BitmapFont generateFont(int size) {
+    private BitmapFont generateFont(int size) {
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Cabin-SemiBold.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter params = new FreeTypeFontGenerator.FreeTypeFontParameter();
 
