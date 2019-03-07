@@ -77,11 +77,17 @@ public class GameController extends Controller {
         ((GameView)view).setRotation(rotation);
 
         // Time break
-        if(!isRotating && !isPaused) {
-            if(mode == Mode.FRONT || isMultiplayer)
+        if(!isRotating && !isPaused && !isMultiplayer) {
+            if(mode == Mode.FRONT)
                 map1.update(deltaTime);
-            else if(isMultiplayer)
+            else
                 map2.update(deltaTime);
+        }
+
+        // Multiplayer updates both maps
+        if(isMultiplayer) {
+            map1.update(deltaTime);
+            map2.update(deltaTime);
         }
 
         // Restart map if either of the maps are in that state (player is dead)
