@@ -24,6 +24,7 @@ import com.dat055.controller.MenuController;
  * @version 2019-03-06
  */
 public class PauseMenu extends Menu {
+    public boolean mute;
     private TextButton resume, settings, menu;
 
     /**
@@ -46,6 +47,8 @@ public class PauseMenu extends Menu {
 
         layoutTable(Gdx.graphics.getWidth()/4, Gdx.graphics.getHeight()/18);
     }
+    //todo: needs documentation
+    public void setMute(boolean foo) {mute = foo;}
 
     /**
      * This is the method that populates the table that exist in the inherited class {@link Menu}.
@@ -154,6 +157,8 @@ public class PauseMenu extends Menu {
             @Override
             public void exit (InputEvent event, float x, float y, int pointer, Actor toActor) {
                 menu.setStyle(txtBtnStyle);
+                controller.getCtrl().getModel().stopMusic();
+                controller.playMusic();
                 super.enter(event,x,y,pointer,toActor);
             }
         });

@@ -39,10 +39,10 @@ public class MenuModel extends Model {
 
     @Override
     public void playMusic(String ost) {
-        Music music = musicBank.get(ost);
-        if (ost.equals("title"))
-            music.setVolume(0.3f);
-        music.play();
+       Music music = musicBank.get(ost);
+       if (ost.equals("title"))
+           music.setVolume(0.3f);
+       music.play();
     }
 
     /**

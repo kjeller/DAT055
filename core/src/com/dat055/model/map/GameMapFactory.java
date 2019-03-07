@@ -129,7 +129,11 @@ public class GameMapFactory {
             } catch (Exception e) { System.out.println(e);
             }
         return new GameMap(jsonToTileMap(map, atlas),
-                getEntities(map, player), player, map.get(MAP_PROPERTIES).getString(MAP_DESC), map.get(MAP_PROPERTIES).getInt("width"));
+                getEntities(map, player), player,
+                map.get(MAP_PROPERTIES).getString(MAP_DESC),
+                map.get(MAP_PROPERTIES).getInt("width"),
+                map.get(MAP_PROPERTIES).getInt("height"),
+                TILESIZE);
     }
 
     /**

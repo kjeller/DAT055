@@ -22,6 +22,7 @@ public class MenuController extends Controller{
     private boolean isCharOne;
     private boolean charOneBlocked = false;
     private boolean charTwoBlocked = false;
+    public boolean mute;
     public String currentMap;
     public String name;
 
@@ -31,6 +32,7 @@ public class MenuController extends Controller{
      */
     public MenuController() {
         super(new MenuModel(), new MenuView());
+        mute = false;
 
         ((MenuModel)model).includeMenu("Main", new MainMenu(this));
         Gdx.input.setInputProcessor(((MenuModel)model).getStage());
@@ -44,6 +46,7 @@ public class MenuController extends Controller{
         ((MenuModel)model).includeMenu("Credits", new CreditsMenu(this));
         ((MenuModel)model).includeMenu("Finish", new FinishMenu(this));
         model.playMusic("title");
+        playMusic();
     }
 
     /**
@@ -134,6 +137,22 @@ public class MenuController extends Controller{
      * @param menu The key to the menu.
      */
     public void swapMenu(String menu) { ((MenuModel)model).swapMenu(menu); }
+
+    /**
+     * a method to mute the music
+     * @param foo a boolean to mute the music
+     */
+    public void setMute(boolean foo) {mute = foo;}
+
+    /**
+     * A method to play the music
+     */
+    public void playMusic(){
+        if(!mute)
+            model.playMusic("title");
+        else if(mute)
+            model.stopMusic();
+    }
 
     /**
      * Toggles the pause method located in {@link GameController}
