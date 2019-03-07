@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.dat055.model.map.GameMap;
 import com.dat055.model.map.GameMapFactory;
+import com.dat055.model.menu.SettingsMenu;
 
 /**
  * This class is responsible for loading game assets
@@ -49,10 +50,10 @@ public class GameModel extends Model {
      */
     @Override
     public void playMusic(String ost) {
-        Music music = musicBank.get(ost);
-        if (ost.equals("map_01"))
-            music.setVolume(0.3f);
-        music.play();
+       Music music = musicBank.get(ost);
+       if (ost.equals("map_01"))
+           music.setVolume(0.3f);
+       music.play();
     }
 
     /**

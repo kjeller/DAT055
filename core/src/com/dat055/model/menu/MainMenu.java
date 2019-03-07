@@ -8,8 +8,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.dat055.controller.MenuController;
 
 /**
- * This class is responsible for the creation of the main menu. It inherits from the class {@link Menu}, which is where
- * the menu table is stored.
+ * This class is responsible for the creation and functionality of the main menu. It inherits from the class
+ * {@link Menu}, which is where the menu table and styles are created and stored.
  *
  * @author Erik Börne
  * @version 2019-03-04
@@ -19,8 +19,9 @@ public class MainMenu extends Menu {
     private Label verNr;
 
     /**
-     * The constructor of {@link MainMenu}
-     * @param ctrl This is the {@link MenuController} that is used to swap menus and set flags.
+     * The default constructor of {@link MainMenu}.
+     * @param ctrl This is the {@link MenuController} that is used to swap menus, set flags and access
+     *             {@link com.dat055.controller.GameController}'s methods.
      */
     public MainMenu(MenuController ctrl) {
         super(ctrl,false, "UI/Delta.jpg");
@@ -48,9 +49,9 @@ public class MainMenu extends Menu {
     }
 
     /**
-     *
-     * @param butX
-     * @param butY
+     * This is the method that populates the table that exist in the inherited class {@link Menu}.
+     * @param butX This is the width of (primarily) buttons.
+     * @param butY This is the height of previously mentioned buttons.
      */
     private void layoutTable(int butX, int butY) {
         int padL, padS;
@@ -72,25 +73,33 @@ public class MainMenu extends Menu {
     }
 
     /**
-     * Adds a listener to every actor active in the table. A quite large method, but a necessary one at that.
+     * Adds listeners to every actor (button, text fields etc.).
      */
-
     private void addListeners() {
         play.addListener(new ClickListener() {
-
+            /**
+             * Overrides the method so that {@link MenuController} multiplayer flag is set false (singleplayer). Then
+             * swaps to {@link SelectMenu}.
+             */
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                controller.setMultiplayer(false);
+                controller.multiplayer = false;
                 controller.swapMenu("Select");
                 super.touchUp(event, x, y, pointer, button);
             }
 
+            /**
+             * Overrides the method so that the button changes to the style when the pointer is above it.
+             */
             @Override
             public void enter (InputEvent event, float x, float y, int pointer, Actor fromActor) {
                 play.setStyle(hoverStyle);
                 super.enter(event,x,y,pointer,fromActor);
             }
 
+            /**
+             * Overrides the method so that the button changes to its original style when the pointer leaves.
+             */
             @Override
             public void exit (InputEvent event, float x, float y, int pointer, Actor toActor) {
                 play.setStyle(txtBtnStyle);
@@ -99,23 +108,28 @@ public class MainMenu extends Menu {
         });
 
         multi.addListener(new ClickListener() {
-            @Override
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                return true;
-            }
-
-            @Override
+            /**
+             * Overrides the method so that {@link MenuController} multiplayer flag is set to true. Then swaps to the
+             * {@link MultiMenu}.
+             */
+           @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                controller.setMultiplayer(true);
+                controller.multiplayer = true;
                 controller.swapMenu("Multiplayer");
             }
 
+            /**
+             * Overrides the method so that the button changes to the style when the pointer is above it.
+             */
             @Override
             public void enter (InputEvent event, float x, float y, int pointer, Actor fromActor) {
                 multi.setStyle(hoverStyle);
                 super.enter(event,x,y,pointer,fromActor);
             }
 
+            /**
+             * Overrides the method so that the button changes to its original style when the pointer leaves.
+             */
             @Override
             public void exit (InputEvent event, float x, float y, int pointer, Actor toActor) {
                 multi.setStyle(txtBtnStyle);
@@ -124,18 +138,28 @@ public class MainMenu extends Menu {
         });
 
         settings.addListener(new ClickListener() {
+            /**
+             * Overrides the method so that {@link MenuController} multiplayer flag is set false (singleplayer), then
+             * swaps to {@link SettingsMenu}.
+             */
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 controller.swapMenu("Settings");
                 super.touchUp(event, x, y, pointer, button);
             }
 
+            /**
+             * Overrides the method so that the button changes to the style when the pointer is above it.
+             */
             @Override
             public void enter (InputEvent event, float x, float y, int pointer, Actor fromActor) {
                 settings.setStyle(hoverStyle);
                 super.enter(event,x,y,pointer,fromActor);
             }
 
+            /**
+             * Overrides the method so that the button changes to its original style when the pointer leaves.
+             */
             @Override
             public void exit (InputEvent event, float x, float y, int pointer, Actor toActor) {
                 settings.setStyle(txtBtnStyle);
@@ -144,23 +168,27 @@ public class MainMenu extends Menu {
         });
 
         exit.addListener(new ClickListener() {
-            @Override
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                return true;
-            }
-
+            /**
+             * Overrides the method so that the application is shutdown when the button is clicked.
+             */
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 Gdx.app.exit();
                 super.touchUp(event, x, y, pointer, button);
             }
 
+            /**
+             * Overrides the method so that the button changes to the style when the pointer is above it.
+             */
             @Override
             public void enter (InputEvent event, float x, float y, int pointer, Actor fromActor) {
                 exit.setStyle(hoverStyle);
                 super.enter(event,x,y,pointer,fromActor);
             }
 
+            /**
+             * Overrides the method so that the button changes to its original style when the pointer leaves.
+             */
             @Override
             public void exit (InputEvent event, float x, float y, int pointer, Actor toActor) {
                 exit.setStyle(txtBtnStyle);
@@ -169,23 +197,27 @@ public class MainMenu extends Menu {
         });
 
         credits.addListener(new ClickListener() {
-            @Override
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                return true;
-            }
-
+            /**
+             * Overrides the method so that {@link MenuController} swaps to the .
+             */
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 controller.swapMenu("Finish");
                 super.touchUp(event, x, y, pointer, button);
             }
 
+            /**
+             * Overrides the method so that the button changes to the style when the pointer is above it.
+             */
             @Override
             public void enter (InputEvent event, float x, float y, int pointer, Actor fromActor) {
                 credits.setStyle(hoverStyle);
                 super.enter(event,x,y,pointer,fromActor);
             }
 
+            /**
+             * Overrides the method so that the button changes to its original style when the pointer leaves.
+             */
             @Override
             public void exit (InputEvent event, float x, float y, int pointer, Actor toActor) {
                 credits.setStyle(txtBtnStyle);

@@ -12,7 +12,7 @@ import com.badlogic.gdx.utils.ObjectMap;
  */
 public abstract class Model {
     ObjectMap<String, Music> musicBank;
-    Model() {}
+    Model() { musicBank = new ObjectMap<String, Music>(); }
     public abstract void initMusic();
     public abstract void playMusic(String ost);
 

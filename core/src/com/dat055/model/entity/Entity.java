@@ -83,7 +83,7 @@ public abstract class Entity extends Observable {
      * @param sound the filename
      */
     protected void playSound(String sound) {
-        soundBank.get(sound).play();
+            soundBank.get(sound).play();
     }
 
     /**
