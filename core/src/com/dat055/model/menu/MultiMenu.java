@@ -125,8 +125,7 @@ public class MultiMenu extends Menu {
              */
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                controller.host = true;
-                controller.startGame();
+                controller.swapMenu("Select");
                 super.touchUp(event, x, y, pointer, button);
             }
 

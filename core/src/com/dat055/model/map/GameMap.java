@@ -24,6 +24,8 @@ public class GameMap {
     private String name;  // name of map
     private TileMap tileMap;
     private int width;
+    private int height;
+    private int tileSize;
 
     private ArrayList<Entity> entities; // List of all entities on map, players included
     private Player player;  // a reference to player - makes it easier to control player
@@ -40,12 +42,15 @@ public class GameMap {
      * @param name
      * @param width
      */
-    public GameMap(TileMap tileMap, ArrayList<Entity> entities, Player player, String name, int width) {
+    public GameMap(TileMap tileMap, ArrayList<Entity> entities,
+                   Player player, String name, int width, int height, int tileSize) {
         this.tileMap = tileMap;
         this.entities = entities;
         this.player = player;
         this.name = name;
         this.width = width;
+        this.height = height;
+        this.tileSize = tileSize;
         restart = false;
         colHandler = new CollisionHandler(this);
     }
@@ -163,9 +168,24 @@ public class GameMap {
     public boolean getRestart() { return restart; }
 
     /**
-     * @return width of this map
+     * @return width of this map in tiles
      */
     public int getWidth(){ return width; }
+
+    /**
+     * @return width of this map in pixels
+     */
+    public int getWidthPixels() { return width*tileSize; }
+
+    /**
+     * @return height of this map
+     */
+    public int getHeight() { return height; }
+
+    /**
+     * @return height of this map in pixels
+     */
+    public int getHeightPixels() { return height*64; }
 
     /**
      * @return true if finished

@@ -43,6 +43,9 @@ public class MenuController extends Controller{
         ((MenuModel)model).includeMenu("Select", new SelectMenu(this));
         ((MenuModel)model).includeMenu("Character", new CharacterMenu(this));
         ((MenuModel)model).includeMenu("Settings", new SettingsMenu(this));
+        ((MenuModel)model).includeMenu("Credits", new CreditsMenu(this));
+        ((MenuModel)model).includeMenu("Finish", new FinishMenu(this));
+        model.playMusic("title");
         playMusic();
     }
 
@@ -128,8 +131,6 @@ public class MenuController extends Controller{
      * @return True, if partner is character two, otherwise false.
      */
     public boolean isCharTwoBlocked() { return charTwoBlocked; }
-
-    public void setMultiplayer(boolean b) { multiplayer = b; }
 
     /**
      * Swaps the {@link Menu} to the specified key.

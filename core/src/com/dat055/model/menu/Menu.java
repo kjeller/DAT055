@@ -48,7 +48,7 @@ public abstract class Menu {
      * The standard constructor for {@link Menu}.
      * @param updatable Determines if the menu should be updated every few cycles.
      */
-    private Menu(MenuController controller, boolean updatable) {
+    Menu(MenuController controller, boolean updatable) {
         this(controller);
         this.updatable = updatable;
     }
@@ -192,6 +192,14 @@ public abstract class Menu {
      * @return The background image used by the menu.
      */
     public Image getBg() { return bg; }
+
+    /**
+     * A set method for the menu's background. Only to be used by inheriting classes.
+     * @return The background image used by the menu.
+     */
+    protected void setBg(Image newBg) {
+        bg = newBg;
+    }
 
     /**
      * Creates a {@link TextButton} with a text label. Uses the standard skin.
