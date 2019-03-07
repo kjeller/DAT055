@@ -206,7 +206,7 @@ public class SettingsMenu extends Menu {
                 settingsMap.put("resolutionY", resFieldY.getText());
                 settingsMap.put("fullscreen", fulField.getText());
                 settingsMap.put("mute", musField.getText());
-                settingsMap.put("soundeffects", soundField.getText());
+                settingsMap.put("muteeffects", soundField.getText());
 
                 if (inputSanitizer()) {
                     try {
@@ -249,14 +249,25 @@ public class SettingsMenu extends Menu {
     }
 
     /**
-     * initialises the config file
+     * initialises the config file and creates one in case of it does not exist
      */
     private void initConfig(){
         try {
             settingsMap = ConfigIO.load("config.txt");
         }
         catch(IOException e){
-            System.out.println("OH,Sugar Honey Ice Tea");
+            System.out.println("config.txt does not exist");
+            settingsMap.put("resolutionX","1280");
+            settingsMap.put("resolutionY","720");
+            settingsMap.put("fullscreen","0");
+            settingsMap.put("mute","0");
+            settingsMap.put("muteeffects","0");
+            try {
+                ConfigIO.save(settingsMap, "config.txt");
+            }
+            catch(IOException i){
+                System.out.println("OhNo!");
+            }
         }
     }
 
@@ -269,7 +280,7 @@ public class SettingsMenu extends Menu {
     }
 
     /**
-     * sanitises the height inputs
+     * sanitizes the height inputs
      */
     private boolean resSanitizerX(){
         if( settingsMap.put("resolutionX", resFieldX.getText()).equals( "1280") ) //1280x720
@@ -278,9 +289,8 @@ public class SettingsMenu extends Menu {
             return true;
         else if (settingsMap.put("resolutionX", resFieldX.getText()).equals("1366")) //1366x768
             return true;
-        else if ( settingsMap.put("resolutionX", resFieldX.getText()).equals("1600")) //1600x900
-            return true;
-        return false;
+        return (settingsMap.put("resolutionX", resFieldX.getText()).equals("1600")); //1600x900
+
     }
 
     /**
@@ -293,9 +303,8 @@ public class SettingsMenu extends Menu {
             return true;
         else if (settingsMap.put("resolutionY", resFieldY.getText()).equals("768")) //1366x768
             return true;
-        else if ( settingsMap.put("resolutionY", resFieldY.getText()).equals("900")) //1600x900
-            return true;
-        return false;
+        return ( settingsMap.put("resolutionY", resFieldY.getText()).equals("900")); //1600x900
+
     }
 
     /**
@@ -304,9 +313,7 @@ public class SettingsMenu extends Menu {
     private boolean fulSanitizer(){
         if (settingsMap.put("fullscreen", fulField.getText()).equals("1"))
             return true;
-        else if (settingsMap.put("fullscreen", fulField.getText()).equals("0"))
-            return true;
-        return false;
+        return(settingsMap.put("fullscreen", fulField.getText()).equals("0"));
     }
 
     /**
@@ -315,19 +322,15 @@ public class SettingsMenu extends Menu {
     private boolean musicSanitizer(){
         if(settingsMap.put("mute", musField.getText()).equals("1"))
             return true;
-        else if( settingsMap.put("mute", musField.getText()).equals("0"))
-            return true;
-        return false;
+        return ( settingsMap.put("mute", musField.getText()).equals("0"));
     }
 
     /**
-     * makes sure that muteeffects is 1 or 0
+     * makes sure that mute effects is 1 or 0
      */
     private boolean soundSanitizer(){
         if (settingsMap.put("muteeffects", soundField.getText()).equals("1"))
             return true;
-        else if (settingsMap.put("muteeffects", soundField.getText()).equals("0"))
-            return true;
-        return false;
+        return (settingsMap.put("muteeffects", soundField.getText()).equals("0"));
     }
 }
