@@ -176,6 +176,7 @@ public class SettingsMenu extends Menu {
                     System.out.println("You can't do that Dave");
             }
         });
+
         save.addListener(new ClickListener() {
             /**
              * Overrides the method so that the button changes to the style when the pointer is above it.

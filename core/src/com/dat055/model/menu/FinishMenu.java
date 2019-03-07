@@ -33,7 +33,7 @@ public class FinishMenu extends Menu {
         int height = Gdx.graphics.getHeight()/18;
 
         // Create the actors
-        proceed = createButton("Back to menu");
+        proceed = createButton("Continue");
 
         // Add listeners to the actors
         addListeners();
