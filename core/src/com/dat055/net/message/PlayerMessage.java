@@ -1,6 +1,7 @@
 package com.dat055.net.message;
 
 import com.badlogic.gdx.math.Vector2;
+import com.dat055.model.entity.character.Hook;
 import com.dat055.model.entity.character.Player;
 
 /**
@@ -13,6 +14,7 @@ public class PlayerMessage extends Message {
     private Vector2 position;
     private Vector2 lookingDirection;
     boolean isAlive;
+    private Hook hook;
 
     /**
      * Default constructor for {@link PlayerMessage}
@@ -24,6 +26,7 @@ public class PlayerMessage extends Message {
         this.position = player.getPosition();
         this.lookingDirection = player.getDirection();
         this.isAlive = player.getIsAlive();
+        this.hook = player.getHook();
     }
 
     /**
@@ -43,6 +46,8 @@ public class PlayerMessage extends Message {
         player.setPosition(position);
         player.setLookingDirection(lookingDirection);
         player.setIsAlive(isAlive);
+        if(hook != null)
+            player.setHook(hook);
     }
 
     public Vector2 getDir() { return lookingDirection; }

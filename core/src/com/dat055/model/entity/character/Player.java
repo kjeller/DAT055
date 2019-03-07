@@ -151,6 +151,7 @@ public class Player extends Character {
             isInvincible = false;
     }
 
+
     /**
      * Method used to slowly stabilize the player's max velocity to normal after hooking.
      * @param deltaTime time since last frame.
@@ -169,6 +170,14 @@ public class Player extends Character {
         if (hook != null)
             return hook;
         return null;
+    }
+
+    /**
+     * Sets hook for this player
+     * @param hook that is set
+     */
+    public void setHook(Hook hook) {
+        this.hook = hook;
     }
 
     /**

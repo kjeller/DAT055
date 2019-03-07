@@ -61,9 +61,7 @@ public class Client extends Thread{
                 Thread.sleep(1);
             } catch (InterruptedException ignored) {}
             if(cs != null) {
-                if(cs.isConnected()) {
-                    udpHandler.send(ds, data, hostname, port);
-                } else {
+                if(!cs.isConnected()) {
                     interrupt();
                 }
             }
@@ -72,10 +70,11 @@ public class Client extends Thread{
 
     /**
      * Sets data that will be carried in a datagram packet
+     * and send packet.
      * @param data that will be sent in packet
      */
     public void setPacketData(byte[] data) {
-        this.data = data;
+        udpHandler.send(ds, data, hostname, port);
     }
 
     public boolean isConnected() { return cs.isConnected(); }

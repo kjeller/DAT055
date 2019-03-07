@@ -104,6 +104,9 @@ public class Server extends Thread{
 
     public void run() {
         while(!interrupted()) {
+            try {
+                Thread.sleep(1);
+            } catch (InterruptedException ignored) {}
             // If there exist no socket connected to server
             if(cs == null) {
                     initialize(); // Initialize server and get socket connected.
