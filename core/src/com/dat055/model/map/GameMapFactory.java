@@ -66,7 +66,7 @@ public class GameMapFactory {
         try {
             nextMap = root.get(MAP_PROPERTIES).getString("nextmap"); // Sets next map
         } catch (Exception x) {
-            nextMap = "Noone.";
+            nextMap = "None.";
         }
 
         // Reads every and creates a gamemap for every map

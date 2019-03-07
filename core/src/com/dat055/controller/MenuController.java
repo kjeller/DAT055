@@ -144,6 +144,8 @@ public class MenuController extends Controller{
      */
     public void setMute(boolean foo) {mute = foo;}
 
+    public void closeGame() { ((GameController)ctrl).closeGame();}
+
     /**
      * A method to play the music
      */

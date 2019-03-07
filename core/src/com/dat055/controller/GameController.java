@@ -213,8 +213,12 @@ public class GameController extends Controller {
      * @param fileName of a json file in assets/maps/
      */
     private boolean startMap(String fileName) {
-        if(fileName.equals("Noone.")){}
-            //TODO: Change to "finished"
+        // if there is no more map after current
+        if(fileName.equals("None.")) {
+            ((MenuController)ctrl).swapMenu("Finish");
+            return true;
+        }
+
         ((GameModel)model).createMap(fileName);
 
         map1 = ((GameModel)model).getGameMap1();
@@ -337,6 +341,15 @@ public class GameController extends Controller {
     }
 
     // === Toggle methods and helper methods ==
+
+    /**
+     * Closes current game session and multiplayer session
+     * if running.
+     */
+    public void closeGame() {
+        if(isMultiplayer)
+            server.close();
+    }
 
     /**
      * Decides who is the top player based on {@link Mode}.

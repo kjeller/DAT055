@@ -1,5 +1,5 @@
 {
-  "properties" : {"id" : 0, "name" : "debug map", "nextmap" : "maps/map_1.json"},
+  "properties" : {"id" : 0, "name" : "debug map"},
   "map" : [{
     "properties" : {"width" : 24, "height": 12, "desc" : "light",
       "sprite" : "textures/spritesheets/tileMap/tileSheet_0.atlas",

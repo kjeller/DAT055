@@ -124,7 +124,7 @@ public class Server extends Thread{
     /**
      * Closes sockets and interrupts threads.
      */
-    private void close() {
+    public void close() {
         try {
             ss.close();
         } catch (IOException ignored) {}
