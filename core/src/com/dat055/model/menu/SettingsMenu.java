@@ -7,7 +7,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.dat055.controller.MenuController;
-import com.sun.istack.internal.NotNull;
 
 import java.io.IOException;
 import java.util.Map;
