@@ -48,7 +48,7 @@ public abstract class Menu {
      * The standard constructor for {@link Menu}.
      * @param updatable Determines if the menu should be updated every few cycles.
      */
-    private Menu(MenuController controller, boolean updatable) {
+    Menu(MenuController controller, boolean updatable) {
         this(controller);
         this.updatable = updatable;
     }

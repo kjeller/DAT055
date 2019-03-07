@@ -31,17 +31,18 @@ public class SelectMenu extends Menu {
      *             {@link com.dat055.controller.GameController}'s methods.
      */
     public SelectMenu(MenuController ctrl) {
-        super(ctrl, false, "UI/bg/Singleplayer.png");
+        super(ctrl, false);
         textButtonGroup = new ButtonGroup<TextButton>();
         textButtonGroup.setMaxCheckCount(1);
         textButtonGroup.setMinCheckCount(0);
         textButtonGroup.setUncheckLast(true);
-        if(controller.multiplayer) setBg(new Image(new Texture("UI/Bg/Host.png")));
         createTable();
     }
 
     @Override
     public void createTable() {
+        setBg(new Image(new Texture((controller.multiplayer) ? "UI/Bg/Host.png" : "UI/Bg/Singleplayer.png")));
+
         back = createButton("Back");
         select = createButton("Select");
 
