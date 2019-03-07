@@ -13,6 +13,7 @@ public class Player extends Character {
     private boolean isInvincible;
     private float iframes;
     private boolean movingWithHook;
+    private boolean hookJustFired; // Used to update hook in multiplayer
 
     /**
      * Sets movingWithHook and isInvincible to default values.
@@ -87,8 +88,10 @@ public class Player extends Character {
      * Method used to generate a new hook.
      * @return the newly generated hook.
      */
-    private Hook generateHook() {
-        return new Hook(new Vector2(position), 20, 20, 250.0f, lookingDirection);
+    public Hook generateHook() {
+        hookJustFired = true;
+        return new Hook(new Vector2(position),
+            20, 20, 250.0f, lookingDirection);
     }
 
     /**
@@ -96,6 +99,7 @@ public class Player extends Character {
      * @param deltaTime time since last frame.
      */
     private void hookUpdate(float deltaTime) {
+        hookJustFired = false;
         hook.setPlayerPosX((int)rect.x);
         hook.setOriginPosition(new Vector2(rect.x, rect.y));
         hook.update(deltaTime);
@@ -187,6 +191,8 @@ public class Player extends Character {
     public boolean getInvincible() {
         return isInvincible;
     }
+
+    public boolean getHookJustFired() { return hookJustFired; }
 
     /**
      * Get debug text for player.

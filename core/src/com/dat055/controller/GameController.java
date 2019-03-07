@@ -78,9 +78,9 @@ public class GameController extends Controller {
 
         // Time break
         if(!isRotating && !isPaused) {
-            if(mode == Mode.FRONT)
+            if(mode == Mode.FRONT || isMultiplayer)
                 map1.update(deltaTime);
-            else
+            else if(isMultiplayer)
                 map2.update(deltaTime);
         }
 
@@ -100,6 +100,9 @@ public class GameController extends Controller {
         if(isMultiplayer && server.isRunning()) {
             // Only send updates if player is in motion
             if(currentPlayer.getInMotion())
+                server.sendPlayerUpdate(currentPlayer);
+
+            if(currentPlayer.getHook() != null)
                 server.sendPlayerUpdate(currentPlayer);
 
             // Update remote player's character

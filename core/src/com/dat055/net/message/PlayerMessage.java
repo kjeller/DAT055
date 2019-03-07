@@ -14,7 +14,7 @@ public class PlayerMessage extends Message {
     private Vector2 position;
     private Vector2 lookingDirection;
     boolean isAlive;
-    private Hook hook;
+    private boolean isHookFired; // true if hook just fired
 
     /**
      * Default constructor for {@link PlayerMessage}
@@ -26,7 +26,7 @@ public class PlayerMessage extends Message {
         this.position = player.getPosition();
         this.lookingDirection = player.getDirection();
         this.isAlive = player.getIsAlive();
-        this.hook = player.getHook();
+        isHookFired = player.getHookJustFired();
     }
 
     /**
@@ -46,8 +46,8 @@ public class PlayerMessage extends Message {
         player.setPosition(position);
         player.setLookingDirection(lookingDirection);
         player.setIsAlive(isAlive);
-        if(hook != null)
-            player.setHook(hook);
+        if(isHookFired)
+            player.generateHook();
     }
 
     public Vector2 getDir() { return lookingDirection; }
