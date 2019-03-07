@@ -33,7 +33,7 @@ public class MultiMenu extends Menu {
      *             {@link com.dat055.controller.GameController}'s methods.
      */
     public MultiMenu(MenuController ctrl) {
-        super(ctrl, false, "UI/Delta.jpg");
+        super(ctrl, false, "UI/Bg/Multiplayer.png");
         createTable();
     }
 
@@ -69,7 +69,7 @@ public class MultiMenu extends Menu {
         table.setPosition(0,0);
 
         table.add(address).width(butX).height(butY).padBottom(padS).expandX().colspan(2).row();
-        table.add(join).width(butX).height(butY).padBottom(padL).colspan(2).row();
+        table.add(join).width(butX).height(butY).padBottom(padL+padS*3).colspan(2).row();
         table.add(back).width(butX>>1).height(butY).padLeft(padS).padBottom(padS).left();
         table.add(host).width(butX>>1).height(butY).padRight(padS).padBottom(padS).right();
     }
