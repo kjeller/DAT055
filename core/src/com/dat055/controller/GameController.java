@@ -34,6 +34,7 @@ public class GameController extends Controller {
     private GameMap map1, map2;
     private Player currentPlayer, player1, player2;
     private OrthographicCamera cam;
+    private Vector2 viewDistance;
 
     // Booleans that describes different game states
     private boolean isRotating, isPaused, isDebug, isMultiplayer, isRunning;
@@ -114,17 +115,19 @@ public class GameController extends Controller {
         float lerp = 2f;
         Vector2 playerPosition = currentPlayer.getPosition();
         Vector3 camPosition = cam.position;
+
         camPosition.x += Math.round((playerPosition.x - camPosition.x) * lerp * deltaTime);
         camPosition.y += Math.round((playerPosition.y - camPosition.y) * lerp * deltaTime);
 
-        if(camPosition.x  >= ((map1.getWidth() - 10) *  60) ) {
-            cam.position.x = (map1.getWidth() -10) *  60 ;
-        }
-        if(camPosition.x - 66*10 <= 0)
-            cam.position.x = 66*10;
+        // Forces camera inside bounds no zoom.
+        if(camPosition.x + viewDistance.x > map1.getWidthPixels())
+            cam.position.x = (int)(map1.getWidthPixels() - viewDistance.x);
 
-        if(camPosition.y >= (map1.getWidth() -10) *  60 )
-            cam.position.y = (map1.getWidth() -10) *  60 ;
+        if(camPosition.x - viewDistance.x < 0)
+            cam.position.x = (int) viewDistance.x;
+
+        if(camPosition.y + viewDistance.y > map1.getHeightPixels())
+            cam.position.y = (int)(map1.getHeightPixels() - viewDistance.y);
         cam.update();
     }
 
@@ -222,6 +225,7 @@ public class GameController extends Controller {
 
         // Set camera position to current player to avoid panning to player at start
         Vector2 camStartPos = currentPlayer.getPosition().cpy();
+        viewDistance = ((GameModel)model).getCamViewDistance();
         cam.position.set(new Vector3(camStartPos.x, camStartPos.y, 0));
         model.playMusic("map_01");
         return true; //TODO: Fix a return false which indicates if map created successfully or not

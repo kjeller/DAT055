@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.dat055.model.map.GameMap;
 import com.dat055.model.map.GameMapFactory;
@@ -21,6 +22,7 @@ public class GameModel extends Model {
     private BitmapFont debugFont;
     private String currentMap;
     private String nextMap;
+    private Vector2 camViewDistance;
 
     /**
      * Default constructor
@@ -63,7 +65,10 @@ public class GameModel extends Model {
         map1 = mapFactory.getMap();
         map2 = mapFactory.getMap();
         nextMap = mapFactory.getNextMap();
-        cam = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        int width = 1280;
+        int height = 720;
+        cam = new OrthographicCamera(width, height);
+        camViewDistance = new Vector2((float)width/2, (float)height/2);
     }
 
     /**
@@ -87,6 +92,11 @@ public class GameModel extends Model {
     public OrthographicCamera getCam() {return cam;}
 
     /**
+     * @return gets camera bounds
+     */
+    public Vector2 getCamViewDistance() { return camViewDistance; }
+
+    /**
      * @return filepath to next map.
      */
     public String getNextMap() { return nextMap; }
@@ -97,4 +107,5 @@ public class GameModel extends Model {
     public String getCurrentMap() {
         return currentMap;
     }
+
 }
