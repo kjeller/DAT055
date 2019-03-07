@@ -57,6 +57,9 @@ public class Client extends Thread{
 
     public void run() {
         while(!interrupted()) {
+            try {
+                Thread.sleep(1);
+            } catch (InterruptedException ignored) {}
             if(cs != null) {
                 if(cs.isConnected()) {
                     udpHandler.send(ds, data, hostname, port);
