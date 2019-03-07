@@ -1,6 +1,0 @@
-fullscreen:1
-mute:0
-muteeffects:0
-resolutionX:1920
-resolutionY:1080
-soundeffects:0
