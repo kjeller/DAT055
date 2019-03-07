@@ -3,6 +3,7 @@ package com.dat055.model.menu;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -30,11 +31,12 @@ public class SelectMenu extends Menu {
      *             {@link com.dat055.controller.GameController}'s methods.
      */
     public SelectMenu(MenuController ctrl) {
-        super(ctrl, false, "UI/Delta.jpg");
+        super(ctrl, false, "UI/bg/Singleplayer.png");
         textButtonGroup = new ButtonGroup<TextButton>();
         textButtonGroup.setMaxCheckCount(1);
         textButtonGroup.setMinCheckCount(0);
         textButtonGroup.setUncheckLast(true);
+        if(controller.multiplayer) setBg(new Image(new Texture("UI/Bg/Host.png")));
         createTable();
     }
 

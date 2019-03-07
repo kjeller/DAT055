@@ -14,16 +14,16 @@ import com.dat055.controller.MenuController;
  * @author Erik Börne
  * @version 2019-03-04
  */
-public class CreditsMenu extends Menu {
-    private TextButton back;
+public class FinishMenu extends Menu {
+    private TextButton proceed;
 
     /**
      * The default constructor of {@link CreditsMenu}.
      * @param ctrl This is the {@link MenuController} that is used to swap menus, set flags and access
      *             {@link com.dat055.controller.GameController}'s methods.
      */
-    public CreditsMenu(MenuController ctrl) {
-        super(ctrl,false, "UI/Bg/Credits.png");
+    public FinishMenu(MenuController ctrl) {
+        super(ctrl,false, "UI/Bg/Finish.png");
         createTable();
     }
 
@@ -33,7 +33,7 @@ public class CreditsMenu extends Menu {
         int height = Gdx.graphics.getHeight()/18;
 
         // Create the actors
-        back = createButton("Back to menu");
+        proceed = createButton("Back to menu");
 
         // Add listeners to the actors
         addListeners();
@@ -55,14 +55,14 @@ public class CreditsMenu extends Menu {
 
         table.setPosition(0, 0);
 
-        table.add(back).width(butX>>1).height(butY).padRight(padS).padBottom(padS).expandX().right();
+        table.add(proceed).width(butX>>1).height(butY).padRight(padS).padBottom(padS).expandX().right();
     }
 
     /**
      * Adds listeners to every actor (button, text fields etc.).
      */
     private void addListeners() {
-        back.addListener(new ClickListener() {
+        proceed.addListener(new ClickListener() {
             /**
              * Overrides the method so that {@link MenuController} swaps back to the {@link MainMenu}.
              */
@@ -77,7 +77,7 @@ public class CreditsMenu extends Menu {
              */
             @Override
             public void enter (InputEvent event, float x, float y, int pointer, Actor fromActor) {
-                back.setStyle(hoverStyle);
+                proceed.setStyle(hoverStyle);
                 super.enter(event,x,y,pointer,fromActor);
             }
 
@@ -86,7 +86,7 @@ public class CreditsMenu extends Menu {
              */
             @Override
             public void exit (InputEvent event, float x, float y, int pointer, Actor toActor) {
-                back.setStyle(txtBtnStyle);
+                proceed.setStyle(txtBtnStyle);
                 super.enter(event,x,y,pointer,toActor);
             }
         });

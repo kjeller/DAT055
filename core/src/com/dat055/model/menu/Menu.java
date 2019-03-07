@@ -194,6 +194,14 @@ public abstract class Menu {
     public Image getBg() { return bg; }
 
     /**
+     * A set method for the menu's background. Only to be used by inheriting classes.
+     * @return The background image used by the menu.
+     */
+    protected void setBg(Image newBg) {
+        bg = newBg;
+    }
+
+    /**
      * Creates a {@link TextButton} with a text label. Uses the standard skin.
      * @param label This is the text that is displayed on the button
      * @return The {@link TextButton} that has been produced.

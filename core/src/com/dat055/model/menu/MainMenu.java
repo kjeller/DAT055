@@ -24,7 +24,7 @@ public class MainMenu extends Menu {
      *             {@link com.dat055.controller.GameController}'s methods.
      */
     public MainMenu(MenuController ctrl) {
-        super(ctrl,false, "UI/Delta.jpg");
+        super(ctrl,false, "UI/Bg/Main.png");
         createTable();
     }
 
@@ -202,7 +202,7 @@ public class MainMenu extends Menu {
              */
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                controller.swapMenu("Finish");
+                controller.swapMenu("Credits");
                 super.touchUp(event, x, y, pointer, button);
             }
 
