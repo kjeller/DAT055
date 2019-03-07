@@ -1,5 +1,6 @@
-fullscreen:0
+fullscreen:1
 mute:0
-resolutionX:1280
-resolutionY:720
-soundeffects:1
+muteeffects:0
+resolutionX:1920
+resolutionY:1080
+soundeffects:0

@@ -1,25 +1,24 @@
 package com.dat055.model.menu;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.*;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.NinePatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.utils.Align;
-import com.dat055.Game;
 import com.dat055.controller.MenuController;
-import com.dat055.model.Model;
+import com.sun.istack.internal.NotNull;
 
 import java.io.IOException;
 import java.util.Map;
 import java.util.TreeMap;
 
-
+/**
+ * This Class is responsible for creating the settings menu.
+ *
+ * @author Pontus Johansson
+ * @version 2019-03-07
+ */
 public class SettingsMenu extends Menu {
     private MenuController controller;
     private TextButton apply ,save ,back;
@@ -27,8 +26,12 @@ public class SettingsMenu extends Menu {
     private TextField resFieldX,resFieldY,fulField,musField,soundField;
     private String resSettingX,resSettingY,fulSetting,musSetting,soundSetting;
     private int resX,resY,fulInt,mutInt;
-    private boolean muteBool;
     private Map<String,String> settingsMap;
+
+    /**
+     * The constructor for the settingsMenu
+     * @param ctrl a menucontroller
+     */
     public SettingsMenu(MenuController ctrl) {
         super(ctrl, false, "UI/Delta.jpg");
 
@@ -39,9 +42,12 @@ public class SettingsMenu extends Menu {
         createTable();
     }
 
+    /**
+     * overrides the method
+     * Creates the buttons and text
+     */
     @Override
     protected void createTable() {
-        // Table table = new Table();
         Table table = new Table();
 
         table.setWidth(controller.getWidth());
@@ -50,38 +56,35 @@ public class SettingsMenu extends Menu {
 
         table.setPosition(0, 0);
 
-        //Buttons <-- todo: rework these
+        //creates the Buttons in the menu
         save = createButton("Save");
         apply = createButton("Apply");
         back = createButton("Back");
 
-        //Settings <-- todo: rework these
+        //gets settings from the config file
         resSettingX = settingsMap.get("resolutionX");
         resSettingY = settingsMap.get("resolutionY");
         fulSetting = settingsMap.get("fullscreen");
         musSetting = settingsMap.get("mute");
-        soundSetting = settingsMap.get("soundeffects");
+        soundSetting = settingsMap.get("muteeffects");
 
-
-        //Textfield <-- todo: rework these
+        //The inputFields
         resFieldX = createTextField(resSettingX);
         resFieldY = createTextField(resSettingY);
         fulField = createTextField(fulSetting);
         musField = createTextField(musSetting);
         soundField = createTextField(soundSetting);
 
-
-        //Texts <-- todo: rework these
+        //The texts in the menu
         resolutionX = new Label("Screen width",lblStyle);
         resolutionY = new Label("Screen height",lblStyle);
         fullscreen = new Label("Fullscreen",lblStyle);
         mute = new Label("Mute music",lblStyle);
-        sound = new Label("Sound",lblStyle);
-
+        sound = new Label("Mute effects",lblStyle);
 
         addListeners();
 
-        table.debug(); // todo: remove
+        // creates the table
         table.add(back).width(150).height(40);
         table.add(save).width(170).height(40);
         table.add(apply).width(170).height(40).row();
@@ -104,16 +107,42 @@ public class SettingsMenu extends Menu {
         super.table = table;
     }
 
-    public boolean getMute(){
-        return muteBool;
+    /**
+     *Method that makes the string from the config.txt into int
+     * @param strn name of the config
+     * @return the specified config in int
+     */
+    private int parseInt(String strn){
+        return Integer.parseInt(settingsMap.get(strn));
     }
 
+    /**
+     * Adds listeners for the buttons
+     */
     private void addListeners() {
         apply.addListener(new ClickListener() {
+            /**
+             * Overrides the method so that the button changes to the style when the pointer is above it.
+             */
             @Override
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                return true;
+            public void enter (InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                apply.setStyle(hoverStyle);
+                super.enter(event,x,y,pointer,fromActor);
             }
+
+            /**
+             * Overrides the method so that the button changes to its original style when the pointer leaves.
+             */
+            @Override
+            public void exit (InputEvent event, float x, float y, int pointer, Actor toActor) {
+                apply.setStyle(txtBtnStyle);
+                super.enter(event,x,y,pointer,toActor);
+            }
+
+            /**
+             * Override of method
+             * gets the new settings from inputfields and applies them
+             */
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 settingsMap.put("resolutionX", resFieldX.getText());
@@ -149,10 +178,27 @@ public class SettingsMenu extends Menu {
             }
         });
         save.addListener(new ClickListener() {
+            /**
+             * Overrides the method so that the button changes to the style when the pointer is above it.
+             */
             @Override
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                return true;
+            public void enter (InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                save.setStyle(hoverStyle);
+                super.enter(event,x,y,pointer,fromActor);
             }
+
+            /**
+             * Overrides the method so that the button changes to its original style when the pointer leaves.
+             */
+            @Override
+            public void exit (InputEvent event, float x, float y, int pointer, Actor toActor) {
+                save.setStyle(txtBtnStyle);
+                super.enter(event,x,y,pointer,toActor);
+            }
+
+            /**
+             * overrides the method and saves the inputFields to the config.txt
+             */
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
 
@@ -174,11 +220,26 @@ public class SettingsMenu extends Menu {
             }
         });
         back.addListener(new ClickListener() {
+            /**
+             * Overrides the method so that the button changes to the style when the pointer is above it.
+             */
             @Override
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                return true;
+            public void enter (InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                back.setStyle(hoverStyle);
+                super.enter(event,x,y,pointer,fromActor);
             }
 
+            /**
+             * Overrides the method so that the button changes to its original style when the pointer leaves.
+             */
+            @Override
+            public void exit (InputEvent event, float x, float y, int pointer, Actor toActor) {
+                back.setStyle(txtBtnStyle);
+                super.enter(event,x,y,pointer,toActor);
+            }
+            /**
+             * overrides the method, swaps to main menu
+             */
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 controller.swapMenu("Main");
@@ -188,7 +249,7 @@ public class SettingsMenu extends Menu {
     }
 
     /**
-     * laddar från config till texter todo: fix!!
+     * initialises the config file
      */
     private void initConfig(){
         try {
@@ -199,14 +260,19 @@ public class SettingsMenu extends Menu {
         }
     }
 
-    public boolean inputSanitizer(){
-        if (resSanitizerX() && resSanitizerY() && fulSanitizer() && musicSanitizer() && soundSanitizer())
-            return true;
-        return false;
+    /**
+     * makes sure that inputs are correct values
+     * @return true if sanitizers are all true
+     */
+    private boolean inputSanitizer(){
+        return (resSanitizerX() && resSanitizerY() && fulSanitizer() && musicSanitizer() && soundSanitizer());
     }
 
+    /**
+     * sanitises the height inputs
+     */
     private boolean resSanitizerX(){
-        if( settingsMap.put("resolutionX", resFieldX.getText()).equals("1280") ) //1280x720
+        if( settingsMap.put("resolutionX", resFieldX.getText()).equals( "1280") ) //1280x720
             return true;
         else if ( settingsMap.put("resolutionX", resFieldX.getText()).equals("1920"))//1920x1080
             return true;
@@ -217,6 +283,9 @@ public class SettingsMenu extends Menu {
         return false;
     }
 
+    /**
+     * Sanitises the width input
+     */
     private boolean resSanitizerY(){
         if( settingsMap.put("resolutionY", resFieldY.getText()).equals("720") ) //1280x720
             return true;
@@ -229,6 +298,9 @@ public class SettingsMenu extends Menu {
         return false;
     }
 
+    /**
+     * makes sure that fullscreen input is 1 or 0
+     */
     private boolean fulSanitizer(){
         if (settingsMap.put("fullscreen", fulField.getText()).equals("1"))
             return true;
@@ -237,6 +309,9 @@ public class SettingsMenu extends Menu {
         return false;
     }
 
+    /**
+     * makes sure that mute is 1 or 0
+     */
     private boolean musicSanitizer(){
         if(settingsMap.put("mute", musField.getText()).equals("1"))
             return true;
@@ -245,10 +320,13 @@ public class SettingsMenu extends Menu {
         return false;
     }
 
+    /**
+     * makes sure that muteeffects is 1 or 0
+     */
     private boolean soundSanitizer(){
-        if (settingsMap.put("soundeffects", soundField.getText()).equals("1"))
+        if (settingsMap.put("muteeffects", soundField.getText()).equals("1"))
             return true;
-        else if (settingsMap.put("soundeffects", soundField.getText()).equals("0"))
+        else if (settingsMap.put("muteeffects", soundField.getText()).equals("0"))
             return true;
         return false;
     }

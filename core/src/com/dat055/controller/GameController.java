@@ -32,7 +32,7 @@ public class GameController extends Controller {
     public enum Mode {FRONT, BACK}
     private Mode mode;
 
-    //todo: needs documenatation
+    //the mute boolean
     public boolean mute;
 
     // Objects that is created by GameModel
@@ -232,17 +232,21 @@ public class GameController extends Controller {
         return true; //TODO: Fix a return false which indicates if map created successfully or not
     }
 
-    //todo: needs documentation
+    /**
+     * a method to mute the music
+     * @param foo a boolean to mute the music
+     */
     public void setMute(boolean foo){mute = foo;}
 
+    /**
+     * A method to start the music
+     */
     public void playMusic(){
-        if (mute)
+        if (!mute)
             model.playMusic("map_01");
         else if (mute)
             model.stopMusic();
     }
-
-
 
     /**
      * Creates next map and starts it.

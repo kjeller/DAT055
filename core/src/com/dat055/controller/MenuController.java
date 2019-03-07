@@ -32,7 +32,6 @@ public class MenuController extends Controller{
      */
     public MenuController() {
         super(new MenuModel(), new MenuView());
-        visible = true;
         mute = false;
 
         ((MenuModel)model).includeMenu("Main", new MainMenu(this));
@@ -131,7 +130,6 @@ public class MenuController extends Controller{
     public boolean isCharTwoBlocked() { return charTwoBlocked; }
 
     public void setMultiplayer(boolean b) { multiplayer = b; }
-    public void setMute(boolean foo) {mute = foo;}
 
     /**
      * Swaps the {@link Menu} to the specified key.
@@ -139,6 +137,15 @@ public class MenuController extends Controller{
      */
     public void swapMenu(String menu) { ((MenuModel)model).swapMenu(menu); }
 
+    /**
+     * a method to mute the music
+     * @param foo a boolean to mute the music
+     */
+    public void setMute(boolean foo) {mute = foo;}
+
+    /**
+     * A method to play the music
+     */
     public void playMusic(){
         if(!mute)
             model.playMusic("title");
