@@ -33,7 +33,7 @@ public class GameController extends Controller {
     private Mode mode;
 
     //the mute boolean
-    public boolean mute;
+    private boolean mute;
 
     // Objects that is created by GameModel
     private GameMap map1, map2;
@@ -215,7 +215,10 @@ public class GameController extends Controller {
     private boolean startMap(String fileName) {
         // if there is no more map after current
         if(fileName.equals("None.")) {
+            model.stopMusic();
+            isRunning = false;
             ((MenuController)ctrl).swapMenu("Finish");
+            ((MenuController)ctrl).playMusic();
             return true;
         }
 
@@ -258,11 +261,11 @@ public class GameController extends Controller {
     /**
      * A method to start the music
      */
-    public void playMusic(){
-        if (!mute)
+    private void playMusic(){
+        if (!mute) {
             model.playMusic("map_01");
-        else if (mute)
-            model.stopMusic();
+            return;
+        } model.stopMusic();
     }
 
     /**
@@ -346,7 +349,7 @@ public class GameController extends Controller {
      * Closes current game session and multiplayer session
      * if running.
      */
-    public void closeGame() {
+        void closeGame() {
         if(isMultiplayer)
             server.close();
     }
@@ -390,7 +393,7 @@ public class GameController extends Controller {
         }
     }
     /**
-     * Toggles pause and tells {@link MenuController} to swap to a pause menu
+     * Toggles pause and tells {@link MenuController} to swap to the pause menu
      */
     void togglePause() {
         isPaused = !isPaused;

@@ -72,9 +72,10 @@ public class MenuModel extends Model {
         stage.clear();
         Menu next = menus.get(menu);
         next.updateTable();
-        if(next.getBg() != null) {
-            next.getBg().setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-            stage.addActor(next.getBg());
+        Image bg = next.getBg();
+        if(bg != null) {
+            bg.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+            stage.addActor(bg);
         }
         Table tbl = next.getTable();
         tbl.setFillParent(true);
@@ -83,7 +84,7 @@ public class MenuModel extends Model {
     }
 
     /**
-     * Updates the current {@link Menu}, then acts the stage.
+     * Updates the current if needed {@link Menu}, then acts the stage.
      */
     public void update() {
         if(menus.get(currentMenu).isUpdatable())

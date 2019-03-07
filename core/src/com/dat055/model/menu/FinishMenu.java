@@ -68,7 +68,7 @@ public class FinishMenu extends Menu {
              */
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                controller.swapMenu("Main");
+                controller.swapMenu("Credits");
                 super.touchUp(event, x, y, pointer, button);
             }
 
