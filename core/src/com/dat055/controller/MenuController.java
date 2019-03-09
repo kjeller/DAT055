@@ -154,7 +154,7 @@ public class MenuController extends Controller{
     public void playMusic(){
         if(!mute)
             model.playMusic("title");
-        else if(mute)
+        else
             model.stopMusic();
     }
 
