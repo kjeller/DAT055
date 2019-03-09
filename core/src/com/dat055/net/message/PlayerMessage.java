@@ -49,7 +49,7 @@ public class PlayerMessage extends Message {
         player.setIsAlive(isAlive);
         if(isHookFired) {
             System.out.println("Hook fired from other player");
-            player.generateHook();
+            player.attack();
         }
     }
 

@@ -93,7 +93,7 @@ public class Player extends Character {
      * Method used to generate a new hook.
      * @return the newly generated hook.
      */
-    public Hook generateHook() {
+    private Hook generateHook() {
         if(server != null)
             server.sendPlayerMessage(new PlayerMessage(this, true));
         return new Hook(new Vector2(position),
