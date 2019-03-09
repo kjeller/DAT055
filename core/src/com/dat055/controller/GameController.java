@@ -95,7 +95,7 @@ public class GameController extends Controller {
         }
 
         // Multiplayer updates both maps
-        if(isMultiplayer) {
+        if(isMultiplayer && !isSingleMap) {
             map1.update(deltaTime);
             map2.update(deltaTime);
         }
@@ -128,9 +128,6 @@ public class GameController extends Controller {
         if(isMultiplayer && server.isRunning()) {
             // Only send updates if player is in motion
             if(currentPlayer.getInMotion())
-                server.sendPlayerUpdate(currentPlayer);
-
-            if(currentPlayer.getHook() != null)
                 server.sendPlayerUpdate(currentPlayer);
 
             // Update remote player's character
@@ -265,13 +262,14 @@ public class GameController extends Controller {
         isPaused = false;
         isDebug = false;
 
-        view = new GameView((GameModel)model);
-
         // Default value for rotationTimer
         rotationTimer = 180f;
 
         // Default value for map name timer
         showMapNameTimer = 0;
+
+        // Create a new view
+        view = new GameView((GameModel)model);
 
         // Sets current player based on mode
         whoIsOnTop(mode);
@@ -281,11 +279,17 @@ public class GameController extends Controller {
         viewDistance = ((GameModel)model).getCamViewDistance();
         cam.position.set(new Vector3(camStartPos.x, camStartPos.y, 0));
 
-        // Set view
+        // Set a server for a player to send updates
+        if(isMultiplayer)
+            currentPlayer.setServer(server);
+
+        // Set view properties
+
         ((GameView)view).setSingleMap(isSingleMap);
         ((GameView)view).setShowMapName(true);
+
         playMusic();
-        return true; //TODO: Fix a return false which indicates if map created successfully or not
+        return true;
     }
 
     /**

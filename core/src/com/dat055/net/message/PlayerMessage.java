@@ -21,12 +21,12 @@ public class PlayerMessage extends Message {
      * Sets protol to OP_PLAYER which can be found in {@link Protocol}
      * @param player
      */
-    public PlayerMessage(Player player) {
+    public PlayerMessage(Player player, boolean hookJustFired) {
         super(Protocol.OP_PLAYER);
         this.position = player.getPosition();
         this.lookingDirection = player.getDirection();
         this.isAlive = player.getIsAlive();
-        isHookFired = player.getHookJustFired();
+        isHookFired = hookJustFired;
     }
 
     /**

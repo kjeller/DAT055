@@ -3,6 +3,8 @@ package com.dat055.model.entity.character;
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.dat055.net.Server;
+import com.dat055.net.message.PlayerMessage;
 
 /**
  * A character which is meant to be the user's playable character.
@@ -13,10 +15,10 @@ import com.badlogic.gdx.math.Vector2;
  */
 public class Player extends Character {
     private Hook hook;
+    private Server server;
     private boolean isInvincible;
     private float iframes;
     private boolean movingWithHook;
-    private boolean hookJustFired; // Used to update hook in multiplayer
 
     /**
      * Sets movingWithHook and isInvincible to default values.
@@ -92,7 +94,8 @@ public class Player extends Character {
      * @return the newly generated hook.
      */
     public Hook generateHook() {
-        hookJustFired = true;
+        if(server != null)
+            server.sendPlayerMessage(new PlayerMessage(this, true));
         return new Hook(new Vector2(position),
             20, 20, 250.0f, lookingDirection);
     }
@@ -102,7 +105,6 @@ public class Player extends Character {
      * @param deltaTime time since last frame.
      */
     private void hookUpdate(float deltaTime) {
-        hookJustFired = false;
         hook.setPlayerPosX((int)rect.x);
         hook.setOriginPosition(new Vector2(rect.x, rect.y));
         hook.update(deltaTime);
@@ -188,14 +190,18 @@ public class Player extends Character {
     }
 
     /**
+     * Sets server
+     * @param server that is set
+     */
+    public void setServer(Server server) {this.server = server; }
+
+    /**
      * Get isInvincible value.
      * @return boolean
      */
     public boolean getInvincible() {
         return isInvincible;
     }
-
-    public boolean getHookJustFired() { return hookJustFired; }
 
     /**
      * Get debug text for player.

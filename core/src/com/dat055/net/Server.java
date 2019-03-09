@@ -213,7 +213,13 @@ public class Server extends Thread{
      * Packages player updates to client
      * @param player
      */
-    public void sendPlayerUpdate(Player player) { setClientPacketData(new PlayerMessage(player)); }
+    public void sendPlayerUpdate(Player player) { setClientPacketData(new PlayerMessage(player, false)); }
+
+    /**
+     * Sends a player message
+     * @param msg
+     */
+    public void sendPlayerMessage(PlayerMessage msg) {setClientPacketData(msg);}
 
     /**
      * Serializes message and set to client

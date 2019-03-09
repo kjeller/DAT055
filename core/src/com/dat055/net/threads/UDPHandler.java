@@ -45,7 +45,7 @@ public class UDPHandler extends Thread {
             server.getDatagramSocket().receive(current);
             System.out.printf("<=== Received package from %s!\n", current.getAddress());
             server.handlePackets(data);
-        } catch (IOException e) { System.out.println(e);}
+        } catch (IOException e) { server.close(); }
     }
 
 
@@ -58,7 +58,7 @@ public class UDPHandler extends Thread {
             try {
                 System.out.printf("==> Client sent UDPHandler packet to %s:%d \n", hostname.getHostAddress(), port);
                 socket.send(packet);
-            } catch (IOException e) { System.out.println(e); }
+            } catch (IOException e) { server.close(); }
         }
     }
 
