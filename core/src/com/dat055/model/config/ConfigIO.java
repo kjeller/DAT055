@@ -1,4 +1,4 @@
-package com.dat055.model.menu;
+package com.dat055.model.config;
 
 import java.io.*;
 import java.util.Map;

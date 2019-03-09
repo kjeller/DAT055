@@ -6,9 +6,8 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
-import com.dat055.controller.GameController;
 import com.dat055.controller.MenuController;
-import com.sun.istack.internal.Nullable;
+import com.dat055.model.config.ConfigIO;
 
 import java.io.IOException;
 import java.util.Map;
@@ -331,7 +330,7 @@ public class SettingsMenu extends Menu {
     }
 
     /*
-     * makes sure that mute effects is 1 or 0
+     * makes sure that mute sound effects is 1 or 0
 
     private boolean soundSanitizer(){
         if (settingsMap.put("muteeffects", soundField.getText()).equals("1"))
