@@ -24,6 +24,10 @@ public class Goal extends Entity {
         BOUNDING_BOX_COLOR = Color.GOLD;
     }
 
+    /**
+     * Update method that updates the texture of goal depending on if
+     * isActive is true or false.
+     * */
     public void update(float deltaTime) {
         if(sprite != null) {
             if(texturePath.equals("textures/interactables/flag.png") || !isActive){
@@ -36,7 +40,10 @@ public class Goal extends Entity {
             }
         }
     }
-
+    /**
+     * Activates the flag at goal. isActive is used by the update method to
+     * check if the player is at the goal.
+     * */
     public void activate() {
         isActive = true;
     }
