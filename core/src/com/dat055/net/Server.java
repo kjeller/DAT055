@@ -207,7 +207,12 @@ public class Server extends Thread{
      * Updates player with last received message
      * @param player
      */
-    public void updatePlayer(Player player) { if(lastPlayerMessage != null)lastPlayerMessage.setPlayerProperties(player); }
+    public void updatePlayer(Player player) {
+        if(lastPlayerMessage != null) {
+            lastPlayerMessage.setPlayerProperties(player);
+            lastPlayerMessage = null; // drop reference to packet to not read it twice
+        }
+    }
 
     /**
      * Packages player updates to client
