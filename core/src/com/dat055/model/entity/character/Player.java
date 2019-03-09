@@ -6,6 +6,8 @@ import com.badlogic.gdx.math.Vector2;
 
 /**
  * A character which is meant to be the user's playable character.
+ * Is controlled by inputs handled in GameController.
+ * Has a hook which is used as a weapon.
  * @author Tobias Campbell
  * @version 22-02-2019
  */
