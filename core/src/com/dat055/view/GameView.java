@@ -1,11 +1,12 @@
 package com.dat055.view;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.BitmapFont.*;
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Vector2;
 import com.dat055.controller.GameController.Mode;
 import com.dat055.model.GameModel;
 import com.dat055.model.map.GameMap;
@@ -21,8 +22,14 @@ public class GameView extends View{
     private float rotation = 0;
 
     private boolean debug = false;
+    private boolean singleMap;
+    private boolean showMapName;
     private String debugString;
 
+    /**
+     * Default constructor for this view
+     * @param gameModel model where every game asset is loaded in
+     */
     public GameView(GameModel gameModel) {
         this.model = gameModel;
         renderer = new ShapeRenderer();
@@ -31,10 +38,24 @@ public class GameView extends View{
     public void render(PolygonSpriteBatch batch) {
         GameMap map1 = ((GameModel)model).getGameMap1();
         GameMap map2 = ((GameModel)model).getGameMap2();
-        batch.setProjectionMatrix(((GameModel)model).getCam().combined);    // Set camera for batch
+        BitmapFont mapFont = ((GameModel)model).getMapFont();
+        Camera cam = ((GameModel)model).getCam();
+        batch.setProjectionMatrix(cam.combined);    // Set camera for batch
+        Vector2 camViewDist = ((GameModel)model).getCamViewDistance();
 
         map1.render(batch, rotation);
-        map2.render(batch, rotation - 180);
+
+        // Render map2 if map2 exist
+        if(!singleMap)
+            map2.render(batch, rotation - 180);
+
+        // Render map name
+        if(showMapName) {
+            String name = ((GameModel)model).getMapName();
+            mapFont.setColor(Color.YELLOW);
+            mapFont.draw(batch, name,
+                    cam.position.x, cam.position.y);
+        }
 
         // Debug
         if(debug) {
@@ -45,28 +66,61 @@ public class GameView extends View{
             if(mode == Mode.FRONT) {
                 map1.drawBoundingBoxes(renderer);
                 batch.begin();
-                map1.drawEntityText(((GameModel)model).getFont(), batch);
+                map1.drawEntityText(((GameModel)model).getDebugFont(), batch);
             } else {
                 map2.drawBoundingBoxes(renderer);
                 batch.begin();
-                map2.drawEntityText(((GameModel)model).getFont(), batch);
+                map2.drawEntityText(((GameModel)model).getDebugFont(), batch);
             }
 
             //Debug text for whole map
-            BitmapFont font = ((GameModel)model).getFont();
-            Camera cam = ((GameModel)model).getCam();
-            font.setColor(Color.WHITE);
-            font.draw(batch, debugString,
-                    cam.position.x - Gdx.graphics.getWidth()/2,
-                    cam.position.y+Gdx.graphics.getHeight()/2);
+            BitmapFont debugFont = ((GameModel)model).getDebugFont();
+            debugFont.setColor(Color.WHITE);
+            debugFont.draw(batch, debugString,
+                    cam.position.x - camViewDist.x,
+                    cam.position.y + camViewDist.y);
             batch.setProjectionMatrix(cam.combined);
         }
     }
 
+    /**
+     * @return gets rotation
+     */
     public float getRotation() { return rotation; }
 
+    /**
+     * Sets string that will be printed
+     * @param debugString string that will be printed
+     */
     public void setDebugString(String debugString) { this.debugString = debugString; }
+
+    /**
+     * Sets rotation for this game
+     * @param rotation value
+     */
     public void setRotation(float rotation) { this.rotation = rotation;}
+
+    /**
+     * If debug is true debugstring will be printed
+     * @param debug value
+     */
     public void setDebug(boolean debug) { this.debug = debug; }
+
+    /**
+     * Sets mode, will be used to know which map should be rotated
+     * @param mode FRONT or BACK
+     */
     public void setMode(Mode mode) { this.mode = mode; }
+
+    /**
+     * True if only map1 should be rendered
+     * @param singleMap value
+     */
+    public void setSingleMap(boolean singleMap) { this.singleMap = singleMap; }
+
+    /**
+     * True if view should render name of map.
+     * @param showMapName value
+     */
+    public void setShowMapName(boolean showMapName) { this.showMapName = showMapName;}
 }

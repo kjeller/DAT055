@@ -1,5 +1,5 @@
 {
-  "properties" : {"id" : 0, "name" : "Map1", "nextmap" : "maps/map_3.json"},
+  "properties" : {"id" : 0, "name" : "Map2", "nextmap" : "maps/map_3.json"},
   "map" : [{
 
     "properties" : {
