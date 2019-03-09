@@ -6,6 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
+import com.dat055.controller.GameController;
 import com.dat055.controller.MenuController;
 import com.sun.istack.internal.Nullable;
 
@@ -156,10 +157,12 @@ public class SettingsMenu extends Menu {
                 if (inputSanitizer() &&mutInt==1){
                     controller.setMute(true);
                     controller.playMusic();
+                    controller.getCtrl().setMute(true);
                 }
                 else if(inputSanitizer()&& mutInt==0){
                     controller.setMute(false);
                     controller.playMusic();
+                    controller.getCtrl().setMute(false);
                 }
 
                 if (inputSanitizer()&&fulInt==1){

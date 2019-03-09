@@ -22,7 +22,7 @@ public class MenuController extends Controller{
     private boolean isCharOne;
     private boolean charOneBlocked = false;
     private boolean charTwoBlocked = false;
-    public boolean mute;
+    private boolean mute;
     public String currentMap;
     public String name;
 
@@ -138,13 +138,15 @@ public class MenuController extends Controller{
      */
     public void swapMenu(String menu) { ((MenuModel)model).swapMenu(menu); }
 
-    /**
-     * a method to mute the music
-     * @param foo a boolean to mute the music
-     */
-    public void setMute(boolean foo) {mute = foo;}
+
 
     public void closeGame() { ((GameController)ctrl).closeGame();}
+
+    /**
+     * Mutes the music
+     * @param foo Boolean to mute the music
+     */
+    public void setMute(boolean foo) {mute = foo;}
 
     /**
      * A method to play the music
