@@ -7,6 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.dat055.controller.MenuController;
+import com.sun.istack.internal.Nullable;
 
 import java.io.IOException;
 import java.util.Map;
@@ -21,9 +22,7 @@ import java.util.TreeMap;
 public class SettingsMenu extends Menu {
     private MenuController controller;
     private TextButton apply ,save ,back;
-    private Label resolutionX,resolutionY, fullscreen, mute, sound;
     private TextField resFieldX,resFieldY,fulField,musField,soundField;
-    private String resSettingX,resSettingY,fulSetting,musSetting,soundSetting;
     private int resX,resY,fulInt,mutInt;
     private Map<String,String> settingsMap;
 
@@ -48,6 +47,9 @@ public class SettingsMenu extends Menu {
     @Override
     protected void createTable() {
         Table table = new Table();
+
+        String resSettingX,resSettingY,fulSetting,musSetting,soundSetting;
+        Label resolutionX,resolutionY, fullscreen, mute, sound;
 
         table.setWidth(controller.getWidth());
         table.setHeight(controller.getHeight());
@@ -83,7 +85,7 @@ public class SettingsMenu extends Menu {
 
         addListeners();
 
-        // creates the table
+        // the placement and size of the menu items
         table.add(back).width(150).height(40);
         table.add(save).width(170).height(40);
         table.add(apply).width(170).height(40).row();
@@ -128,7 +130,6 @@ public class SettingsMenu extends Menu {
                 apply.setStyle(hoverStyle);
                 super.enter(event,x,y,pointer,fromActor);
             }
-
             /**
              * Overrides the method so that the button changes to its original style when the pointer leaves.
              */
@@ -137,7 +138,6 @@ public class SettingsMenu extends Menu {
                 apply.setStyle(txtBtnStyle);
                 super.enter(event,x,y,pointer,toActor);
             }
-
             /**
              * Override of method
              * gets the new settings from inputfields and applies them
@@ -173,7 +173,8 @@ public class SettingsMenu extends Menu {
                     controller.resize(resX, resY);
                 }
                 else
-                    System.out.println("You can't do that Dave");
+                    System.out.println("I can't let you do that Dave");
+                controller.swapMenu("Settings");
             }
         });
 
@@ -216,7 +217,8 @@ public class SettingsMenu extends Menu {
                     }
                 }
                 else
-                    System.out.println("You can't do that Dave");
+                    System.out.println("I can't let you do that Dave");
+                controller.swapMenu("Settings");
             }
         });
         back.addListener(new ClickListener() {
