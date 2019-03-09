@@ -43,11 +43,14 @@ public class PlayerMessage extends Message {
      * @param player - values from this player
      */
     public void setPlayerProperties(Player player) {
+        position = new Vector2((int)position.x, (int)position.y);
         player.setPosition(position);
         player.setLookingDirection(lookingDirection);
         player.setIsAlive(isAlive);
-        if(isHookFired)
+        if(isHookFired) {
+            System.out.println("Hook fired from other player");
             player.generateHook();
+        }
     }
 
     public Vector2 getDir() { return lookingDirection; }
