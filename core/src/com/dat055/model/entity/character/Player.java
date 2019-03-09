@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 
 /**
+ * A character which is meant to be the user's playable character.
  * @author Tobias Campbell
  * @version 22-02-2019
  */
