@@ -289,13 +289,13 @@ public class GameController extends Controller {
     }
 
     /**
-     * a method to mute the music
-     * @param foo a boolean to mute the music
+     * Mutes the music
+     * @param foo Boolean to mute the music
      */
     public void setMute(boolean foo){mute = foo;}
 
     /**
-     * A method to start the music
+     * Starts and stops the music
      */
     private void playMusic(){
         if (!mute) {

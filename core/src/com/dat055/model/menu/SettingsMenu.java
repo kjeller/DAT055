@@ -6,6 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
+import com.dat055.controller.GameController;
 import com.dat055.controller.MenuController;
 import com.sun.istack.internal.Nullable;
 
@@ -67,21 +68,21 @@ public class SettingsMenu extends Menu {
         resSettingY = settingsMap.get("resolutionY");
         fulSetting = settingsMap.get("fullscreen");
         musSetting = settingsMap.get("mute");
-        soundSetting = settingsMap.get("muteeffects");
+       // soundSetting = settingsMap.get("muteeffects");
 
         //The inputFields
         resFieldX = createTextField(resSettingX);
         resFieldY = createTextField(resSettingY);
         fulField = createTextField(fulSetting);
         musField = createTextField(musSetting);
-        soundField = createTextField(soundSetting);
+       // soundField = createTextField(soundSetting);
 
         //The texts in the menu
         resolutionX = new Label("Screen width",lblStyle);
         resolutionY = new Label("Screen height",lblStyle);
         fullscreen = new Label("Fullscreen",lblStyle);
         mute = new Label("Mute music",lblStyle);
-        sound = new Label("Mute effects",lblStyle);
+        //sound = new Label("Mute effects",lblStyle);
 
         addListeners();
 
@@ -102,8 +103,8 @@ public class SettingsMenu extends Menu {
         table.add(mute).height(40).padBottom(10).padTop(20);
         table.add(musField).padTop(20).padBottom(10).row();
         table.add();
-        table.add(sound).padTop(20).height(40).padBottom(10);
-        table.add(soundField).padTop(20).padBottom(10).row();
+      //  table.add(sound).padTop(20).height(40).padBottom(10);
+       // table.add(soundField).padTop(20).padBottom(10).row();
 
         super.table = table;
     }
@@ -156,10 +157,12 @@ public class SettingsMenu extends Menu {
                 if (inputSanitizer() &&mutInt==1){
                     controller.setMute(true);
                     controller.playMusic();
+                    controller.getCtrl().setMute(true);
                 }
                 else if(inputSanitizer()&& mutInt==0){
                     controller.setMute(false);
                     controller.playMusic();
+                    controller.getCtrl().setMute(false);
                 }
 
                 if (inputSanitizer()&&fulInt==1){
@@ -207,7 +210,7 @@ public class SettingsMenu extends Menu {
                 settingsMap.put("resolutionY", resFieldY.getText());
                 settingsMap.put("fullscreen", fulField.getText());
                 settingsMap.put("mute", musField.getText());
-                settingsMap.put("muteeffects", soundField.getText());
+              //  settingsMap.put("muteeffects", soundField.getText());
 
                 if (inputSanitizer()) {
                     try {
@@ -263,7 +266,7 @@ public class SettingsMenu extends Menu {
             settingsMap.put("resolutionY","720");
             settingsMap.put("fullscreen","0");
             settingsMap.put("mute","0");
-            settingsMap.put("muteeffects","0");
+            //settingsMap.put("muteeffects","0");
             try {
                 ConfigIO.save(settingsMap, "config.txt");
             }
@@ -278,7 +281,7 @@ public class SettingsMenu extends Menu {
      * @return true if sanitizers are all true
      */
     private boolean inputSanitizer(){
-        return (resSanitizerX() && resSanitizerY() && fulSanitizer() && musicSanitizer() && soundSanitizer());
+        return (resSanitizerX() && resSanitizerY() && fulSanitizer() && musicSanitizer() );
     }
 
     /**
@@ -327,12 +330,13 @@ public class SettingsMenu extends Menu {
         return ( settingsMap.put("mute", musField.getText()).equals("0"));
     }
 
-    /**
+    /*
      * makes sure that mute effects is 1 or 0
-     */
+
     private boolean soundSanitizer(){
         if (settingsMap.put("muteeffects", soundField.getText()).equals("1"))
             return true;
         return (settingsMap.put("muteeffects", soundField.getText()).equals("0"));
     }
+     */
 }
