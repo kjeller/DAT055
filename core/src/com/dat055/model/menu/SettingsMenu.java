@@ -246,7 +246,8 @@ public class SettingsMenu extends Menu {
              */
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                controller.swapMenu("Main");
+                if (controller.getCtrl().isRunning()) controller.swapMenu("Pause");
+                else controller.swapMenu("Main");
                 super.touchUp(event, x, y, pointer, button);
             }
         });
