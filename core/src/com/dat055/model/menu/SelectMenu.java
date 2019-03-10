@@ -72,8 +72,16 @@ public class SelectMenu extends Menu {
 
     private Table createSubTable(int padding) {
         Table table = new Table();
-        files = Gdx.files.internal("maps/").list();
-        for(FileHandle file: files) {
+        FileHandle listOfMap = Gdx.files.internal("maps/maps.txt"); // get list of maps
+        String files[] = listOfMap.readString().split("\\n");
+        ArrayList<FileHandle> fh = new ArrayList<FileHandle>();
+
+        // Get handle for every level
+        for (String filename: files) {
+            fh.add(Gdx.files.internal("maps/" + filename));
+        }
+
+        for(FileHandle file: fh) {
             TextButton tb = createButton(file.nameWithoutExtension(), checkedStyle);
             textButtonGroup.add(tb);
             //noinspection IntegerDivisionInFloatingPointContext
