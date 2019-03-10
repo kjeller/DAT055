@@ -148,34 +148,33 @@ public class SettingsMenu extends Menu {
                 settingsMap.put("resolutionY", resFieldY.getText());
                 settingsMap.put("fullscreen",fulField.getText());
                 settingsMap.put("mute",musField.getText());
-                resX = parseInt("resolutionX");
-                resY = parseInt("resolutionY");
-                fulInt = parseInt("fullscreen");
-                mutInt = parseInt("mute");
+                if (inputSanitizer()) {
+                    resX = parseInt("resolutionX");
+                    resY = parseInt("resolutionY");
+                    fulInt = parseInt("fullscreen");
+                    mutInt = parseInt("mute");
 
-                if (inputSanitizer() &&mutInt==1){
-                    controller.setMute(true);
-                    controller.playMusic();
-                    controller.getCtrl().setMute(true);
-                }
-                else if(inputSanitizer()&& mutInt==0){
-                    controller.setMute(false);
-                    controller.playMusic();
-                    controller.getCtrl().setMute(false);
-                }
+                    if ( mutInt == 1) {
+                        controller.setMute(true);
+                        controller.playMusic();
+                        controller.getCtrl().setMute(true);
+                    } else if (mutInt == 0) {
+                        controller.setMute(false);
+                        controller.playMusic();
+                        controller.getCtrl().setMute(false);
+                    }
 
-                if (inputSanitizer()&&fulInt==1){
-                    Gdx.graphics.setWindowedMode(resX,resY);
-                    Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
-                    controller.resize(resX,resY);
+                    if (fulInt == 1) {
+                        Gdx.graphics.setWindowedMode(resX, resY);
+                        Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
+                        controller.resize(resX, resY);
+                    } else if (fulInt == 0) {
+                        Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
+                        Gdx.graphics.setWindowedMode(resX, resY);
+                        controller.resize(resX, resY);
+                    } else
+                        System.out.println("I can't let you do that Dave");
                 }
-                else if (inputSanitizer()&&fulInt==0){
-                    Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
-                    Gdx.graphics.setWindowedMode(resX, resY);
-                    controller.resize(resX, resY);
-                }
-                else
-                    System.out.println("I can't let you do that Dave");
                 controller.swapMenu("Settings");
             }
         });
