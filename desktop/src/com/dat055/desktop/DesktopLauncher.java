@@ -11,6 +11,7 @@ public class DesktopLauncher {
 		config.title = "Shadow World";
 		config.width = 1920;
 		config.height = 1080;
+		config.fullscreen = true;
 		config.vSyncEnabled = true;
 		config.addIcon("textures/icon.png", Files.FileType.Internal);
 		new LwjglApplication(new Game(), config);
