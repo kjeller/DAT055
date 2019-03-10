@@ -62,6 +62,11 @@ public class GameController extends Controller {
      */
     @Override
     public void update(float deltaTime) {
+        if(!isRunning) {
+            server.close();
+            return;
+        }
+
         if(!isPaused)
             updateCamera(deltaTime);        // Updates camera
 
@@ -123,16 +128,23 @@ public class GameController extends Controller {
          * Multiplayer updates received from another player
          * and sent to that player.
          */
-        if(isMultiplayer && server.isRunning()) {
-            // Only send updates if player is in motion
-            if(currentPlayer.getInMotion())
-                server.sendPlayerUpdate(currentPlayer);
+        if(isMultiplayer) {
+            if(server.isRunning()) {
+                // Only send updates if player is in motion
+                if(currentPlayer.getInMotion())
+                    server.sendPlayerUpdate(currentPlayer);
 
-            // Update remote player's character
-            if(currentPlayer == player1) {
-                server.updatePlayer(player2);
+                // Update remote player's character
+                if(currentPlayer == player1) {
+                    server.updatePlayer(player2);
+                } else {
+                    server.updatePlayer(player1);
+                }
             } else {
-                server.updatePlayer(player1);
+                closeGame();
+
+                // Switches to mainmenu
+                ((MenuController)ctrl).swapToMain();
             }
         }
     }
@@ -150,15 +162,23 @@ public class GameController extends Controller {
         camPosition.x += Math.round((playerPosition.x - camPosition.x) * lerp * deltaTime);
         camPosition.y += Math.round((playerPosition.y - camPosition.y) * lerp * deltaTime);
 
-        // Forces camera inside bounds no zoom.
+        // Force camera horizontally inbounds to the right
         if(camPosition.x + viewDistance.x > map1.getWidthPixels())
             cam.position.x = (int)(map1.getWidthPixels() - viewDistance.x);
 
+        // Force camera horizontally inbounds to the left
         if(camPosition.x - viewDistance.x < 0)
             cam.position.x = (int) viewDistance.x;
 
+        // Force camera vertically inbounds top
         if(camPosition.y + viewDistance.y > map1.getHeightPixels())
             cam.position.y = (int)(map1.getHeightPixels() - viewDistance.y);
+
+        // Force camera vertically inbounds bottom - only used for singlemaps
+        if(isSingleMap)
+            if(camPosition.y - viewDistance.y < 0)
+                cam.position.y = (int)viewDistance.y;
+
         cam.update();
     }
 
@@ -204,6 +224,9 @@ public class GameController extends Controller {
             if(!isMultiplayer && !isSingleMap)
                 if(Gdx.input.isKeyJustPressed(Input.Keys.T))
                     toggleCurrentPlayer();
+        } else {
+            currentPlayer.setMoving(false);
+            currentPlayer.move(0);
         }
 
         // Toggles pause menu
@@ -336,6 +359,9 @@ public class GameController extends Controller {
      * @param fileName name of map that will be created with startMap()
      */
     boolean startMultiplayerMap(String fileName, String name) {
+        mode = Mode.FRONT;
+        isMultiplayer = true;
+
         server = new Server(name, 1337);
         if(!server.startServer(fileName))
             return false;
@@ -343,14 +369,10 @@ public class GameController extends Controller {
         // Wait for server to start
         while(true) {
             if(!server.isRunning()) {
-                try { Thread.sleep(0);
+                try { Thread.sleep(10);
                 } catch (InterruptedException ignored) {}
             } else { break; }
         }
-
-        //Host decides this from menu
-        mode = Mode.FRONT;
-        isMultiplayer = true;
         startMap(fileName);
         return true;
     }
@@ -362,6 +384,9 @@ public class GameController extends Controller {
      * @param addr IP of other server
      */
     boolean joinMultiplayerMap(String addr, String name) {
+        mode = Mode.BACK;
+        isMultiplayer = true;
+
         server = new Server(name, 1337);
         if(!server.startServerAndClient(addr))
             return false;
@@ -372,10 +397,10 @@ public class GameController extends Controller {
                 try {
                     Thread.sleep(0);
                 } catch (InterruptedException ignored) {}
+
+
             } else { break; }
         }
-        mode = Mode.BACK;
-        isMultiplayer = true;
         startMap(server.getChosenMap());
 
         return true;
@@ -387,9 +412,10 @@ public class GameController extends Controller {
      * Closes current game session and multiplayer session
      * if running.
      */
-        void closeGame() {
+    void closeGame() {
         if(isMultiplayer)
             server.close();
+        isRunning = false;
     }
 
     /**

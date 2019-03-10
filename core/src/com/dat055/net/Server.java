@@ -2,6 +2,7 @@ package com.dat055.net;
 
 import com.dat055.model.entity.character.Player;
 import com.dat055.net.message.JoinMessage;
+import com.dat055.net.message.LeaveMessage;
 import com.dat055.net.message.Message;
 import com.dat055.net.message.PlayerMessage;
 import com.dat055.net.threads.TCPHandler;
@@ -125,8 +126,11 @@ public class Server extends Thread{
      * Closes sockets and interrupts threads.
      */
     public void close() {
+        isRunning = false;
+        tcpHandler.writeClientMessage(new LeaveMessage());
         try {
             ss.close();
+            cs.close();
         } catch (IOException ignored) {}
         ds.close();
         tcpHandler.interrupt();

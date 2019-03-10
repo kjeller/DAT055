@@ -46,14 +46,11 @@ public class SettingsMenu extends Menu {
      */
     @Override
     protected void createTable() {
-        Table table = new Table();
-
         String resSettingX,resSettingY,fulSetting,musSetting,soundSetting;
-        Label resolutionX,resolutionY, fullscreen, mute, sound;
 
         table.setWidth(controller.getWidth());
         table.setHeight(controller.getHeight());
-        table.align(Align.center | Align.top);
+        table.bottom();
 
         table.setPosition(0, 0);
 
@@ -76,36 +73,41 @@ public class SettingsMenu extends Menu {
         musField = createTextField(musSetting);
        // soundField = createTextField(soundSetting);
 
-        //The texts in the menu
-        resolutionX = new Label("Screen width",lblStyle);
-        resolutionY = new Label("Screen height",lblStyle);
-        fullscreen = new Label("Fullscreen",lblStyle);
-        mute = new Label("Mute music",lblStyle);
+
         //sound = new Label("Mute effects",lblStyle);
 
         addListeners();
 
         // the placement and size of the menu items
-        table.add(back).width(150).height(40);
-        table.add(save).width(170).height(40);
-        table.add(apply).width(170).height(40).row();
-        table.add();
-        table.add(resolutionX).padTop(20).height(40).padBottom(10);
-        table.add(resFieldX).padTop(20).padBottom(10).row();
-        table.add();
-        table.add(resolutionY).padTop(20).height(40).padBottom(10);
-        table.add(resFieldY).padTop(20).padBottom(10).row();
-        table.add();
-        table.add(fullscreen).height(40).padBottom(10).padTop(20);
-        table.add(fulField).padTop(20).padBottom(10).row();
-        table.add();
-        table.add(mute).height(40).padBottom(10).padTop(20);
-        table.add(musField).padTop(20).padBottom(10).row();
-        table.add();
+        table.add(createSubtable()).colspan(3).expand().padBottom(200).row();
+        table.add(back).width(170).height(40).expandX().left().pad(20);
+        table.add(save).width(170).height(40).center().pad(20);
+        table.add(apply).width(170).height(40).right().pad(20);
       //  table.add(sound).padTop(20).height(40).padBottom(10);
        // table.add(soundField).padTop(20).padBottom(10).row();
+    }
 
-        super.table = table;
+    private Table createSubtable() {
+        //The texts in the menu
+        Label resolutionX = new Label("Screen width",lblStyle);
+        Label resolutionY = new Label("Screen height",lblStyle);
+        Label fullscreen = new Label("Fullscreen",lblStyle);
+        Label mute = new Label("Mute music",lblStyle);
+
+        Table subTable = new Table();
+        subTable.add(resolutionX).padTop(20).height(40).padBottom(10).colspan(2);
+        subTable.add(resFieldX).padTop(20).padBottom(10).row();
+
+        subTable.add(resolutionY).padTop(20).height(40).padBottom(10).colspan(2);
+        subTable.add(resFieldY).padTop(20).padBottom(10).row();
+
+        subTable.add(fullscreen).height(40).padBottom(10).padTop(20).colspan(2);
+        subTable.add(fulField).padTop(20).padBottom(10).row();
+
+        subTable.add(mute).height(40).padBottom(10).padTop(20).colspan(2);
+        subTable.add(musField).padTop(20).padBottom(10).row();
+
+        return subTable;
     }
 
     /**
@@ -245,7 +247,8 @@ public class SettingsMenu extends Menu {
              */
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                controller.swapMenu("Main");
+                if (controller.getCtrl().isRunning()) controller.swapMenu("Pause");
+                else controller.swapMenu("Main");
                 super.touchUp(event, x, y, pointer, button);
             }
         });

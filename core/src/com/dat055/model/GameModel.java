@@ -72,8 +72,8 @@ public class GameModel extends Model {
         map2 = mapFactory.getMap();
         nextMap = mapFactory.getNextMap();
         mapName = mapFactory.getMapName();
-        int width = 1280;
-        int height = 720;
+        int width = 1500;
+        int height = 1100;
         cam = new OrthographicCamera(width, height);
         camViewDistance = new Vector2((float)width/2, (float)height/2);
     }

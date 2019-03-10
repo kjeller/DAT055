@@ -36,13 +36,13 @@ public class SelectMenu extends Menu {
         textButtonGroup.setMaxCheckCount(1);
         textButtonGroup.setMinCheckCount(0);
         textButtonGroup.setUncheckLast(true);
-        setBg(new Image(new Texture((controller.multiplayer) ? "UI/Bg/Host.png" : "UI/Bg/Singleplayer.png")));
-        getBg().setSize(Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
         createTable();
     }
 
     @Override
     public void createTable() {
+        setBg(new Image(new Texture((controller.multiplayer) ? "UI/Bg/Host.png" : "UI/Bg/Singleplayer.png")));
+        getBg().setSize(Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
         back = createButton("Back");
         select = createButton("Select");
 
@@ -69,10 +69,23 @@ public class SelectMenu extends Menu {
         table.add(select).width(butX>>1).height(butY).padRight(padSmall).padBottom(padSmall).bottom().right();
     }
 
+    /**
+     * A help-method to create a part of the table.
+     * @param padding The padding to be used when layouting the objects.
+     * @return The resulting sub-table.
+     */
     private Table createSubTable(int padding) {
         Table table = new Table();
-        files = Gdx.files.internal("maps/").list();
-        for(FileHandle file: files) {
+        FileHandle listOfMap = Gdx.files.internal("maps/maps.txt"); // get list of maps
+        String files[] = listOfMap.readString().split("\\n");
+        ArrayList<FileHandle> fh = new ArrayList<FileHandle>();
+
+        // Get handle for every level
+        for (String filename: files) {
+            fh.add(Gdx.files.internal("maps/" + filename));
+        }
+
+        for(FileHandle file: fh) {
             TextButton tb = createButton(file.nameWithoutExtension(), checkedStyle);
             textButtonGroup.add(tb);
             table.add(tb).width(width).height(height).padBottom(padding).expandX().row();

@@ -27,7 +27,7 @@ public class MenuController extends Controller{
 
     /**
      * The default constructor for {@link MenuController}, which initializes the controller and includes the
-     * {@link Menu}s.
+     * {@link Menu}s. This is done here instead of in the Menu Model since it needs the controller.
      */
     public MenuController() {
         super(new MenuModel(), new MenuView());
@@ -93,7 +93,7 @@ public class MenuController extends Controller{
     }
 
     /**
-     * This method clears the {@link Stage}
+     * This method clears the {@link Stage}.
      */
     public void clearStage() {
         ((MenuModel)model).getStage().clear();
@@ -137,8 +137,18 @@ public class MenuController extends Controller{
      */
     public void swapMenu(String menu) { ((MenuModel)model).swapMenu(menu); }
 
+    /**
+     * Swaps to {@link MainMenu} and stops playing music
+     */
+    public void swapToMain() {
+        swapMenu("Main");
+        getCtrl().getModel().stopMusic();
+        getModel().playMusic("title");
+    }
 
-
+    /**
+     * Closes the game
+     */
     public void closeGame() { ((GameController)ctrl).closeGame();}
 
     /**

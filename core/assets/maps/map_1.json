@@ -25,7 +25,7 @@
         1, 1, 1, 1, 1, 7, 8, 1, 1, 1, 1, 1, 1, 1, 1, 7, 2, 2, 2, 2, 8, 1, 1, 2, 2, 2, 2, 8, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2],
     "entities" : [
       {"player" : {"position" : [0, 2], "sprite" : "textures/blue_penguin_64x80.png"}},
-      {"button" : {"position" : [22, 1], "timer" : 30, "id" : "b1", "target" : "d1", "sprite" : "textures/interactables/ButtonInactive.png"}},
+      {"button" : {"position" : [22, 1], "timer" : 30, "id" : "b1", "target" : "d1", "sprite" : "textures/interactables/buttonInactive.png"}},
       {"door"   : {"position" : [31, 1], "rqs" : ["b1"], "id" : "d1", "sprite" : "textures/interactables/doorClosed.png" }}]
   }]
 }
