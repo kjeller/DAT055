@@ -341,6 +341,9 @@ public class GameController extends Controller {
      * @param fileName name of map that will be created with startMap()
      */
     boolean startMultiplayerMap(String fileName, String name) {
+        mode = Mode.FRONT;
+        isMultiplayer = true;
+
         server = new Server(name, 1337);
         if(!server.startServer(fileName))
             return false;
@@ -348,20 +351,10 @@ public class GameController extends Controller {
         // Wait for server to start
         while(true) {
             if(!server.isRunning()) {
-                try { Thread.sleep(0);
+                try { Thread.sleep(10);
                 } catch (InterruptedException ignored) {}
-
-                // Stop hosting server
-                if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
-                    closeGame();
-                    return false;
-                }
             } else { break; }
         }
-
-        //Host decides this from menu
-        mode = Mode.FRONT;
-        isMultiplayer = true;
         startMap(fileName);
         return true;
     }
@@ -373,6 +366,9 @@ public class GameController extends Controller {
      * @param addr IP of other server
      */
     boolean joinMultiplayerMap(String addr, String name) {
+        mode = Mode.BACK;
+        isMultiplayer = true;
+
         server = new Server(name, 1337);
         if(!server.startServerAndClient(addr))
             return false;
@@ -383,16 +379,10 @@ public class GameController extends Controller {
                 try {
                     Thread.sleep(0);
                 } catch (InterruptedException ignored) {}
-                // Stop joining server
-                if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
-                    closeGame();
-                    return false;
-                }
+
 
             } else { break; }
         }
-        mode = Mode.BACK;
-        isMultiplayer = true;
         startMap(server.getChosenMap());
 
         return true;
