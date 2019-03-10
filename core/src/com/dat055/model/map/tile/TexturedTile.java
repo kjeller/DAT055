@@ -31,6 +31,7 @@ class TexturedTile extends Tile {
      */
     @Override
     public void draw(PolygonSpriteBatch batch, float rotation) {
+        sprite.setFlip(rotation > 90  && rotation < 270, false); // Rotates sprite correctly to plane
         batch.draw(sprite, x, y, 32, -y,
                 rect.width, rect.height, 1,1, rotation);
     }
