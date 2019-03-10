@@ -36,19 +36,19 @@ public class SelectMenu extends Menu {
         textButtonGroup.setMaxCheckCount(1);
         textButtonGroup.setMinCheckCount(0);
         textButtonGroup.setUncheckLast(true);
+        setBg(new Image(new Texture((controller.multiplayer) ? "UI/Bg/Host.png" : "UI/Bg/Singleplayer.png")));
+        getBg().setSize(Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
         createTable();
     }
 
     @Override
     public void createTable() {
-        setBg(new Image(new Texture((controller.multiplayer) ? "UI/Bg/Host.png" : "UI/Bg/Singleplayer.png")));
-
         back = createButton("Back");
         select = createButton("Select");
 
         addListeners();
 
-        layoutTable(Gdx.graphics.getWidth()/4, Gdx.graphics.getHeight()/18);
+        layoutTable(width, height);
     }
 
     /**
@@ -69,15 +69,13 @@ public class SelectMenu extends Menu {
         table.add(select).width(butX>>1).height(butY).padRight(padSmall).padBottom(padSmall).bottom().right();
     }
 
-
     private Table createSubTable(int padding) {
         Table table = new Table();
         files = Gdx.files.internal("maps/").list();
         for(FileHandle file: files) {
             TextButton tb = createButton(file.nameWithoutExtension(), checkedStyle);
             textButtonGroup.add(tb);
-            //noinspection IntegerDivisionInFloatingPointContext
-            table.add(tb).width(Gdx.graphics.getWidth()/3).height(Gdx.graphics.getHeight()/16).padBottom(padding).expandX().row();
+            table.add(tb).width(width).height(height).padBottom(padding).expandX().row();
         }
         return table;
     }

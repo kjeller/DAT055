@@ -2,7 +2,7 @@ package com.dat055.controller;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.*;
-import com.dat055.model.menu.SettingsMenu;
+import com.dat055.model.menu.DebugSettingsMenu;
 import com.dat055.model.menu.*;
 import com.dat055.view.MenuView;
 import com.dat055.model.MenuModel;
@@ -42,10 +42,9 @@ public class MenuController extends Controller{
         ((MenuModel)model).includeMenu("Pause", new PauseMenu(this));
         ((MenuModel)model).includeMenu("Select", new SelectMenu(this));
         ((MenuModel)model).includeMenu("Character", new CharacterMenu(this));
-        ((MenuModel)model).includeMenu("Settings", new SettingsMenu(this));
+        ((MenuModel)model).includeMenu("Settings", new DebugSettingsMenu(this));
         ((MenuModel)model).includeMenu("Credits", new CreditsMenu(this));
         ((MenuModel)model).includeMenu("Finish", new FinishMenu(this));
-        model.playMusic("title");
         playMusic();
     }
 
@@ -68,6 +67,7 @@ public class MenuController extends Controller{
      */
     public void resize(int width, int height) {
         ((MenuModel)model).resize(width, height);
+        update(0);
     }
 
     /**

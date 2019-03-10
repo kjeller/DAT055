@@ -8,7 +8,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.dat055.model.map.GameMap;
 import com.dat055.model.map.GameMapFactory;
-import com.dat055.model.menu.SettingsMenu;
 
 /**
  * This class is responsible for loading game assets

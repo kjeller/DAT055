@@ -42,7 +42,7 @@ public class CharacterMenu extends Menu {
 
         addListeners();
 
-        layoutTable( Gdx.graphics.getWidth()/4,  Gdx.graphics.getHeight()/18);
+        layoutTable(width,  height);
     }
 
     /**

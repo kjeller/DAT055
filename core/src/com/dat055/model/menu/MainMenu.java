@@ -17,6 +17,7 @@ import com.dat055.controller.MenuController;
 public class MainMenu extends Menu {
     private TextButton play, multi, settings, exit, credits;
     private Label verNr;
+    int width, height;
 
     /**
      * The default constructor of {@link MainMenu}.
@@ -25,14 +26,14 @@ public class MainMenu extends Menu {
      */
     public MainMenu(MenuController ctrl) {
         super(ctrl,false, "UI/Bg/Main.png");
+        width = Gdx.graphics.getWidth()/4;
+        height = Gdx.graphics.getHeight()/18;
+
         createTable();
     }
 
     @Override
     public void createTable() {
-        int width = Gdx.graphics.getWidth()/4;
-        int height = Gdx.graphics.getHeight()/18;
-
         // Create the actors
         play = createButton("Play");
         multi = createButton("Multiplayer");
@@ -140,7 +141,7 @@ public class MainMenu extends Menu {
         settings.addListener(new ClickListener() {
             /**
              * Overrides the method so that {@link MenuController} multiplayer flag is set false (singleplayer), then
-             * swaps to {@link SettingsMenu}.
+             * swaps to {@link DebugSettingsMenu}.
              */
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {

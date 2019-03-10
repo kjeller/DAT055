@@ -9,8 +9,6 @@ import com.badlogic.gdx.math.Vector3;
 import com.dat055.model.GameModel;
 import com.dat055.model.entity.character.Player;
 import com.dat055.model.map.GameMap;
-import com.dat055.model.menu.Menu;
-import com.dat055.model.menu.SettingsMenu;
 import com.dat055.net.Server;
 import com.dat055.view.GameView;
 
