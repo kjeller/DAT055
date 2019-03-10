@@ -390,6 +390,7 @@ public class GameController extends Controller {
         void closeGame() {
         if(isMultiplayer)
             server.close();
+        isRunning = false;
     }
 
     /**

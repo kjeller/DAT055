@@ -274,9 +274,19 @@ public abstract class Character extends Entity {
 
     /**
      * Get the character's direction.
+     * direction.x = -1: left, direction.x = 1: right
+     * direction.y = -1: down. direction.y = 1: up
      * @return direction of the character.
      */
     public Vector2 getDirection() { return direction; }
+
+    /**
+     * Get the character's looking direction.
+     * direction.x = -1: left, direction.x = 1: right
+     * direction.y = -1: down. direction.y = 1: up
+     * @return direction of the character.
+     */
+    public Vector2 getLookDirection() { return lookingDirection; }
 
     /**
      * Get the character's velocity.

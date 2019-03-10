@@ -24,7 +24,7 @@ public class PlayerMessage extends Message {
     public PlayerMessage(Player player, boolean hookJustFired) {
         super(Protocol.OP_PLAYER);
         this.position = player.getPosition();
-        this.lookingDirection = player.getDirection();
+        this.lookingDirection = player.getLookDirection();
         this.isAlive = player.getIsAlive();
         isHookFired = hookJustFired;
     }
