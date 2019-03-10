@@ -34,9 +34,9 @@ public class SettingsMenu extends Menu {
         super(ctrl, false, "UI/Delta.jpg");
 
         settingsMap = new TreeMap<String, String>() {};
+        controller = ctrl;
 
         initConfig();
-        controller = ctrl;
         createTable();
     }
 
@@ -89,22 +89,23 @@ public class SettingsMenu extends Menu {
 
     private Table createSubtable() {
         //The texts in the menu
+        initLblStyle(55);
         Label resolutionX = new Label("Screen width",lblStyle);
         Label resolutionY = new Label("Screen height",lblStyle);
         Label fullscreen = new Label("Fullscreen",lblStyle);
         Label mute = new Label("Mute music",lblStyle);
 
         Table subTable = new Table();
-        subTable.add(resolutionX).padTop(20).height(40).padBottom(10).colspan(2);
+        subTable.add(resolutionX).padTop(20).padBottom(10).padRight(10).colspan(2);
         subTable.add(resFieldX).padTop(20).padBottom(10).row();
 
-        subTable.add(resolutionY).padTop(20).height(40).padBottom(10).colspan(2);
+        subTable.add(resolutionY).padTop(20).padBottom(10).padRight(10).colspan(2);
         subTable.add(resFieldY).padTop(20).padBottom(10).row();
 
-        subTable.add(fullscreen).height(40).padBottom(10).padTop(20).colspan(2);
+        subTable.add(fullscreen).padBottom(10).padTop(20).padRight(10).colspan(2);
         subTable.add(fulField).padTop(20).padBottom(10).row();
 
-        subTable.add(mute).height(40).padBottom(10).padTop(20).colspan(2);
+        subTable.add(mute).padBottom(10).padTop(20).padRight(10).colspan(2);
         subTable.add(musField).padTop(20).padBottom(10).row();
 
         return subTable;
