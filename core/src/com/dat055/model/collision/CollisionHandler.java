@@ -107,7 +107,6 @@ public class CollisionHandler {
             //TODO: Fix corner collisions
         }
         else if ((checkIfEntityCollision(character)) != null) {
-            System.out.println("WAOW");
         }
     }
 
@@ -192,7 +191,6 @@ public class CollisionHandler {
     private void edgeAdjacentCollision(Character character, Rectangle intersection) {
         if (checkBothCollisions(intersection)) {
             Vector2 newPosition = new Vector2();
-            System.out.println("mweep");
         }
     }
 
@@ -247,6 +245,11 @@ public class CollisionHandler {
                 if(entity instanceof Player && mapEntity instanceof Door){
                     if(!((Door) mapEntity).getState()){
                         horizontalCollision((Character) entity, intersection);
+                    }
+                }
+                if(entity instanceof Enemy && mapEntity instanceof Door){
+                    if(!((Door) mapEntity).getState()){
+                        horizontalCollision((Enemy) entity, intersection);
                     }
                 }
                 if(entity instanceof Player && mapEntity instanceof Spike){

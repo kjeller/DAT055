@@ -36,6 +36,7 @@ public class GameMapFactory {
 
     private Iterator<GameMap> iterator;
     private String nextMap;
+    private String mapName;
 
     public GameMapFactory(String fileName) {
         initialize(fileName);
@@ -46,7 +47,9 @@ public class GameMapFactory {
      * @return a gamemap with a set of tilemaps
      */
     public GameMap getMap() {
-        return iterator.next();
+        if(iterator.hasNext())
+            return iterator.next();
+        return null;
     }
 
     /**
@@ -67,6 +70,13 @@ public class GameMapFactory {
             nextMap = root.get(MAP_PROPERTIES).getString("nextmap"); // Sets next map
         } catch (Exception x) {
             nextMap = "None.";
+        }
+
+        // Get name of map
+        try {
+            mapName = root.get(MAP_PROPERTIES).getString("name"); // Sets next map
+        } catch (Exception x) {
+            mapName = "Name not set. Blame map designers.";
         }
 
         // Reads every and creates a gamemap for every map
@@ -183,8 +193,9 @@ public class GameMapFactory {
         } catch (Exception ignored) {}
 
         if(x >= 0 && y >= 0) {
-            return new Goal(new Vector2(x* TILESIZE,y *TILESIZE), texture);
+                return new Goal(new Vector2(x* TILESIZE,y *TILESIZE), texture);
         }
+
         return new Goal(Vector2.Zero);
     }
 
@@ -261,8 +272,12 @@ public class GameMapFactory {
     }
 
     /**
-     * Returns next map filepath
-     * @return
+     * @return next map filepath
      */
     public String getNextMap() { return nextMap; }
-}
+
+    /**
+     * @return name of map
+     */
+    public String getMapName() { return mapName; }
+ }

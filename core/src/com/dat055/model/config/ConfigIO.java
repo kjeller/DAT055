@@ -1,4 +1,4 @@
-package com.dat055.model.menu;
+package com.dat055.model.config;
 
 import java.io.*;
 import java.util.Map;
@@ -20,10 +20,10 @@ public class ConfigIO {
      * @param fileName the name of the file
      * @throws IOException if file cannot be written
      */
-    public static void save(Map<String,String> map,String fileName) throws IOException {
-        PrintWriter printWriter = new PrintWriter(new FileWriter(fileName));
-        for (Map.Entry<String,String> e: map.entrySet())
-            printWriter.println(e.getKey() + ":" + e.getValue());
+    public static void save( Map<String, String> map, String fileName) throws IOException {
+        PrintWriter printWriter = new PrintWriter( new FileWriter(fileName) );
+        for ( Map.Entry<String, String> e: map.entrySet())
+            printWriter.println( e.getKey() + ":" + e.getValue());
         printWriter.close();
     }
 
@@ -33,13 +33,13 @@ public class ConfigIO {
      * @return the map containing the strings from the file
      * @throws IOException if file cannot be read
      */
-    public static Map<String,String> load(String fileName)throws IOException {
-        Map<String,String> resultMap = new TreeMap();
-        Scanner scanner = new Scanner(new FileReader(fileName));
-        while (scanner.hasNextLine()) {
+    public static Map< String, String > load( String fileName )throws IOException {
+        Map< String, String > resultMap = new TreeMap();
+        Scanner scanner = new Scanner( new FileReader( fileName ));
+        while ( scanner.hasNextLine()) {
             String[] row = scanner.nextLine().split(":");
-            checkRow(row);
-            resultMap.put(row[0],row[1]);
+            checkRow( row );
+            resultMap.put( row[0], row[1] );
         }
         scanner.close();
         return resultMap;
@@ -50,8 +50,8 @@ public class ConfigIO {
      * @param row the row that is checked
      * @throws IOException if row is not correct length
      */
-    private static void checkRow(String[] row) throws IOException{
-        if (row.length != 2)
+    private static void checkRow( String[] row ) throws IOException{
+        if ( row.length != 2 )
             throw new IOException("Illegal data format in config file.");
     }
 }

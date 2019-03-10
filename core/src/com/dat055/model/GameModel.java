@@ -19,10 +19,13 @@ public class GameModel extends Model {
     private GameMap map1;
     private GameMap map2;
     private OrthographicCamera cam;
+    private Vector2 camViewDistance;
     private BitmapFont debugFont;
+    private BitmapFont mapFont;
+
     private String currentMap;
     private String nextMap;
-    private Vector2 camViewDistance;
+    private String mapName;
 
     /**
      * Default constructor
@@ -30,7 +33,10 @@ public class GameModel extends Model {
     public GameModel(){
         debugFont = new BitmapFont(Gdx.files.internal("fonts/Mincho.fnt"),
                 Gdx.files.internal("fonts/Mincho.png"), false);
+        mapFont = new BitmapFont(Gdx.files.internal("fonts/Mincho.fnt"),
+                Gdx.files.internal("fonts/Mincho.png"), false);
         debugFont.getData().setScale(0.4f, 0.4f);
+        mapFont.getData().setScale(2f, 2f);
         musicBank = new ObjectMap<String, Music>();
         initMusic();
     }
@@ -65,6 +71,7 @@ public class GameModel extends Model {
         map1 = mapFactory.getMap();
         map2 = mapFactory.getMap();
         nextMap = mapFactory.getNextMap();
+        mapName = mapFactory.getMapName();
         int width = 1280;
         int height = 720;
         cam = new OrthographicCamera(width, height);
@@ -84,7 +91,12 @@ public class GameModel extends Model {
     /**
      * @return font used to draw debug text
      */
-    public BitmapFont getFont() { return debugFont; }
+    public BitmapFont getDebugFont() { return debugFont; }
+
+    /**
+     * @return font used to draw map name at the beginning of map
+     */
+    public BitmapFont getMapFont() { return mapFont; }
 
     /**
      * @return camera.
@@ -104,8 +116,10 @@ public class GameModel extends Model {
     /**
      * @return filepath to current map.
      */
-    public String getCurrentMap() {
-        return currentMap;
-    }
+    public String getCurrentMap() { return currentMap; }
 
+    /**
+     * @return name of current map
+     */
+    public String getMapName() { return mapName; }
 }

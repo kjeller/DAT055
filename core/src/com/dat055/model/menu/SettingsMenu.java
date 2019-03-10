@@ -7,6 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.dat055.controller.MenuController;
+import com.dat055.model.config.ConfigIO;
 
 import java.io.IOException;
 import java.util.Map;
@@ -21,9 +22,7 @@ import java.util.TreeMap;
 public class SettingsMenu extends Menu {
     private MenuController controller;
     private TextButton apply ,save ,back;
-    private Label resolutionX,resolutionY, fullscreen, mute, sound;
     private TextField resFieldX,resFieldY,fulField,musField,soundField;
-    private String resSettingX,resSettingY,fulSetting,musSetting,soundSetting;
     private int resX,resY,fulInt,mutInt;
     private Map<String,String> settingsMap;
 
@@ -49,6 +48,9 @@ public class SettingsMenu extends Menu {
     protected void createTable() {
         Table table = new Table();
 
+        String resSettingX,resSettingY,fulSetting,musSetting,soundSetting;
+        Label resolutionX,resolutionY, fullscreen, mute, sound;
+
         table.setWidth(controller.getWidth());
         table.setHeight(controller.getHeight());
         table.align(Align.center | Align.top);
@@ -65,25 +67,25 @@ public class SettingsMenu extends Menu {
         resSettingY = settingsMap.get("resolutionY");
         fulSetting = settingsMap.get("fullscreen");
         musSetting = settingsMap.get("mute");
-        soundSetting = settingsMap.get("muteeffects");
+       // soundSetting = settingsMap.get("muteeffects");
 
         //The inputFields
         resFieldX = createTextField(resSettingX);
         resFieldY = createTextField(resSettingY);
         fulField = createTextField(fulSetting);
         musField = createTextField(musSetting);
-        soundField = createTextField(soundSetting);
+       // soundField = createTextField(soundSetting);
 
         //The texts in the menu
         resolutionX = new Label("Screen width",lblStyle);
         resolutionY = new Label("Screen height",lblStyle);
         fullscreen = new Label("Fullscreen",lblStyle);
         mute = new Label("Mute music",lblStyle);
-        sound = new Label("Mute effects",lblStyle);
+        //sound = new Label("Mute effects",lblStyle);
 
         addListeners();
 
-        // creates the table
+        // the placement and size of the menu items
         table.add(back).width(150).height(40);
         table.add(save).width(170).height(40);
         table.add(apply).width(170).height(40).row();
@@ -100,8 +102,8 @@ public class SettingsMenu extends Menu {
         table.add(mute).height(40).padBottom(10).padTop(20);
         table.add(musField).padTop(20).padBottom(10).row();
         table.add();
-        table.add(sound).padTop(20).height(40).padBottom(10);
-        table.add(soundField).padTop(20).padBottom(10).row();
+      //  table.add(sound).padTop(20).height(40).padBottom(10);
+       // table.add(soundField).padTop(20).padBottom(10).row();
 
         super.table = table;
     }
@@ -128,7 +130,6 @@ public class SettingsMenu extends Menu {
                 apply.setStyle(hoverStyle);
                 super.enter(event,x,y,pointer,fromActor);
             }
-
             /**
              * Overrides the method so that the button changes to its original style when the pointer leaves.
              */
@@ -137,7 +138,6 @@ public class SettingsMenu extends Menu {
                 apply.setStyle(txtBtnStyle);
                 super.enter(event,x,y,pointer,toActor);
             }
-
             /**
              * Override of method
              * gets the new settings from inputfields and applies them
@@ -156,10 +156,12 @@ public class SettingsMenu extends Menu {
                 if (inputSanitizer() &&mutInt==1){
                     controller.setMute(true);
                     controller.playMusic();
+                    controller.getCtrl().setMute(true);
                 }
                 else if(inputSanitizer()&& mutInt==0){
                     controller.setMute(false);
                     controller.playMusic();
+                    controller.getCtrl().setMute(false);
                 }
 
                 if (inputSanitizer()&&fulInt==1){
@@ -173,7 +175,8 @@ public class SettingsMenu extends Menu {
                     controller.resize(resX, resY);
                 }
                 else
-                    System.out.println("You can't do that Dave");
+                    System.out.println("I can't let you do that Dave");
+                controller.swapMenu("Settings");
             }
         });
 
@@ -206,7 +209,7 @@ public class SettingsMenu extends Menu {
                 settingsMap.put("resolutionY", resFieldY.getText());
                 settingsMap.put("fullscreen", fulField.getText());
                 settingsMap.put("mute", musField.getText());
-                settingsMap.put("muteeffects", soundField.getText());
+              //  settingsMap.put("muteeffects", soundField.getText());
 
                 if (inputSanitizer()) {
                     try {
@@ -216,7 +219,8 @@ public class SettingsMenu extends Menu {
                     }
                 }
                 else
-                    System.out.println("You can't do that Dave");
+                    System.out.println("I can't let you do that Dave");
+                controller.swapMenu("Settings");
             }
         });
         back.addListener(new ClickListener() {
@@ -261,7 +265,7 @@ public class SettingsMenu extends Menu {
             settingsMap.put("resolutionY","720");
             settingsMap.put("fullscreen","0");
             settingsMap.put("mute","0");
-            settingsMap.put("muteeffects","0");
+            //settingsMap.put("muteeffects","0");
             try {
                 ConfigIO.save(settingsMap, "config.txt");
             }
@@ -276,7 +280,7 @@ public class SettingsMenu extends Menu {
      * @return true if sanitizers are all true
      */
     private boolean inputSanitizer(){
-        return (resSanitizerX() && resSanitizerY() && fulSanitizer() && musicSanitizer() && soundSanitizer());
+        return (resSanitizerX() && resSanitizerY() && fulSanitizer() && musicSanitizer() );
     }
 
     /**
@@ -325,12 +329,13 @@ public class SettingsMenu extends Menu {
         return ( settingsMap.put("mute", musField.getText()).equals("0"));
     }
 
-    /**
-     * makes sure that mute effects is 1 or 0
-     */
+    /*
+     * makes sure that mute sound effects is 1 or 0
+
     private boolean soundSanitizer(){
         if (settingsMap.put("muteeffects", soundField.getText()).equals("1"))
             return true;
         return (settingsMap.put("muteeffects", soundField.getText()).equals("0"));
     }
+     */
 }

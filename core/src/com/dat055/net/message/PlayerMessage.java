@@ -21,12 +21,12 @@ public class PlayerMessage extends Message {
      * Sets protol to OP_PLAYER which can be found in {@link Protocol}
      * @param player
      */
-    public PlayerMessage(Player player) {
+    public PlayerMessage(Player player, boolean hookJustFired) {
         super(Protocol.OP_PLAYER);
         this.position = player.getPosition();
         this.lookingDirection = player.getDirection();
         this.isAlive = player.getIsAlive();
-        isHookFired = player.getHookJustFired();
+        isHookFired = hookJustFired;
     }
 
     /**
@@ -43,11 +43,14 @@ public class PlayerMessage extends Message {
      * @param player - values from this player
      */
     public void setPlayerProperties(Player player) {
+        position = new Vector2((int)position.x, (int)position.y);
         player.setPosition(position);
         player.setLookingDirection(lookingDirection);
         player.setIsAlive(isAlive);
-        if(isHookFired)
-            player.generateHook();
+        if(isHookFired) {
+            System.out.println("Hook fired from other player");
+            player.attack();
+        }
     }
 
     public Vector2 getDir() { return lookingDirection; }

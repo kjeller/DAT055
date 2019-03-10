@@ -9,7 +9,7 @@ import java.util.Observable;
 import java.util.Observer;
 /**
  * A class that handles door entities. Used to block the players path until they
- * touch a button. Is an observer, mostly observes buttons.
+ * touch a button. Is an observer that observes buttons.
  * @author Marcus Schmidt
  *
  **/

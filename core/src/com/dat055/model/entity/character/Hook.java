@@ -163,9 +163,12 @@ public class Hook extends Entity {
      */
     @Override
     public void draw(PolygonSpriteBatch sb, float rotation) {
-        poly.draw(sb);
-        poly.setOrigin(wire3.getX()+wire3.getWidth()/2, 0);
-        poly.setRotation(rotation);
+        // poly is set before update but since multiplayer runs in its own thread this might not be the case
+        if(poly != null) {
+            poly.draw(sb);
+            poly.setOrigin(wire3.getX()+wire3.getWidth()/2, 0);
+            poly.setRotation(rotation);
+        }
         super.draw(sb, rotation, new Vector2(-5, ((rotation > 90 && rotation < 270) ? 23 : -23)));
     }
 

@@ -40,11 +40,14 @@ public class GameController extends Controller {
     private Vector2 viewDistance;
 
     // Booleans that describes different game states
-    private boolean isRotating, isPaused, isDebug, isMultiplayer, isRunning;
+    private boolean isRotating, isPaused, isDebug,
+            isMultiplayer, isRunning, isSingleMap;
 
     // Used to rotate a map
     private float rotationTimer;
     private float rotation;
+
+    private float showMapNameTimer;
 
     private Server server;  // Used to communicate with a remote player
 
@@ -61,8 +64,15 @@ public class GameController extends Controller {
     public void update(float deltaTime) {
         if(!isPaused)
             updateCamera(deltaTime);        // Updates camera
+
         checkKeyboardInput();           // Handles keyboard input
 
+        // Timer that is used to show name of map in gameview
+        if(showMapNameTimer>=4) {
+            ((GameView)view).setShowMapName(false);
+        } else {
+            showMapNameTimer += deltaTime;
+        }
 
         // tile rotation map transition
         if(isRotating && !isPaused)
@@ -83,14 +93,26 @@ public class GameController extends Controller {
         }
 
         // Multiplayer updates both maps
-        if(isMultiplayer) {
+        if(isMultiplayer && !isSingleMap) {
             map1.update(deltaTime);
             map2.update(deltaTime);
         }
 
-        // Restart map if either of the maps are in that state (player is dead)
-        if (map1.getRestart() || map2.getRestart()) {
-            resetMap(); }
+        // If there only is one map, do not check the other map
+        if(!isSingleMap) {
+            // Restart map if either of the maps are in that state (player is dead)
+            if (map1.getRestart() || map2.getRestart())
+                resetMap();
+            if(map1.isFinished() && map2.isFinished())
+                nextMap();
+        } else {
+            if(map1.getRestart())
+                resetMap();
+            // Change to next map if player1
+            if(map1.isFinished()) {
+                nextMap();
+            }
+        }
 
         // Change to next map if both players have reached their goals
         if(map1.isFinished() && map2.isFinished()) {
@@ -104,9 +126,6 @@ public class GameController extends Controller {
         if(isMultiplayer && server.isRunning()) {
             // Only send updates if player is in motion
             if(currentPlayer.getInMotion())
-                server.sendPlayerUpdate(currentPlayer);
-
-            if(currentPlayer.getHook() != null)
                 server.sendPlayerUpdate(currentPlayer);
 
             // Update remote player's character
@@ -182,7 +201,7 @@ public class GameController extends Controller {
                 currentPlayer.attack();
             if (Gdx.input.isKeyPressed(Input.Keys.SPACE))
                 currentPlayer.jump();
-            if(!isMultiplayer)
+            if(!isMultiplayer && !isSingleMap)
                 if(Gdx.input.isKeyJustPressed(Input.Keys.T))
                     toggleCurrentPlayer();
         }
@@ -219,14 +238,21 @@ public class GameController extends Controller {
             ((MenuController)ctrl).playMusic();
             return true;
         }
+        isSingleMap = false;
 
-        ((GameModel)model).createMap(fileName);
+        ((GameModel)model).createMap(fileName); // Tell model to create map
 
+        // Get maps
         map1 = ((GameModel)model).getGameMap1();
         map2 = ((GameModel)model).getGameMap2();
+
+        if(map2 == null)
+            isSingleMap = true;
+
         cam = ((GameModel)model).getCam();
         player1 = map1.getPlayer();
-        player2 = map2.getPlayer();
+        if(!isSingleMap)
+            player2 = map2.getPlayer();
 
         // Start running
         isRunning = true;
@@ -234,10 +260,14 @@ public class GameController extends Controller {
         isPaused = false;
         isDebug = false;
 
-        view = new GameView((GameModel)model);
-
         // Default value for rotationTimer
         rotationTimer = 180f;
+
+        // Default value for map name timer
+        showMapNameTimer = 0;
+
+        // Create a new view
+        view = new GameView((GameModel)model);
 
         // Sets current player based on mode
         whoIsOnTop(mode);
@@ -246,18 +276,28 @@ public class GameController extends Controller {
         Vector2 camStartPos = currentPlayer.getPosition().cpy();
         viewDistance = ((GameModel)model).getCamViewDistance();
         cam.position.set(new Vector3(camStartPos.x, camStartPos.y, 0));
+
+        // Set a server for a player to send updates
+        if(isMultiplayer)
+            currentPlayer.setServer(server);
+
+        // Set view properties
+
+        ((GameView)view).setSingleMap(isSingleMap);
+        ((GameView)view).setShowMapName(true);
+
         playMusic();
-        return true; //TODO: Fix a return false which indicates if map created successfully or not
+        return true;
     }
 
     /**
-     * a method to mute the music
-     * @param foo a boolean to mute the music
+     * Mutes the music
+     * @param foo Boolean to mute the music
      */
     public void setMute(boolean foo){mute = foo;}
 
     /**
-     * A method to start the music
+     * Starts and stops the music
      */
     private void playMusic(){
         if (!mute) {
