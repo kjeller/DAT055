@@ -9,8 +9,8 @@ public class DesktopLauncher {
 	public static void main (String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 		config.title = "Shadow World";
-		config.width = 1280;
-		config.height = 720;
+		config.width = 1920;
+		config.height = 1080;
 		config.vSyncEnabled = true;
 		config.addIcon("textures/icon.png", Files.FileType.Internal);
 		new LwjglApplication(new Game(), config);

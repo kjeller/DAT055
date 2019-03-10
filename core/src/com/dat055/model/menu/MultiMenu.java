@@ -39,9 +39,6 @@ public class MultiMenu extends Menu {
 
     @Override
     public void createTable() {
-        int width = Gdx.graphics.getWidth()/4;
-        int height = Gdx.graphics.getHeight()/18;
-
         join = createButton("Join");
         host = createButton("Host");
         back = createButton("Back");

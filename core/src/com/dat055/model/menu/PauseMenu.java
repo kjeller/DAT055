@@ -1,18 +1,9 @@
 package com.dat055.model.menu;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.NinePatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.FocusListener;
-import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
-import com.badlogic.gdx.utils.Align;
 import com.dat055.controller.GameController;
 import com.dat055.controller.MenuController;
 
@@ -45,7 +36,7 @@ public class PauseMenu extends Menu {
 
         addListeners();
 
-        layoutTable(Gdx.graphics.getWidth()/4, Gdx.graphics.getHeight()/18);
+        layoutTable(width, height);
     }
     //todo: needs documentation
     public void setMute(boolean foo) {mute = foo;}
@@ -103,7 +94,7 @@ public class PauseMenu extends Menu {
 
         settings.addListener(new ClickListener() {
             /**
-             * Overrides the method so that {@link MenuController} swaps to the {@link SettingsMenu}.
+             * Overrides the method so that {@link MenuController} swaps to the {@link DebugSettingsMenu}.
              */
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
@@ -158,8 +149,6 @@ public class PauseMenu extends Menu {
             @Override
             public void exit (InputEvent event, float x, float y, int pointer, Actor toActor) {
                 menu.setStyle(txtBtnStyle);
-                controller.getCtrl().getModel().stopMusic();
-                controller.playMusic();
                 super.enter(event,x,y,pointer,toActor);
             }
         });

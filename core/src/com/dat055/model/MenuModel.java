@@ -74,7 +74,6 @@ public class MenuModel extends Model {
         next.updateTable();
         Image bg = next.getBg();
         if(bg != null) {
-            bg.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
             stage.addActor(bg);
         }
         Table tbl = next.getTable();

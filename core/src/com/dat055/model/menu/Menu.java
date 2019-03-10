@@ -28,6 +28,7 @@ public abstract class Menu {
     Table table;
     LabelStyle lblStyle;
     TextButtonStyle txtBtnStyle, hoverStyle, checkedStyle;
+    int width, height;
     private TextFieldStyle txtFldStyle;
     private Image bg;
 
@@ -42,6 +43,8 @@ public abstract class Menu {
         table = new Table();
         controller = ctrl;
         updatable = false;
+        width = Gdx.graphics.getWidth()/4;
+        height = Gdx.graphics.getHeight()/18;
     }
 
     /**
@@ -61,6 +64,7 @@ public abstract class Menu {
     Menu(MenuController controller, boolean updatable, String bgAssetLocation) {
         this(controller, updatable);
         bg = new Image(new Texture(bgAssetLocation));
+        bg.setSize(Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
     }
 
     /**

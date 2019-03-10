@@ -29,10 +29,7 @@ public class FinishMenu extends Menu {
 
     @Override
     public void createTable() {
-        int width = Gdx.graphics.getWidth()/4;
-        int height = Gdx.graphics.getHeight()/18;
-
-        // Create the actors
+         // Create the actors
         proceed = createButton("Continue");
 
         // Add listeners to the actors
