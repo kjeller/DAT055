@@ -62,6 +62,11 @@ public class GameController extends Controller {
      */
     @Override
     public void update(float deltaTime) {
+        if(!isRunning) {
+            server.close();
+            return;
+        }
+
         if(!isPaused)
             updateCamera(deltaTime);        // Updates camera
 
@@ -345,6 +350,12 @@ public class GameController extends Controller {
             if(!server.isRunning()) {
                 try { Thread.sleep(0);
                 } catch (InterruptedException ignored) {}
+
+                // Stop hosting server
+                if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+                    closeGame();
+                    return false;
+                }
             } else { break; }
         }
 
@@ -372,6 +383,12 @@ public class GameController extends Controller {
                 try {
                     Thread.sleep(0);
                 } catch (InterruptedException ignored) {}
+                // Stop joining server
+                if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+                    closeGame();
+                    return false;
+                }
+
             } else { break; }
         }
         mode = Mode.BACK;
@@ -387,7 +404,8 @@ public class GameController extends Controller {
      * Closes current game session and multiplayer session
      * if running.
      */
-        void closeGame() {
+    void closeGame() {
+        System.out.println("Game has been closed!");
         if(isMultiplayer)
             server.close();
         isRunning = false;

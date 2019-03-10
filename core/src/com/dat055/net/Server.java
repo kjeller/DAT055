@@ -127,6 +127,7 @@ public class Server extends Thread{
     public void close() {
         try {
             ss.close();
+            cs.close();
         } catch (IOException ignored) {}
         ds.close();
         tcpHandler.interrupt();
