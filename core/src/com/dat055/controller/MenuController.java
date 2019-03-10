@@ -42,7 +42,7 @@ public class MenuController extends Controller{
         ((MenuModel)model).includeMenu("Pause", new PauseMenu(this));
         ((MenuModel)model).includeMenu("Select", new SelectMenu(this));
         ((MenuModel)model).includeMenu("Character", new CharacterMenu(this));
-        ((MenuModel)model).includeMenu("Settings", new DebugSettingsMenu(this));
+        ((MenuModel)model).includeMenu("Settings", new SettingsMenu(this));
         ((MenuModel)model).includeMenu("Credits", new CreditsMenu(this));
         ((MenuModel)model).includeMenu("Finish", new FinishMenu(this));
         playMusic();
