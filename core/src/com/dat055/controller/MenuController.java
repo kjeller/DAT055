@@ -138,6 +138,15 @@ public class MenuController extends Controller{
     public void swapMenu(String menu) { ((MenuModel)model).swapMenu(menu); }
 
     /**
+     * Swaps to {@link MainMenu} and stops playing music
+     */
+    public void swapToMain() {
+        swapMenu("Main");
+        getCtrl().getModel().stopMusic();
+        getModel().playMusic("title");
+    }
+
+    /**
      * Closes the game
      */
     public void closeGame() { ((GameController)ctrl).closeGame();}

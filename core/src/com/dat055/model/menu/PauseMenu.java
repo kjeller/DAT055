@@ -128,9 +128,7 @@ public class PauseMenu extends Menu {
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 controller.closeGame();
-                controller.swapMenu("Main");
-                controller.getCtrl().getModel().stopMusic();
-                controller.getModel().playMusic("title");
+                controller.swapToMain();
                 super.touchUp(event, x, y, pointer, button);
             }
 

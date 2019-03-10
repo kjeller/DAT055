@@ -126,6 +126,7 @@ public class Server extends Thread{
      * Closes sockets and interrupts threads.
      */
     public void close() {
+        isRunning = false;
         tcpHandler.writeClientMessage(new LeaveMessage());
         try {
             ss.close();
