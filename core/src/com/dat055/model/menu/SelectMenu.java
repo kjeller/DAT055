@@ -36,13 +36,13 @@ public class SelectMenu extends Menu {
         textButtonGroup.setMaxCheckCount(1);
         textButtonGroup.setMinCheckCount(0);
         textButtonGroup.setUncheckLast(true);
-        setBg(new Image(new Texture((controller.multiplayer) ? "UI/Bg/Host.png" : "UI/Bg/Singleplayer.png")));
-        getBg().setSize(Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
         createTable();
     }
 
     @Override
     public void createTable() {
+        setBg(new Image(new Texture((controller.multiplayer) ? "UI/Bg/Host.png" : "UI/Bg/Singleplayer.png")));
+        getBg().setSize(Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
         back = createButton("Back");
         select = createButton("Select");
 
@@ -69,6 +69,11 @@ public class SelectMenu extends Menu {
         table.add(select).width(butX>>1).height(butY).padRight(padSmall).padBottom(padSmall).bottom().right();
     }
 
+    /**
+     * A help-method to create a part of the table.
+     * @param padding The padding to be used when layouting the objects.
+     * @return The resulting sub-table.
+     */
     private Table createSubTable(int padding) {
         Table table = new Table();
         FileHandle listOfMap = Gdx.files.internal("maps/maps.txt"); // get list of maps
