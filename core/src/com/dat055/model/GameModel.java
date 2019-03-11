@@ -46,7 +46,7 @@ public class GameModel extends Model {
      */
     @Override
     public void initMusic() {
-        musicBank.put("map_01", loadMusic("map_01.mp3"));
+        musicBank.put("map", loadMusic("map.mp3"));
     }
 
     /**
@@ -56,7 +56,7 @@ public class GameModel extends Model {
     @Override
     public void playMusic(String ost) {
        Music music = musicBank.get(ost);
-       if (ost.equals("map_01"))
+       if (ost.equals("map"))
            music.setVolume(0.3f);
        music.play();
     }

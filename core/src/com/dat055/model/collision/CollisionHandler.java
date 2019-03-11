@@ -253,7 +253,7 @@ public class CollisionHandler {
                     }
                 }
                 if(entity instanceof Player && mapEntity instanceof Spike){
-                    if(((Player) entity).getIsAlive())
+                    if(((Player) entity).getIsAlive() && !((Player) entity).getInvincible())
                     ((Spike) mapEntity).death((Player) entity);
                 }
                 if(entity instanceof Player && mapEntity instanceof Goal) {
