@@ -366,13 +366,12 @@ public class GameController extends Controller {
         if(!server.startServer(fileName))
             return false;
 
-        // Wait for server to start
-        while(true) {
-            if(!server.isRunning()) {
-                try { Thread.sleep(10);
-                } catch (InterruptedException ignored) {}
-            } else { break; }
+        // Waits for server to connect
+        if(!waitForServer()) {
+            ((MenuController)ctrl).swapToMain();
+            return false;
         }
+
         startMap(fileName);
         return true;
     }
@@ -388,21 +387,35 @@ public class GameController extends Controller {
         isMultiplayer = true;
 
         server = new Server(name, 1337);
-        if(!server.startServerAndClient(addr))
+        if(!server.startServerAndClient(addr)) {
+            ((MenuController)ctrl).swapToMain();
             return false;
-
-        // Waits for server to start
-        while(true) {
-            if(!server.isRunning()) {
-                try {
-                    Thread.sleep(0);
-                } catch (InterruptedException ignored) {}
-
-
-            } else { break; }
         }
+
+        // Waits for server to connect
+        if(!waitForServer()) {
+            ((MenuController)ctrl).swapToMain();
+            return false;
+        }
+
         startMap(server.getChosenMap());
 
+        return true;
+    }
+
+    /**
+     * Waits for server to start running or time out
+     */
+    private boolean waitForServer() {
+        // Wait for server to start
+        while(true) {
+            if(!server.isRunning()) {
+                try { Thread.sleep(0);
+                } catch (InterruptedException ignored) {}
+                if(server.isTimedOut())
+                    return false;
+            } else { break; }
+        }
         return true;
     }
 
