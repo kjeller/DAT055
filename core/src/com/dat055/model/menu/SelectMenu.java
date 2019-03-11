@@ -42,7 +42,7 @@ public class SelectMenu extends Menu {
     @Override
     public void createTable() {
         setBg(new Image(new Texture((controller.multiplayer) ? "UI/Bg/Host.png" : "UI/Bg/Singleplayer.png")));
-        getBg().setSize(Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
+        getBg().setSize(width*4, height*18);
         back = createButton("Back");
         select = createButton("Select");
 
