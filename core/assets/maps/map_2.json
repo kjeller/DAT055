@@ -50,7 +50,8 @@
     {"door"       : {"position" : [14, 2], "rqs"    : ["b5"], "id" : "d3" ,"sprite" :"textures/interactables/doorClosed.png"}},
     {"door"       : {"position" : [23, 6], "rqs"    : ["b3"], "id" : "d4" ,"sprite" :"textures/interactables/doorClosed.png"}},
     {"button"     : {"position" : [18, 7], "timer"  : 10, "id" : "b4", "target" : "d2", "sprite"  : "textures/interactables/buttonInactive.png"}},
-    {"button"     : {"position" : [18, 6], "timer"  : 10, "id" : "b5", "target" : "d3", "sprite"  : "textures/interactables/buttonInactive.png"}}
+    {"button"     : {"position" : [18, 6], "timer"  : 10, "id" : "b5", "target" : "d3", "sprite"  : "textures/interactables/buttonInactive.png"}},
+    {"spike"  : {"position" : [12, 2], "sprite" : "textures/interactables/Spikes.png"}}
    ]
 }]
 }
