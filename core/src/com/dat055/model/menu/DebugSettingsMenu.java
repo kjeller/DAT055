@@ -16,9 +16,8 @@ import java.util.Map;
 import java.util.TreeMap;
 
 /**
- * This Class is responsible for creating the settings menu.
- *
- * @author Pontus Johansson
+ * This is an alternative class for createing and giving functionality to the settings menu (used for debugging)
+ * @author Erik Börne
  * @version 2019-03-07
  */
 public class DebugSettingsMenu extends Menu {
@@ -40,6 +39,9 @@ public class DebugSettingsMenu extends Menu {
         createTable();
     }
 
+    /**
+     * Initilizes the resolutions
+     */
     private void initResoltions() {
         resolutions.add(new Vector2(1024,576));
         resolutions.add(new Vector2(1280,720));

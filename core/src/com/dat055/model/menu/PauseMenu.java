@@ -8,7 +8,7 @@ import com.dat055.controller.GameController;
 import com.dat055.controller.MenuController;
 
 /**
- * This class is responsible for the creation and functionality of the pause. It inherits from the class {@link Menu},
+ * This class is responsible for the creation and functionality of the pause menu. It inherits from the class {@link Menu},
  * which is where the menu table and styles are created and stored.
  *
  * @author Erik Börne
@@ -38,8 +38,12 @@ public class PauseMenu extends Menu {
 
         layoutTable(width, height);
     }
-    //todo: needs documentation
-    public void setMute(boolean foo) {mute = foo;}
+
+    /**
+     * This sets the mute flag.
+     * @param state sets the state of mute.
+     */
+    public void setMute(boolean state) {mute = state;}
 
     /**
      * This is the method that populates the table that exist in the inherited class {@link Menu}.

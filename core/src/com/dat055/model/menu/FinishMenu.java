@@ -8,8 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.dat055.controller.MenuController;
 
 /**
- * This class is responsible for the creation and functionality of the main menu. It inherits from the class
- * {@link Menu}, which is where the menu table and styles are created and stored.
+ * This class is responsible for the creation and functionality of the finished menu.
  *
  * @author Erik Börne
  * @version 2019-03-04

@@ -14,8 +14,8 @@ import com.dat055.controller.MenuController;
 import java.util.ArrayList;
 
 /**
- *  This class is responsible for the creation of the multiplayer. It inherits from the class {@link Menu}, which is where
- *  the menu table is stored.
+ *  This class is responsible for the creation of the map selection menu. It inherits from the class {@link Menu}, which
+ *  is where the menu table is stored.
  *
  *  @author Erik Börne
  *  @version 2019-03-06

@@ -78,7 +78,7 @@ public class SettingsMenu extends Menu {
         addListeners();
 
         // the placement and size of the menu items
-        table.add(createSubtable()).colspan(3).expand().padBottom(200).row();
+        table.add(createSubtable()).colspan(3).expand().padBottom(height).row();
         table.add(back).width(170).height(40).expandX().left().pad(20);
         table.add(save).width(170).height(40).center().pad(20);
         table.add(apply).width(170).height(40).right().pad(20);

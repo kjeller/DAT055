@@ -10,12 +10,12 @@ import com.badlogic.gdx.scenes.scene2d.utils.FocusListener;
 import com.dat055.controller.MenuController;
 
 /**
- * This class is a work-in-progress. It was meant to work as a multiplayer lobby of sorts. This is where I realized that
- * the concept of an updatable menu was needed. This is because of the static nature of menus, they don't update to
+ * This class is not used in the demo. It was meant to work as a multiplayer lobby of sorts. This is where the concept
+ * of an updatable menu was needed. This is because of the static nature of menus, they don't update to
  * external information unless recreated. Might result in a re-design of the menu system.
  *
  * @author Erik Börne
- * @version 2019-03-06
+ * @version 2019-03-11
  */
 public class CharacterMenu extends Menu {
     private TextField username;
