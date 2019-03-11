@@ -86,6 +86,7 @@ public class MenuController extends Controller{
 
     /**
      * Calls the joinGame method from the {@link GameController} with the selected ip.
+     * @param ip the IP to join.
      * @return A boolean that reports if the method is successful or not.
      */
     public boolean joinGame(String ip) {
@@ -138,7 +139,7 @@ public class MenuController extends Controller{
     public void swapMenu(String menu) { ((MenuModel)model).swapMenu(menu); }
 
     /**
-     * Swaps to {@link MainMenu} and stops playing music
+     * Swaps to {@link MainMenu} and stops playing music.
      */
     public void swapToMain() {
         swapMenu("Main");
@@ -152,13 +153,13 @@ public class MenuController extends Controller{
     public void closeGame() { ((GameController)ctrl).closeGame();}
 
     /**
-     * Mutes the music
-     * @param foo Boolean to mute the music
+     * Mutes the music.
+     * @param state Boolean to mute the music.
      */
-    public void setMute(boolean foo) {mute = foo;}
+    public void setMute(boolean state) {mute = state;}
 
     /**
-     * A method to play the music
+     * A method to play the music.
      */
     public void playMusic(){
         if(!mute)
@@ -168,7 +169,7 @@ public class MenuController extends Controller{
     }
 
     /**
-     * Toggles the pause method located in {@link GameController}
+     * Toggles the pause method located in {@link GameController}.
      */
     public void togglePause() { ((GameController)ctrl).togglePause(); }
 

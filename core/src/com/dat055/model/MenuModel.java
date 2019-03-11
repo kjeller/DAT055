@@ -66,7 +66,7 @@ public class MenuModel extends Model {
     /**
      * This method swaps to the current {@link Menu} to the selected one. If the menu has a background
      * it's swapped aswell.
-     * @param menu A string that is used as a key to the object-map of  menus.
+     * @param menu A string that is used as a key to the object-map of menus.
      */
     public void swapMenu(String menu) {
         stage.clear();
