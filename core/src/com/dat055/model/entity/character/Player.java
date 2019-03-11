@@ -30,6 +30,18 @@ public class Player extends Character {
         super(startPosition, 80, 64, texturePath,name, 5, new Vector2(5, 20));
         movingWithHook = false;
         isInvincible = false;
+        initSounds();
+    }
+
+    /**
+     * Initiates soundBank with player-specific sound effects.
+     */
+    @Override
+    protected void initSounds() {
+        super.initSounds();
+        soundBank.put("takedamage", loadFile("player_damage.mp3"));
+        soundBank.put("attack", loadFile("attack.mp3"));
+        soundBank.put("death", loadFile("player_death.mp3"));
     }
 
     /**
@@ -91,11 +103,13 @@ public class Player extends Character {
 
     /**
      * Method used to generate a new hook.
+     * Plays a sound effect when creating a new hook.
      * @return the newly generated hook.
      */
     private Hook generateHook() {
         if(server != null)
             server.sendPlayerMessage(new PlayerMessage(this, true));
+        playSound("attack");
         return new Hook(new Vector2(position),
             20, 20, 250.0f, lookingDirection);
     }
@@ -146,7 +160,6 @@ public class Player extends Character {
         super.takeDamage(damage);
         isInvincible = true;
         iframes = 2;
-        playSound("takedamage");
     }
 
     /**

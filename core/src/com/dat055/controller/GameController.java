@@ -324,7 +324,7 @@ public class GameController extends Controller {
      */
     private void playMusic(){
         if (!mute) {
-            model.playMusic("map_01");
+            model.playMusic("map");
             return;
         } model.stopMusic();
     }

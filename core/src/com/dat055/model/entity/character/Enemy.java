@@ -21,6 +21,27 @@ public class Enemy extends Character {
         isMoving = true;
         lookingDirection.x = 1;
         BOUNDING_BOX_COLOR = Color.GOLD;
+        initSounds();
+    }
+
+    /**
+     * Plays an enemy-specific sound effect when taking damage.
+     * @param damage amount of damage to take
+     */
+    @Override
+    public void takeDamage(int damage) {
+        super.takeDamage(damage);
+        playSound("takedamage");
+    }
+
+    /**
+     * Initializes soundBank with enemy-specific sounds.
+     */
+    @Override
+    protected void initSounds() {
+        super.initSounds();
+        soundBank.put("takedamage", loadFile("enemy_damage.mp3"));
+        soundBank.put("death", loadFile("enemy_death.mp3"));
     }
 
     /**

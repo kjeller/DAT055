@@ -188,8 +188,12 @@ public abstract class Character extends Entity {
      */
     public void takeDamage(int damage) {
         healthPoints -= damage;
-        if (healthPoints <= 0)
+        if (healthPoints <= 0) {
             die();
+            playSound("death");
+        } else
+            playSound("takedamage");
+
     }
 
     /**

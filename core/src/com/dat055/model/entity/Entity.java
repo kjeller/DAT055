@@ -27,7 +27,7 @@ public abstract class Entity extends Observable {
     protected Sprite sprite;
     protected String texturePath;
     protected Rectangle rect;
-    private ObjectMap<String, Sound> soundBank;
+    protected ObjectMap<String, Sound> soundBank;
 
     /**
      * Initiates an entity with a texturePath, used when an entity should have a sprite.
@@ -65,17 +65,16 @@ public abstract class Entity extends Observable {
      * @param file filename of sound
      * @return Sound object with the sound effect.
      */
-    private Sound loadFile(String file) {
+    protected Sound loadFile(String file) {
         return Gdx.audio.newSound(Gdx.files.internal("audio/sfx/" + file));
     }
 
     /**
      * Initializes the sound bank ObjectMap.
      */
-    private void initSounds() {
+    protected void initSounds() {
         soundBank = new ObjectMap<String, Sound>();
-        soundBank.put("takedamage", loadFile("oof.mp3"));
-        soundBank.put("jump", loadFile("jump.wav"));
+        soundBank.put("jump", loadFile("jump.mp3"));
     }
 
     /**

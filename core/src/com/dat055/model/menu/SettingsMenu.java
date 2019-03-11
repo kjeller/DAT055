@@ -5,7 +5,6 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.utils.Align;
 import com.dat055.controller.MenuController;
 import com.dat055.model.config.ConfigIO;
 
@@ -96,8 +95,8 @@ public class SettingsMenu extends Menu {
         Label mute = new Label("Mute music",lblStyle);
 
         Table subTable = new Table();
-        subTable.add(resolutionX).padTop(20).padBottom(10).padRight(10).colspan(2);
-        subTable.add(resFieldX).padTop(20).padBottom(10).row();
+        subTable.add(resolutionX).padTop(400).padBottom(10).padRight(10).colspan(2);
+        subTable.add(resFieldX).padTop(400).padBottom(10).row();
 
         subTable.add(resolutionY).padTop(20).padBottom(10).padRight(10).colspan(2);
         subTable.add(resFieldY).padTop(20).padBottom(10).row();
