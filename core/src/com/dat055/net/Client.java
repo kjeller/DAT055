@@ -79,4 +79,5 @@ public class Client extends Thread{
 
     public boolean isConnected() { return cs.isConnected(); }
     public ObjectOutputStream getOut() { return out; }
+    public Socket getSocket() { return cs; }
 }

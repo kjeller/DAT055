@@ -163,13 +163,26 @@ public class Hook extends Entity {
      */
     @Override
     public void draw(PolygonSpriteBatch sb, float rotation) {
-        // poly is set before update but since multiplayer runs in its own thread this might not be the case
-        if(poly != null) {
-            poly.draw(sb);
-            poly.setOrigin(wire3.getX()+wire3.getWidth()/2, 0);
-            poly.setRotation(rotation);
+        int hookAdjust;
+        int scaleAdj;
+        if(rotation > 90 && rotation < 270) {
+            hookAdjust = 23;
+            scaleAdj = -1;
+        } else {
+            hookAdjust = -23;
+            scaleAdj = 1;
         }
-        super.draw(sb, rotation, new Vector2(-5, ((rotation > 90 && rotation < 270) ? 23 : -23)));
+        if(poly != null) {
+            // Sets rotation for plane where poly will be drawed
+           poly.setOrigin(wire3.getX()+wire3.getWidth()/2, 0);
+           poly.setScale(scaleAdj, 1);
+
+            poly.setRotation(rotation);
+            poly.draw(sb);
+
+        }
+        // Rotation corrects hook's position when drawn upside down
+        super.draw(sb, rotation, new Vector2(-5, (hookAdjust)));
     }
 
     /**
@@ -217,7 +230,7 @@ public class Hook extends Entity {
                 wire.x + wire.width, wire.y});
 
         // Sets the polygon region that makes up the wire with texture.
-        PolygonRegion p = new PolygonRegion(new TextureRegion(texture), wire2.getVertices(),
+        PolygonRegion p = new PolygonRegion(new TextureRegion(texture), wire2.getTransformedVertices(),
                 new short[] {0, 1, 2, 0, 2, 3 });
         poly = new PolygonSprite(p);
 

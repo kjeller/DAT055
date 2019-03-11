@@ -2,6 +2,7 @@ package com.dat055.net;
 
 import com.dat055.model.entity.character.Player;
 import com.dat055.net.message.JoinMessage;
+import com.dat055.net.message.LeaveMessage;
 import com.dat055.net.message.Message;
 import com.dat055.net.message.PlayerMessage;
 import com.dat055.net.threads.TCPHandler;
@@ -23,6 +24,7 @@ import static com.dat055.net.message.Protocol.*;
  * @version 2019-02-26
  */
 public class Server extends Thread{
+    private final int TIMEOUT = 10000; // 10 sec before server times out
     // TCPcommunication
     private ServerSocket ss;
     private Socket cs; // Connected socket
@@ -42,7 +44,7 @@ public class Server extends Thread{
 
     // Server properties
     private int port;
-    private boolean isRunning;
+    private boolean isRunning, isTimedOut;
 
     // Game properties
     private String chosenMap;
@@ -52,6 +54,7 @@ public class Server extends Thread{
         this.port = port;
         this.name = name;
         isRunning = false;
+        isTimedOut = false;
         tcpHandler = new TCPHandler(this);
         udpHandler = new UDPHandler(this);
     }
@@ -62,6 +65,10 @@ public class Server extends Thread{
      * @return
      */
     public boolean startServerAndClient(String addr) {
+        // Try if address is a correct inet address
+        try { InetAddress.getByName(addr);
+        } catch (UnknownHostException e) { return false;}
+
         tcpHandler.setClient(client = new Client(addr, port));
         return startServer(null);
     }
@@ -84,8 +91,11 @@ public class Server extends Thread{
     private boolean initialize() {
         try {
             ss = new ServerSocket(port);
-            // Serversocket is nowcreated
+            // Serversocket is now created
+            ss.setSoTimeout(TIMEOUT);
             cs = ss.accept();   // Blocking method awaiting client to connect
+            ss.setSoTimeout(0);
+
             // A client has now connected to the server.
             out = new ObjectOutputStream(cs.getOutputStream());
             in = new ObjectInputStream(cs.getInputStream());
@@ -98,7 +108,11 @@ public class Server extends Thread{
             }
             tcpHandler.start();
             udpHandler.start();
-        } catch (IOException e) { System.out.println(e); return false;}
+        } catch (IOException e) {
+            isTimedOut = true;
+            close();
+            return false;
+        }
         return true;
     }
 
@@ -109,7 +123,8 @@ public class Server extends Thread{
             } catch (InterruptedException ignored) {}
             // If there exist no socket connected to server
             if(cs == null) {
-                    initialize(); // Initialize server and get socket connected.
+                if(!initialize()) // Initialize server and get socket connected.
+                    close();
             } else {
                 // Check if socket is still connected
                 if(!cs.isConnected()) {
@@ -125,15 +140,23 @@ public class Server extends Thread{
      * Closes sockets and interrupts threads.
      */
     public void close() {
-        try {
-            ss.close();
-        } catch (IOException ignored) {}
-        ds.close();
-        tcpHandler.interrupt();
-        udpHandler.interrupt();
-        client.tcpHandler.interrupt();
-        client.udpHandler.interrupt();
+        isRunning = false;
+        if(client != null) {
+            if(client.getSocket() != null) {
+                tcpHandler.writeClientMessage(new LeaveMessage());
+                tcpHandler.interrupt();
+            }
+            try {
+                client.tcpHandler.interrupt();
+                client.udpHandler.interrupt();
+            } catch (Exception ignored) {}
+        }
+        if(udpHandler != null)
+            udpHandler.interrupt();
 
+        try { ss.close(); } catch (Exception ignored) {}
+        try { cs.close(); } catch (Exception ignored) {}
+        try { ds.close(); } catch (Exception ignored) {}
         this.interrupt();
     }
 
@@ -266,5 +289,6 @@ public class Server extends Thread{
     public ObjectInputStream getIn() { return in; }
 
     public boolean isRunning() { return isRunning; }
+    public boolean isTimedOut() { return isTimedOut; }
     public boolean isConnected() { return cs.isConnected(); }
 }

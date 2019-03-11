@@ -139,7 +139,7 @@ public abstract class Menu {
      * Initializes the label style.
      * @param height Scales the font used on the labels.
      */
-    private void initLblStyle(int height) {
+    protected final void initLblStyle(int height) {
         // Create the standard style.
         lblStyle.font = generateFont(height/2);
         lblStyle.fontColor = Color.WHITE;
