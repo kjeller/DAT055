@@ -27,7 +27,7 @@ public class CharacterMenu extends Menu {
      *             {@link com.dat055.controller.GameController}'s methods.
      */
     public CharacterMenu(MenuController ctrl) {
-        super(ctrl,true, "UI/Delta.jpg");
+        super(ctrl,true, "UI/Bg/Main.png");
         createTable();
     }
 

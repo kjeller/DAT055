@@ -31,7 +31,7 @@ public class SettingsMenu extends Menu {
      * @param ctrl a menucontroller
      */
     public SettingsMenu(MenuController ctrl) {
-        super(ctrl, false, "UI/Delta.jpg");
+        super(ctrl, false, "UI/Bg/Settings.png");
 
         settingsMap = new TreeMap<String, String>() {};
 
@@ -111,7 +111,7 @@ public class SettingsMenu extends Menu {
     }
 
     /**
-     *Method that makes the string from the config.txt into int
+     * Method that makes the string from the config.txt into int
      * @param strn name of the config
      * @return the specified config in int
      */
