@@ -49,6 +49,18 @@ public class Button extends Entity {
         if (isActive){
             disableTime -= deltaTime;
     }
+        if(disableTime > 3 && disableTime < 4 && isActive)
+            this.setTexture("textures/interactables/buttonInactive.png");
+
+        if(disableTime < 3 && disableTime > 2 && isActive)
+            this.setTexture("textures/interactables/buttonActive.png");
+
+        if(disableTime > 1 && disableTime < 2 && isActive)
+            this.setTexture("textures/interactables/buttonInactive.png");
+
+        if(disableTime < 1 && disableTime > 0 && isActive)
+            this.setTexture("textures/interactables/buttonActive.png");
+
         if(disableTime < 0 && isActive) {
             isActive = false;
             setChanged();
