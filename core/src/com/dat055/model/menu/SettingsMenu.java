@@ -20,7 +20,7 @@ import java.util.TreeMap;
  */
 public class SettingsMenu extends Menu {
     private MenuController controller;
-    private TextButton apply ,save ,back;
+    private TextButton apply ,save ,back, ful, mus;
     private TextField resFieldX,resFieldY,fulField,musField,soundField;
     private int resX,resY,fulInt,mutInt;
     private Map<String,String> settingsMap;
@@ -41,7 +41,7 @@ public class SettingsMenu extends Menu {
 
     /**
      * overrides the method
-     * Creates the buttons and text
+     * Creates the buttons and texts
      */
     @Override
     protected void createTable() {
@@ -57,6 +57,8 @@ public class SettingsMenu extends Menu {
         save = createButton("Save");
         apply = createButton("Apply");
         back = createButton("Back");
+        ful = createButton("");
+        mus = createButton("");
 
         //gets settings from the config file
         resSettingX = settingsMap.get("resolutionX");
@@ -82,9 +84,13 @@ public class SettingsMenu extends Menu {
         table.add(back).width(170).height(40).expandX().left().pad(20);
         table.add(save).width(170).height(40).center().pad(20);
         table.add(apply).width(170).height(40).right().pad(20);
-      //  table.add(sound).padTop(20).height(40).padBottom(10);
+       // table.add(sound).padTop(20).height(40).padBottom(10);
        // table.add(soundField).padTop(20).padBottom(10).row();
     }
+
+    /**
+     * @return the upper table and text
+     */
 
     private Table createSubtable() {
         //The texts in the menu
@@ -102,10 +108,11 @@ public class SettingsMenu extends Menu {
         subTable.add(resFieldY).padTop(20).padBottom(10).row();
 
         subTable.add(fullscreen).padBottom(10).padTop(20).padRight(10).colspan(2);
-        subTable.add(fulField).padTop(20).padBottom(10).row();
+        subTable.add(ful).width(170).height(40).padTop(20).padBottom(10).row();
+        //subTable.add(fulField).padTop(20).padBottom(10).row();
 
         subTable.add(mute).padBottom(10).padTop(20).padRight(10).colspan(2);
-        subTable.add(musField).padTop(20).padBottom(10).row();
+        subTable.add(mus).width(170).height(40).padTop(20).padBottom(10).row();
 
         return subTable;
     }
@@ -150,6 +157,7 @@ public class SettingsMenu extends Menu {
                 settingsMap.put("resolutionY", resFieldY.getText());
                 settingsMap.put("fullscreen",fulField.getText());
                 settingsMap.put("mute",musField.getText());
+
                 if (inputSanitizer()) {
                     resX = parseInt("resolutionX");
                     resY = parseInt("resolutionY");
@@ -250,6 +258,36 @@ public class SettingsMenu extends Menu {
                 if (controller.getCtrl().isRunning()) controller.swapMenu("Pause");
                 else controller.swapMenu("Main");
                 super.touchUp(event, x, y, pointer, button);
+            }
+        });
+            //todo: make ful button work as a toggle
+        ful.addListener(new ClickListener() {
+            /**
+             * Overrides the method so that the button changes to the style when the pointer is above it.
+             */
+            @Override
+            public void enter (InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                ful.setStyle(txtBtnStyle);
+                super.enter(event,x,y,pointer,fromActor);
+            }
+
+            /**
+             * Overrides the method so that the button changes to its original style when the pointer leaves.
+             */
+            @Override
+            public void exit (InputEvent event, float x, float y, int pointer, Actor toActor) {
+                ful.setStyle(hoverStyle);
+                super.enter(event,x,y,pointer,toActor);
+            }
+
+            /**
+             * overrides the method
+             */
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                ful.setStyle(checkedStyle);
+                super.touchUp(event, x, y, pointer, button);
+                return true;
             }
         });
     }
