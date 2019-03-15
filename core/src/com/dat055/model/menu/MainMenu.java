@@ -40,7 +40,7 @@ public class MainMenu extends Menu {
         settings = createButton("Settings");
         exit = createButton("Exit");
         credits = createButton("Credits");
-        verNr = new Label("Version: 0.43", super.lblStyle);
+        verNr = new Label("Version: 0.77", super.lblStyle);
 
         // Add listeners to the actors
         addListeners();
