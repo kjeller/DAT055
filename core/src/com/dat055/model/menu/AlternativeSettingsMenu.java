@@ -2,6 +2,8 @@ package com.dat055.model.menu;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Graphics;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -9,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.dat055.controller.MenuController;
+import com.dat055.model.entity.interactables.Button;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -16,13 +19,14 @@ import java.util.Map;
 import java.util.TreeMap;
 
 /**
- * This is an alternative class for createing and giving functionality to the settings menu (used for debugging)
+ * This is an alternative class for creating and giving functionality to the settings menu (used for debugging)
  * @author Erik Börne
  * @version 2019-03-07
  */
-public class DebugSettingsMenu extends Menu {
+public class AlternativeSettingsMenu extends Menu {
     private MenuController controller;
-    private TextButton back, apply, resolution, fullscreen;
+    private TextButton back, apply, resolution, fullscreen, mute;
+    private Label.LabelStyle section, subSection;
     private ArrayList<Vector2> resolutions;
     private int resIndex, tmpResIndex;
 
@@ -30,14 +34,20 @@ public class DebugSettingsMenu extends Menu {
      * The constructor for the settingsMenu
      * @param ctrl a menucontroller
      */
-    public DebugSettingsMenu(MenuController ctrl) {
-        super(ctrl, false, "UI/Delta.jpg");
+    public AlternativeSettingsMenu(MenuController ctrl) {
+        super(ctrl, false, "UI/Bg/Settings.png");
         resolutions = new ArrayList<Vector2>();
         initResoltions();
+        resIndex = 5;
 
+        section = createLblStyle(height);
+        subSection = createLblStyle(height>>1);
         controller = ctrl;
+
         createTable();
     }
+
+
 
     /**
      * Initilizes the resolutions
@@ -62,6 +72,9 @@ public class DebugSettingsMenu extends Menu {
         back = createButton("Back");
         resolution = createButton(resToString(resolutions.get(resIndex)));
         fullscreen = createButton("Fullscreen", checkedStyle);
+        mute = createButton("Mute", checkedStyle);
+
+        fullscreen.setChecked(Gdx.graphics.isFullscreen());
 
         layoutTable(width,  height);
 
@@ -78,15 +91,19 @@ public class DebugSettingsMenu extends Menu {
         table.bottom();
 
         table.add(settingsTable(butX, butY)).expand().colspan(2).row();
-        table.add(back).size(butX>>1, butY).pad(butY>>1).expandX().right();
-        table.add(apply).size(butX>>1, butY).pad(butY>>1).expandX().left();
+        table.add(back).size(butX>>1, butY).pad(butY>>1).right();
+        table.add(apply).size(butX>>1, butY).pad(butY>>1).left();
     }
 
     public Table settingsTable(int butX, int butY) {
         Table subTable = new Table();
 
-        subTable.add(resolution).size(butX, butY).padBottom(butY>>1).row();
-        subTable.add(fullscreen).size(butX, butY);
+        subTable.defaults().size(butX, butY).padBottom(butY>>1);
+        subTable.add(new Label("Video", section)).padBottom(butY>>4).row();
+        subTable.add(resolution).row();
+        subTable.add(fullscreen).row();
+        subTable.add(new Label("Audio", section)).padBottom(butY>>4).row();
+        subTable.add(mute).row();
         return subTable;
     }
 
@@ -135,6 +152,9 @@ public class DebugSettingsMenu extends Menu {
                 Gdx.graphics.setWindowedMode((int) vec.x, (int) vec.y);
                 if(fullscreen.isChecked())
                     Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
+                controller.setMute(mute.isChecked());
+                controller.getCtrl().setMute((mute.isChecked()));
+                controller.playMusic();
                 controller.resize((int)vec.x,(int)vec.y);
                 super.touchUp(event, x, y, pointer, button);
             }
@@ -164,8 +184,7 @@ public class DebugSettingsMenu extends Menu {
              */
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                if(++tmpResIndex==resolutions.size()) tmpResIndex = 0;
-
+                if (++tmpResIndex == resolutions.size()) tmpResIndex = 0;
                 resolution.setText(resToString(resolutions.get(tmpResIndex)));
                 super.touchUp(event, x, y, pointer, button);
             }
@@ -186,6 +205,18 @@ public class DebugSettingsMenu extends Menu {
             public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
                 resolution.setStyle(txtBtnStyle);
                 super.enter(event, x, y, pointer, toActor);
+            }
+        });
+
+        resolution.addListener(new ClickListener(Input.Buttons.RIGHT) {
+            /**
+             * Overrides the method so that {@link MenuController} swaps to the .
+             */
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                if (--tmpResIndex < 0) tmpResIndex = resolutions.size()-1;
+                resolution.setText(resToString(resolutions.get(tmpResIndex)));
+                super.touchUp(event, x, y, pointer, button);
             }
         });
     }

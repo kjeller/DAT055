@@ -87,7 +87,7 @@ public abstract class Menu {
     private void initStyles(int height) {
         initTxtBtnStyle(height);
         initTxtFldStyle(height);
-        initLblStyle(height);
+        lblStyle = createLblStyle(height>>1);
     }
 
     /**
@@ -139,10 +139,13 @@ public abstract class Menu {
      * Initializes the label style.
      * @param height Scales the font used on the labels.
      */
-    protected final void initLblStyle(int height) {
-        // Create the standard style.
-        lblStyle.font = generateFont(height/2);
-        lblStyle.fontColor = Color.WHITE;
+    LabelStyle createLblStyle(int height) {
+        LabelStyle newStyle = new LabelStyle();
+
+        newStyle.font = generateFont(height);
+        newStyle.fontColor = Color.WHITE;
+
+        return newStyle;
     }
 
     /**
@@ -237,7 +240,7 @@ public abstract class Menu {
      * @param size Size is the fonts size in pixels.
      * @return The method returns the font created.
      */
-    private BitmapFont generateFont(int size) {
+    public BitmapFont generateFont(int size) {
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Cabin-SemiBold.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter params = new FreeTypeFontGenerator.FreeTypeFontParameter();
 

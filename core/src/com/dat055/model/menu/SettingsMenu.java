@@ -88,7 +88,7 @@ public class SettingsMenu extends Menu {
 
     private Table createSubtable() {
         //The texts in the menu
-        initLblStyle(55);
+        lblStyle = createLblStyle(55);
         Label resolutionX = new Label("Screen width",lblStyle);
         Label resolutionY = new Label("Screen height",lblStyle);
         Label fullscreen = new Label("Fullscreen",lblStyle);

@@ -1,6 +1,8 @@
 package com.dat055.controller;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.scenes.scene2d.*;
 import com.dat055.model.menu.*;
 import com.dat055.view.MenuView;
@@ -34,14 +36,17 @@ public class MenuController extends Controller{
         mute = false;
 
         ((MenuModel)model).includeMenu("Main", new MainMenu(this));
-        Gdx.input.setInputProcessor(((MenuModel)model).getStage());
+        InputMultiplexer multiInput = new InputMultiplexer();
+        multiInput.addProcessor(((MenuModel)model).getStage());
+        multiInput.addProcessor(new InputAdapter());
+        Gdx.input.setInputProcessor(multiInput);
 
         swapMenu("Main");
         ((MenuModel)model).includeMenu("Multiplayer", new MultiMenu(this));
         ((MenuModel)model).includeMenu("Pause", new PauseMenu(this));
         ((MenuModel)model).includeMenu("Select", new SelectMenu(this));
         ((MenuModel)model).includeMenu("Character", new CharacterMenu(this));
-        ((MenuModel)model).includeMenu("Settings", new SettingsMenu(this));
+        ((MenuModel)model).includeMenu("Settings", new AlternativeSettingsMenu(this));
         ((MenuModel)model).includeMenu("Credits", new CreditsMenu(this));
         ((MenuModel)model).includeMenu("Finish", new FinishMenu(this));
         playMusic();

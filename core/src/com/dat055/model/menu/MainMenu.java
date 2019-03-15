@@ -141,7 +141,7 @@ public class MainMenu extends Menu {
         settings.addListener(new ClickListener() {
             /**
              * Overrides the method so that {@link MenuController} multiplayer flag is set false (singleplayer), then
-             * swaps to {@link DebugSettingsMenu}.
+             * swaps to {@link AlternativeSettingsMenu}.
              */
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
