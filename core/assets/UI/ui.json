@@ -1,0 +1,13 @@
+{
+  "BitmapFont": { "default-font": { "file": "fonts/Mincho.fnt" } },
+
+  "Color": {
+    "green": { "a": 1, "b": 0, "g": 1, "r": 0 },
+    "white": { "a": 1, "b": 1, "g": 1, "r": 1 },
+    "red": { "a": 1, b: 0, g: 0, "r": 1 },
+    "black": { "a": 1, "b": 0, "g": 0, "r": 0 }
+  },
+  "TextButtonStyle": {
+    "default": { "up": "but1", "down": "but1_pressed", "font": "default-font", "fontColor": "white", "downFontColor": "black" },
+  }
+}

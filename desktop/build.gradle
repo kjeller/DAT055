@@ -3,7 +3,7 @@ sourceSets.main.java.srcDirs = [ "src/" ]
 sourceSets.main.resources.srcDirs = ["../assets"]
 
 project.ext.mainClassName = "com.mygdx.game.DesktopLauncher"
-project.ext.assetsDir = new File("../assets")
+project.ext.assetsDir = new File("../core/assets")
 
 import org.gradle.internal.os.OperatingSystem
 
